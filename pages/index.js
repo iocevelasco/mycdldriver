@@ -4,6 +4,7 @@ import { getUsers } from '../store/actions';
 import Link from 'next/link';
 import MainLayout from '../components/layouts';
 class Home extends Component {
+    
 
     componentDidMount(){
         this.props.dispatch(getUsers())
