@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getUsers } from '../store/actions';
 import Link from 'next/link';
-
+import MainLayout from '../components/layouts';
 class Home extends Component {
 
     componentDidMount(){
@@ -11,11 +11,11 @@ class Home extends Component {
 
     render(){
         return(
-            <div>
+            <MainLayout>
                 <Link href="/user">
                     <a>Users page</a>
                 </Link>
-            </div>
+            </MainLayout>
         )
     }
 

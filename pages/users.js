@@ -1,5 +1,5 @@
 import React,{ Component} from 'react';
-import MainLayout from '../components/layouts/mainLayout';
+import MainLayout from '../components/layouts';
 
 class Users extends Component {
     render(){

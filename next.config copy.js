@@ -1,19 +1,8 @@
-const withSass = require('@zeit/next-sass')
-const withLess = require('@zeit/next-less')
 const dotenv = require('dotenv');
+
 dotenv.config();
 
-const isProd = process.env.NODE_ENV === 'production'
-
-// fix: prevents error when .less files are required by node
-if (typeof require !== 'undefined') {
-  require.extensions['.less'] = file => { }
-}
-
-module.exports = withLess(withSass({
-  lessLoaderOptions: {
-    javascriptEnabled: true
-  },
+module.exports = {
   env: {
     AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
     AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
@@ -26,4 +15,4 @@ module.exports = withLess(withSass({
     SESSION_COOKIE_SECRET: process.env.SESSION_COOKIE_SECRET,
     SESSION_COOKIE_LIFETIME: 7200 // 2 hours
   }
-}))
+};
