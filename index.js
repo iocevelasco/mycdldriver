@@ -4,6 +4,7 @@ const db = require('./src/db');
 const config = require('./src/config');
 
 const router = require('./src/network/routes');
+db(config.dbUrl);
 
 var app = express();
 app.use(bodyParser.json());
