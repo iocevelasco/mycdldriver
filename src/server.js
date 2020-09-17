@@ -1,9 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('./src/db');
-const config = require('./src/config');
-
-const router = require('./src/network/routes');
+const db = require('./db');
+const config = require('./config');
 
 var app = express();
 app.use(bodyParser.json());
