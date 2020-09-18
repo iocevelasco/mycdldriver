@@ -9,7 +9,7 @@ class MyApp extends App {
         const { Component, pageProps } = this.props;
         return (
             <Container>
-                <Component {...pageProps}/>
+               <Component {...pageProps}/>
             </Container>
         )
     }
