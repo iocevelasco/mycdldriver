@@ -1,18 +1,7 @@
-import App,{ Container } from 'next/app';
-import React from 'react';
+import '../styles/globals.css'
 
-import './css/antd.less';
-
-class MyApp extends App {
-    
-    render(){
-        const { Component, pageProps } = this.props;
-        return (
-            <Container>
-               <Component {...pageProps}/>
-            </Container>
-        )
-    }
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />
 }
 
-export default MyApp;
+export default MyApp
