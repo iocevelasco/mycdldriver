@@ -4,11 +4,6 @@ import { getUsers } from '../store/actions';
 import Link from 'next/link';
 import MainLayout from '../components/layouts';
 class Home extends Component {
-    
-
-    componentDidMount(){
-        this.props.dispatch(getUsers())
-    }
 
     render(){
         return(
@@ -21,12 +16,4 @@ class Home extends Component {
     }
 
 }
-
-function mapStateToProps(state){
-    return {
-        users: state.users
-    }
-}
-
-
-export default connect(mapStateToProps)(Home);
+export default Home;
