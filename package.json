@@ -2,14 +2,21 @@
   "name": "mycdldriver",
   "version": "0.1.0",
   "private": true,
+  "description": "",
+  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "node ./index.js",
+    "start-dev": "NODE_ENV=development nodemon ./index.js"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "next": "9.5.3",
     "react": "16.13.1",
     "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
