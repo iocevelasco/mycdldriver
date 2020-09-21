@@ -6,7 +6,9 @@
   "scripts": {
     "start-dev": "next",
     "build": "next build",
-    "start": "node src/server"
+    "start-next": "next start",
+    "start-node": "nodemon src/server",
+    "start": "concurrently \"next start\" \"nodemon src/server\""
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +23,7 @@
     "babel-plugin-inline-import": "^3.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "concurrently": "^5.3.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
