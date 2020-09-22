@@ -8,7 +8,7 @@
     "build": "next build",
     "start-next": "next start",
     "start-node": "nodemon src/server",
-    "start": "concurrently \"next start\" \"nodemon src/server\""
+    "start": "concurrently \"next start\" \"nodemon ./src/server\""
   },
   "author": "",
   "license": "ISC",

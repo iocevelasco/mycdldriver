@@ -11,5 +11,5 @@ app.use(bodyParser.json());
 router(app);
 
 app.listen(config.port, function(){
-    console.log('La app esta escuchando en ' + config.host + ':' + config.port);
+    console.log('La app esta escuchando en ' + config.host + ':' + config.port + ' del archivo index.js');
 });
