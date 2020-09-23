@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const response = require('../../network/response');
 const controller = require('./controller');
+const auth = require('../../middelware/auth');
 
 router.get('/', function (req, res) {
     const filterUsers = req.query.user || null;
@@ -43,5 +44,45 @@ router.delete('/:id', function (req, res) {
             response.error(req, res, 'Error interno', 500, e);
         });
 });
+
+router.post('/login', async(req, res) => {
+    controller.loginUser(req.body)
+    .then((user) => {
+        response.success(req, res, user, 200);
+        
+    })
+    .catch(e => {
+        response.error(req, res, 'Invalid user data', 400, e);
+    }); 
+ });
+
+ router.get('/me', auth, async(req, res) => {
+    // View logged in user profile
+    res.send(req.user);
+ });
+
+ router.post('/logout', auth, async (req, res) => {
+    controller.logoutUser(req.user._id, req.token)
+    .then((user) => {
+        response.success(req, res, user, 200);
+        
+    })
+    .catch(e => {
+        response.error(req, res, 'Invalid user data', 400, e);
+    });
+ });
+
+ 
+
+router.post('/logoutall', auth, async(req, res) => {
+    controller.logoutAll(req.user._id)
+    .then((user) => {
+        response.success(req, res, user, 200);
+        
+    })
+    .catch(e => {
+        response.error(req, res, 'Invalid user data', 400, e);
+    });
+ })
 
 module.exports = router;
