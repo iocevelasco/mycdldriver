@@ -48,9 +48,46 @@ function deleteUser(id){
     });
 }
 
+function loginUser(user){
+    return new Promise(async (resolve, reject) => {
+        if(!user){
+            reject('Invalid data');
+            return false;
+        }
+        const { email, password } = user;
+        const result = await store.login(email, password);
+        resolve(result);
+    });
+}
+
+function logoutUser(id, token){
+    return new Promise(async (resolve, reject) => {
+        if(!token){
+            reject('Invalid data');
+            return false;
+        }
+        const result = await store.logout(id, token);
+        resolve(result);
+    });
+}
+
+function logoutAll(id){
+    return new Promise(async (resolve, reject) => {
+        if(!id){
+            reject('Invalid data');
+            return false;
+        }
+        const result = await store.logoutAll(id);
+        resolve(result);
+    });
+}
+
 module.exports = {
     getUsers,
     addUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    loginUser,
+    logoutUser,
+    logoutAll
 }
