@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start-next": "next start",
+    "start-node": "nodemon src/server",
+    "start": "concurrently \"next start\" \"nodemon ./src/server\""
   },
   "dependencies": {
     "next": "9.5.3",
