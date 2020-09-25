@@ -2,7 +2,7 @@ const express = require('express');
 const next = require('next');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-const router_front = require("./pages/network/routes"); 
+const router_front = require("./network/routes"); 
 const router_api = require("./api/network/routes");
 
 const dev = process.env.NODE_ENV !== 'production';
