@@ -1,16 +1,17 @@
 import React,{ Component} from 'react';
-import MainLayout from '../components/layouts/mainLayout';
+import MainLayout from '../../components/layouts/mainLayout';
 
-class About extends Component {
+class Users extends Component {
     render(){
         return(
             <>
                 <MainLayout>
-                <h1>About</h1>
+                    <h1>Users</h1>
                 </MainLayout>
+                
             </>
         )
     }
 }
 
-export default About;
+export default Users;

@@ -1,59 +1,51 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import LayoutComponent from '../components/layout/index.js';
+import React,{ Component} from 'react';
+import axios from 'axios';
+import MainLayout from '../components/layouts/mainLayout';
+import MyStyle from '../styles/main.css';
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <LayoutComponent>
+class Home extends Component {
+    static async getInitialProps({pathname,query,asPath,req,res}){
+        let userData;
 
+        try {
+            const response = await axios.get('https://jsonplaceholder.typicode.com/users/1')
+            userData = response.data;
+        } catch {
+            console.log('error')
+        }
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        // console.log(pathname)
+        //  console.log(query)
+        // console.log(req)
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+        return {
+            user:{
+                name:'Francis',
+                lastname:'Jones'
+            },
+            userData
+        }
+    }
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+    constructor(props){
+        super(props)
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+        this.state = {
+            user: this.props.user,
+            userData: this.props.userData
+        }
+    }
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-    </LayoutComponent>
-    </div>
-  )
+    render(){
+       // console.log(this.state);
+        return(
+            <>
+                <MainLayout>
+                    <h1>Welcome to my page, guys</h1>
+                </MainLayout>
+            </>
+        )
+    }
 }
+
+export default Home;
