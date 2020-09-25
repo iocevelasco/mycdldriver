@@ -1,5 +1,5 @@
 {
-  "name": "heroku-nextjs-custom-server-express",
+  "name": "mycdldriver411",
   "version": "3.0.0",
   "description": "Deploy Next.js server-side React apps using a custom Express server to Heroku",
   "scripts": {
