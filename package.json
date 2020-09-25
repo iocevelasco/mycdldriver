@@ -1,26 +1,16 @@
 {
-  "name": "mycdldriver",
-  "version": "0.1.0",
-  "private": true,
+  "name": "heroku-nextjs-custom-server-express",
+  "version": "3.0.0",
+  "description": "Deploy Next.js server-side React apps using a custom Express server to Heroku",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.js -p $PORT",
     "build": "next build",
-    "start-next": "next start",
-    "start-node": "nodemon src/server",
-    "start": "concurrently \"next start\" \"nodemon ./src/server\""
+    "start": "NODE_ENV=production node server.js -p $PORT"
   },
   "dependencies": {
-    "@zeit/next-css": "^1.0.1",
-    "axios": "^0.20.0",
-    "bcryptjs": "^2.4.3",
-    "concurrently": "^5.3.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.7",
-    "next": "^8.1.0",
-    "nodemon": "^2.0.4",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "validator": "^13.1.17"
+    "express": "^4.16.4",
+    "next": "^8.0.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   }
 }
