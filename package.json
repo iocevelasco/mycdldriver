@@ -7,7 +7,8 @@
     "build": "next build",
     "start-next": "next start",
     "start-node": "nodemon src/server",
-    "start": "concurrently \"next start\" \"node ./src/server\""
+    "start-concurrently": "concurrently \"next start\" \"node ./src/server\""
+    "start": "next start"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
