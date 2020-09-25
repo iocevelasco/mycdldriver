@@ -10,6 +10,10 @@ var app = express();
 app.use(bodyParser.json());
 router(app);
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname+'/public/index.html'));
+});
+
 app.listen(config.port, function(){
     console.log('La app esta escuchando en ' + config.host + ':' + config.port + ' del archivo server.js');
 });
