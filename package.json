@@ -10,8 +10,14 @@
     "start": "concurrently \"next start\" \"nodemon ./src/server\""
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^5.3.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.7",
     "next": "9.5.3",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "validator": "^13.1.17"
   }
 }
