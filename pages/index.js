@@ -1,52 +1,62 @@
-import React, { Component } from 'react';
-import MainLayout from '../components/layouts/mainLayout';
+import React, {useEffect, useReducer} from 'react';
+import MainLayout from '../components/layout';
 import { Row, Col, Typography, Input, DatePicker, Select } from 'antd';
+import HeaderHome from './home/components/search';
+import CarouselComp from '../components/carousel';
+import axios from 'axios';
 
 const { Title } = Typography;
 const { Option } = Select;
 
 const { Search } = Input;
 
+const initialState = {
+  sponsors: [],
+  search_name:'',
+
+}
+
+const types = {
+  HANDLE_INPUTS:'handle_inputs',
+  DATA:'data'
+}
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case types.HANDLE_INPUTS:
+      return { ...state, ...action.payload }
+    case types.DATA:
+      return { ...state, ...action.payload }
+    default:
+      throw new Error('Unexpected action');
+  }
+}
 const Home = (props) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    fetchData()
+  },[])
+
+  const fetchData = async () => {
+    await axios.get(`https://run.mocky.io/v3/633aa569-140f-4f58-9802-6738a6d6da5c`)
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
+  }
+
+
   return (
     <>
-      <MainLayout>
-        <div className="home-header"
-          style={{
-            background: `url('/static/images/truck11.jpg')`
-          }}>
+      <MainLayout title='Wellcome'>
+        <HeaderHome/>
+        <div>
           <Row justify='center' align='middle'>
-            <Col span={18}>
-              <div className="home-header__input-container">
-                <Title> TEAMWORK & LOYALTY <br />
-                      DRIVING OUR SUCCESS
-                    </Title>
-                <Row>
-                  <Col span={24}>
-                    <Search
-                      placeholder="input search text"
-                      size='large'
-                      onSearch={value => console.log(value)}
-                      style={{ width: '100%' }}
-                    />
-                  </Col>
-                  <Col span={24} style={{marginTop: 16}}>
-                      <Input.Group size="large">
-                        <Row gutter={[16, 16]}>
-                          <Col span={5}>
-                          <Select size="large" style={{ width: '100%' }}  defaultValue="Zhejiang">
-                            <Option value="Zhejiang">Zhejiang</Option>
-                            <Option value="Jiangsu">Jiangsu</Option>
-                          </Select>
-                          </Col>
-                          <Col span={8}>
-                            <DatePicker size="large" style={{ width: '100%' }} />
-                          </Col>
-                        </Row>
-                      </Input.Group>
-                  </Col>
-                </Row>
-              </div>
+            <Col span={20}>
+              <CarouselComp/>
             </Col>
           </Row>
         </div>

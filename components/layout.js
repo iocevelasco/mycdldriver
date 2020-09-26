@@ -1,17 +1,17 @@
 import React from 'react';
-import Header from '../includes/header';
+import Header from './header';
 import Head from 'next/head'
-import Footer from '../includes/footer';
+import Footer from './footer';
 import { Layout } from 'antd';
-import '../../styles/index.less';
+import '../styles/index.less';
 
 const { Content } = Layout;
 
 
-const MainLayout = ({ children }) => (
+const MainLayout = ({ children, title }) => (
     <>
         <Head>
-            <title>My Awesome app</title>
+            <title>{`My CDL Driver | ${title}`}</title>
         </Head>
         <Layout>
             <Header />
