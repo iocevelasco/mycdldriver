@@ -4,9 +4,12 @@ const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const router_front = require("./network/routes"); 
 const router_api = require("./api/network/routes");
+const config = require('./api/config');
+const db = require('./api/db');
+const bodyParser = require('body-parser');
 
-const dev = process.env.NODE_ENV !== 'production';
-const port = process.env.PORT || 3000;
+const dev = config.dev;
+db(config.dbUrl);
 
 // Multi-process to utilize all CPU cores.
 if (!dev && cluster.isMaster) {
@@ -27,6 +30,7 @@ if (!dev && cluster.isMaster) {
   nextApp.prepare()
     .then(() => {
       const server = express();
+      server.use(bodyParser.json());
 
       if (!dev) {
         // Enforce SSL & HSTS in production
@@ -45,9 +49,9 @@ if (!dev && cluster.isMaster) {
       router_api(server);
       router_front(server, dev, nextApp);
 
-      server.listen(port, (err) => {
+      server.listen(config.port, (err) => {
         if (err) throw err;
-        console.log(`Listening on http://localhost:${port}`);
+        console.log(`Listening on http://localhost:${config.port}`);
       });
     });
 }

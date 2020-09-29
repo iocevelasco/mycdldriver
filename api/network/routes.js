@@ -1,4 +1,5 @@
 const express = require('express');
+const user = require('../components/user/network');
 const url_api = "/api";
 
 const routes = function(server){
@@ -8,6 +9,7 @@ const routes = function(server){
             "prueba": "data"
         });
     });
+    server.use(url_api + '/user', user);
 };
 
 module.exports = routes;
