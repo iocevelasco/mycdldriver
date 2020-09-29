@@ -13,7 +13,7 @@ const HeaderComp = () => (
                 <img src='/static/images/logo.svg' />
              </Col>
              <Col span={4}>
-             <Space>
+             <Space span={16}>
                 <Button type="secondary" size='large'>
                     COMPANY
                 </Button>
