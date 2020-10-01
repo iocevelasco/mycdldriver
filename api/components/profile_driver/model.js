@@ -20,11 +20,19 @@ const profileDriverSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    rating: {
+        type: Number,
+        trim: true
+    },
     habilities: {
         type: String,
         trim: true
     },
     description: {
+        type: String,
+        trim: true
+    },
+    address: {
         type: String,
         trim: true
     },

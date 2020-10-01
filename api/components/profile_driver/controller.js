@@ -26,6 +26,8 @@ function addDriver(driver, user, imageCdl){
             birthDate: driver.birthDate,
             imageCdl: fileUrl,
             sex: driver.sex,
+            rating: driver.rating,
+            address: driver.address,
             habilities: driver.habilities,
             description: driver.description,
             user: user

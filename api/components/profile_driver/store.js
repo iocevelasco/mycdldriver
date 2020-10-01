@@ -10,13 +10,14 @@ function getDriver(filterDriver){
             };
         }
         Model.find(filter)
-        .populate('user')
+        .select("rating address")
+        .populate('user', "name lastname -_id")
         .exec((error, populated) => {
             if(error){
                 reject(error);
                 return false;
             }
-
+            
             resolve(populated);
         });
     });

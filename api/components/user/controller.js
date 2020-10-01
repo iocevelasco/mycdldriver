@@ -14,10 +14,8 @@ function addUser(user, photo){
             reject('Los datos son incorrectos');
             return false;
         }
-        let now= new Date();
         const fileUrl = photo ? config.publicRoute + config.filesRoute + '/' + photo.filename : '';
         user.photo = fileUrl;
-        user.date = now;
 
         const fullUser = store.add(user); 
         resolve(fullUser);

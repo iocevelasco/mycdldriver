@@ -16,7 +16,10 @@ const userSchema = mongoose.Schema({
       trim: true
    },
    photo: String,
-   date: Date,
+   date: {
+      type: Date,
+      default: Date.now
+   },
    email: {
       type: String,
       required: true,
