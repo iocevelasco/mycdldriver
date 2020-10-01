@@ -1,5 +1,306 @@
 [
   {
+    "type": "get",
+    "url": "/driver",
+    "title": "getDriverList",
+    "group": "Driver",
+    "version": "1.0.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "driver",
+            "description": "<p>Datos del conductor registrado</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "driver._id",
+            "description": "<p>ID de conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.cdl",
+            "description": "<p>Numero de identificacion del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "driver.birthDate",
+            "description": "<p>Fecha de nacimiento del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.imageCdl",
+            "description": "<p>Url de la imagen de la licencia del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.sex",
+            "description": "<p>Sexo del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.habilities",
+            "description": "<p>Habilidades del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.description",
+            "description": "<p>Descripcion del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "driver.user",
+            "description": "<p>Listado de datos del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "driver.user._id",
+            "description": "<p>ID del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.user.name",
+            "description": "<p>Nombre del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.user.lastname",
+            "description": "<p>Apellido del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.user.photo",
+            "description": "<p>Url de la imagen del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "driver.user.date",
+            "description": "<p>Fecha de registro del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.user.email",
+            "description": "<p>Correo electronico del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.user.password",
+            "description": "<p>Clave cifrada electronico del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "driver.user.tokens",
+            "description": "<p>Listado de tokens de seguridad registrados por el usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "driver.user.tokens._id",
+            "description": "<p>ID del token</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.user.tokens.token",
+            "description": "<p>Token de seguridad</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ejemplo de respuesta correcta",
+          "content": "{\n  \"error\": 0,\n  \"mensaje\": [\n    {\n      \"_id\": \"5f735483938ab21aa0cb13dd\",\n      \"cdl\": 16134236,\n      \"birthDate\": \"1985-05-21T06:28:57.779Z\",\n      \"imageCdl\": \"/public/files/RHyJbGRuQtNSFrdZrAONpU84_bGlrf_aoNAkaeSdRBPFfJj7RtO4mrUKOTjT_M1L.jpg\",\n      \"sex\": 1,\n      \"habilities\": \"Manejo muy bien la bicicleta\",\n      \"description\": \"Me he caido muy poco\",\n      \"user\": {\n        \"_id\": \"5f72d42900e63838cce64756\",\n        \"name\": \"Erick\",\n        \"lastname\": \"Hernandez\",\n        \"email\": \"takashi.onimaru@gmail.com\",\n        \"password\": \"$2a$08$Yc/sqrnErDnpwoCSkfuGWOOq0exC4n7CEXCy5rKyz/Z5/G.2.c2E6\",\n        \"photo\": \"/public/files/d1fMhe9_efe_lXtntP-fReUycKThnRdNVWjM4k9UcEpHtA-X59CCK3sYTgVnDXCo.jpg\",\n        \"date\": \"2020-09-29T06:28:57.779Z\",\n        \"tokens\": [\n          {\n            \"_id\": \"5f7353e6938ab21aa0cb13dc\",\n            \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjcyZDQyOTAwZTYzODM4Y2NlNjQ3NTYiLCJpYXQiOjE2MDEzOTM2Mzh9.qzb15XXY8iPW8TSZptXHIotMGVXogWm-adGf0pVK8AE\"\n          }\n        ],\n        \"__v\": 5\n      },\n      \"__v\": 0\n    }\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 500 Internal Server Error",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "api/components/profile_driver/network.js",
+    "groupTitle": "Driver",
+    "name": "GetDriver"
+  },
+  {
+    "type": "post",
+    "url": "/driver",
+    "title": "AddNewDriver",
+    "group": "Driver",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "cdl",
+            "description": "<p>Numero de idntificacion del conductor</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "birthDate",
+            "description": "<p>Decha de nacimiento del conductor</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "imageCdl",
+            "description": "<p>Imagen de la licencia del conductor</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "sex",
+            "description": "<p>Sexo del conductor</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "habilities",
+            "description": "<p>Habilidades del conductor</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>Descripcion del conductor</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "driver",
+            "description": "<p>Datos del conductor registrado</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.cdl",
+            "description": "<p>Numero de identificacion del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "driver.birthDate",
+            "description": "<p>Fecha de nacimiento del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.imageCdl",
+            "description": "<p>Url de la imagen de la licencia del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.sex",
+            "description": "<p>Sexo del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.habilities",
+            "description": "<p>Habilidades del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.description",
+            "description": "<p>Descripcion del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "driver.user",
+            "description": "<p>Id del usuario asociado</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ejemplo de respuesta correcta",
+          "content": "{\n  \"error\": 0,\n  \"mensaje\": {\n    \"_id\": \"5f7376d9e6153a2910ceba5b\",\n    \"cdl\": 15540621,\n    \"birthDate\": \"1985-05-21T06:28:57.779Z\",\n    \"imageCdl\": \"/public/files/e7yqayb96JVmZm3dRPi42koddNQx-ogL9VRAXY-ZT8XmQb2PzbeiSJsNp8jUoGIA.jpg\",\n    \"sex\": 0,\n    \"habilities\": \"Manejo muy bien la bicicleta\",\n    \"description\": \"Me he caido muy poco\",\n    \"user\": \"5f72d42900e63838cce64756\",\n    \"__v\": 0\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 500 Internal Server Error",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "api/components/profile_driver/network.js",
+    "groupTitle": "Driver",
+    "name": "PostDriver"
+  },
+  {
     "type": "delete",
     "url": "/user/:id",
     "title": "DeleteUser",
@@ -187,7 +488,7 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "Id",
             "optional": false,
             "field": "user._id",
             "description": "<p>ID de usuario</p>"
@@ -329,7 +630,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "Id",
             "optional": false,
             "field": "user._id",
             "description": "<p>ID de usuario</p>"
@@ -465,7 +766,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "Id",
             "optional": false,
             "field": "user._id",
             "description": "<p>ID de usuario</p>"
@@ -580,7 +881,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "Id",
             "optional": false,
             "field": "user._id",
             "description": "<p>ID de usuario</p>"

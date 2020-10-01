@@ -45,17 +45,17 @@ const userSchema = mongoose.Schema({
     // Hash the password before saving the user model
     const user = this
     if (user.isModified('password')) {
-       user.password = await bcrypt.hash(user.password, 8)
+       user.password = await bcrypt.hash(user.password, 8);
     }
-    next()
+    next();
  })
  
  userSchema.methods.generateAuthToken = async function() {
     // Generate an auth token for the user
-    const user = this
-    const token = jwt.sign({_id: user._id}, config.JWT_KEY)
-    user.tokens = user.tokens.concat({token})
-    await user.save()
+    const user = this;
+    const token = jwt.sign({_id: user._id}, config.JWT_KEY);
+    user.tokens = user.tokens.concat({token});
+    await user.save();
     return token
  }
  
@@ -68,13 +68,12 @@ const userSchema = mongoose.Schema({
     if (!user) {
        throw new Error({ error: 'Invalid login credentials' });
     }
-    const isPasswordMatch = await bcrypt.compare(password, user.password)
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
        throw new Error({ error: 'Invalid login credentials' });
     }
     return user
  }
  
- const User = mongoose.model('User', userSchema)
- 
- module.exports = User
+ const User = mongoose.model('User', userSchema);
+ module.exports = User;

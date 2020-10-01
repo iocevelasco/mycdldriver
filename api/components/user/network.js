@@ -1,24 +1,9 @@
 const express = require('express');
-const multer = require('multer');
-const nanoid = require('nanoid');
-const path = require('path');
+const storage = require('../../middelware/saveFile');
 const router = express.Router();
 const response = require('../../network/response');
 const controller = require('./controller');
 const auth = require('../../middelware/auth');
-const config = require('../../config');
-
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => callback(null, '.' + config.publicRoute + config.filesRoute),
-    filename: (req, file, callback) => {
-        const id = nanoid.nanoid(64);
-        const extension = path.extname(file.originalname);
-        const fileName = id + extension;
-        callback(null, fileName)
-  	}
-});
-
-const upload = multer({ storage });
 
 /**
  * @api {get} /user getUserList
@@ -80,7 +65,7 @@ router.get('/', function (req, res) {
  * @apiParam {String} email Correo electronico del usuario
  * @apiParam {String} password Clave en crudo del usuario
  * @apiSuccess {Object[]} user Datos del usuario registrado
- * @apiSuccess {Number} user._id ID de usuario
+ * @apiSuccess {Id} user._id ID de usuario
  * @apiSuccess {String} user.name Nombre del usuario
  * @apiSuccess {String} user.lastname Apellido del usuario
  * @apiSuccess {String} user.photo Url de la imagen del usuario
@@ -105,7 +90,7 @@ router.get('/', function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.post('/', upload.single('photo'), function (req, res) {
+router.post('/', storage.single('photo'), function (req, res) {
 
     controller.addUser(req.body, req.file)
     .then((fullUser) => {
@@ -127,7 +112,7 @@ router.post('/', upload.single('photo'), function (req, res) {
  * @apiParam {String} email Correo electronico del usuario
  * @apiParam {String} password Clave en crudo del usuario
  * @apiSuccess {Object[]} user Datos del usuario registrado
- * @apiSuccess {Number} user._id ID de usuario
+ * @apiSuccess {Id} user._id ID de usuario
  * @apiSuccess {String} user.name Nombre del usuario
  * @apiSuccess {String} user.lastname Apellido del usuario
  * @apiSuccess {String} user.photo Url de la imagen del usuario
@@ -152,7 +137,7 @@ router.post('/', upload.single('photo'), function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.patch('/:id', auth, upload.single('photo'), function (req, res){
+router.patch('/:id', auth, storage.single('photo'), function (req, res){
     controller.updateUser(req.params.id, req.body, req.file)
         .then((data) => {
             response.success(req, res, data, 200);
@@ -195,7 +180,7 @@ router.delete('/:id', auth, function (req, res) {
  * @apiParam {String} email Correo de usuario
  * @apiParam {String} password Clave de usuario
  * @apiSuccess {Object[]} user Datos del usuario logueado
- * @apiSuccess {Number} user._id ID de usuario
+ * @apiSuccess {Id} user._id ID de usuario
  * @apiSuccess {String} user.name Nombre del usuario
  * @apiSuccess {String} user.lastname Apellido del usuario
  * @apiSuccess {String} user.photo Url de la imagen del usuario
@@ -233,7 +218,7 @@ router.post('/login', async(req, res) => {
  * @apiVersion 1.0.0
  * @apiDescription Datos del usuario autenticado
  * @apiHeader {String} token Token de acceso de usuario.
- * @apiSuccess {Number} user._id ID de usuario
+ * @apiSuccess {Id} user._id ID de usuario
  * @apiSuccess {String} user.name Nombre del usuario
  * @apiSuccess {String} user.lastname Apellido del usuario
  * @apiSuccess {String} user.photo Url de la imagen del usuario
