@@ -10,13 +10,13 @@ function getDriver(filter){
 function addDriver(driver, user, imageCdl){
     return new Promise((resolve, reject) => {
         if(!driver){
-            console.error('[userController] No driver data');
-            reject('[userController] No driver data');
+            console.error('[driverController] No driver data');
+            reject('[driverController] No driver data');
             return false;
         }
         if(!user){
-            console.error('[userController] No user data');
-            reject('[userController] No user data');
+            console.error('[driverController] No user data');
+            reject('[driverController] No user data');
             return false;
         }
         const fileUrl = imageCdl ? config.publicRoute + config.filesRoute + '/' + imageCdl.filename : '';
