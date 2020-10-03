@@ -33,7 +33,6 @@ const reducer = (state, action) => {
 }
 
 const Profile = ({user}) => {
-  console.log(user)
   const { picture, displayName } = user;
   const [state, dispatch] = useReducer(reducer, initialState);
   
@@ -43,7 +42,7 @@ const Profile = ({user}) => {
 
   return (
     <>
-      <MainLayout title='Profile'>
+      <MainLayout title='Profile' user={user}>
         <Row justify='center' align='middle'>
           <Col span={16}>
             <div className="profile">

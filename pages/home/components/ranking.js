@@ -19,7 +19,7 @@ const RankingComp = ({ full_name, ranking, address, image }) => {
     <>
     <Col className="home--ranking" span={6}>
       <Card
-      hoverable={true}
+       hoverable={true}
         cover={
           <img
             alt="example"

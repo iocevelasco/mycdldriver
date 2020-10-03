@@ -42,7 +42,7 @@ const reducer = (state, action) => {
 }
 
 const Home = ({ user }) => {
-  console.log(user)
+  console.log(user);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const Home = ({ user }) => {
 
   return (
     <>
-      <MainLayout title='Wellcome'>
+      <MainLayout title='Wellcome' user={user}>
         <HeaderHome />
         <WrapperSection row={20} arginTop={0}>
           <CarouselComp carousel_data={state.carousel_data} />
