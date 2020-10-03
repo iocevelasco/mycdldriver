@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/login", passport.authenticate("auth0", {
   scope: "openid email profile"
-}), (req, res) => res.redirect("/profile"));
+}), (req, res) => res.redirect("/login"));
 
 router.get("/callback", (req, res, next) => {
   passport.authenticate("auth0",  (err, user) => {

@@ -1,8 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import MainLayout from '../components/layout';
-import { Row, Col, Typography, Input, DatePicker, Select, Card } from 'antd';
+import { Row, Col, Typography, Input, Avatar, Select, Card } from 'antd';
 
-const { Title } = Typography;
+const { Meta } = Card;
+const { Text } = Typography;
 const { Option } = Select;
 
 const { Search } = Input;
@@ -32,8 +33,8 @@ const reducer = (state, action) => {
 }
 
 const Profile = ({user}) => {
-  //console.log(props)
-  const {nickname, picture, emails } = user;
+  console.log(user)
+  const { picture, displayName } = user;
   const [state, dispatch] = useReducer(reducer, initialState);
   
   useEffect(() => {
@@ -43,7 +44,23 @@ const Profile = ({user}) => {
   return (
     <>
       <MainLayout title='Profile'>
-        <p>{nickname}</p>
+        <Row justify='center' align='middle'>
+          <Col span={16}>
+            <div className="profile">
+              <Card
+                style={{ width: 400 }}>
+                <Row justify='start' align='middle'>
+                  <Col span={4}>
+                  <Avatar src={picture}/>
+                  </Col>
+                  <Col span={8}>
+                    <Text strong>{displayName}</Text>
+                  </Col>
+                </Row>
+              </Card>
+              </div>
+          </Col>
+        </Row>
       </MainLayout>
     </>
   )
