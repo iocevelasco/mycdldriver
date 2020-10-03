@@ -15,8 +15,8 @@ const config = {
         domain: process.env.AUTH0_DOMAIN || 'dev-8zm642k2.us.auth0.com',
         clientID: process.env.AUTH0_CLIENT_ID || 'pLRsn8o0a1uyBULqVk62sF3LcMMHfahr',
         clientSecret: process.env.AUTH0_CLIENT_SECRET || '5OLosllM-ZDwwJ4aU2u5HxhAAFzxGKD6DBl-XRZc-Vzmty-8cMm4UdllVw1sjBqN',
-        callbackURL: process.env.AUTH0_CALLBACK_URL || 'https://www.mycdldriver411.com/callback',
-        baseURL: process.env.BASE_URL || 'https://www.mycdldriver411.com'
+        callbackURL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback',
+        baseURL: process.env.BASE_URL || 'http://localhost:3000'
     }
 };
 
