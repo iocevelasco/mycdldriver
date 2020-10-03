@@ -4,7 +4,6 @@ import { Carousel, Avatar } from 'antd';
 
 
 const CarouselComp = ({carousel_data}) => {
-  console.log(carousel_data);
   const [slide, setSlide] = useState(0);
 
   const slider = useRef();
