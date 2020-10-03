@@ -36,7 +36,8 @@ const reducer = (state, action) => {
   }
 }
 
-const Home = (props) => {
+const Home = ({user}) => {
+  console.log(user)
   const [state, dispatch] = useReducer(reducer, initialState);
   
   useEffect(() => {

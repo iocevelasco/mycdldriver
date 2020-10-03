@@ -17,9 +17,11 @@ const HeaderComp = () => (
                 <Button type="secondary" size='large'>
                     COMPANY
                 </Button>
-                <Button type="secondary" size='large'>
-                     LOGIN
-                </Button>
+                <Link href="/login">
+                    <Button type="secondary"  size='large'>
+                        LOGIN
+                    </Button>
+                </Link>
              </Space>
              </Col>
            </Row>
