@@ -53,8 +53,11 @@ if (!dev && cluster.isMaster) {
       }
 
       const sess = {
-        secret: uid.sync(18),
-        cookie: {},
+        //secret: uid.sync(18),
+        secret: config.JWT_KEY,
+        cookie: {
+          secure: false
+        },
         resave: false,
         saveUninitialized: true
       };
