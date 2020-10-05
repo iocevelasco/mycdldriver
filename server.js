@@ -66,7 +66,8 @@ if (!dev && cluster.isMaster) {
           domain: config.auth0.domain,
           clientID: config.auth0.clientID,
           clientSecret: config.auth0.clientSecret,
-          callbackURL: config.auth0.callbackURL
+          callbackURL: config.auth0.callbackURL,
+          state: false
         },
         function(accessToken, refreshToken, extraParams, profile, done) {
           return done(null, profile);
