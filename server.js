@@ -60,11 +60,11 @@ if (!dev && cluster.isMaster) {
         resave: false,
         saveUninitialized: true
       };
-      if (app.get('env') === 'production') {
+      if (server.get('env') === 'production') {
         sessionConfig.cookie.secure = true;
         sessionConfig.proxy = true;
         server.set('trust proxy', 1);
-    }
+      }
       server.use(session(sessionConfig));
       const auth0Strategy = new Auth0Strategy(
         {
