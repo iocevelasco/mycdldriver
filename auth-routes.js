@@ -9,17 +9,17 @@ router.get("/login", passport.authenticate("auth0", {
 }), (req, res) => res.redirect("/login"));
 
 router.get("/callback", (req, res, next) => {
-  passport.authenticate("auth0",  (err, user) => {
+  passport.authenticate("auth0",  (err, user, info) => {
+    console.log("Error: " + info);
+    console.log("Usuario: " + user);
     if (err) return next(err);
     if (!user) {
-      //return res.redirect("/");
+      return res.redirect("/");
     }
-    console.log("Error: " + err);
-    console.log("Usuario: " + user);
-    /*req.logIn(user, (err) => {
+    req.logIn(user, (err) => {
       if (err) return next(err);
       res.redirect("/");
-    });*/
+    });
   })(req, res, next);
 });
 
