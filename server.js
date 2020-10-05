@@ -54,13 +54,12 @@ if (!dev && cluster.isMaster) {
 
       const sessionConfig = {
         secret: uid.sync(18),
-        cookie: {
-          maxAge: 86400 * 1000 // 24 hours in milliseconds
-        },
+        cookie: {},
         resave: false,
         saveUninitialized: true
       };
       if (server.get('env') === 'production') {
+        console.log("Entrando en el bucle de produccion");
         sessionConfig.cookie.secure = true;
         sessionConfig.proxy = true;
         server.set('trust proxy', 1);
