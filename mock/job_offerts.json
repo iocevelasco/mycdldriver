@@ -1,0 +1,44 @@
+{
+  "jobs_offers":[
+    {
+      "title": "Position Name",
+      "image": "https://image.freepik.com/vector-gratis/truck-logo-vector-imagen-archivo_56473-238.jpg",
+      "postion_id": 0,
+      "description": "Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt.",
+      "address": "Miami",
+      "date": "12/04/23",
+      "expire_date": "12/05/23",
+      "company_name": "pepito"
+    },
+    {
+      "title": "Position Name",
+      "image": "https://image.shutterstock.com/image-vector/truck-logo-template-600w-1193985586.jpg",
+      "postion_id": 0,
+      "description": "Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt.",
+      "address": "Buenos Aires",
+      "date": "12/04/23",
+      "expire_date": "12/05/23",
+      "company_name": "pepito"
+    },
+    {
+      "title": "Position Name",
+      "image": "https://www.creativefabrica.com/wp-content/uploads/2019/12/18/Food-truck-logo-design-Graphics-1-1-580x386.jpg",
+      "postion_id": 0,
+      "description": "Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt.",
+      "address": "Caracas",
+      "date": "12/04/23",
+      "expire_date": "12/05/23",
+      "company_name": "pepito"
+    },
+    {
+      "title": "Position Name",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTz7Hcg0Ty6W4WsWZQTkWtbg6PFdVsX3cglKg&usqp=CAU",
+      "postion_id": 0,
+      "description": "Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt.",
+      "address": "Caracas",
+      "date": "12/04/23",
+      "expire_date": "12/05/23",
+      "company_name": "pepito"
+    }
+  ]
+}

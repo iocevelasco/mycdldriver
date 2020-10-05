@@ -4,9 +4,18 @@ const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const router_front = require("./network/routes"); 
 const router_api = require("./api/network/routes");
+const config = require('./api/config');
+const db = require('./api/db');
+const bodyParser = require('body-parser');
 
-const dev = process.env.NODE_ENV !== 'production';
-const port = process.env.PORT || 3000;
+const session = require("express-session");
+const passport = require("passport");
+const Auth0Strategy = require("passport-auth0");
+const uid = require('uid-safe');
+const authRoutes = require("./auth-routes");
+
+const dev = config.dev;
+db(config.dbUrl);
 
 // Multi-process to utilize all CPU cores.
 if (!dev && cluster.isMaster) {
@@ -27,6 +36,7 @@ if (!dev && cluster.isMaster) {
   nextApp.prepare()
     .then(() => {
       const server = express();
+      server.use(bodyParser.json());
 
       if (!dev) {
         // Enforce SSL & HSTS in production
@@ -42,12 +52,44 @@ if (!dev && cluster.isMaster) {
         });
       }
 
+      const sessionConfig = {
+        secret: uid.sync(18),
+        cookie: {
+          maxAge: 86400 * 1000 // 24 hours in milliseconds
+        },
+        resave: false,
+        saveUninitialized: true
+      };
+      server.use(session(sessionConfig));
+      const auth0Strategy = new Auth0Strategy(
+        {
+          domain: config.auth0.domain,
+          clientID: config.auth0.clientID,
+          clientSecret: config.auth0.clientSecret,
+          callbackURL: config.auth0.callbackURL
+        },
+        function(accessToken, refreshToken, extraParams, profile, done) {
+          return done(null, profile);
+        }
+      );
+      passport.use(auth0Strategy);
+      passport.serializeUser((user, done) => done(null, user));
+      passport.deserializeUser((user, done) => done(null, user));
+      server.use(passport.initialize());
+      server.use(passport.session());
+      server.use(authRoutes);
+      const restrictAccess = (req, res, next) => {
+        if (!req.isAuthenticated()) return res.redirect("/login");
+        next();
+      };
+      server.use("/profile", restrictAccess);
+
       router_api(server);
       router_front(server, dev, nextApp);
 
-      server.listen(port, (err) => {
+      server.listen(config.port, (err) => {
         if (err) throw err;
-        console.log(`Listening on http://localhost:${port}`);
+        console.log(`Listening on http://localhost:${config.port}`);
       });
     });
 }
