@@ -52,26 +52,25 @@ if (!dev && cluster.isMaster) {
         });
       }
 
-      const sessionConfig = {
+      const sess = {
         secret: uid.sync(18),
         cookie: {},
         resave: false,
         saveUninitialized: true
       };
       if (server.get('env') === 'production') {
-        sessionConfig.cookie.secure = true;
+        sess.cookie.secure = true;
         server.set('trust proxy', 1);
       }
-      server.use(session(sessionConfig));
+      server.use(session(sess));
       const auth0Strategy = new Auth0Strategy(
         {
           domain: config.auth0.domain,
           clientID: config.auth0.clientID,
           clientSecret: config.auth0.clientSecret,
-          callbackURL: config.auth0.callbackURL,
-          passReqToCallback: true
+          callbackURL: config.auth0.callbackURL
         },
-        function(req, accessToken, refreshToken, extraParams, profile, done) {
+        function(accessToken, refreshToken, extraParams, profile, done) {
           return done(null, profile);
         }
       );
