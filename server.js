@@ -59,9 +59,7 @@ if (!dev && cluster.isMaster) {
         saveUninitialized: true
       };
       if (server.get('env') === 'production') {
-        console.log("Entrando en el bucle de produccion");
         sessionConfig.cookie.secure = true;
-        sessionConfig.proxy = true;
         server.set('trust proxy', 1);
       }
       server.use(session(sessionConfig));
