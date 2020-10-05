@@ -11,11 +11,15 @@ router.get("/login", passport.authenticate("auth0", {
 router.get("/callback", (req, res, next) => {
   passport.authenticate("auth0",  (err, user) => {
     if (err) return next(err);
-    if (!user) return res.redirect("/");
-    req.logIn(user, (err) => {
+    if (!user) {
+      //return res.redirect("/");
+    }
+    console.log("Error: " + err);
+    console.log("Usuario: " + user);
+    /*req.logIn(user, (err) => {
       if (err) return next(err);
       res.redirect("/");
-    });
+    });*/
   })(req, res, next);
 });
 
