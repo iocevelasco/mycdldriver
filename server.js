@@ -74,7 +74,7 @@ if (!dev && cluster.isMaster) {
       );
       if (process.env.NODE_ENV === 'production') {
         server.set('trust proxy', 1); // trust first proxy
-        //sess.cookie.secure = true; // serve secure cookies, requires https
+        session.cookie.secure = true; // serve secure cookies, requires https
       }
       passport.use(auth0Strategy);
       passport.serializeUser((user, done) => done(null, user));
