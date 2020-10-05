@@ -66,13 +66,16 @@ if (!dev && cluster.isMaster) {
           domain: config.auth0.domain,
           clientID: config.auth0.clientID,
           clientSecret: config.auth0.clientSecret,
-          callbackURL: config.auth0.callbackURL,
-          state: false
+          callbackURL: config.auth0.callbackURL 
         },
         function(accessToken, refreshToken, extraParams, profile, done) {
           return done(null, profile);
         }
       );
+      if (process.env.NODE_ENV === 'production') {
+        server.set('trust proxy', 1); // trust first proxy
+        //sess.cookie.secure = true; // serve secure cookies, requires https
+      }
       passport.use(auth0Strategy);
       passport.serializeUser((user, done) => done(null, user));
       passport.deserializeUser((user, done) => done(null, user));
