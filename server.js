@@ -56,7 +56,8 @@ if (!dev && cluster.isMaster) {
         secret: config.JWT_KEY,
         cookie: {},
         resave: false,
-        saveUninitialized: true
+        saveUninitialized: true,
+        sameSite: false 
       };
       if (server.get('env') === 'production') {
         sess.cookie.secure = true;
