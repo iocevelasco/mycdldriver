@@ -53,14 +53,14 @@ if (!dev && cluster.isMaster) {
       }
 
       const sess = {
-        //secret: uid.sync(18),
         secret: config.JWT_KEY,
         cookie: {},
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: true
       };
       if (server.get('env') === 'production') {
-        sess.cookie.secure = false;
+        sess.cookie.secure = true;
+        sess.proxy = true;
         server.set('trust proxy', 1);
       }
       server.use(session(sess));
