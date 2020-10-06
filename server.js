@@ -60,9 +60,9 @@ if (!dev && cluster.isMaster) {
         sameSite: false 
       };
       if (server.get('env') === 'production') {
-        sess.cookie.secure = true;
-        sess.proxy = true;
         server.set('trust proxy', 1);
+        //sess.proxy = true;
+        sess.cookie.secure = true;
       }
       server.use(session(sess));
       const auth0Strategy = new Auth0Strategy(
