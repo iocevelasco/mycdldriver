@@ -52,17 +52,22 @@ if (!dev && cluster.isMaster) {
         });
       }
 
+      server.enable('trust proxy');
+
       const sess = {
         secret: config.JWT_KEY,
-        cookie: {},
+        proxy : true,
+        cookie : {
+          secure : true,
+          maxAge: 5184000000 // 2 months
+      },
         resave: false,
-        saveUninitialized: true,
-        sameSite: false 
+        saveUninitialized: true
       };
       if (server.get('env') === 'production') {
-        server.set('trust proxy', 1);
+        //server.set('trust proxy', 1);
         //sess.proxy = true;
-        sess.cookie.secure = true;
+        //sess.cookie.secure = true;
       }
       server.use(session(sess));
       const auth0Strategy = new Auth0Strategy(
