@@ -52,15 +52,26 @@ if (!dev && cluster.isMaster) {
         });
       }
 
-      const sessionConfig = {
-        secret: uid.sync(18),
-        cookie: {
-          maxAge: 86400 * 1000 // 24 hours in milliseconds
-        },
+      server.enable('trust proxy');
+
+      const sess = {
+        secret: config.JWT_KEY,
+        proxy : true,
+        cookie : {
+          sameSite: false,
+          secure : true,
+          maxAge: 5184000000 // 2 months
+      },
         resave: false,
         saveUninitialized: true
       };
-      server.use(session(sessionConfig));
+      if (server.get('env') === 'production') {
+        //server.set('trust proxy', 1);
+        //sess.proxy = true;
+        //sess.cookie.secure = true;
+      }
+      server.use(session(sess));
+      
       const auth0Strategy = new Auth0Strategy(
         {
           domain: config.auth0.domain,
