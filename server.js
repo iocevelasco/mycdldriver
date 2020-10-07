@@ -58,6 +58,7 @@ if (!dev && cluster.isMaster) {
         secret: config.JWT_KEY,
         proxy : true,
         cookie : {
+          sameSite: false,
           secure : true,
           maxAge: 5184000000 // 2 months
       },
@@ -70,6 +71,7 @@ if (!dev && cluster.isMaster) {
         //sess.cookie.secure = true;
       }
       server.use(session(sess));
+      
       const auth0Strategy = new Auth0Strategy(
         {
           domain: config.auth0.domain,
