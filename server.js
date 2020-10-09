@@ -11,6 +11,12 @@ var passport = require('passport');
 const session = require('express-session');
 require('./passports')(passport);
 
+const session = require("express-session");
+const passport = require("passport");
+const Auth0Strategy = require("passport-auth0");
+const uid = require('uid-safe');
+const authRoutes = require("./auth-routes");
+
 const dev = config.dev;
 db(config.dbUrl);
 
@@ -55,6 +61,49 @@ if (!dev && cluster.isMaster) {
       }else {
         //server.use(express.errorHandler());
       }
+
+      server.enable('trust proxy');
+
+      const sess = {
+        secret: config.JWT_KEY,
+        proxy : true,
+        cookie : {
+          sameSite: false,
+          secure : true,
+          maxAge: 5184000000 // 2 months
+      },
+        resave: false,
+        saveUninitialized: true
+      };
+      if (server.get('env') === 'production') {
+        //server.set('trust proxy', 1);
+        //sess.proxy = true;
+        //sess.cookie.secure = true;
+      }
+      server.use(session(sess));
+      
+      const auth0Strategy = new Auth0Strategy(
+        {
+          domain: config.auth0.domain,
+          clientID: config.auth0.clientID,
+          clientSecret: config.auth0.clientSecret,
+          callbackURL: config.auth0.callbackURL
+        },
+        function(accessToken, refreshToken, extraParams, profile, done) {
+          return done(null, profile);
+        }
+      );
+      passport.use(auth0Strategy);
+      passport.serializeUser((user, done) => done(null, user));
+      passport.deserializeUser((user, done) => done(null, user));
+      server.use(passport.initialize());
+      server.use(passport.session());
+      server.use(authRoutes);
+      const restrictAccess = (req, res, next) => {
+        if (!req.isAuthenticated()) return res.redirect("/login");
+        next();
+      };
+      server.use("/profile", restrictAccess);
 
       router_api(server);
       router_front(server, dev, nextApp);

@@ -1,0 +1,28 @@
+{
+  "ranking":[
+    {
+      "full_name": "Ioce Velasco",
+      "image": "https://media.glassdoor.com/l/4c/1e/16/31/truck-driver.jpg",
+      "rating": 5,
+      "address": "Miami"
+    },
+    {
+      "full_name": "Erick Hermandez",
+      "image": "https://s29755.pcdn.co/wp-content/uploads/2018/05/shutterstock_704626036-1.jpg",
+      "rating": 3,
+      "address": "Miami"
+    },
+    {
+      "full_name": "Giuliana Espindola",
+      "image": "https://www.auto.edu/wp-content/uploads/ati-2-5.png",
+      "rating": 3,
+      "address": "Miami"
+    },
+    {
+      "full_name": "Jose Soto",
+      "image": "https://loaddelivered.blob.core.windows.net/images/image/3a362766260d4e18aca6567513e2f627/truck-driver-appreciation.PNG",
+      "rating": 4,
+      "address": "Miami"
+    }
+  ]
+}
