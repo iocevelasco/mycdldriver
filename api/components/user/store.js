@@ -66,14 +66,13 @@ async function deleteUser(id){
         if(foundUser.photo){
             fs.unlinkSync("." + foundUser.photo);
         }
-        
-        return Model.deleteOne({
-            _id: id
-        });
     } catch(err) {
         console.error(err);
-        return err;
     }
+        
+    return Model.deleteOne({
+        _id: id
+    });
     
 
 }

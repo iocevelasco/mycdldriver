@@ -13,8 +13,13 @@ const profileDriverSchema = mongoose.Schema({
     },
     imageCdl: {
         type: String,
-        required: true,
         trim: true
+    },
+    areaCode: {
+        type: Number
+    },
+    phoneNumber: {
+        type: Number
     },
     sex: {
         type: Number,

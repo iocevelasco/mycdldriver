@@ -15,7 +15,11 @@ const userSchema = mongoose.Schema({
       required: true,
       trim: true
    },
-   photo: String,
+   photo: {
+      type: String,
+      required: true,
+      trim: true
+   },
    date: {
       type: Date,
       default: Date.now
@@ -31,9 +35,12 @@ const userSchema = mongoose.Schema({
          }
       }
    },
+   provider_id : {
+      type: String, 
+      unique: true
+   },
    password: {
       type: String,
-      required: true,
       minLength: 7
    },
    tokens: [{

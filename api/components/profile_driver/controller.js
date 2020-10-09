@@ -7,18 +7,22 @@ function getDriver(filter){
     });
 }
 
-function addDriver(driver, user, imageCdl){
+function addDriver(driver, imageCdl){
     return new Promise((resolve, reject) => {
         if(!driver){
             console.error('[driverController] No driver data');
             reject('[driverController] No driver data');
             return false;
         }
-        if(!user){
-            console.error('[driverController] No user data');
-            reject('[driverController] No user data');
-            return false;
-        }
+
+        const user = {
+            name: driver.base.name,
+            lastname: driver.base.lastname,
+            photo: driver.base.photo,
+            email: driver.base.email,
+            provider_id: driver.base.provider_id
+        };
+
         const fileUrl = imageCdl ? config.publicRoute + config.filesRoute + '/' + imageCdl.filename : '';
 
         const fullDriver = {
@@ -26,6 +30,8 @@ function addDriver(driver, user, imageCdl){
             birthDate: driver.birthDate,
             imageCdl: fileUrl,
             sex: driver.sex,
+            areaCode: driver.areaCode,
+            phoneNumber: driver.phoneNumber,
             rating: driver.rating,
             address: driver.address,
             habilities: driver.habilities,

@@ -1,4 +1,5 @@
 const Model = require('./model');
+const userModel = require('../user/model');
 const fs = require('fs');
 
 async function getDriver(filterDriver){
@@ -32,9 +33,15 @@ async function getDriver(filterDriver){
 }
 
 async function addDriver(driver){
+    const myUser = new userModel(driver.user);
+    await myUser.save();
+    const {_id, name, lastname, photo, email, date} = myUser;
+    const token = await myUser.generateAuthToken();
+    user = { _id, name, lastname, photo, email, date, token };
+    driver.user = user;
     const myDriver = new Model(driver);
     await myDriver.save();
-    return myDriver;
+    return {myDriver, user};
 }
 
 module.exports = {

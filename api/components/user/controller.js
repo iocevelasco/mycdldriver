@@ -24,6 +24,21 @@ function addUser(user, photo){
     
 }
 
+function addUserDirect(user){
+    return new Promise((resolve, reject) => {
+        if(!user){
+            console.error('[userController] No hay usuario');
+            reject('Los datos son incorrectos');
+            return false;
+        }
+
+        const fullUser = store.add(user); 
+        resolve(fullUser);
+        
+    });
+    
+}
+
 function updateUser(id, user, photo){
     return new Promise(async (resolve, reject) => {
         if(!id){
@@ -105,5 +120,6 @@ module.exports = {
     deleteUser,
     loginUser,
     logoutUser,
-    logoutAll
+    logoutAll,
+    addUserDirect
 }

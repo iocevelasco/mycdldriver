@@ -41,10 +41,10 @@ if (!dev && cluster.isMaster) {
         secret: 'ClydeIsASquirrel',
         resave: 'false',
         saveUninitialized: 'false',
-        store: new MemcachedStore({
+        /*store: new MemcachedStore({
           servers: [process.env.MEMCACHIER_SERVERS],
           prefix: '_session_'
-        })
+        })*/
       }));
 
       if (!dev) {
