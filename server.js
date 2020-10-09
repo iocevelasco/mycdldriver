@@ -7,12 +7,11 @@ const router_api = require("./api/network/routes");
 const config = require('./api/config');
 const db = require('./api/db');
 const bodyParser = require('body-parser');
-
-const session = require("express-session");
-const passport = require("passport");
-const Auth0Strategy = require("passport-auth0");
-const uid = require('uid-safe');
-const authRoutes = require("./auth-routes");
+const passport = require('passport');
+const session = require('express-session');
+const MemcachedStore = require('connect-memjs')(session);
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 const dev = config.dev;
 db(config.dbUrl);
@@ -37,6 +36,16 @@ if (!dev && cluster.isMaster) {
     .then(() => {
       const server = express();
       server.use(bodyParser.json());
+      
+      server.use(session({
+        secret: 'ClydeIsASquirrel',
+        resave: 'false',
+        saveUninitialized: 'false',
+        store: new MemcachedStore({
+          servers: [process.env.MEMCACHIER_SERVERS],
+          prefix: '_session_'
+        })
+      }));
 
       if (!dev) {
         // Enforce SSL & HSTS in production
@@ -50,50 +59,73 @@ if (!dev && cluster.isMaster) {
           }
           res.redirect("https://" + req.headers.host + req.url);
         });
+      }else {
+        //server.use(express.errorHandler());
       }
 
-      server.enable('trust proxy');
-
-      const sess = {
-        secret: config.JWT_KEY,
-        proxy : true,
-        cookie : {
-          secure : true,
-          maxAge: 5184000000 // 2 months
-      },
-        resave: false,
-        saveUninitialized: true
-      };
-      if (server.get('env') === 'production') {
-        //server.set('trust proxy', 1);
-        //sess.proxy = true;
-        //sess.cookie.secure = true;
-      }
-      server.use(session(sess));
-      const auth0Strategy = new Auth0Strategy(
-        {
-          domain: config.auth0.domain,
-          clientID: config.auth0.clientID,
-          clientSecret: config.auth0.clientSecret,
-          callbackURL: config.auth0.callbackURL,
-          passReqToCallback: true
-        },
-        function(accessToken, refreshToken, extraParams, profile, done) {
-          return done(null, profile);
-        }
-      );
-      passport.use(auth0Strategy);
-      //passport.serializeUser((user, done) => done(null, user));
-      //passport.deserializeUser((user, done) => done(null, user));
+      //CONFIGURACION PASSPORT
+      passport.serializeUser(function(user, done) {
+        done(null, user);
+      });
+      passport.deserializeUser(function(obj, done) {
+        done(null, obj);
+      });
       server.use(passport.initialize());
       server.use(passport.session());
-      server.use(authRoutes);
+        
+      passport.use(new GoogleStrategy({
+          clientID: config.oauth.google.clientID,
+          clientSecret: config.oauth.google.clientSecret,
+          callbackURL: config.oauth.google.callbackURL
+        },
+        function(accessToken, refreshToken, profile, done) {
+          process.nextTick(function() {
+            console.log(profile);
+            return done(null, profile);
+          });
+        }
+      ));
+      passport.use(new FacebookStrategy({
+        clientID			: config.oauth.facebook.clientID,
+        clientSecret	: config.oauth.facebook.clientSecret,
+        callbackURL	 : config.oauth.facebook.callbackURL,
+        profileFields : ['id', 'displayName', /*'provider',*/ 'photos']
+      }, function(accessToken, refreshToken, profile, done) {
+        console.log(profile);
+        return done(null, profile);
+      }));
+      //CONFIGURACION PASSPORT
+
+      //AUTENTICACION
+      server.get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+      });
+      server.get('/auth/google', passport.authenticate('google', {
+        scope: [
+          'https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/userinfo.email'
+        ]
+      }),
+      function(req, res) {});
+      server.get('/auth/google/callback', passport.authenticate('google', {
+        failureRedirect: '/'
+      }),
+      function(req, res) {
+        res.redirect('/profile');
+      });
+
+      server.get('/auth/facebook', passport.authenticate('facebook'));
+      server.get('/auth/facebook/callback', passport.authenticate('facebook',
+        { successRedirect: '/profile', failureRedirect: '/' }
+      ));
+
       const restrictAccess = (req, res, next) => {
-        console.log('req',req);
-        if (!req.isAuthenticated()) return res.redirect("/login");
+        if (!req.isAuthenticated()) return res.redirect("/");
         next();
       };
       server.use("/profile", restrictAccess);
+      //AUTENTICACION
 
       router_api(server);
       router_front(server, dev, nextApp);
