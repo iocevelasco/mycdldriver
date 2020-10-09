@@ -75,19 +75,21 @@ if (!dev && cluster.isMaster) {
           domain: config.auth0.domain,
           clientID: config.auth0.clientID,
           clientSecret: config.auth0.clientSecret,
-          callbackURL: config.auth0.callbackURL
+          callbackURL: config.auth0.callbackURL,
+          passReqToCallback: true
         },
         function(accessToken, refreshToken, extraParams, profile, done) {
           return done(null, profile);
         }
       );
       passport.use(auth0Strategy);
-      passport.serializeUser((user, done) => done(null, user));
-      passport.deserializeUser((user, done) => done(null, user));
+      //passport.serializeUser((user, done) => done(null, user));
+      //passport.deserializeUser((user, done) => done(null, user));
       server.use(passport.initialize());
       server.use(passport.session());
       server.use(authRoutes);
       const restrictAccess = (req, res, next) => {
+        console.log('req',req);
         if (!req.isAuthenticated()) return res.redirect("/login");
         next();
       };

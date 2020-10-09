@@ -11,7 +11,7 @@ router.get("/login", passport.authenticate("auth0", {
 router.get("/callback", (req, res, next) => {
   passport.authenticate("auth0",  (err, user, info) => {
     console.log("Error: " + JSON.stringify(info));
-    console.log("Usuario: " + user);
+    console.log(": " + user);
     if (err) return next(err);
     if (!user) {
       return res.redirect("/");
