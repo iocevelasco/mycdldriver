@@ -35,14 +35,10 @@ if (!dev && cluster.isMaster) {
     .then(() => {
       const server = express();
       server.use(bodyParser.json());
-      server.set('trust proxy', 1);
       server.use(session({
         secret: config.JWT_KEY,
         resave: false,
-        saveUninitialized: true,
-        cookie: {
-          secure: true
-        }
+        saveUninitialized: false
       }));
 
       if (!dev) {
