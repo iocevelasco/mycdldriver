@@ -33,6 +33,7 @@ if (!dev && cluster.isMaster) {
     .then(() => {
       const server = express();
       server.use(bodyParser.json());
+      server.use(express.session({ secret: config.JWT_KEY }));
 
       if (!dev) {
         // Enforce SSL & HSTS in production
@@ -46,6 +47,8 @@ if (!dev && cluster.isMaster) {
           }
           res.redirect("https://" + req.headers.host + req.url);
         });
+      }else {
+        server.use(express.errorHandler());
       }
 
       router_api(server);
