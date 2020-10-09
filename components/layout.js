@@ -1,14 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Head from 'next/head'
 import Footer from './footer';
 import Link from 'next/link';
-import { Layout, Row, Col, Button, Space, Avatar, Typography } from 'antd';
+import { 
+    Layout, 
+    Row, 
+    Col, 
+    Button, 
+    Modal, 
+    Avatar, 
+    Typography 
+} from 'antd';
+import { GoogleOutlined, FacebookOutlined} from '@ant-design/icons';
 import '../styles/index.less';
 const { Text } = Typography;
 const { Content, Header } = Layout;
 
 
 const MainLayout = ({ children, title, user }) => {
+    const [visible, setVisible] = useState(false)
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
@@ -33,8 +43,10 @@ const MainLayout = ({ children, title, user }) => {
                                 </Col>
                             </Row>: 
                             <Row justify='end' align='middle'>
-                                <Link href="/login">
-                                    <Button type="secondary" size='large'>
+                                <Link >
+                                    <Button 
+                                    onClick={()=>setVisible(true)}
+                                    type="secondary" size='large'>
                                         LOGIN
                                     </Button>
                                 </Link>
@@ -47,6 +59,20 @@ const MainLayout = ({ children, title, user }) => {
                 {children}
             </Content>
             <Footer />
+            <Modal
+                title="Welcome!"
+                visible={visible}
+                onOk={()=>setVisible(false)}
+                onCancel={()=>setVisible(false)}
+                >
+                <Button icon={<GoogleOutlined />} block size='large' >
+                    Loggin with facebook
+                </Button>
+
+                <Button block size='large' style={{background:'#1877f2'}} icon={<FacebookOutlined />} >
+                       Continue with facebook     
+                </Button>
+            </Modal>
         </Layout>
     </>
     )
