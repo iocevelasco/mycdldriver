@@ -7,6 +7,8 @@ const router_api = require("./api/network/routes");
 const config = require('./api/config');
 const db = require('./api/db');
 const bodyParser = require('body-parser');
+var passport = require('passport');
+require('./passport')(passport);
 
 const dev = config.dev;
 db(config.dbUrl);
@@ -49,6 +51,24 @@ if (!dev && cluster.isMaster) {
       router_api(server);
       router_front(server, dev, nextApp);
 
+      //AUTENTICACION
+      server.get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+      });
+      server.get('/auth/google', passport.authenticate('google', {
+        scope: [
+          'https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/userinfo.email'
+        ]
+      }),
+      function(req, res) {});
+      server.get('/auth/google/callback', passport.authenticate('google', {
+        failureRedirect: '/login'
+      }),
+      function(req, res) {
+        res.redirect('/');
+      });
       server.listen(config.port, (err) => {
         if (err) throw err;
         console.log(`Listening on http://localhost:${config.port}`);
