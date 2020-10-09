@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React from 'react';
 import {
   Row,
@@ -17,6 +18,11 @@ const { Meta } = Card;
 const JobListComp = ({ title, image, description, address, date, postion_id }) => {
   return (
     <>
+   <Link href={{
+     pathname: '/jobs',
+     query:{
+       id: postion_id
+     }}}>
       <Card
         bodyStyle={{
           padding: 0
@@ -52,6 +58,7 @@ const JobListComp = ({ title, image, description, address, date, postion_id }) =
           </div>
         </div>
       </Card>
+      </Link>
     </>
   );
 }
