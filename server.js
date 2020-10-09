@@ -35,10 +35,14 @@ if (!dev && cluster.isMaster) {
     .then(() => {
       const server = express();
       server.use(bodyParser.json());
+      server.set('trust proxy', 1);
       server.use(session({
         secret: config.JWT_KEY,
         resave: false,
-        saveUninitialized: true
+        saveUninitialized: true,
+        cookie: {
+          secure: true
+        }
       }));
 
       if (!dev) {
@@ -106,15 +110,17 @@ if (!dev && cluster.isMaster) {
         failureRedirect: '/'
       }),
       function(req, res) {
-        res.redirect('/');
+        res.redirect('/profile');
       });
 
       server.get('/auth/facebook', passport.authenticate('facebook'));
       server.get('/auth/facebook/callback', passport.authenticate('facebook',
-        { successRedirect: '/', failureRedirect: '/' }
+        { successRedirect: '/profile', failureRedirect: '/' }
       ));
 
       const restrictAccess = (req, res, next) => {
+        req.session.views = +1;
+        console.log('viewa: ' + req.session.views );
         if (!req.isAuthenticated()) return res.redirect("/");
         next();
       };
