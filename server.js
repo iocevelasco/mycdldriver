@@ -8,7 +8,8 @@ const config = require('./api/config');
 const db = require('./api/db');
 const bodyParser = require('body-parser');
 var passport = require('passport');
-require('./passport')(passport);
+const session = require('express-session');
+require('./passports')(passport);
 
 const dev = config.dev;
 db(config.dbUrl);
@@ -33,7 +34,11 @@ if (!dev && cluster.isMaster) {
     .then(() => {
       const server = express();
       server.use(bodyParser.json());
-      server.use(express.session({ secret: config.JWT_KEY }));
+      server.use(session({
+        secret: config.JWT_KEY,
+        resave: false,
+        saveUninitialized: true
+      }));
 
       if (!dev) {
         // Enforce SSL & HSTS in production
@@ -48,7 +53,7 @@ if (!dev && cluster.isMaster) {
           res.redirect("https://" + req.headers.host + req.url);
         });
       }else {
-        server.use(express.errorHandler());
+        //server.use(express.errorHandler());
       }
 
       router_api(server);
