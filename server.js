@@ -9,6 +9,7 @@ const db = require('./api/db');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
+const MemcachedStore = require('connect-memjs')(session);
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 
@@ -35,10 +36,15 @@ if (!dev && cluster.isMaster) {
     .then(() => {
       const server = express();
       server.use(bodyParser.json());
+      
       server.use(session({
-        secret: config.JWT_KEY,
-        resave: false,
-        saveUninitialized: false
+        secret: 'ClydeIsASquirrel',
+        resave: 'false',
+        saveUninitialized: 'false',
+        store: new MemcachedStore({
+          servers: [process.env.MEMCACHIER_SERVERS],
+          prefix: '_session_'
+        })
       }));
 
       if (!dev) {
