@@ -16,6 +16,11 @@ const config = {
             clientID: process.env.OAUTH2_CLIENT_ID || '762087274564-vhbjmlqm5vc8qmc9slkd8tjtkh447dut.apps.googleusercontent.com',
             clientSecret: process.env.OAUTH2_CLIENT_SECRET || '2EjAZAVFLJFjLLBxBS2Z0d5y',
             callbackURL: process.env.OAUTH2_CALLBACK || 'http://localhost:3000/auth/google/callback'
+        },
+        facebook: {
+            clientID: process.env.OAUTH2_CLIENT_ID || '371266210898392',
+            clientSecret: process.env.OAUTH2_CLIENT_SECRET || '50eeb472813974f76e27e299ab859de4',
+            callbackURL: process.env.OAUTH2_CALLBACK || 'http://localhost:3000/auth/facebook/callback'
         }
     }
 };
