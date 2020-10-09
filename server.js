@@ -52,33 +52,44 @@ if (!dev && cluster.isMaster) {
         });
       }
 
-      const sessionConfig = {
-        secret: uid.sync(18),
-        cookie: {
-          maxAge: 86400 * 1000 // 24 hours in milliseconds
-        },
+      server.enable('trust proxy');
+
+      const sess = {
+        secret: config.JWT_KEY,
+        proxy : true,
+        cookie : {
+          secure : true,
+          maxAge: 5184000000 // 2 months
+      },
         resave: false,
         saveUninitialized: true
       };
-      server.use(session(sessionConfig));
+      if (server.get('env') === 'production') {
+        //server.set('trust proxy', 1);
+        //sess.proxy = true;
+        //sess.cookie.secure = true;
+      }
+      server.use(session(sess));
       const auth0Strategy = new Auth0Strategy(
         {
           domain: config.auth0.domain,
           clientID: config.auth0.clientID,
           clientSecret: config.auth0.clientSecret,
-          callbackURL: config.auth0.callbackURL
+          callbackURL: config.auth0.callbackURL,
+          passReqToCallback: true
         },
         function(accessToken, refreshToken, extraParams, profile, done) {
           return done(null, profile);
         }
       );
       passport.use(auth0Strategy);
-      passport.serializeUser((user, done) => done(null, user));
-      passport.deserializeUser((user, done) => done(null, user));
+      //passport.serializeUser((user, done) => done(null, user));
+      //passport.deserializeUser((user, done) => done(null, user));
       server.use(passport.initialize());
       server.use(passport.session());
       server.use(authRoutes);
       const restrictAccess = (req, res, next) => {
+        console.log('req',req);
         if (!req.isAuthenticated()) return res.redirect("/login");
         next();
       };

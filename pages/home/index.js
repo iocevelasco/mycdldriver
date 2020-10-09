@@ -1,13 +1,19 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from '../components/layout';
-import { Row, Col, Typography, Input, DatePicker, Select, Card } from 'antd';
-import HeaderHome from './home/components/search';
-import OffertJobComp from './home/components/job_offerts';
-import RankingComp from './home/components/ranking';
-import CarouselComp from '../components/carousel';
-import mock_jobs from '../mock/job_offerts.json';
-import mock_ranking from '../mock/ranking.json';
+import MainLayout from '../../components/layout';
+import { Row, Col, Typography, Input, Select } from 'antd';
+import { withRouter } from 'next/router'
+import CarouselComp from '../../components/carousel';
 import axios from 'axios';
+
+//mock
+import mock_ranking from '../../mock/ranking.json';
+import mock_jobs from '../../mock/job_offerts.json';
+
+
+//View components
+import HeaderHome from './components/search';
+import OffertJobComp from './components/job_offerts';
+import RankingComp from './components/ranking';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -41,7 +47,7 @@ const reducer = (state, action) => {
   }
 }
 
-const Home = ({ user }) => {
+const  Home = ({ user }) => {
   console.log(user);
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -68,7 +74,7 @@ const Home = ({ user }) => {
 
   return (
     <>
-      <MainLayout title='Wellcome' user={user}>
+      <MainLayout title='Welcome' user={user}>
         <HeaderHome />
         <WrapperSection row={20} arginTop={0}>
           <CarouselComp carousel_data={state.carousel_data} />
@@ -116,6 +122,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   )
 }
 
-
-
-export default Home;
+export default withRouter(Home);
