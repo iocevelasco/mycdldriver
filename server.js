@@ -89,7 +89,6 @@ if (!dev && cluster.isMaster) {
         callbackURL	 : config.oauth.facebook.callbackURL,
         profileFields : ['id', 'displayName', /*'provider',*/ 'photos']
       }, function(accessToken, refreshToken, profile, done) {
-
         return done(null, profile);
       }));
       //CONFIGURACION PASSPORT
@@ -110,19 +109,19 @@ if (!dev && cluster.isMaster) {
         failureRedirect: '/'
       }),
       function(req, res) {
-        res.redirect('/');
+        res.redirect('/profile');
       });
 
       server.get('/auth/facebook', passport.authenticate('facebook'));
       server.get('/auth/facebook/callback', passport.authenticate('facebook',
-        { successRedirect: '/', failureRedirect: '/' }
+        { successRedirect: '/profile', failureRedirect: '/' }
       ));
 
       const restrictAccess = (req, res, next) => {
         if (!req.isAuthenticated()) return res.redirect("/");
         next();
       };
-      server.use("/", restrictAccess);
+      server.use("/profile", restrictAccess);
       //AUTENTICACION
 
       router_api(server);

@@ -96,9 +96,9 @@ const  Home = ({ user }) => {
           </Row>
           <Row justify='center' align='middle' gutter={[16]}>
             {
-              state.ranking.map((e, i) => {
+              state.ranking.map((e, ind) => {
                 return (
-                  <RankingComp key={i} {...e} />
+                  <RankingComp key={ind} {...e} />
                 )
               })
             }

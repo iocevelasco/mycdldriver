@@ -12,7 +12,8 @@ import {
     Avatar, 
     Typography,
     Menu, 
-    Dropdown 
+    Dropdown,
+    Space
 } from 'antd';
 import { 
     GoogleOutlined, 
@@ -50,21 +51,18 @@ const MainLayout = ({ children, title, user, router }) => {
     const menu = (
         <Menu>
           <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-              1st menu item
-            </a>
+            <Link href='/profile'>
+                <Button type='link'>
+                    Profile
+                </Button>
+            </Link>
           </Menu.Item>
-          <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-              2nd menu item
-            </a>
+          <Menu.Item >
+            <Button type='link' onClick={()=>router.push('/logout')} >
+                Logout
+            </Button>
           </Menu.Item>
-          <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-              3rd menu item
-            </a>
-          </Menu.Item>
-          <Menu.Item danger>a danger item</Menu.Item>
+
         </Menu>
       );
 
@@ -80,17 +78,16 @@ const MainLayout = ({ children, title, user, router }) => {
                             <img style={{height: 50}} src='/static/images/logo.svg' />
                         </Link>
                     </Col>
-                    <Col span={6}>
+                    <Col span={5}>
                     {
                         user ?
                         <Dropdown overlay={menu}>
                              <Row justify='end' align='middle'>
-                                <Col span={8}>
-                                    <Text strong>{userProps.name}</Text>
-                                </Col>
-                                <Col span={4}>
-                                    <Avatar src={userProps.photo} />
-                                </Col>
+                                <Space size='large'>
+                                <DownOutlined /> 
+                                <Text strong>{userProps.name}</Text> 
+                                <Avatar src={userProps.photo} />
+                             </Space>
                             </Row>
                        </Dropdown>
                      : 
@@ -123,7 +120,7 @@ const MainLayout = ({ children, title, user, router }) => {
                         <Title level={3}>Welcome!</Title>
                         <Text>Sign in for MyCDL</Text>
                     </div>
-                    <Button onClick={()=>router.push('/auth/google')} style={{ color:'#1877f2'}}  icon={<GoogleOutlined />} block size='large' >
+                    <Button onClick={()=>router.push('/auth/google')} icon={<GoogleOutlined />} block size='large' >
                         Loggin with Google
                     </Button>
 
