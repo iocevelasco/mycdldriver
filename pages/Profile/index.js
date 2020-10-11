@@ -56,8 +56,7 @@ const reducer = (state, action) => {
   }
 }
 
-const Profile = ({ user }) => {
-  console.log(user);
+const Profile = ({ user, ...props }) => {
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [formLayout, setFormLayout] = useState('horizontal');

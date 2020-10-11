@@ -57,7 +57,6 @@ const reducer = (state, action) => {
 }
 
 const JobOffert = ({ user }) => {
-  console.log(user);
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [formLayout, setFormLayout] = useState('horizontal');

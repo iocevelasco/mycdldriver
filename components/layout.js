@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import { withRouter } from 'next/router';
 import Head from 'next/head'
 import Footer from './footer';
 import Link from 'next/link';
@@ -9,16 +10,64 @@ import {
     Button, 
     Modal, 
     Avatar, 
-    Typography 
+    Typography,
+    Menu, 
+    Dropdown 
 } from 'antd';
-import { GoogleOutlined, FacebookOutlined} from '@ant-design/icons';
+import { 
+    GoogleOutlined, 
+    FacebookOutlined, 
+    DownOutlined} 
+from '@ant-design/icons';
+
 import '../styles/index.less';
-const { Text } = Typography;
+
+const { Text, Title } = Typography;
 const { Content, Header } = Layout;
 
+const MainLayout = ({ children, title, user, router }) => {
+    const [visible, setVisible] = useState(false);
 
-const MainLayout = ({ children, title, user }) => {
-    const [visible, setVisible] = useState(false)
+    const [userProps, setUserProps] = useState({ 
+        name:'',
+        email:'',
+        id:'',
+        photo:'',
+    });
+
+    useEffect(()=>{
+        if(!user) return
+        const { displayName, emails, photos, id} = user;
+        setUserProps({ 
+            name:displayName,
+            email:emails[0].value,
+            id:id,
+            photo:photos[0].value,
+        }) 
+    },[user])
+
+    
+    const menu = (
+        <Menu>
+          <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+              1st menu item
+            </a>
+          </Menu.Item>
+          <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+              2nd menu item
+            </a>
+          </Menu.Item>
+          <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+              3rd menu item
+            </a>
+          </Menu.Item>
+          <Menu.Item danger>a danger item</Menu.Item>
+        </Menu>
+      );
+
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
@@ -34,14 +83,17 @@ const MainLayout = ({ children, title, user }) => {
                     <Col span={6}>
                     {
                         user ?
-                            <Row justify='end' align='middle'>
+                        <Dropdown overlay={menu}>
+                             <Row justify='end' align='middle'>
                                 <Col span={8}>
-                                    <Text strong>{user.displayName}</Text>
+                                    <Text strong>{userProps.name}</Text>
                                 </Col>
                                 <Col span={4}>
-                                    <Avatar src={user.picture} />
+                                    <Avatar src={userProps.photo} />
                                 </Col>
-                            </Row>: 
+                            </Row>
+                       </Dropdown>
+                     : 
                             <Row justify='end' align='middle'>
                                 <Link >
                                     <Button 
@@ -60,21 +112,28 @@ const MainLayout = ({ children, title, user }) => {
             </Content>
             <Footer />
             <Modal
-                title="Welcome!"
                 visible={visible}
+                footer={null}
+                width={380}
                 onOk={()=>setVisible(false)}
                 onCancel={()=>setVisible(false)}
                 >
-                <Button icon={<GoogleOutlined />} block size='large' >
-                    Loggin with facebook
-                </Button>
+                <div className='modal-login'>
+                    <div className='title'>
+                        <Title level={3}>Welcome!</Title>
+                        <Text>Sign in for MyCDL</Text>
+                    </div>
+                    <Button onClick={()=>router.push('/auth/google')} style={{ color:'#1877f2'}}  icon={<GoogleOutlined />} block size='large' >
+                        Loggin with Google
+                    </Button>
 
-                <Button block size='large' style={{background:'#1877f2'}} icon={<FacebookOutlined />} >
-                       Continue with facebook     
-                </Button>
+                    <Button onClick={()=>router.push('/auth/facebook')} block size='large' style={{background:'#1877f2', color:'#fff'}} icon={<FacebookOutlined />} >
+                        Continue with facebook     
+                    </Button>
+                </div>
             </Modal>
         </Layout>
     </>
     )
 }
-export default MainLayout;
+export default withRouter(MainLayout);
