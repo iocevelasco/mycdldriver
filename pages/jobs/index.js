@@ -6,7 +6,6 @@ import axios from 'axios';
 
 
 const Jobs = (props) => {
-  console.log(props)
   return (
     <>
       <MainLayout title='Wellcome'>

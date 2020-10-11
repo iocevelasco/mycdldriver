@@ -11,12 +11,17 @@ const config = {
     publicRoute: process.env.PUBLIC_ROUTE || '/public',
     filesRoute: process.env.FILES_ROUTE || '/files',
     dev: process.env.NODE_ENV !== 'production',
-    auth0: {
-        domain: process.env.AUTH0_DOMAIN || 'dev-8zm642k2.us.auth0.com',
-        clientID: process.env.AUTH0_CLIENT_ID || 'pLRsn8o0a1uyBULqVk62sF3LcMMHfahr',
-        clientSecret: process.env.AUTH0_CLIENT_SECRET || '5OLosllM-ZDwwJ4aU2u5HxhAAFzxGKD6DBl-XRZc-Vzmty-8cMm4UdllVw1sjBqN',
-        callbackURL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback',
-        baseURL: process.env.BASE_URL || 'http://localhost:3000'
+    oauth:  {
+        google: {
+            clientID: process.env.GOOGLE_CLIENT_ID || '762087274564-vhbjmlqm5vc8qmc9slkd8tjtkh447dut.apps.googleusercontent.com',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || '2EjAZAVFLJFjLLBxBS2Z0d5y',
+            callbackURL: process.env.GOOGLE_CALLBACK || 'http://localhost:3000/auth/google/callback'
+        },
+        facebook: {
+            clientID: process.env.FACEBOOK_CLIENT_ID || '371266210898392',
+            clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '50eeb472813974f76e27e299ab859de4',
+            callbackURL: process.env.FACEBOOK_CALLBACK || 'http://localhost:3000/auth/facebook/callback'
+        }
     }
 };
 

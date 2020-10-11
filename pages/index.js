@@ -1,13 +1,19 @@
 import React, { useEffect, useReducer } from 'react';
 import MainLayout from '../components/layout';
-import { Row, Col, Typography, Input, DatePicker, Select, Card } from 'antd';
+import { Row, Col, Typography, Input, Select } from 'antd';
+import { withRouter } from 'next/router'
+import CarouselComp from '../components/carousel';
+import axios from 'axios';
+
+//mock
+import mock_ranking from '../mock/ranking.json';
+import mock_jobs from '../mock/job_offerts.json';
+
+
+//View components
 import HeaderHome from './home/components/search';
 import OffertJobComp from './home/components/job_offerts';
 import RankingComp from './home/components/ranking';
-import CarouselComp from '../components/carousel';
-import mock_jobs from '../mock/job_offerts.json';
-import mock_ranking from '../mock/ranking.json';
-import axios from 'axios';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -41,8 +47,7 @@ const reducer = (state, action) => {
   }
 }
 
-const Home = ({ user }) => {
-  console.log(user);
+const  Home = ({ user }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -68,7 +73,7 @@ const Home = ({ user }) => {
 
   return (
     <>
-      <MainLayout title='Wellcome' user={user}>
+      <MainLayout title='Welcome' user={user}>
         <HeaderHome />
         <WrapperSection row={20} arginTop={0}>
           <CarouselComp carousel_data={state.carousel_data} />
@@ -91,9 +96,9 @@ const Home = ({ user }) => {
           </Row>
           <Row justify='center' align='middle' gutter={[16]}>
             {
-              state.ranking.map((e, i) => {
+              state.ranking.map((e, ind) => {
                 return (
-                  <RankingComp key={i} {...e} />
+                  <RankingComp key={ind} {...e} />
                 )
               })
             }
@@ -116,6 +121,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   )
 }
 
-
-
-export default Home;
+export default withRouter(Home);

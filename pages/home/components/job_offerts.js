@@ -9,12 +9,13 @@ import {
   Button
 } from 'antd';
 import Link from 'next/link';
+
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography
 const { Meta } = Card;
 
-const OffertJobComp = ({ title, image, description, address, date, postion_id }) => {
+const JobListComp = ({ title, image, description, address, date, postion_id }) => {
   return (
     <>
    <Link href={{
@@ -46,7 +47,14 @@ const OffertJobComp = ({ title, image, description, address, date, postion_id })
             </div>
           </div>
           <div className='action'>
-            <Button type='primary'> Apply </Button>
+          <Link
+            href={{
+              pathname: '/jobOffert',
+              query: { id: postion_id },
+              }}
+              >
+               <Button type='primary'> Apply </Button>
+            </Link>
           </div>
         </div>
       </Card>
@@ -55,4 +63,4 @@ const OffertJobComp = ({ title, image, description, address, date, postion_id })
   );
 }
 
-export default OffertJobComp;
+export default JobListComp;
