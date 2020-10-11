@@ -31,7 +31,6 @@ if (!dev && cluster.isMaster) {
 
 } else {
   const nextApp = next({ dir: '.', dev });
-
   nextApp.prepare()
     .then(() => {
       const server = express();
@@ -41,10 +40,10 @@ if (!dev && cluster.isMaster) {
         secret: 'ClydeIsASquirrel',
         resave: 'false',
         saveUninitialized: 'false',
-        /*store: new MemcachedStore({
-          servers: [process.env.MEMCACHIER_SERVERS],
-          prefix: '_session_'
-        })*/
+        // store: new MemcachedStore({
+        //   servers: [process.env.MEMCACHIER_SERVERS],
+        //   prefix: '_session_'
+        // })
       }));
 
       if (!dev) {
@@ -80,7 +79,6 @@ if (!dev && cluster.isMaster) {
         },
         function(accessToken, refreshToken, profile, done) {
           process.nextTick(function() {
-            console.log(profile);
             return done(null, profile);
           });
         }
@@ -91,7 +89,6 @@ if (!dev && cluster.isMaster) {
         callbackURL	 : config.oauth.facebook.callbackURL,
         profileFields : ['id', 'displayName', /*'provider',*/ 'photos']
       }, function(accessToken, refreshToken, profile, done) {
-        console.log(profile);
         return done(null, profile);
       }));
       //CONFIGURACION PASSPORT

@@ -16,7 +16,6 @@ module.exports = function(passport) {
 	  },
 	  function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function() {
-		  console.log(profile);
 		  return done(null, profile);
 		});
 	  }

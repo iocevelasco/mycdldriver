@@ -20,14 +20,6 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const initialState = {
-  title: "Position Name",
-  image: "https://image.freepik.com/vector-gratis/truck-logo-vector-imagen-archivo_56473-238.jpg",
-  postion_id: 0,
-  description: "Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt.",
-  address: "Miami",
-  date: "12/04/23",
-  expire_date: "12/05/23",
-  company_name: "pepito",
   experience:[
     {key:1-2, value:'1 - 2'},
     {key:2-4, value:'2 - 4'},
@@ -56,8 +48,7 @@ const reducer = (state, action) => {
   }
 }
 
-const Profile = ({ user }) => {
-  console.log(user);
+const Profile = ({ user, ...props }) => {
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [formLayout, setFormLayout] = useState('horizontal');
@@ -88,26 +79,8 @@ const Profile = ({ user }) => {
       <MainLayout title='Welcome' user={user}>
         <WrapperSection row={24} mt={0}>
           <div className='job-offert'>
-            <Row>
-              <Col className='job-offert__detaill' span={14}>
-                <div className="header"
-                  style={{
-                    backgroundImage: `url('/static/images/truck3.jpg')`
-                  }}>
-                  <Avatar size={130} src={image} alt='image' />
-                </div>
-                <div>
-                  <Title> {title} </Title>
-                  <div>
-                    <Text> Addres </Text>
-                    <Text strong> {address} </Text> <Text strong > | </Text>
-                    <Text> Date </Text>
-                    <Text strong> {date} </Text>
-                  </div>
-                </div>
-                <Text className='description'>{description}</Text>
-              </Col>
-              <Col className='job-offert__form' span={10}>
+            <Row justify='center'>
+              <Col className='job-offert__form' span={14}>
                 <Form
                   labelCol={{ span: 4 }}
                   wrapperCol={{ span: 24 }}
