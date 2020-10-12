@@ -10,9 +10,12 @@ import {
   Form,
   Button,
   Switch,
-  InputNumber
+  InputNumber,
+  Radio,
+  DatePicker,
 } from 'antd';
 import axios from 'axios';
+import moment from 'moment';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -20,29 +23,35 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const initialState = {
-  experience:[
-    {key:1-2, value:'1 - 2'},
-    {key:2-4, value:'2 - 4'},
-    {key:4-6, value:'4 - 6'},
-    {key:6-9, value:'6 - 9'},
-    {key:10-15, value:'10 - 15'}
-  ]
+  is_cdl:false,
+  new_user: {
+    name: '',
+    lastname: '',
+    photo: '',
+    email: '',
+    provider_id: '',
+    cdl: '',
+    birthDate: '',
+    sex: '',
+    areaCode: '',
+    phoneNumber: '',
+    address: '',
+    habilities: '',
+    description: '',
+    experience: '',
+    zipCode: '',
+    expirationDate:''
+  }
 }
 
 const types = {
-  carousel_data: 'carousel_data',
-  positions: 'positions',
-  ranking: 'ranking',
+  CREATE_NEW_USER: 'create_new_user',
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case types.carousel_data:
-      return { ...state, carousel_data: action.payload }
-    case types.positions:
-      return { ...state, positions: action.payload }
-    case types.ranking:
-      return { ...state, ranking: action.payload }
+    case types.CREATE_NEW_USER:
+      return { ...state, new_user: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -51,137 +60,209 @@ const reducer = (state, action) => {
 const Profile = ({ user, ...props }) => {
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [formLayout, setFormLayout] = useState('horizontal');
 
   useEffect(() => {
+    if (!user) return;
+    let new_user = state.new_user;
+    new_user.name = user.name.givenName || '';
+    new_user.lastname = user.name.familyName || '';
+    new_user.provider_id = user.id || '';
+    new_user.image = user.photos[0].value || '';
+    new_user.email = user.emails[0].value || '';
+
+    dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
   }, [])
 
-  const onChange = (e, key) => {
-    const newDash = state.dashboard;
+  const onChangeInputs = (e, key) => {
+    let new_user = state.new_user;
     let value = "";
     switch (key) {
       default:
         value = e.target.value;
-        newDash[key] = value;
+        new_user[key] = value;
         break;
     }
-    dispatch({ type: types.ADD_NEW_DATA, payload: newDash })
-  }
-  const formItemLayout = {
-    labelCol: { span: 24 },
-    wrapperCol: { span: 14 },
+    dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
   }
 
-  const { title, image, description, address, date, expire_date, company_name } = state
+  const handleDatePicker = (obj, date, key) => {
+    let new_user = state.new_user;
+    state.new_user[key] = date
+    dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
+  }
+
+  const newRequest = () => {
+    const { new_request, fileArray } = state
+
+    for (let key in new_request) {
+      if (!new_request[key]) return message.warning('All fields are required');
+    }
+    dispatch({ type: types.START_CREATE_POST });
+
+    const file_data = new FormData();
+    for (var i = 0; i < fileArray.length; i++) {
+      file_data.append("file_final", fileArray[i]);
+    }
+    file_data.append("type", new_request.type)
+    file_data.append("project_id", new_request.project_id);
+    file_data.append("description", new_request.description);
+    file_data.append("title", new_request.title);
+
+    request.post("/request", { data: file_data })
+      .then(response => {
+        dispatch({ type: types.CREATE_REQUEST_SUCCESS });
+        props.getRequest();
+      })
+      .catch(error => {
+        console.log("error en view: ", error.response.data.result.message);
+        dispatch({ type: types.ERROR_CREATE_POST });
+      });
+  };
+ 
+
+  console.log('new', state.new_user);
 
   return (
     <>
-      <MainLayout title='Welcome' user={user}>
+      <MainLayout title='Profile' user={user}>
         <WrapperSection row={24} mt={0}>
-          <div className='job-offert'>
+          <div className='profile-driver'>
             <Row justify='center'>
-              <Col className='job-offert__form' span={14}>
+              <Col className='profile-driver__form' span={14}>
+                <Row justify='center'>
+                  <div className='avatar'>
+                    <Avatar src={state.new_user.image} size={120} />
+                  </div>
+                </Row>
                 <Form
-                  labelCol={{ span: 4 }}
-                  wrapperCol={{ span: 24 }}
                   layout='horizontal'
                   form={form}>
-                  <Form.Item>
-                    <Input
-                      size='large'
-                      placeholder="First Name"
-                      onChange={(e) => onChange(e, 'name')} />
-                  </Form.Item>
-                  <Form.Item>
-                    <Input
-                      size='large'
-                      placeholder="Last Name"
-                      onChange={(e) => onChange(e, 'last-name')} />
-                  </Form.Item>
+                  <Row gutter={[24]} justify='space-between' >
+                    <Col span={12}>
+                      <Form.Item>
+                        <Input
+                          size='large'
+                          placeholder="Name"
+                          value={state.new_user.name}
+                          onChange={(e) => onChangeInputs(e, 'name')} />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item>
+                        <Input
+                          size='large'
+                          placeholder="Last Name"
+                          value={state.new_user.lastname}
+                          onChange={(e) => onChangeInputs(e, 'lastname')} />
+                      </Form.Item>
+                    </Col>
+                  </Row>
                   <Form.Item>
                     <Input
                       size='large'
                       placeholder="Mail"
-                      onChange={(e) => onChange(e, 'Mail')} />
+                      value={state.new_user.email}
+                      onChange={(e) => onChangeInputs(e, 'email')} />
                   </Form.Item>
                   <Row gutter={[24]} justify='space-between' align='middle'>
-                  <Col span={13}>
-                    <Form.Item>
-                    <Row gutter={[24]} justify='space-between' >
-                        <Col span={8}>
-                          <Text style={{color:'#fff'}}> Age </Text>
-                        </Col>
-                        <Col span={14}>
-                          <InputNumber 
-                          min={1} 
-                          max={10} 
-                          defaultValue={3}
-                          onChange={onChange} />
-                        </Col>
-                    </Row>
-                    </Form.Item>
-                  </Col>
-                  <Col span={11}>
-                   <Form.Item>
-                      <Row gutter={[24]} justify='space-between' >
-                        <Col span={16}>
-                          <Text style={{color:'#fff'}}> Do you have CDL-A? </Text>
-                        </Col>
-                        <Col span={8}>
-                          <Switch 
-                          checkedChildren={<CheckOutlined />}
-                          unCheckedChildren={<CloseOutlined />} />
-                        </Col>
-                      </Row> 
-                    </Form.Item>
-                  </Col>
+                    <Col span={12}>
+                       <Form.Item>
+                        <DatePicker
+                          size='large'
+                          style={{width: '100%'}}
+                          placeholder="Birth Date"
+                          onChange={(obj, key)=>handleDatePicker(obj, key, 'birthDate')}/>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item>
+                        <Radio.Group
+                          value={state.new_user.sex}
+                          onChange={(e) => onChangeInputs(e, 'sex')}>
+                          <Radio value={0}>F</Radio>
+                          <Radio value={1}>M</Radio>
+                          <Radio value={1}>Other</Radio>
+                        </Radio.Group>
+                      </Form.Item>
+                    </Col>
                   </Row>
-                  <Form.Item>
+                  <Row gutter={[24]} justify='space-between' align='middle'>
+                   <Col span={12}>
+                      <Form.Item>
+                       <Input
+                          disabled={state.is_cdl}
+                          size='large'
+                          placeholder="DLN"
+                          value={state.new_user.dln}
+                          onChange={(e) => onChangeInputs(e, 'dln')} />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item>
+                        <DatePicker
+                          size='large'
+                          placeholder="Experation Date"
+                          style={{width: '100%'}}
+                          onChange={(obj, key)=>handleDatePicker(obj, key, 'expirationDate')}/>
+                      </Form.Item>
+                    </Col>
+                  </Row>
                     <Row gutter={[24]} justify='space-between' >
-                      <Col span={10}>
+                      <Col span={6}>
+                      <Form.Item>
                         <Input
                           size='large'
                           placeholder="Area Code"
-                          onChange={(e) => onChange(e, 'last-name')} />
-
+                          value={state.new_user.areaCode}
+                          onChange={(e) => onChangeInputs(e, 'areaCode')} />
+                          </Form.Item>
                       </Col>
-                      <Col span={14}>
+                      <Col span={18}>
+                          <Form.Item>
                         <Input
                           size='large'
                           placeholder="Phone Number"
-                          onChange={(e) => onChange(e, 'last-name')} />
+                          value={state.new_user.phoneNumber}
+                          onChange={(e) => onChangeInputs(e, 'phoneNumber')} />
+                        </Form.Item>
                       </Col>
                     </Row>
-                  </Form.Item>
-                  <Form.Item>
-                    <Input
-                      size='large'
-                      placeholder="Zip Code"
-                      onChange={(e) => onChange(e, 'zip-code')} />
-                  </Form.Item>
-                  <Form.Item>
-                  <Select 
-                    placeholder="Experience"
-                    size='large'
-                    onChange={(e) => onChange(e, 'Mail')}>
-                      {
-                        state.experience.map((e,i)=>{
-                        return <Option key={i} value={e.key}>{e.value}</Option>
-                        })
-                      }
-                    </Select>
-                  </Form.Item>
-                  <Form.Item>
-                    <TextArea
-                      rows={4} 
-                      size='large'
-                      placeholder="Zip Code"
-                      onChange={(e) => onChange(e, 'zip-code')} />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button style={{color:'#FF2A39'}} block size='large'>Submit</Button>
-                  </Form.Item>
+                    <Row gutter={[24]} justify='space-between' >
+                      <Col span={6}>
+                      <Form.Item>
+                        <Input
+                          size='large'
+                          placeholder="Zip Code"
+                          value={state.new_user.zipCode}
+                          onChange={(e) => onChangeInputs(e, 'zipCode')} />
+                          </Form.Item>
+                      </Col>
+                      <Col span={18}>
+                      <Form.Item>
+                        <Input
+                          size='large'
+                          placeholder="Address"
+                          value={state.new_user.Address}
+                          onChange={(e) => onChangeInputs(e, 'Address')} />
+                        </Form.Item>
+                      </Col>
+                    </Row>
                 </Form>
+              </Col>
+              <Col className='profile-driver__form' span={14}>
+              <Form.Item>
+                    <TextArea
+                      rows={4}
+                      size='large'
+                      placeholder="Description"
+                      value={state.new_user.description}
+                      onChange={(e) => onChangeInputs(e, 'description')} />
+                  </Form.Item>
+              <Row gutter={[24]} justify='end'  align='middle'>
+                  <Col span={6}>
+                    <Button type='primary' block size='large'>Save Information</Button>
+                  </Col>
+              </Row>
               </Col>
             </Row>
           </div>

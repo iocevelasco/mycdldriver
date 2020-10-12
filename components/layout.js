@@ -121,7 +121,7 @@ const MainLayout = ({ children, title, user, router }) => {
                         <Text>Sign in for MyCDL</Text>
                     </div>
                     <Button onClick={()=>router.push('/auth/google')} icon={<GoogleOutlined />} block size='large' >
-                        Loggin with Google
+                      Continue with Google
                     </Button>
 
                     <Button onClick={()=>router.push('/auth/facebook')} block size='large' style={{background:'#1877f2', color:'#fff'}} icon={<FacebookOutlined />} >
