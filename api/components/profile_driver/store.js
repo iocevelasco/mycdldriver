@@ -44,7 +44,27 @@ async function addDriver(driver){
     return {myDriver, user};
 }
 
+async function deleteDriver(id){
+    const foundUser = await Model.findOne({
+        _id: id
+    });
+
+    try {
+        if(foundUser.imageCdl){
+            fs.unlinkSync("." + foundUser.imageCdl);
+        }
+    } catch(err) {
+        console.error(err);
+    }
+        
+    return Model.deleteOne({
+        _id: id
+    });    
+
+}
+
 module.exports = {
     list: getDriver,
-    add: addDriver
+    add: addDriver,
+    delete: deleteDriver
 }

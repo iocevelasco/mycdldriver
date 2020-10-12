@@ -1,4 +1,5 @@
 const Model = require('./model');
+const driverModel = require('../profile_driver/model');
 const fs = require('fs');
 
 async function getUser(filterUser){
@@ -61,19 +62,28 @@ async function deleteUser(id){
     const foundUser = await Model.findOne({
         _id: id
     });
+    const foundDriver = await driverModel.findOne({
+        user: id
+    });
 
     try {
         if(foundUser.photo){
             fs.unlinkSync("." + foundUser.photo);
         }
+        if(foundDriver.imageCdl){
+            fs.unlinkSync("." + foundUser.imageCdl);
+        }
     } catch(err) {
         console.error(err);
     }
+
+    driverModel.deleteOne({
+        _id: foundDriver._id
+    }); 
         
     return Model.deleteOne({
         _id: id
-    });
-    
+    });    
 
 }
 
