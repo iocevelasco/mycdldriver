@@ -84,7 +84,6 @@ if (!dev && cluster.isMaster) {
           callbackURL: config.oauth.google.callbackURL
         },
         function(accessToken, refreshToken, profile, done) {
-          console.log(profile);
           process.nextTick(function() {
             userController.loginProviderUser(profile.id, profile.emails[0].value, 1)
             .then((fullUser) => {
