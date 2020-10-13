@@ -29,7 +29,8 @@ const initialState = {
     lastname: '',
     photo: '',
     email: '',
-    provider_id: '',
+    google_id: '',
+    facebook_id: '',
     cdl: '',
     birthDate: '',
     sex: '',
@@ -64,11 +65,12 @@ const Profile = ({ user, ...props }) => {
   useEffect(() => {
     if (!user) return;
     let new_user = state.new_user;
-    new_user.name = user.name.givenName || '';
-    new_user.lastname = user.name.familyName || '';
-    new_user.provider_id = user.id || '';
-    new_user.image = user.photos[0].value || '';
-    new_user.email = user.emails[0].value || '';
+    new_user.name = user.name || '';
+    new_user.lastname = user.lastname || '';
+    new_user.google_id = user.google_id || '';
+    new_user.facebook_id = user.facebook_id || '';
+    new_user.image = user.photo || '';
+    new_user.email = user.email || '';
 
     dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
   }, [])

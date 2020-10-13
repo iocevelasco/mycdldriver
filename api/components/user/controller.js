@@ -91,6 +91,25 @@ function loginUser(user){
     });
 }
 
+function loginProviderUser(provider_id, email, type){
+    return new Promise(async (resolve, reject) => {
+        if(!provider_id){
+            reject('Invalid data');
+            return false;
+        }
+        if(!email){
+            reject('Invalid data');
+            return false;
+        }
+        const result = await store.loginProviderUser(provider_id, email, type);
+        if(result){
+            resolve(result);
+        }else{
+            reject('[ USER CONTROLLER ] Usuario no registrado');
+        }
+    });
+}
+
 function logoutUser(id, token){
     return new Promise(async (resolve, reject) => {
         if(!token){
@@ -121,5 +140,6 @@ module.exports = {
     loginUser,
     logoutUser,
     logoutAll,
-    addUserDirect
+    addUserDirect,
+    loginProviderUser
 }

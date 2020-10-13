@@ -9,6 +9,7 @@ const db = require('./api/db');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
+const userController = require('./api/components/user/controller');
 const MemcachedStore = require('connect-memjs')(session);
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
@@ -36,17 +37,18 @@ if (!dev && cluster.isMaster) {
       const server = express();
       server.use(bodyParser.json());
       
-      server.use(session({
-        secret: 'ClydeIsASquirrel',
-        resave: 'false',
-        saveUninitialized: 'false',
-        // store: new MemcachedStore({
-        //   servers: [process.env.MEMCACHIER_SERVERS],
-        //   prefix: '_session_'
-        // })
-      }));
+      
 
       if (!dev) {
+        server.use(session({
+          secret: 'ClydeIsASquirrel',
+          resave: 'false',
+          saveUninitialized: 'false',
+           store: new MemcachedStore({
+             servers: config.memcached,
+             prefix: '_session_'
+           })
+        }));
         // Enforce SSL & HSTS in production
         server.use(function(req, res, next) {
           var proto = req.headers["x-forwarded-proto"];
@@ -59,7 +61,11 @@ if (!dev && cluster.isMaster) {
           res.redirect("https://" + req.headers.host + req.url);
         });
       }else {
-        //server.use(express.errorHandler());
+        server.use(session({
+          secret: 'ClydeIsASquirrel',
+          resave: 'false',
+          saveUninitialized: 'false'
+        }));
       }
 
       //CONFIGURACION PASSPORT
@@ -78,8 +84,23 @@ if (!dev && cluster.isMaster) {
           callbackURL: config.oauth.google.callbackURL
         },
         function(accessToken, refreshToken, profile, done) {
+          console.log(profile);
           process.nextTick(function() {
-            return done(null, profile);
+            userController.loginProviderUser(profile.id, profile.emails[0].value, 1)
+            .then((fullUser) => {
+              return done(null, fullUser);
+            })
+            .catch(e => {
+              console.log('[ GoogleStrategy ] Usuario no registrado: ' + e);
+              newUser = {
+                "name": profile.name.givenName,
+                "lastname": profile.name.familyName,
+                "google_id": profile.id,
+                "photo": profile.photos[0].value,
+                "email": profile.emails[0].value
+              };
+              return done(null, newUser);
+            });
           });
         }
       ));
@@ -87,9 +108,23 @@ if (!dev && cluster.isMaster) {
         clientID			: config.oauth.facebook.clientID,
         clientSecret	: config.oauth.facebook.clientSecret,
         callbackURL	 : config.oauth.facebook.callbackURL,
-        profileFields : ['id', 'displayName', /*'provider',*/ 'photos']
+        profileFields : ['id', 'displayName', 'emails', 'photos']
       }, function(accessToken, refreshToken, profile, done) {
-        return done(null, profile);
+        userController.loginProviderUser(profile.id, profile.emails[0].value, 2)
+        .then((fullUser) => {
+          return done(null, fullUser);
+        })
+        .catch(e => {
+          console.log('[ FacebookStrategy ] Usuario no registrado: ' + e);
+          newUser = {
+            "name": profile.name.givenName,
+            "lastname": profile.name.familyName,
+            "facebook_id": profile.id,
+            "photo": profile.photos[0].value,
+            "email": profile.emails[0].value
+          };
+          return done(null, newUser);
+        });
       }));
       //CONFIGURACION PASSPORT
 
@@ -112,7 +147,7 @@ if (!dev && cluster.isMaster) {
         res.redirect('/profile');
       });
 
-      server.get('/auth/facebook', passport.authenticate('facebook'));
+      server.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
       server.get('/auth/facebook/callback', passport.authenticate('facebook',
         { successRedirect: '/profile', failureRedirect: '/' }
       ));

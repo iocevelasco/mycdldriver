@@ -7,7 +7,7 @@ async function getDriver(filterDriver){
         let filter = {};
         if(filterDriver !== null){
             filter = {
-                cdl: filterDriver,
+                dln: filterDriver,
             };
         }
         Model.find(filter)
@@ -32,16 +32,16 @@ async function getDriver(filterDriver){
     });
 }
 
-async function addDriver(driver){
-    const myUser = new userModel(driver.user);
+async function addDriver(user){
+    const driver = new Model(user.driver);
+    await driver.save();
+    user.driver = driver;
+    const myUser = new userModel(user);
     await myUser.save();
-    const {_id, name, lastname, photo, email, date} = myUser;
+    const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
     const token = await myUser.generateAuthToken();
-    user = { _id, name, lastname, photo, email, date, token };
-    driver.user = user;
-    const myDriver = new Model(driver);
-    await myDriver.save();
-    return {myDriver, user};
+    user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date, token };
+    return {user, driver};
 }
 
 async function deleteDriver(id){

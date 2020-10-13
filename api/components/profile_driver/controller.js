@@ -7,7 +7,7 @@ function getDriver(filter){
     });
 }
 
-function addDriver(driver, imageCdl){
+function addDriver(driver, imageDln){
     return new Promise((resolve, reject) => {
         if(!driver){
             console.error('[driverController] No driver data');
@@ -15,31 +15,34 @@ function addDriver(driver, imageCdl){
             return false;
         }
 
+        const fileUrl = imageDln ? config.publicRoute + config.filesRoute + '/' + imageDln.filename : '';
+
+        const fullDriver = {
+            dln: driver.dln,
+            imageDln: fileUrl,
+            expDateDln: driver.expDateDln,
+            birthDate: driver.birthDate,
+            areaCode: driver.areaCode,
+            phoneNumber: driver.phoneNumber,
+            sex: driver.sex,
+            experience: driver.experience,
+            address: driver.address,
+            zipCode: driver.zipCode,
+            description: driver.description
+        };
+
         const user = {
             name: driver.base.name,
             lastname: driver.base.lastname,
+            typeUser: driver.base.typeUser,
             photo: driver.base.photo,
             email: driver.base.email,
-            provider_id: driver.base.provider_id
+            google_id: driver.base.google_id,
+            facebook_id: driver.base.facebook_id,
+            driver: fullDriver
         };
 
-        const fileUrl = imageCdl ? config.publicRoute + config.filesRoute + '/' + imageCdl.filename : '';
-
-        const fullDriver = {
-            cdl: driver.cdl,
-            birthDate: driver.birthDate,
-            imageCdl: fileUrl,
-            sex: driver.sex,
-            areaCode: driver.areaCode,
-            phoneNumber: driver.phoneNumber,
-            rating: driver.rating,
-            address: driver.address,
-            habilities: driver.habilities,
-            description: driver.description,
-            user: user
-        };
-
-        const driverResolve = store.add(fullDriver); 
+        const driverResolve = store.add(user); 
         resolve(driverResolve);
     });
     

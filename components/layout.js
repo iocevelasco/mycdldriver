@@ -38,12 +38,12 @@ const MainLayout = ({ children, title, user, router }) => {
 
     useEffect(()=>{
         if(!user) return
-        const { displayName, emails, photos, id} = user;
+        const { name, lastname, email, photo, google_id} = user;
         setUserProps({ 
-            name:displayName,
-            email:emails[0].value,
-            id:id,
-            photo:photos[0].value,
+            name:name + " " + lastname,
+            email:email,
+            id:google_id ,
+            photo:photo,
         }) 
     },[user])
 
