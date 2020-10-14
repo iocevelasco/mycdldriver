@@ -253,6 +253,14 @@ const Profile = ({ user, ...props }) => {
                 </Form>
               </Col>
               <Col className='profile-driver__form' span={14}>
+              <Form.Item label="Experience">
+              <InputNumber 
+                  size="large" 
+                  min={1} 
+                  max={100000}
+                  defaultValue={3} 
+                  onChange={(e) => onChangeInputs(e, 'experience')} />
+                  </Form.Item>
               <Form.Item>
                     <TextArea
                       rows={4}

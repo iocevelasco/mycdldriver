@@ -124,6 +124,7 @@ async function loginProviderUser(provider, mail, type){
                 break;
         };
         const token = await user.generateAuthToken();
+        console.log('user', user);
         const login = {
             "_id": user._id,
             "name": user.name,
