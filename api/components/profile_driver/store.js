@@ -1,4 +1,5 @@
 const Model = require('./model');
+const userModel = require('../user/model');
 const fs = require('fs');
 
 async function getDriver(filterDriver){
@@ -6,7 +7,7 @@ async function getDriver(filterDriver){
         let filter = {};
         if(filterDriver !== null){
             filter = {
-                cdl: filterDriver,
+                dln: filterDriver,
             };
         }
         Model.find(filter)
@@ -31,13 +32,39 @@ async function getDriver(filterDriver){
     });
 }
 
-async function addDriver(driver){
-    const myDriver = new Model(driver);
-    await myDriver.save();
-    return myDriver;
+async function addDriver(user){
+    const driver = new Model(user.driver);
+    await driver.save();
+    user.driver = driver;
+    const myUser = new userModel(user);
+    await myUser.save();
+    const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
+    const token = await myUser.generateAuthToken();
+    user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date, token };
+    return {user, driver};
+}
+
+async function deleteDriver(id){
+    const foundUser = await Model.findOne({
+        _id: id
+    });
+
+    try {
+        if(foundUser.imageCdl){
+            fs.unlinkSync("." + foundUser.imageCdl);
+        }
+    } catch(err) {
+        console.error(err);
+    }
+        
+    return Model.deleteOne({
+        _id: id
+    });    
+
 }
 
 module.exports = {
     list: getDriver,
-    add: addDriver
+    add: addDriver,
+    delete: deleteDriver
 }

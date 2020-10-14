@@ -7,33 +7,42 @@ function getDriver(filter){
     });
 }
 
-function addDriver(driver, user, imageCdl){
+function addDriver(driver, imageDln){
     return new Promise((resolve, reject) => {
         if(!driver){
             console.error('[driverController] No driver data');
             reject('[driverController] No driver data');
             return false;
         }
-        if(!user){
-            console.error('[driverController] No user data');
-            reject('[driverController] No user data');
-            return false;
-        }
-        const fileUrl = imageCdl ? config.publicRoute + config.filesRoute + '/' + imageCdl.filename : '';
+
+        const fileUrl = imageDln ? config.publicRoute + config.filesRoute + '/' + imageDln.filename : '';
 
         const fullDriver = {
-            cdl: driver.cdl,
+            dln: driver.dln,
+            imageDln: fileUrl,
+            expDateDln: driver.expDateDln,
             birthDate: driver.birthDate,
-            imageCdl: fileUrl,
+            areaCode: driver.areaCode,
+            phoneNumber: driver.phoneNumber,
             sex: driver.sex,
-            rating: driver.rating,
+            experience: driver.experience,
             address: driver.address,
-            habilities: driver.habilities,
-            description: driver.description,
-            user: user
+            zipCode: driver.zipCode,
+            description: driver.description
         };
 
-        const driverResolve = store.add(fullDriver); 
+        const user = {
+            name: driver.base.name,
+            lastname: driver.base.lastname,
+            typeUser: driver.base.typeUser,
+            photo: driver.base.photo,
+            email: driver.base.email,
+            google_id: driver.base.google_id,
+            facebook_id: driver.base.facebook_id,
+            driver: fullDriver
+        };
+
+        const driverResolve = store.add(user); 
         resolve(driverResolve);
     });
     

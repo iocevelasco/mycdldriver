@@ -109,7 +109,7 @@ router.get('/', function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.post('/', auth, storage.single('imageCdl'), function (req, res) {
+router.post('/', storage.single('imageCdl'), function (req, res) {
 
     controller.addDriver(req.body, req.user, req.file)
     .then((fullDriver) => {

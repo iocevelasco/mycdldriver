@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config  = require('../../config');
+const Schema = mongoose.Schema;
 
 const userSchema = mongoose.Schema({
    name: {
@@ -15,7 +16,15 @@ const userSchema = mongoose.Schema({
       required: true,
       trim: true
    },
-   photo: String,
+   typeUser: {
+      type: Number,
+      required: true
+   },
+   photo: {
+      type: String,
+      required: true,
+      trim: true
+   },
    date: {
       type: Date,
       default: Date.now
@@ -31,10 +40,21 @@ const userSchema = mongoose.Schema({
          }
       }
    },
+   google_id : {
+      type: String, 
+      unique: true
+   },
+   facebook_id : {
+      type: String, 
+      unique: true
+   },
    password: {
       type: String,
-      required: true,
       minLength: 7
+   },
+   driver: {
+       type: Schema.ObjectId,
+       ref: 'ProfileDriver',
    },
    tokens: [{
       token: {
@@ -67,7 +87,7 @@ const userSchema = mongoose.Schema({
     if (!validator.isEmail(email)) {
       throw new Error({ error: 'Invalid login credentials' });
     }
-    const user = await User.findOne({ email} )
+    const user = await User.findOne({ email} );
     if (!user) {
        throw new Error({ error: 'Invalid login credentials' });
     }
@@ -75,8 +95,20 @@ const userSchema = mongoose.Schema({
     if (!isPasswordMatch) {
        throw new Error({ error: 'Invalid login credentials' });
     }
-    return user
+    return user;
  }
+
+   userSchema.methods.findByProvider = async (provider_id) => {
+      if (!provider_id) {
+         throw new Error({ error: 'Invalid provider credentials' });
+      }
+      const user = await User.findOne({provider_id} );
+      if (!user) {
+         throw new Error({ error: 'Invalid login credentials' });
+      }
+      
+      return user;
+   }
  
  const User = mongoose.model('User', userSchema);
  module.exports = User;

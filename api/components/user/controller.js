@@ -24,6 +24,21 @@ function addUser(user, photo){
     
 }
 
+function addUserDirect(user){
+    return new Promise((resolve, reject) => {
+        if(!user){
+            console.error('[userController] No hay usuario');
+            reject('Los datos son incorrectos');
+            return false;
+        }
+
+        const fullUser = store.add(user); 
+        resolve(fullUser);
+        
+    });
+    
+}
+
 function updateUser(id, user, photo){
     return new Promise(async (resolve, reject) => {
         if(!id){
@@ -76,6 +91,25 @@ function loginUser(user){
     });
 }
 
+function loginProviderUser(provider_id, email, type){
+    return new Promise(async (resolve, reject) => {
+        if(!provider_id){
+            reject('Invalid data');
+            return false;
+        }
+        if(!email){
+            reject('Invalid data');
+            return false;
+        }
+        const result = await store.loginProviderUser(provider_id, email, type);
+        if(result){
+            resolve(result);
+        }else{
+            reject('[ USER CONTROLLER ] Usuario no registrado');
+        }
+    });
+}
+
 function logoutUser(id, token){
     return new Promise(async (resolve, reject) => {
         if(!token){
@@ -105,5 +139,7 @@ module.exports = {
     deleteUser,
     loginUser,
     logoutUser,
-    logoutAll
+    logoutAll,
+    addUserDirect,
+    loginProviderUser
 }

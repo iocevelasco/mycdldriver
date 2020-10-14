@@ -11,6 +11,7 @@ const config = {
     publicRoute: process.env.PUBLIC_ROUTE || '/public',
     filesRoute: process.env.FILES_ROUTE || '/files',
     dev: process.env.NODE_ENV !== 'production',
+    memcached: process.env.MEMCACHIER_SERVERS !== 'mc4.dev.ec2.memcachier.com:11211',
     oauth:  {
         google: {
             clientID: process.env.GOOGLE_CLIENT_ID || '762087274564-vhbjmlqm5vc8qmc9slkd8tjtkh447dut.apps.googleusercontent.com',
