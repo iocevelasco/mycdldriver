@@ -59,6 +59,7 @@ const reducer = (state, action) => {
 }
 
 const Profile = ({ user, ...props }) => {
+  console.log('user', user);
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -69,7 +70,7 @@ const Profile = ({ user, ...props }) => {
     new_user.lastname = user.lastname || '';
     new_user.google_id = user.google_id || '';
     new_user.facebook_id = user.facebook_id || '';
-    new_user.image = user.photo || '';
+    new_user.photo = user.photo || '';
     new_user.email = user.email || '';
 
     dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
