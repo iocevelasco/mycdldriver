@@ -134,7 +134,7 @@ const Profile = ({ user, ...props }) => {
               <Col className='profile-driver__form' span={14}>
                 <Row justify='center'>
                   <div className='avatar'>
-                    <Avatar src={state.new_user.image} size={120} />
+                    <Avatar src={state.new_user.photo} size={120} />
                   </div>
                 </Row>
                 <Form
@@ -286,7 +286,6 @@ const WrapperSection = ({ children, row, mt, mb }) => {
     </div>
   )
 }
-
 
 
 export default Profile;
