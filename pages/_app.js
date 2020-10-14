@@ -31,10 +31,7 @@ class MyApp extends App {
 
     return (
       <NextContainer>
-        <Head>
-          <title>Thoughts!</title>
-        </Head>
-            <Component {...props} />
+          <Component {...props} />
       </NextContainer>
     );
   }

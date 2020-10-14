@@ -58,8 +58,7 @@ const reducer = (state, action) => {
   }
 }
 
-const Profile = ({ user, ...props }) => {
-  console.log('user', user);
+const UserProfile = ({ user, ...props }) => {
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -122,9 +121,6 @@ const Profile = ({ user, ...props }) => {
       });
   };
  
-
-  console.log('new', state.new_user);
-
   return (
     <>
       <MainLayout title='Profile' user={user}>
@@ -296,4 +292,4 @@ const WrapperSection = ({ children, row, mt, mb }) => {
 }
 
 
-export default Profile;
+export default UserProfile;

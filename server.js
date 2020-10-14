@@ -143,19 +143,19 @@ if (!dev && cluster.isMaster) {
         failureRedirect: '/'
       }),
       function(req, res) {
-        res.redirect('/profile');
+        res.redirect('/userProfile');
       });
 
       server.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
       server.get('/auth/facebook/callback', passport.authenticate('facebook',
-        { successRedirect: '/profile', failureRedirect: '/' }
+        { successRedirect: '/userProfile', failureRedirect: '/' }
       ));
 
       const restrictAccess = (req, res, next) => {
         if (!req.isAuthenticated()) return res.redirect("/");
         next();
       };
-      server.use("/profile", restrictAccess);
+      server.use("/userProfile", restrictAccess);
       //AUTENTICACION
 
       router_api(server);
