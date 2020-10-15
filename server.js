@@ -106,7 +106,7 @@ if (!dev && cluster.isMaster) {
       passport.use(new FacebookStrategy({
         clientID			: config.oauth.facebook.clientID,
         clientSecret	: config.oauth.facebook.clientSecret,
-        callbackURL	 : config.oauth.facebook.callbackURL,
+        callbackURL	  : config.oauth.facebook.callbackURL,
         profileFields : ['id', 'displayName', 'emails', 'photos']
       }, function(accessToken, refreshToken, profile, done) {
         userController.loginProviderUser(profile.id, profile.emails[0].value, 2)
