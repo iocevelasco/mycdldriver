@@ -61,9 +61,10 @@ const reducer = (state, action) => {
 }
 
 const UserProfile = ({ user, ...props }) => {
+  console.log('user',user);
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log('state', state);
+
   useEffect(() => {
     if (!user) return;
     let new_user = state.new_user;
@@ -107,7 +108,6 @@ const UserProfile = ({ user, ...props }) => {
 
   const newDrivers = async () => {
     const { new_user } = state
-    console.log('new_user',new_user);
     try {
       const { data } = await axios.post('/api/driver', new_user);
       console.log('data', data);
@@ -115,6 +115,13 @@ const UserProfile = ({ user, ...props }) => {
       console.log(err);
     }
   };
+
+  const validateMessages = {
+    required: "'${name}' is required!",
+    // ...
+  };
+
+  console.log('form', form);
 
   return (
     <>
@@ -129,11 +136,17 @@ const UserProfile = ({ user, ...props }) => {
                   </div>
                 </Row>
                 <Form
-                  layout='horizontal'
-                  form={form}>
+                  form={form}
+                  name="user-driver"
+                  validateMessages={validateMessages}
+                  initialValues={{ remember: true }}
+                  layout='horizontal'>
                   <Row gutter={[24]} justify='space-between' >
                     <Col span={12}>
-                      <Form.Item>
+                      <Form.Item 
+                        hasFeedback
+                        validateStatus={state.new_user.base.name.length <= 0 ? 'error': 'success'}
+                        help="Should be combination of numbers & alphabets">
                         <Input
                           size='large'
                           placeholder="Name"
@@ -142,7 +155,8 @@ const UserProfile = ({ user, ...props }) => {
                       </Form.Item>
                     </Col>
                     <Col span={12}>
-                      <Form.Item>
+                      <Form.Item
+                        rules={[{ required: true, message: 'Please input your username!' }]}>
                         <Input
                           size='large'
                           placeholder="Last Name"
@@ -151,7 +165,8 @@ const UserProfile = ({ user, ...props }) => {
                       </Form.Item>
                     </Col>
                   </Row>
-                  <Form.Item>
+                  <Form.Item
+                   rules={[{ required: true, message: 'Please input your username!' }]}>
                     <Input
                       size='large'
                       placeholder="Mail"
@@ -160,7 +175,8 @@ const UserProfile = ({ user, ...props }) => {
                   </Form.Item>
                   <Row gutter={[24]} justify='space-between' align='middle'>
                     <Col span={12}>
-                      <Form.Item>
+                      <Form.Item
+                        rules={[{ required: true, message: 'Please input your password!' }]}>
                         <DatePicker
                           size='large'
                           style={{ width: '100%' }}
@@ -169,7 +185,8 @@ const UserProfile = ({ user, ...props }) => {
                       </Form.Item>
                     </Col>
                     <Col span={12}>
-                      <Form.Item>
+                      <Form.Item
+                        rules={[{ required: true, message: 'Please input your password!' }]}>
                         <Radio.Group
                           value={state.new_user.sex}
                           onChange={(e) => onChangeInputs(e, 'sex', 0)}>
@@ -182,7 +199,8 @@ const UserProfile = ({ user, ...props }) => {
                   </Row>
                   <Row gutter={[24]} justify='space-between' align='middle'>
                     <Col span={12}>
-                      <Form.Item>
+                      <Form.Item
+                        rules={[{ required: true, message: 'Please input your password!' }]}>
                         <Input
                           disabled={state.is_cdl}
                           size='large'
@@ -192,7 +210,9 @@ const UserProfile = ({ user, ...props }) => {
                       </Form.Item>
                     </Col>
                     <Col span={12}>
-                      <Form.Item>
+                      <Form.Item
+                      label="Select"
+                      rules={[{ required: true, message: 'Please input your username!' }]}>
                         <DatePicker
                           size='large'
                           placeholder="Experation Date"

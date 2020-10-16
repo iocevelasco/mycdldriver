@@ -110,7 +110,6 @@ router.get('/', function (req, res) {
  *    HTTP/1.1 500 Internal Server Error
  */
 router.post('/', storage.single('imageCdl'), function (req, res) {
-     console.log('body',req.body)
     controller.addDriver(req.body, req.user, req.file)
     .then((fullDriver) => {
         response.success(req, res, fullDriver, 201);
