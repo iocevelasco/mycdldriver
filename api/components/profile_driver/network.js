@@ -118,4 +118,28 @@ router.post('/', storage.single('imageCdl'), function (req, res) {
     });
 });
 
+/**
+ * @api {delete} /driver/:id DeleteDriver 
+ * @apiGroup Driver
+ * @apiVersion 1.0.0
+ * @apiHeader {String} token Token de acceso de usuario.
+ * @apiParam {Id} _id ID de usuario
+ * @apiSuccessExample {json} Ejemplo de respuesta correcta
+ * {
+  "error": 0,
+  "mensaje": "Usuario 5f72ba72f5aa7224d8cc9ee2 eliminado"
+}
+ * @apiErrorExample {json} List error
+ *    HTTP/1.1 500 Internal Server Error
+ */
+router.delete('/:id', auth, function (req, res) {
+  controller.deleteDriver(req.params.id)
+      .then(() => {
+          response.success(req, res, `Driver ${req.params.id} eliminado`, 200);
+      })
+      .catch(e => {
+          response.error(req, res, 'Error interno', 500, e);
+      });
+});
+
 module.exports = router;
