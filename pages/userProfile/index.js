@@ -133,11 +133,6 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
   }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> feature/landing-page
   const newDrivers = async () => {
     const { new_user } = state
     try {
