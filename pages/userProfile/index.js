@@ -24,12 +24,11 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const initialState = {
-  is_cdl: false,
   new_user: {
     base: {
       name: '',
       lastname: '',
-      typeUser: 1,
+      typeUser: '1',
       photo: '',
       email: '',
       google_id: '',
@@ -108,8 +107,9 @@ const UserProfile = ({ user, ...props }) => {
 
   const newDrivers = async () => {
     const { new_user } = state
+    console.log('new_user',new_user);
     try {
-      const { data } = await axios.post('/api/driver', { new_user });
+      const { data } = await axios.post('/api/driver', new_user);
       console.log('data', data);
     } catch (err) {
       console.log(err);
