@@ -27,16 +27,16 @@ const { TextArea } = Input;
 
 const initialState = {
   typeUser: 0,
+  base: {
+    name: '',
+    lastname: '',
+    typeUser: '1',
+    photo: '',
+    email: '',
+    google_id: '',
+    facebook_id: ''
+  },
   driver: {
-    base: {
-      name: '',
-      lastname: '',
-      typeUser: '1',
-      photo: '',
-      email: '',
-      google_id: '',
-      facebook_id: ''
-    },
     dln: '',
     expDateDln: '',
     birthDate: '',
@@ -49,14 +49,6 @@ const initialState = {
     description: ''
   },
   company: {
-      base: {
-          name: '',
-          lastname: '',
-          typeUser: '',
-          photo:'',
-          email: '',
-          google_id:''
-      },
       tradename:'',
       legalNumber:'',
       address: '',
@@ -69,13 +61,17 @@ const initialState = {
 
 const types = {
   CREATE_NEW_USER: 'create_new_user',
-  SELECT_USER_TYPE:'select_user_type'
+  SELECT_USER_TYPE:'select_user_type',
+  PROPS_BASE:'props_base'
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case types.PROPS_BASE:
+      console.log(action.payload);
+      return { ...state, base: action.payload }
     case types.CREATE_NEW_USER:
-      return { ...state, user: action.payload }
+      return { ...state, driver: action.payload }
     case types.SELECT_USER_TYPE:
       return { ...state, typeUser: action.payload }
     default:
@@ -84,9 +80,9 @@ const reducer = (state, action) => {
 }
 
 const UserProfile = ({ user, ...props }) => {
-  console.log('user', user);
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
+  console.log('state', state);
 
   useEffect(() => {
     verifyUserType(user.typeUser)
@@ -97,17 +93,17 @@ const UserProfile = ({ user, ...props }) => {
   }
 
   useEffect(() => {
-    if (!user) return;
-    let user = state.driver;
-    user.base.name = user.name || '';
-    user.base.lastname = user.lastname || '';
-    user.base.google_id = user.google_id || '';
-    user.base.facebook_id = user.facebook_id || '';
-    user.base.photo = user.photo || '';
-    user.base.email = user.email || '';
+    //Esto carga las props iniciales
+    let base = state.base;
+    base.name = user.name || '';
+    base.lastname = user.lastname || '';
+    base.google_id = user.google_id || '';
+    base.facebook_id = user.facebook_id || '';
+    base.photo = user.photo || '';
+    base.email = user.email || '';
 
-    dispatch({ type: types.CREATE_NEW_USER, payload: user })
-  }, [])
+    dispatch({ type: types.PROPS_BASE, payload: base })
+  }, [user, state.typeUser]);
 
   const onChangeInputs = (e, key, base) => {
     let user = state.userType == 1 ? state.driver : state.company ;
@@ -132,20 +128,22 @@ const UserProfile = ({ user, ...props }) => {
   const handleDatePicker = (obj, date, key) => {
     let new_user = state.user;
     state.new_user[key] = date
-    dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
+    dispatch({ type: types.CREATE_NEW_USER, payload: new_user });
   }
 
-  const ResolveUserType = ({typeUser,newDrivers, onChangeInputs, handleDatePicker}) => {
+  const ResolveUserType = ({newDrivers, onChangeInputs, handleDatePicker}) => {
     switch(user.typeUser){
       case 1:
         return <DriverUser 
         driver={state.driver}
+        base={state.base}
         onChangeInputs={onChangeInputs}
         handleDatePicker={handleDatePicker} 
         newDrivers={newDrivers}
         />
       default:
-        return <CompanyUser 
+        return <CompanyUser
+        base={state.base}
         company={state.company}
         onChangeInputs={onChangeInputs}
         handleDatePicker={handleDatePicker}

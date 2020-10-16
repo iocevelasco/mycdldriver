@@ -24,7 +24,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const DriverUser = (props) => {
-  const { company, onChangeInputs, handleDatePicker, newDrivers} = props;
+  const { company, onChangeInputs, handleDatePicker, newDrivers, base} = props;
   const [form] = Form.useForm();
   return (
     <div className='profile-driver'>
@@ -32,7 +32,7 @@ const DriverUser = (props) => {
         <Col className='profile-driver__form' span={14}>
           <Row justify='center'>
             <div className='avatar'>
-              <Avatar src={company.base.photo} size={120} />
+              <Avatar src={base.photo} size={120} />
             </div>
           </Row>
           <Form
@@ -44,12 +44,12 @@ const DriverUser = (props) => {
               <Col span={12}>
                 <Form.Item
                   hasFeedback
-                  validateStatus={company.base.name.length <= 0 ? 'error' : 'success'}
+                  validateStatus={base.name.length <= 0 ? 'error' : 'success'}
                   help="Should be combination of numbers & alphabets">
                   <Input
                     size='large'
                     placeholder="Name"
-                    value={company.base.name}
+                    value={base.name}
                     onChange={(e) => onChangeInputs(e, 'name', 1)} />
                 </Form.Item>
               </Col>
@@ -59,7 +59,7 @@ const DriverUser = (props) => {
                   <Input
                     size='large'
                     placeholder="Last Name"
-                    value={company.base.lastname}
+                    value={base.lastname}
                     onChange={(e) => onChangeInputs(e, 'lastname', 1)} />
                 </Form.Item>
               </Col>
@@ -69,7 +69,7 @@ const DriverUser = (props) => {
               <Input
                 size='large'
                 placeholder="Mail"
-                value={company.base.email}
+                value={base.email}
                 onChange={(e) => onChangeInputs(e, 'email', 1)} />
             </Form.Item>
             <Row gutter={[24]} justify='space-between' align='middle'>
