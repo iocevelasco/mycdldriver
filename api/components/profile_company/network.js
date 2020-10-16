@@ -1,5 +1,6 @@
 const express = require('express');
 const auth = require('../../middelware/auth');
+const storage = require('../../middelware/saveFile');
 const router = express.Router();
 const response = require('../../network/response');
 const controller = require('./controller');
@@ -14,7 +15,7 @@ router.get('/', function (req, res) {
     });
 });
 
-router.post('/', auth, function (req, res) {
+router.post('/', storage.single('imageCdl'), function (req, res) {
 
     controller.addCompany(req.body, req.user)
     .then((fullCompany) => {
@@ -23,5 +24,15 @@ router.post('/', auth, function (req, res) {
         response.error(req, res, 'informacion invalida', 400, e);
     });
 });
+
+router.delete('/:id', auth, function (req, res) {
+    controller.deleteCompany(req.params.id)
+        .then(() => {
+            response.success(req, res, `Compañia ${req.params.id} eliminada`, 200);
+        })
+        .catch(e => {
+            response.error(req, res, 'Error interno', 500, e);
+        });
+  });
 
 module.exports = router;

@@ -96,8 +96,10 @@ if (!dev && cluster.isMaster) {
                 "lastname": profile.name.familyName,
                 "google_id": profile.id,
                 "photo": profile.photos[0].value,
-                "email": profile.emails[0].value
+                "email": profile.emails[0].value,
+                "typeUser": 0
               };
+              console.log(newUser);
               return done(null, newUser);
             });
           });
@@ -120,7 +122,8 @@ if (!dev && cluster.isMaster) {
             "lastname": profile.name.familyName,
             "facebook_id": profile.id,
             "photo": profile.photos[0].value,
-            "email": profile.emails[0].value
+            "email": profile.emails[0].value,
+            "typeUser": 0
           };
           return done(null, newUser);
         });

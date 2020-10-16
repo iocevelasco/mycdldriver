@@ -10,25 +10,9 @@ async function getDriver(filterDriver){
                 dln: filterDriver,
             };
         }
-        Model.find(filter)
-        .select("rating address")
-        .populate('user', "name lastname -_id")
-        .exec((error, populated) => {
-            if(error){
-                reject(error);
-                return false;
-            } 
-            const driverResult = [];
-            populated.forEach(element => {
-                driverResult.push({
-                    "full_name" : element.user.name + " " + element.user.lastname,
-                    "rating" : element.rating,
-                    "address" : element.address
-                });
-            });
+        driverResult = Model.find(filter);
 
-            resolve(driverResult);
-        });
+        resolve(driverResult);
     });
 }
 
