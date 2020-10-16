@@ -41,12 +41,10 @@ const userSchema = mongoose.Schema({
       }
    },
    google_id : {
-      type: String, 
-      unique: true
+      type: String
    },
    facebook_id : {
-      type: String, 
-      unique: true
+      type: String
    },
    password: {
       type: String,
@@ -55,6 +53,10 @@ const userSchema = mongoose.Schema({
    driver: {
        type: Schema.ObjectId,
        ref: 'ProfileDriver',
+   },
+   company: {
+       type: Schema.ObjectId,
+       ref: 'ProfileCompany',
    },
    tokens: [{
       token: {

@@ -1,4 +1,5 @@
 const Model = require('./model');
+const userModel = require('../user/model');
 
 function getCompany(filterCompany){
     return new Promise((resolve, reject) => {
@@ -8,23 +9,22 @@ function getCompany(filterCompany){
                 legalNumber: filterCompany,
             };
         }
-        Model.find(filter)
-        .populate('user')
-        .exec((error, populated) => {
-            if(error){
-                reject(error);
-                return false;
-            }
+        result = Model.find(filter);
 
-            resolve(populated);
-        });
+        resolve(result);
     });
 }
 
-async function addCompany(company){
-    const myCompany = new Model(company);
-    await myCompany.save();
-    return myCompany;
+async function addCompany(user){
+    const company = new Model(user.company);
+    await company.save();
+    user.company = company;
+    const myUser = new userModel(user);
+    await myUser.save();
+    const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
+    const token = await myUser.generateAuthToken();
+    user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date, token };
+    return {user, company};
 }
 
 module.exports = {

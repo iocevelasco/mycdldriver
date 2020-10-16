@@ -1,5 +1,6 @@
 const Model = require('./model');
 const driverModel = require('../profile_driver/model');
+const companyModel = require('../profile_company/model');
 const fs = require('fs');
 
 async function getUser(filterUser){
@@ -63,7 +64,10 @@ async function deleteUser(id){
         _id: id
     });
     const foundDriver = await driverModel.findOne({
-        user: id
+        _id: foundUser.driver
+    });
+    const foundCompany = await companyModel.findOne({
+        _id: foundUser.company
     });
 
     try {
@@ -73,13 +77,28 @@ async function deleteUser(id){
         if(foundDriver.imageCdl){
             fs.unlinkSync("." + foundUser.imageCdl);
         }
+        if(foundCompany.logo){
+            fs.unlinkSync("." + foundCompany.logo);
+        }
     } catch(err) {
         console.error(err);
     }
 
-    driverModel.deleteOne({
-        _id: foundDriver._id
-    }); 
+    try {
+        await driverModel.deleteOne({
+            _id: foundDriver._id
+        }); 
+    } catch(err) {
+        console.error(err);
+    }
+
+    try {
+        await companyModel.deleteOne({
+            _id: foundCompany._id
+        }); 
+    } catch(err) {
+        console.error(err);
+    }
         
     return Model.deleteOne({
         _id: id
@@ -103,7 +122,8 @@ async function loginProviderUser(provider, mail, type){
     try {
         const user = await Model.findOne({email: mail})
         .select("-__v")
-        .populate('driver', "-_id -__v");
+        .populate('driver', "-_id -__v")
+        .populate('company', "-_id -__v");
 
         switch (type) {
             case 1:
@@ -135,7 +155,8 @@ async function loginProviderUser(provider, mail, type){
             "facebook_id": user.facebook_id,
             "date": user.date,
             "token": token,
-            "driver": user.driver
+            "driver": user.driver,
+            "company": user.company
         }
         return login;
         
