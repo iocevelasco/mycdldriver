@@ -96,7 +96,8 @@ if (!dev && cluster.isMaster) {
                 "lastname": profile.name.familyName,
                 "google_id": profile.id,
                 "photo": profile.photos[0].value,
-                "email": profile.emails[0].value
+                "email": profile.emails[0].value,
+                "typeUser": 0
               };
               return done(null, newUser);
             });
@@ -106,7 +107,7 @@ if (!dev && cluster.isMaster) {
       passport.use(new FacebookStrategy({
         clientID			: config.oauth.facebook.clientID,
         clientSecret	: config.oauth.facebook.clientSecret,
-        callbackURL	 : config.oauth.facebook.callbackURL,
+        callbackURL	  : config.oauth.facebook.callbackURL,
         profileFields : ['id', 'displayName', 'emails', 'photos']
       }, function(accessToken, refreshToken, profile, done) {
         userController.loginProviderUser(profile.id, profile.emails[0].value, 2)
@@ -120,7 +121,8 @@ if (!dev && cluster.isMaster) {
             "lastname": profile.name.familyName,
             "facebook_id": profile.id,
             "photo": profile.photos[0].value,
-            "email": profile.emails[0].value
+            "email": profile.emails[0].value,
+            "typeUser": 0
           };
           return done(null, newUser);
         });
@@ -143,19 +145,19 @@ if (!dev && cluster.isMaster) {
         failureRedirect: '/'
       }),
       function(req, res) {
-        res.redirect('/profile');
+        res.redirect('/userProfile');
       });
 
       server.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
       server.get('/auth/facebook/callback', passport.authenticate('facebook',
-        { successRedirect: '/profile', failureRedirect: '/' }
+        { successRedirect: '/userProfile', failureRedirect: '/' }
       ));
 
       const restrictAccess = (req, res, next) => {
         if (!req.isAuthenticated()) return res.redirect("/");
         next();
       };
-      server.use("/profile", restrictAccess);
+      server.use("/userProfile", restrictAccess);
       //AUTENTICACION
 
       router_api(server);

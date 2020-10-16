@@ -77,9 +77,13 @@ async function deleteUser(id){
         console.error(err);
     }
 
-    driverModel.deleteOne({
-        _id: foundDriver._id
-    }); 
+    try {
+        driverModel.deleteOne({
+            _id: foundDriver._id
+        }); 
+    } catch(err) {
+        console.error(err);
+    }
         
     return Model.deleteOne({
         _id: id
