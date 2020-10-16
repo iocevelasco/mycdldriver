@@ -135,22 +135,24 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
   }
 
-  const ResolveUserType = ({typeUser, onChangeInputs, handleDatePicker}) => {
-    switch(typeUser){
+  const ResolveUserType = ({typeUser,newDrivers, onChangeInputs, handleDatePicker}) => {
+    switch(user.typeUser){
       case 1:
         return <DriverUser 
         driver={state.driver}
         onChangeInputs={onChangeInputs}
         handleDatePicker={handleDatePicker} 
+        newDrivers={newDrivers}
         />
       default:
         return <CompanyUser 
         company={state.company}
         onChangeInputs={onChangeInputs}
-        handleDatePicker={handleDatePicker}/>
-
+        handleDatePicker={handleDatePicker}
+        newDrivers={newDrivers}
+        />
     }
-  }
+  };
 
   const selectUserType = (userType) => {
     dispatch({ type: types.SELECT_USER_TYPE, payload: userType })
