@@ -48,7 +48,24 @@ function addDriver(driver, imageDln){
     
 }
 
+function deleteDriver(id){
+    return new Promise(async (resolve, reject) => {
+        if(!id){
+            reject('Invalid data');
+            return false;
+        }
+        store.delete(id)
+            .then(() => {
+                resolve();
+            })
+            .catch(e => {
+                reject(e); 
+            });
+    });
+}
+
 module.exports = {
     getDriver,
-    addDriver
+    addDriver,
+    deleteDriver
 }

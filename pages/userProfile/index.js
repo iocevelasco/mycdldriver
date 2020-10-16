@@ -103,8 +103,6 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
   }
 
-  
-
   const newDrivers = async () => {
     const { new_user } = state
     console.log('new_user',new_user);
