@@ -158,10 +158,23 @@ const UserProfile = ({ user, ...props }) => {
 
 
   const newDrivers = async () => {
-    const { new_user } = state
-    console.log('new_user',new_user);
+    const { base } = state;
+    const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
+    const fullDriver = {
+      base: base,
+      dln: dln,
+      expDateDln: expDateDln,
+      birthDate: birthDate,
+      areaCode: areaCode,
+      phoneNumber: phoneNumber,
+      sex: sex,
+      experience: experience,
+      address: address,
+      zipCode: zipCode,
+      description: description
+    };
     try {
-      const { data } = await axios.post('/api/driver', new_user);
+      const { data } = await axios.post('/api/driver', fullDriver);
       console.log('data', data);
     } catch (err) {
       console.log(err);
