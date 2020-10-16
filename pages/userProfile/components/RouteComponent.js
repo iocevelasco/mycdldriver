@@ -25,61 +25,9 @@ const { Option } = Select;
 
 const { TextArea } = Input;
 
-const initialState = {
-  typeUser: 0,
-  base: {
-    name: '',
-    lastname: '',
-    typeUser: '1',
-    photo: '',
-    email: '',
-    google_id: '',
-    facebook_id: ''
-  },
-  driver: {
-    dln: '',
-    expDateDln: '',
-    birthDate: '',
-    areaCode: '',
-    phoneNumber: '',
-    sex: '',
-    experience: '',
-    address: '',
-    zipCode: '',
-    description: ''
-  },
-  company: {
-      tradename:'',
-      legalNumber:'',
-      address: '',
-      description:'',
-      areaCode:'',
-      phoneNumber:'',
-      zipCode: ''
-  }
-}
+const initialState = {}
 
-const types = {
-  CREATE_NEW_USER: 'create_new_user',
-  SELECT_USER_TYPE:'select_user_type',
-  PROPS_BASE:'props_base'
-}
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case types.PROPS_BASE:
-      console.log(action.payload);
-      return { ...state, base: action.payload }
-    case types.CREATE_NEW_USER:
-      return { ...state, driver: action.payload }
-    case types.SELECT_USER_TYPE:
-      return { ...state, typeUser: action.payload }
-    default:
-      throw new Error('Unexpected action');
-  }
-}
-
-const UserProfile = ({ user, ...props }) => {
+const RouteComponent = ({ user, ...props }) => {
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
   console.log('state', state);
@@ -105,34 +53,30 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.PROPS_BASE, payload: base })
   }, [user, state.typeUser]);
 
-  const onChangeInputs = (e, key, type) => {
+  const onChangeInputs = (e, key, base) => {
     let user = state.userType == 1 ? state.driver : state.company ;
     let value = "";
-    switch (type){
-      case 1:
-        if(key == 'experience'){
-          value = e;
-        }else{
-          value = e.target.value;
-        }
-        user.driver[key] = value;
-        break;
-      case 2:
-        value = e.target.value;
-        user.company[key] = value;
+    switch (key) {
+      case 'experience':
+        value = e;
+        user[key] = value;
         break;
       default:
-        value = e.target.value;
-        user.base[key] = value;
-        break;
-    };
+        if (base) {
+          value = e.target.value;
+          user.base[key] = value;
+        } else {
+          value = e.target.value;
+          user[key] = value;
+        }
+    }
     dispatch({ type: types.CREATE_NEW_USER, payload: user });
   }
 
   const handleDatePicker = (obj, date, key) => {
-    let user = state.userType == 1 ? state.driver : state.company ;
-    user[key] = date
-    dispatch({ type: types.CREATE_NEW_USER, payload: user });
+    let new_user = state.user;
+    state.new_user[key] = date
+    dispatch({ type: types.CREATE_NEW_USER, payload: new_user });
   }
 
   const ResolveUserType = ({newDrivers, onChangeInputs, handleDatePicker}) => {
@@ -162,29 +106,15 @@ const UserProfile = ({ user, ...props }) => {
 
 
   const newDrivers = async () => {
-    const { base } = state;
-    const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
-    const fullDriver = {
-      base: base,
-      dln: dln,
-      expDateDln: expDateDln,
-      birthDate: birthDate,
-      areaCode: areaCode,
-      phoneNumber: phoneNumber,
-      sex: sex,
-      experience: experience,
-      address: address,
-      zipCode: zipCode,
-      description: description
-    };
+    const { driver } = state
+    console.log('new_user',new_user);
     try {
-      const { data } = await axios.post('/api/driver', fullDriver);
+      const { data } = await axios.post('/api/driver', new_user);
       console.log('data', data);
     } catch (err) {
       console.log(err);
     }
   };
-
 
   return (
     <MainLayout title='Profile' user={user}>
@@ -223,4 +153,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
 
 
 
-export default UserProfile;
+export default RouteComponent;
