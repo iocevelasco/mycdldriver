@@ -63,8 +63,9 @@ async function deleteUser(id){
         _id: id
     });
     const foundDriver = await driverModel.findOne({
-        user: id
+        _id: foundUser.driver
     });
+    console.log(foundDriver);
 
     try {
         if(foundUser.photo){
@@ -78,7 +79,7 @@ async function deleteUser(id){
     }
 
     try {
-        driverModel.deleteOne({
+        await driverModel.deleteOne({
             _id: foundDriver._id
         }); 
     } catch(err) {
