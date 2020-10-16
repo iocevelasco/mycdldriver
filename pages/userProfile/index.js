@@ -27,7 +27,7 @@ const { TextArea } = Input;
 
 const initialState = {
   typeUser: 0,
-  new_user: {
+  driver: {
     base: {
       name: '',
       lastname: '',
@@ -48,7 +48,7 @@ const initialState = {
     zipCode: '',
     description: ''
   },
-  new_company: {
+  company: {
       base: {
           name: '',
           lastname: '',
@@ -75,7 +75,7 @@ const types = {
 const reducer = (state, action) => {
   switch (action.type) {
     case types.CREATE_NEW_USER:
-      return { ...state, new_user: action.payload }
+      return { ...state, user: action.payload }
     case types.SELECT_USER_TYPE:
       return { ...state, typeUser: action.payload }
     default:
@@ -98,80 +98,111 @@ const UserProfile = ({ user, ...props }) => {
 
   useEffect(() => {
     if (!user) return;
-    let new_user = state.new_user;
-    new_user.base.name = user.name || '';
-    new_user.base.lastname = user.lastname || '';
-    new_user.base.google_id = user.google_id || '';
-    new_user.base.facebook_id = user.facebook_id || '';
-    new_user.base.photo = user.photo || '';
-    new_user.base.email = user.email || '';
+    let user = state.driver;
+    user.base.name = user.name || '';
+    user.base.lastname = user.lastname || '';
+    user.base.google_id = user.google_id || '';
+    user.base.facebook_id = user.facebook_id || '';
+    user.base.photo = user.photo || '';
+    user.base.email = user.email || '';
 
-    dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
+    dispatch({ type: types.CREATE_NEW_USER, payload: user })
   }, [])
 
   const onChangeInputs = (e, key, base) => {
-    let new_user = state.new_user;
+    let user = state.userType == 1 ? state.driver : state.company ;
     let value = "";
     switch (key) {
       case 'experience':
         value = e;
-        new_user[key] = value;
+        user[key] = value;
         break;
       default:
         if (base) {
           value = e.target.value;
-          new_user.base[key] = value;
+          user.base[key] = value;
         } else {
           value = e.target.value;
-          new_user[key] = value;
+          user[key] = value;
         }
     }
-    dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
+    dispatch({ type: types.CREATE_NEW_USER, payload: user });
   }
 
   const handleDatePicker = (obj, date, key) => {
-    let new_user = state.new_user;
+    let new_user = state.user;
     state.new_user[key] = date
     dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
   }
 
-  const ResolveUserType = () => {
-    switch(user.typeUser){
+  const ResolveUserType = ({typeUser, onChangeInputs, handleDatePicker}) => {
+    switch(typeUser){
       case 1:
-        return <DriverUser new_user={state.new_user} />
-      case 2:
-        return <CompanyUser new_company={state.new_company} />
+        return <DriverUser 
+        driver={state.driver}
+        onChangeInputs={onChangeInputs}
+        handleDatePicker={handleDatePicker} 
+        />
+      default:
+        return <CompanyUser 
+        company={state.company}
+        onChangeInputs={onChangeInputs}
+        handleDatePicker={handleDatePicker}/>
+
     }
   }
+
+  const selectUserType = (userType) => {
+    dispatch({ type: types.SELECT_USER_TYPE, payload: userType })
+  }
+
+
+  const newDrivers = async () => {
+    const { new_user } = state
+    console.log('new_user',new_user);
+    try {
+      const { data } = await axios.post('/api/driver', new_user);
+      console.log('data', data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <MainLayout title='Profile' user={user}>
       <WrapperSection row={24} mt={0}>
         {
-          state.user ? (
-           <ResolveUserType 
-           handleDatePicker={handleDatePicker}
-           userType={user.typeUser}/> 
+          state.typeUser ? (
+           <ResolveUserType
+            onChangeInputs={onChangeInputs}
+            handleDatePicker={handleDatePicker}
+            userType={user.typeUser}
+            newDrivers={newDrivers}/> 
           ):( 
-          <WrapperSection>pepe</WrapperSection>
+            <WrapperSection row={24} mt={0}>
+                <Button onClick={()=>selectUserType(2)}> Empresa </Button>
+                <Button onClick={()=>selectUserType(1)}> Chofer </Button>
+            </WrapperSection>
           )
         }
       </WrapperSection>
     </MainLayout>
   )
-}
+};
 
-const WrapperSection = ({row, mt, mb }) => {
+
+const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   return (
-    <div style={{ marginTop: mt, marginBottom: mb }}>
+    <div style={{marginTop:marginTop, marginBottom:marginBottom}}>
       <Row justify='center' align='middle'>
         <Col span={row}>
-            <Button> </Button>
+          {children}
         </Col>
       </Row>
     </div>
   )
 }
+
 
 
 export default UserProfile;
