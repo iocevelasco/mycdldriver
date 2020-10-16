@@ -7,33 +7,61 @@ function getCompany(filter){
     });
 }
 
-function addCompany(company, user){
+function addCompany(company, logo){
     return new Promise((resolve, reject) => {
         if(!company){
-            console.error('[companyController] No driver data');
-            reject('[companyController] No driver data');
+            console.error('[companyController] No company data');
+            reject('[companyController] No company data');
             return false;
         }
-        if(!user){
-            console.error('[companyController] No user data');
-            reject('[companyController] No user data');
-            return false;
-        }
+        const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
+
         const fullCompany = {
             tradename: company.tradename,
             legalNumber: company.legalNumber,
+            areaCode: company.areaCode,
+            phoneNumber: company.phoneNumber,
+            logo: fileUrl,
             address: company.address,
             description: company.description,
-            user: user
+            zipCode: company.zipCode
         };
 
-        const companyResolve = store.add(fullCompany); 
+        const user = {
+            name: company.base.name,
+            lastname: company.base.lastname,
+            typeUser: company.base.typeUser,
+            photo: company.base.photo,
+            email: company.base.email,
+            google_id: company.base.google_id,
+            facebook_id: company.base.facebook_id,
+            company: fullCompany
+        };
+
+        const companyResolve = store.add(user); 
         resolve(companyResolve);
     });
     
 }
 
+function deleteCompany(id){
+    return new Promise(async (resolve, reject) => {
+        if(!id){
+            reject('Invalid data');
+            return false;
+        }
+        store.delete(id)
+            .then(() => {
+                resolve();
+            })
+            .catch(e => {
+                reject(e); 
+            });
+    });
+}
+
 module.exports = {
     getCompany,
-    addCompany
+    addCompany,
+    deleteCompany
 }

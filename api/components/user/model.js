@@ -54,6 +54,10 @@ const userSchema = mongoose.Schema({
        type: Schema.ObjectId,
        ref: 'ProfileDriver',
    },
+   company: {
+       type: Schema.ObjectId,
+       ref: 'ProfileCompany',
+   },
    tokens: [{
       token: {
          type: String,

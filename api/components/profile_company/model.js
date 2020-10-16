@@ -13,6 +13,16 @@ const profileCompanySchema = mongoose.Schema({
         unique: true,
         required: true
     },
+    logo: {
+        type: String,
+        trim: true
+    },
+    areaCode: {
+        type: Number
+    },
+    phoneNumber: {
+        type: Number
+    },
     address: {
         type: String,
         trim: true
@@ -21,9 +31,9 @@ const profileCompanySchema = mongoose.Schema({
         type: String,
         trim: true
     },
-    user: {
-        type: Schema.ObjectId,
-        ref: 'User',
+    zipCode: {
+        type: String,
+        trim: true
     }
 });
 

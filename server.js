@@ -99,6 +99,7 @@ if (!dev && cluster.isMaster) {
                 "email": profile.emails[0].value,
                 "typeUser": 0
               };
+              console.log(newUser);
               return done(null, newUser);
             });
           });
