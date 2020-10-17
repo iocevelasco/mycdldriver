@@ -66,7 +66,7 @@ const driverUser = (props) => {
                     style={{ width: '100%' }}
                     placeholder="Birth Date"
                     value={moment(driver.birthDate)}
-                    defaultPickerValue={moment(driver.birthDate)}
+                    defaultValue={moment(new Date()).format('MM DD YYYY')}
                     onChange={(obj, key) => handleDatePicker(obj, key, 'birthDate')} />
                 </Form.Item>
               </Col>
@@ -97,8 +97,8 @@ const driverUser = (props) => {
                 <Form.Item>
                   <DatePicker
                     size='large'
+                    defaultValue={moment(new Date()).format('MM DD YYYY')}
                     value={moment(driver.expDateDln)}
-                    defaultPickerValue={moment(driver.expDateDln)}
                     placeholder="Experation Date"
                     style={{ width: '100%' }}
                     onChange={(obj, key) => handleDatePicker(obj, key, 'expDateDln')} />
