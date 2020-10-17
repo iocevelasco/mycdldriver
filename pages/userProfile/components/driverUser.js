@@ -23,9 +23,9 @@ const { Option } = Select;
 
 const { TextArea } = Input;
 
-const CompanyUser = (props) => {
+const driverUser = (props) => {
   const [form] = Form.useForm();
-  const { driver, onChangeInputs, handleDatePicker, newDrivers, base} = props;
+  const { driver, onChangeBase, onChangeDriver, handleDatePicker, newDrivers, base} = props;
   return (
     <div className='profile-driver'>
       <Row justify='center'>
@@ -38,7 +38,6 @@ const CompanyUser = (props) => {
           <Form
             form={form}
             name="user-driver"
-            initialValues={{ remember: true }}
             layout='horizontal'>
             <Row gutter={[24]} justify='space-between' >
               <Col span={12}>
@@ -50,7 +49,7 @@ const CompanyUser = (props) => {
                     size='large'
                     placeholder="Name"
                     value={base.name}
-                    onChange={(e) => onChangeInputs(e, 'name', 0)} />
+                    onChange={(e) => onChangeBase(e, 'name')} />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -60,7 +59,7 @@ const CompanyUser = (props) => {
                     size='large'
                     placeholder="Last Name"
                     value={base.lastname}
-                    onChange={(e) => onChangeInputs(e, 'lastname', 0)} />
+                    onChange={(e) => onChangeBase(e, 'lastname')} />
                 </Form.Item>
               </Col>
             </Row>
@@ -70,12 +69,11 @@ const CompanyUser = (props) => {
                 size='large'
                 placeholder="Mail"
                 value={base.email}
-                onChange={(e) => onChangeInputs(e, 'email', 0)} />
+                onChange={(e) => onChangeBase(e, 'email')} />
             </Form.Item>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your password!' }]}>
+                <Form.Item>
                   <DatePicker
                     size='large'
                     style={{ width: '100%' }}
@@ -84,11 +82,10 @@ const CompanyUser = (props) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your password!' }]}>
+                <Form.Item>
                   <Radio.Group
                     value={driver.sex}
-                    onChange={(e) => onChangeInputs(e, 'sex', 1)}>
+                    onChange={(e) => onChangeDriver(e, 'sex')}>
                     <Radio value={0}>F</Radio>
                     <Radio value={1}>M</Radio>
                     <Radio value={2}>Other</Radio>
@@ -98,14 +95,13 @@ const CompanyUser = (props) => {
             </Row>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your password!' }]}>
+                <Form.Item>
                   <Input
                     disabled={driver.is_cdl}
                     size='large'
                     placeholder="DLN"
                     value={driver.dln}
-                    onChange={(e) => onChangeInputs(e, 'dln', 1)} />
+                    onChange={(e) => onChangeDriver(e, 'dln')} />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -127,7 +123,7 @@ const CompanyUser = (props) => {
                     size='large'
                     placeholder="Area Code"
                     value={driver.areaCode}
-                    onChange={(e) => onChangeInputs(e, 'areaCode', 1)} />
+                    onChange={(e) => onChangeDriver(e, 'areaCode')} />
                 </Form.Item>
               </Col>
               <Col span={18}>
@@ -136,7 +132,7 @@ const CompanyUser = (props) => {
                     size='large'
                     placeholder="Phone Number"
                     value={driver.phoneNumber}
-                    onChange={(e) => onChangeInputs(e, 'phoneNumber', 1)} />
+                    onChange={(e) => onChangeDriver(e, 'phoneNumber')} />
                 </Form.Item>
               </Col>
             </Row>
@@ -147,7 +143,7 @@ const CompanyUser = (props) => {
                     size='large'
                     placeholder="Zip Code"
                     value={driver.zipCode}
-                    onChange={(e) => onChangeInputs(e, 'zipCode', 1)} />
+                    onChange={(e) => onChangeDriver(e, 'zipCode')} />
                 </Form.Item>
               </Col>
               <Col span={18}>
@@ -156,7 +152,7 @@ const CompanyUser = (props) => {
                     size='large'
                     placeholder="Address"
                     value={driver.Address}
-                    onChange={(e) => onChangeInputs(e, 'address', 1)} />
+                    onChange={(e) => onChangeDriver(e, 'address')} />
                 </Form.Item>
               </Col>
             </Row>
@@ -169,7 +165,7 @@ const CompanyUser = (props) => {
               min={1}
               max={100000}
               defaultValue={3}
-              onChange={(e) => onChangeInputs(e, 'experience', 1)} />
+              onChange={(e) => onChangeDriver(e, 'experience')} />
           </Form.Item>
           <Form.Item>
             <TextArea
@@ -177,7 +173,7 @@ const CompanyUser = (props) => {
               size='large'
               placeholder="Description"
               value={driver.description}
-              onChange={(e) => onChangeInputs(e, 'description', 1)} />
+              onChange={(e) => onChangeDriver(e, 'description')} />
           </Form.Item>
           <Row gutter={[24]} justify='end' align='middle'>
             <Col span={6}>
@@ -194,4 +190,4 @@ const CompanyUser = (props) => {
   )
 }
 
-export default CompanyUser;
+export default driverUser;
