@@ -40,7 +40,6 @@ const initialState = {
     birthDate: '',
     areaCode: '',
     phoneNumber: '',
-    sex: '',
     experience: '',
     address: '',
     zipCode: '',
@@ -217,9 +216,32 @@ const UserProfile = ({ user, ...props }) => {
       description: description
     };
     try {
-      console.log('[ fullDriver ]', fullDriver);
       const { data } = await axios.post('/api/driver', fullDriver);
-      console.log('data', data);
+      console.log('[ newDrivers ] data', data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const newCompany = async () => {
+    const { base } = state;
+    const {tradename,legalNumber,areaCode,phoneNumber,logo,address,zipCode,description} = state.company;
+    base.typeUser = 2;
+    const fullCompany = {
+      base: base,
+      tradename: tradename,
+      legalNumber: legalNumber,
+      areaCode: areaCode,
+      phoneNumber: phoneNumber,
+      logo: logo,
+      address: address,
+      zipCode: zipCode,
+      description: description
+    };
+    try {
+      console.log('[ fullCompany ]', fullCompany);
+      const { data } = await axios.post('/api/company', fullCompany);
+      console.log('[ newCompany ] data', data);
     } catch (err) {
       console.log(err);
     }
