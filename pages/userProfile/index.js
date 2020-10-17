@@ -7,7 +7,8 @@ import {
   Input,
   Select,
   Spin,
-  Card
+  Card,
+  notification
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
@@ -15,7 +16,7 @@ import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import DriverUser from './components/driverUser';
 import CompanyUser from './components/companyUser';
 import ResolveUserType from '../../middleware/resolveUserType';
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, CheckCircleOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -219,6 +220,12 @@ const UserProfile = ({ user, ...props }) => {
     try {
       const { data } = await axios.post('/api/driver', fullDriver);
       console.log('[ newDrivers ] data', data);
+      notification.open({
+        message: 'Notification Title',
+        description:
+          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -242,7 +249,12 @@ const UserProfile = ({ user, ...props }) => {
     try {
       console.log('[ fullCompany ]', fullCompany);
       const { data } = await axios.post('/api/company', fullCompany);
-      console.log('[ newCompany ] data', data);
+      notification.open({
+        message: 'Notification Title',
+        description:
+          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
+      });
     } catch (err) {
       console.log(err);
     }

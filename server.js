@@ -116,6 +116,7 @@ if (!dev && cluster.isMaster) {
           return done(null, fullUser);
         })
         .catch(e => {
+          console.log('[profile]', profile)
           console.log('[ FacebookStrategy ] Usuario no registrado: ' + e);
           newUser = {
             "name": profile.name.givenName,

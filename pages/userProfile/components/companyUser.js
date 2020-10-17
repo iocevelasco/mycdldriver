@@ -42,10 +42,7 @@ const DriverUser = (props) => {
             layout='horizontal'>
             <Row gutter={[24]} justify='space-between' >
               <Col span={12}>
-                <Form.Item
-                  hasFeedback
-                  validateStatus={base.name.length <= 0 ? 'error' : 'success'}
-                  help="Should be combination of numbers & alphabets">
+                <Form.Item>
                   <Input
                     size='large'
                     placeholder="Name"
