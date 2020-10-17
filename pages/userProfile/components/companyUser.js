@@ -24,7 +24,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const DriverUser = (props) => {
-  const { company, onChangeInputs, handleDatePicker, newDrivers, base} = props;
+  const { company, onChangeInputs, handleDatePicker, newCompany, base} = props;
   const [form] = Form.useForm();
   return (
     <div className='profile-driver'>
@@ -72,30 +72,6 @@ const DriverUser = (props) => {
                 value={base.email}
                 onChange={(e) => onChangeInputs(e, 'email', 1)} />
             </Form.Item>
-            <Row gutter={[24]} justify='space-between' align='middle'>
-              <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your password!' }]}>
-                  <DatePicker
-                    size='large'
-                    style={{ width: '100%' }}
-                    placeholder="Birth Date"
-                    onChange={(obj, key) => handleDatePicker(obj, key, 'birthDate')} />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your password!' }]}>
-                  <Radio.Group
-                    value={company.sex}
-                    onChange={(e) => onChangeInputs(e, 'sex', 0)}>
-                    <Radio value={0}>F</Radio>
-                    <Radio value={1}>M</Radio>
-                    <Radio value={2}>Other</Radio>
-                  </Radio.Group>
-                </Form.Item>
-              </Col>
-            </Row>
             <Row gutter={[24]} justify='space-between' >
               <Col span={6}>
                 <Form.Item>
@@ -150,7 +126,7 @@ const DriverUser = (props) => {
           <Row gutter={[24]} justify='end' align='middle'>
             <Col span={6}>
               <Button
-                onClick={newDrivers}
+                onClick={newCompany}
                 type='primary'
                 block
                 size='large'>Save Information</Button>

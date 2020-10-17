@@ -183,7 +183,6 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
 
-
   const newDrivers = async () => {
     const { base } = state;
     const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
@@ -209,6 +208,28 @@ const UserProfile = ({ user, ...props }) => {
     }
   };
 
+  const newCompany = async () => {
+    const { base } = state;
+    const {tradename,legalNumber,areaCode,phoneNumber,logo,address,zipCode,description} = state.driver;
+    const fullCompany = {
+      base: base,
+      tradename: tradename,
+      legalNumber: legalNumber,
+      areaCode: areaCode,
+      phoneNumber: phoneNumber,
+      logo: logo,
+      address: address,
+      zipCode: zipCode,
+      description: description
+    };
+    try {
+      console.log('[ fullCompany ]', fullCompany);
+      const { data } = await axios.post('/api/company', fullCompany);
+      console.log('data', data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <MainLayout title='Profile' user={user}>
@@ -221,7 +242,8 @@ const UserProfile = ({ user, ...props }) => {
             onChangeCompany={onChangeCompany}
             handleDatePicker={handleDatePicker}
             userType={state.typeUser}
-            newDrivers={newDrivers}/> 
+            newDrivers={newDrivers}
+            newCompany={newCompany}/> 
           ):( 
             <WrapperSection row={24} mt={0}>
               <div className="profile-driver__route">
