@@ -45,20 +45,20 @@ const initialState = {
     description: ''
   },
   company: {
-      tradename:'',
-      legalNumber:'',
-      address: '',
-      description:'',
-      areaCode:'',
-      phoneNumber:'',
-      zipCode: ''
+    tradename: '',
+    legalNumber: '',
+    address: '',
+    description: '',
+    areaCode: '',
+    phoneNumber: '',
+    zipCode: ''
   }
 }
 
 const types = {
   CREATE_NEW_USER: 'create_new_user',
-  SELECT_USER_TYPE:'select_user_type',
-  PROPS_BASE:'props_base',
+  SELECT_USER_TYPE: 'select_user_type',
+  PROPS_BASE: 'props_base',
   DATA_DRIVER: 'DATA_DRIVER',
   DATA_COMPANY: 'DATA_COMPANY'
 }
@@ -106,11 +106,11 @@ const UserProfile = ({ user, ...props }) => {
   const onChangeBase = (e, key, type) => {
     let base = state.base;
     let value = "";
-    switch (type){
+    switch (type) {
       case 1:
-        if(key == 'experience'){
+        if (key == 'experience') {
           value = e;
-        }else{
+        } else {
           value = e.target.value;
         }
         base[key] = value;
@@ -130,11 +130,11 @@ const UserProfile = ({ user, ...props }) => {
   const onChangeCompany = (e, key, type) => {
     let driver = state.driver;
     let value = "";
-    switch (type){
+    switch (type) {
       case 1:
-        if(key == 'experience'){
+        if (key == 'experience') {
           value = e;
-        }else{
+        } else {
           value = e.target.value;
         }
         driver[key] = value;
@@ -153,11 +153,11 @@ const UserProfile = ({ user, ...props }) => {
   const onChangeDriver = (e, key, type) => {
     let driver = state.driver;
     let value = "";
-    switch (type){
+    switch (type) {
       case 1:
-        if(key == 'experience'){
+        if (key == 'experience') {
           value = e;
-        }else{
+        } else {
           value = e.target.value;
         }
         driver[key] = value;
@@ -175,42 +175,42 @@ const UserProfile = ({ user, ...props }) => {
   }
 
   const handleDatePicker = (obj, date, key) => {
-    let data = state.typeUser ? state.driver : state.company ;
+    let data = state.typeUser ? state.driver : state.company;
     data[key] = date;
-    if(state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
+    if (state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
     else dispatch({ type: types.DATA_COMPANY, payload: data });
   }
 
   const ResolveUserType = () => {
     console.log('typeUser', user.typeUser);
-    switch(user.typeUser){
+    switch (user.typeUser) {
       case 1:
-        return <DriverUser 
-        driver={state.driver}
-        base={state.base}
-        onChangeBase={onChangeBase}
-        onChangeDriver={onChangeDriver}
-        handleDatePicker={handleDatePicker} 
-        newDrivers={newDrivers}
-        />
-      case 2:
-        return <CompanyUser
-        base={state.base}
-        onChangeBase={onChangeBase}
-        company={state.company}
-        onChangeCompany={onChangeCompany}
-        handleDatePicker={handleDatePicker}
-        newDrivers={newDrivers}
-        />
-        default:
-          return <DriverUser 
+        return <DriverUser
           driver={state.driver}
           base={state.base}
           onChangeBase={onChangeBase}
           onChangeDriver={onChangeDriver}
-          handleDatePicker={handleDatePicker} 
+          handleDatePicker={handleDatePicker}
           newDrivers={newDrivers}
-          />
+        />
+      case 2:
+        return <CompanyUser
+          base={state.base}
+          onChangeBase={onChangeBase}
+          company={state.company}
+          onChangeCompany={onChangeCompany}
+          handleDatePicker={handleDatePicker}
+          newDrivers={newDrivers}
+        />
+      default:
+        return <DriverUser
+          driver={state.driver}
+          base={state.base}
+          onChangeBase={onChangeBase}
+          onChangeDriver={onChangeDriver}
+          handleDatePicker={handleDatePicker}
+          newDrivers={newDrivers}
+        />
     }
   };
 
@@ -221,7 +221,7 @@ const UserProfile = ({ user, ...props }) => {
 
   const newDrivers = async () => {
     const { base } = state;
-    const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
+    const { dln, expDateDln, birthDate, areaCode, phoneNumber, sex, experience, address, zipCode, description } = state.driver;
     const fullDriver = {
       base: base,
       dln: dln,
@@ -243,36 +243,44 @@ const UserProfile = ({ user, ...props }) => {
     }
   };
 
+  const cardConfig = {
+    hoverable:true
+  }
 
   return (
     <MainLayout title='Profile' user={user}>
       <WrapperSection row={24} mt={0}>
         {
           state.typeUser ? (
-           <ResolveUserType
-            onChangeInputs={onChangeInputs}
-            handleDatePicker={handleDatePicker}
-            userType={user.typeUser}
-            newDrivers={newDrivers}/> 
-          ):( 
-            <WrapperSection row={24} mt={0}>
-              <div className="profile-driver__route">
-                <div className="title">
-                  <Title> Addres </Title>
-                </div>
-                <div className="card-container">
-                  <div onClick={()=>selectUserType(2)}>
-                    <img src='/static/images/truck.svg' />
-                    <Text > Company </Text>
+            <ResolveUserType
+              onChangeInputs={onChangeInputs}
+              handleDatePicker={handleDatePicker}
+              userType={user.typeUser}
+              newDrivers={newDrivers} />
+          ) : (
+              <WrapperSection row={24} mt={0}>
+                <div className="profile-driver__route">
+                  <div className="title">
+                    <Title> Addres </Title>
+                    <Text strong > lorem ipsum asdasd asdasdasd </Text>
                   </div>
-                  <div onClick={()=>selectUserType(1)}>
-                    <img src='/static/images/driver.svg' />
-                    <Text > Drivers </Text>
+                  <div className="card-container">
+                    <Card
+                      {...cardConfig}
+                      onClick={() => selectUserType(1)}>
+                      <img src='/static/images/driver.svg' />
+                      <Text > Drivers </Text>
+                    </Card>
+                    <Card
+                      {...cardConfig}
+                      onClick={() => selectUserType(2)}>
+                      <img src='/static/images/truck.svg' />
+                      <Text > Company </Text>
+                    </Card>
                   </div>
                 </div>
-              </div>
-            </WrapperSection>
-          )
+              </WrapperSection>
+            )
         }
       </WrapperSection>
     </MainLayout>
@@ -282,7 +290,12 @@ const UserProfile = ({ user, ...props }) => {
 
 const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   return (
-    <div style={{marginTop:marginTop, marginBottom:marginBottom}}>
+    <div style={{ 
+      background: `url('/static/images/bg-routes.jpg')`,
+      marginTop: marginTop, 
+      marginBottom: marginBottom,
+      backgroundSize:'contain',
+      }}>
       <Row justify='center' align='middle'>
         <Col span={row}>
           {children}
