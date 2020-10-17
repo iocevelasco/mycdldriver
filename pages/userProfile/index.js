@@ -166,7 +166,7 @@ const UserProfile = ({ user, ...props }) => {
         onChangeBase={onChangeBase}
         onChangeCompany={onChangeCompany}
         handleDatePicker={handleDatePicker}
-        newDrivers={newCompany}
+        newCompany={newCompany}
         />
       default:
         return <WrapperSection row={24} mt={0}>
