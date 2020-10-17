@@ -151,7 +151,7 @@ const driverUser = (props) => {
                   <Input
                     size='large'
                     placeholder="Address"
-                    value={driver.Address}
+                    value={driver.address}
                     onChange={(e) => onChangeDriver(e, 'address')} />
                 </Form.Item>
               </Col>

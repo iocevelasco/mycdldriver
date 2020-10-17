@@ -38,7 +38,6 @@ const initialState = {
     birthDate: '',
     areaCode: '',
     phoneNumber: '',
-    sex: '',
     experience: '',
     address: '',
     zipCode: '',
@@ -138,16 +137,13 @@ const UserProfile = ({ user, ...props }) => {
 
   const handleDatePicker = (obj, date, key) => {
     let data = state.typeUser ? state.driver : state.company ;
-    console.log('[handleDatePicker] typeUser', state.typeUser);
     data[key] = date;
     if(state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
     else dispatch({ type: types.DATA_COMPANY, payload: data });
-    console.log('[handleDatePicker] data', data);
   }
 
   const ResolveUserType = () => {
-    console.log('[ResolveUserType] typeUser', state.typeUser);
-    console.log('[ResolveUserType] state', state);
+    state.base.typeUser = state.typeUser;
     switch(state.typeUser){
       case 1:
         return <DriverUser 
@@ -200,9 +196,8 @@ const UserProfile = ({ user, ...props }) => {
       description: description
     };
     try {
-      console.log('[ fullDriver ]', fullDriver);
       const { data } = await axios.post('/api/driver', fullDriver);
-      console.log('data', data);
+      console.log('[ newDrivers ] data', data);
     } catch (err) {
       console.log(err);
     }
@@ -210,7 +205,8 @@ const UserProfile = ({ user, ...props }) => {
 
   const newCompany = async () => {
     const { base } = state;
-    const {tradename,legalNumber,areaCode,phoneNumber,logo,address,zipCode,description} = state.driver;
+    const {tradename,legalNumber,areaCode,phoneNumber,logo,address,zipCode,description} = state.company;
+    base.typeUser = 2;
     const fullCompany = {
       base: base,
       tradename: tradename,
@@ -225,7 +221,7 @@ const UserProfile = ({ user, ...props }) => {
     try {
       console.log('[ fullCompany ]', fullCompany);
       const { data } = await axios.post('/api/company', fullCompany);
-      console.log('data', data);
+      console.log('[ newCompany ] data', data);
     } catch (err) {
       console.log(err);
     }

@@ -24,7 +24,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const DriverUser = (props) => {
-  const { company, onChangeInputs, handleDatePicker, newCompany, base} = props;
+  const { company, onChangeBase, onChangeCompany, newCompany, base} = props;
   const [form] = Form.useForm();
   return (
     <div className='profile-driver'>
@@ -50,7 +50,7 @@ const DriverUser = (props) => {
                     size='large'
                     placeholder="Name"
                     value={base.name}
-                    onChange={(e) => onChangeInputs(e, 'name', 1)} />
+                    onChange={(e) => onChangeBase(e, 'name')} />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -60,7 +60,7 @@ const DriverUser = (props) => {
                     size='large'
                     placeholder="Last Name"
                     value={base.lastname}
-                    onChange={(e) => onChangeInputs(e, 'lastname', 1)} />
+                    onChange={(e) => onChangeBase(e, 'lastname')} />
                 </Form.Item>
               </Col>
             </Row>
@@ -70,7 +70,7 @@ const DriverUser = (props) => {
                 size='large'
                 placeholder="Mail"
                 value={base.email}
-                onChange={(e) => onChangeInputs(e, 'email', 1)} />
+                onChange={(e) => onChangeBase(e, 'email')} />
             </Form.Item>
             <Row gutter={[24]} justify='space-between' >
               <Col span={6}>
@@ -79,7 +79,7 @@ const DriverUser = (props) => {
                     size='large'
                     placeholder="Area Code"
                     value={company.areaCode}
-                    onChange={(e) => onChangeInputs(e, 'areaCode', 0)} />
+                    onChange={(e) => onChangeCompany(e, 'areaCode')} />
                 </Form.Item>
               </Col>
               <Col span={18}>
@@ -88,7 +88,7 @@ const DriverUser = (props) => {
                     size='large'
                     placeholder="Phone Number"
                     value={company.phoneNumber}
-                    onChange={(e) => onChangeInputs(e, 'phoneNumber', 0)} />
+                    onChange={(e) => onChangeCompany(e, 'phoneNumber')} />
                 </Form.Item>
               </Col>
             </Row>
@@ -99,7 +99,7 @@ const DriverUser = (props) => {
                     size='large'
                     placeholder="Zip Code"
                     value={company.zipCode}
-                    onChange={(e) => onChangeInputs(e, 'zipCode', 0)} />
+                    onChange={(e) => onChangeCompany(e, 'zipCode')} />
                 </Form.Item>
               </Col>
               <Col span={18}>
@@ -107,37 +107,48 @@ const DriverUser = (props) => {
                   <Input
                     size='large'
                     placeholder="Address"
-                    value={company.Address}
-                    onChange={(e) => onChangeInputs(e, 'address', 0)} />
+                    value={company.address}
+                    onChange={(e) => onChangeCompany(e, 'address')} />
                 </Form.Item>
               </Col>
             </Row>
           </Form>
         </Col>
         <Col className='profile-driver__form-small' span={14}>
-        <Row gutter={[24]} justify='space-between' >
-              <Col span={12}>
-                <Form.Item
-                  hasFeedback
-                  validateStatus={base.name.length <= 0 ? 'error' : 'success'}>
-                  <Input
-                    size='large'
-                    placeholder="Trade Name"
-                    value={base.name}
-                    onChange={(e) => onChangeInputs(e, 'tradename', 1)} />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your username!' }]}>
-                  <Input
-                    size='large'
-                    placeholder="Legal Number"
-                    value={base.lastname}
-                    onChange={(e) => onChangeInputs(e, 'legalNumber', 1)} />
-                </Form.Item>
-              </Col>
-            </Row>
+          <Row gutter={[24]} justify='space-between' >
+            <Col span={12}>
+              <Form.Item
+                rules={[{ required: true, message: 'Please input your username!' }]}>
+                <Input
+                  size='large'
+                  placeholder="Trade Name"
+                  value={company.tradename}
+                  onChange={(e) => onChangeCompany(e, 'tradename')} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                rules={[{ required: true, message: 'Please input your username!' }]}>
+                <Input
+                  size='large'
+                  placeholder="Legal Number"
+                  value={company.legalNumber}
+                  onChange={(e) => onChangeCompany(e, 'legalNumber')} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[24]} justify='space-between' >
+            <Col span={24}>
+              <Form.Item>
+                <TextArea
+                  rows={4}
+                  size='large'
+                  placeholder="Description"
+                  value={company.description}
+                  onChange={(e) => onChangeCompany(e, 'description')} />
+              </Form.Item>
+            </Col>
+          </Row>
           <Row gutter={[24]} justify='end' align='middle'>
             <Col span={6}>
               <Button
