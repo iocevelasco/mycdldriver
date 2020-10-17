@@ -115,14 +115,29 @@ const DriverUser = (props) => {
           </Form>
         </Col>
         <Col className='profile-driver__form-small' span={14}>
-          <Form.Item label="Experience">
-            <InputNumber
-              size="large"
-              min={1}
-              max={100000}
-              defaultValue={3}
-              onChange={(e) => onChangeInputs(e, 'experience', 0)} />
-          </Form.Item>
+        <Row gutter={[24]} justify='space-between' >
+              <Col span={12}>
+                <Form.Item
+                  hasFeedback
+                  validateStatus={base.name.length <= 0 ? 'error' : 'success'}>
+                  <Input
+                    size='large'
+                    placeholder="Trade Name"
+                    value={base.name}
+                    onChange={(e) => onChangeInputs(e, 'tradename', 1)} />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  rules={[{ required: true, message: 'Please input your username!' }]}>
+                  <Input
+                    size='large'
+                    placeholder="Legal Number"
+                    value={base.lastname}
+                    onChange={(e) => onChangeInputs(e, 'legalNumber', 1)} />
+                </Form.Item>
+              </Col>
+            </Row>
           <Row gutter={[24]} justify='end' align='middle'>
             <Col span={6}>
               <Button
