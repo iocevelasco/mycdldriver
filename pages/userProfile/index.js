@@ -103,87 +103,52 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.PROPS_BASE, payload: base })
   }, [user, state.typeUser]);
 
-  const onChangeBase = (e, key, type) => {
+  const onChangeBase = (e, key) => {
     let base = state.base;
     let value = "";
-    switch (type){
-      case 1:
-        if(key == 'experience'){
-          value = e;
-        }else{
-          value = e.target.value;
-        }
-        base[key] = value;
-        break;
-      case 2:
-        value = e.target.value;
-        base[key] = value;
-        break;
-      default:
-        value = e.target.value;
-        base[key] = value;
-        break;
-    };
+
+    value = e.target.value;
+    base[key] = value;
+       
     dispatch({ type: types.DATA_DRIVER, payload: base });
   }
 
-  const onChangeCompany = (e, key, type) => {
+  const onChangeCompany = (e, key) => {
     let driver = state.driver;
     let value = "";
-    switch (type){
-      case 1:
-        if(key == 'experience'){
-          value = e;
-        }else{
-          value = e.target.value;
-        }
-        driver[key] = value;
-        break;
-      case 2:
-        value = e.target.value;
-        driver[key] = value;
-        break;
-      default:
-        value = e.target.value;
-        driver[key] = value;
-        break;
-    };
+
+    if(key == 'experience'){
+      value = e;
+    }else{
+      value = e.target.value;
+    }
+    driver[key] = value;
+        
     dispatch({ type: types.DATA_DRIVER, payload: driver });
   }
-  const onChangeDriver = (e, key, type) => {
+  const onChangeDriver = (e, key) => {
     let driver = state.driver;
     let value = "";
-    switch (type){
-      case 1:
-        if(key == 'experience'){
-          value = e;
-        }else{
-          value = e.target.value;
-        }
-        driver[key] = value;
-        break;
-      case 2:
-        value = e.target.value;
-        driver[key] = value;
-        break;
-      default:
-        value = e.target.value;
-        driver[key] = value;
-        break;
-    };
+    
+    value = e.target.value;
+    driver[key] = value;
+
     dispatch({ type: types.DATA_DRIVER, payload: driver });
   }
 
   const handleDatePicker = (obj, date, key) => {
     let data = state.typeUser ? state.driver : state.company ;
+    console.log('[handleDatePicker] typeUser', state.typeUser);
     data[key] = date;
     if(state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
     else dispatch({ type: types.DATA_COMPANY, payload: data });
+    console.log('[handleDatePicker] data', data);
   }
 
   const ResolveUserType = () => {
-    console.log('typeUser', user.typeUser);
-    switch(user.typeUser){
+    console.log('[ResolveUserType] typeUser', state.typeUser);
+    console.log('[ResolveUserType] state', state);
+    switch(state.typeUser){
       case 1:
         return <DriverUser 
         driver={state.driver}
@@ -196,21 +161,21 @@ const UserProfile = ({ user, ...props }) => {
       case 2:
         return <CompanyUser
         base={state.base}
-        onChangeBase={onChangeBase}
         company={state.company}
+        onChangeBase={onChangeBase}
         onChangeCompany={onChangeCompany}
         handleDatePicker={handleDatePicker}
         newDrivers={newDrivers}
         />
-        default:
-          return <DriverUser 
-          driver={state.driver}
-          base={state.base}
-          onChangeBase={onChangeBase}
-          onChangeDriver={onChangeDriver}
-          handleDatePicker={handleDatePicker} 
-          newDrivers={newDrivers}
-          />
+      default:
+        return <DriverUser 
+        driver={state.driver}
+        base={state.base}
+        onChangeBase={onChangeBase}
+        onChangeDriver={onChangeDriver}
+        handleDatePicker={handleDatePicker} 
+        newDrivers={newDrivers}
+        />
     }
   };
 
@@ -250,9 +215,11 @@ const UserProfile = ({ user, ...props }) => {
         {
           state.typeUser ? (
            <ResolveUserType
-            onChangeInputs={onChangeInputs}
+            onChangeBase={onChangeBase}
+            onChangeDriver={onChangeDriver}
+            onChangeCompany={onChangeCompany}
             handleDatePicker={handleDatePicker}
-            userType={user.typeUser}
+            userType={state.typeUser}
             newDrivers={newDrivers}/> 
           ):( 
             <WrapperSection row={24} mt={0}>
