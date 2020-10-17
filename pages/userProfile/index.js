@@ -239,13 +239,17 @@ const UserProfile = ({ user, ...props }) => {
     try {
       const { data } = await axios.post('/api/driver', fullDriver);
       console.log('[ newDrivers ] data', data);
-      notification.open({
-        message: 'Notification Title',
+      notification['success']({
+        message: 'Success',
         description:
-          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-        icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
       });
     } catch (err) {
+      notification['error']({
+        message: 'error',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
       console.log(err);
     }
   };
@@ -268,14 +272,18 @@ const UserProfile = ({ user, ...props }) => {
     try {
       console.log('[ fullCompany ]', fullCompany);
       const { data } = await axios.post('/api/company', fullCompany);
-      notification.open({
-        message: 'Notification Title',
+      notification['success']({
+        message: 'Success',
         description:
-          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-        icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
       });
     } catch (err) {
       console.log(err);
+      notification['error']({
+        message: 'error',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
     }
   };
 
