@@ -147,8 +147,9 @@ const UserProfile = ({ user, ...props }) => {
     else dispatch({ type: types.DATA_COMPANY, payload: data });
   }
 
-  const resolveUserType = (typeUser) => {
-    switch(typeUser){
+  const resolveUserType = () => {
+    state.base.typeUser = state.typeUser;
+    switch(state.typeUser){
       case 1:
         return <DriverUser 
         driver={state.driver}
@@ -165,7 +166,7 @@ const UserProfile = ({ user, ...props }) => {
         onChangeBase={onChangeBase}
         onChangeCompany={onChangeCompany}
         handleDatePicker={handleDatePicker}
-        newDrivers={newDrivers}
+        newDrivers={newCompany}
         />
       default:
         return <WrapperSection row={24} mt={0}>
