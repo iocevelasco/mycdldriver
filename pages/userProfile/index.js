@@ -83,7 +83,6 @@ const reducer = (state, action) => {
 const UserProfile = ({ user, ...props }) => {
   console.log('user', user);
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log('[ UserProfile ] user', user);
 
   useEffect(() => {
     verifyUserType(user.typeUser)
@@ -238,7 +237,6 @@ const UserProfile = ({ user, ...props }) => {
     };
     try {
       const { data } = await axios.post('/api/driver', fullDriver);
-      console.log('[ newDrivers ] data', data);
       notification['success']({
         message: 'Success',
         description:
@@ -270,7 +268,6 @@ const UserProfile = ({ user, ...props }) => {
       description: description
     };
     try {
-      console.log('[ fullCompany ]', fullCompany);
       const { data } = await axios.post('/api/company', fullCompany);
       notification['success']({
         message: 'Success',
