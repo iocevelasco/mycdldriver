@@ -249,7 +249,7 @@ const UserProfile = ({ user, ...props }) => {
               <div className="profile-driver__route">
                 <div className="title">
                   <Title>  Let's do this!  </Title>
-                  <Text>Are you a driver or a company?</Text>
+                  <Text strong>Are you a driver or a company?</Text>
                 </div>
                 <div className="card-container">
                   <Card
