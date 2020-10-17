@@ -38,7 +38,6 @@ const driverUser = (props) => {
           <Form
             form={form}
             name="user-driver"
-            initialValues={{ remember: true }}
             layout='horizontal'>
             <Row gutter={[24]} justify='space-between' >
               <Col span={12}>
@@ -74,8 +73,7 @@ const driverUser = (props) => {
             </Form.Item>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your password!' }]}>
+                <Form.Item>
                   <DatePicker
                     size='large'
                     style={{ width: '100%' }}
@@ -84,8 +82,7 @@ const driverUser = (props) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your password!' }]}>
+                <Form.Item>
                   <Radio.Group
                     value={driver.sex}
                     onChange={(e) => onChangeDriver(e, 'sex')}>
@@ -98,8 +95,7 @@ const driverUser = (props) => {
             </Row>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your password!' }]}>
+                <Form.Item>
                   <Input
                     disabled={driver.is_cdl}
                     size='large'

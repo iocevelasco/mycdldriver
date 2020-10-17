@@ -113,7 +113,7 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.DATA_DRIVER, payload: base });
   }
 
-  const onChangeCompany = (e, key) => {
+  const onChangeDriver = (e, key) => {
     let driver = state.driver;
     let value = "";
 
@@ -126,14 +126,14 @@ const UserProfile = ({ user, ...props }) => {
         
     dispatch({ type: types.DATA_DRIVER, payload: driver });
   }
-  const onChangeDriver = (e, key) => {
-    let driver = state.driver;
+  const onChangeCompany = (e, key) => {
+    let company = state.company;
     let value = "";
     
     value = e.target.value;
-    driver[key] = value;
+    company[key] = value;
 
-    dispatch({ type: types.DATA_DRIVER, payload: driver });
+    dispatch({ type: types.DATA_COMPANY, payload: company });
   }
 
   const handleDatePicker = (obj, date, key) => {
@@ -201,6 +201,7 @@ const UserProfile = ({ user, ...props }) => {
       description: description
     };
     try {
+      console.log('[ fullDriver ]', fullDriver);
       const { data } = await axios.post('/api/driver', fullDriver);
       console.log('data', data);
     } catch (err) {
