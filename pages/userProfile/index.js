@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import MainLayout from '../../components/layout';
 import {
   Row,
@@ -6,279 +6,302 @@ import {
   Typography,
   Input,
   Select,
-  Avatar,
-  Form,
-  Button,
-  Switch,
-  InputNumber,
-  Radio,
-  DatePicker,
-  message
+  Spin,
+  Card,
+  notification
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import DriverUser from './components/driverUser';
+import CompanyUser from './components/companyUser';
+import ResolveUserType from '../../middleware/resolveUserType';
+import { LoadingOutlined, CheckCircleOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 const { TextArea } = Input;
 
 const initialState = {
-  new_user: {
-    base: {
-      name: '',
-      lastname: '',
-      typeUser: '1',
-      photo: '',
-      email: '',
-      google_id: '',
-      facebook_id: ''
-    },
+  typeUser: 0,
+  base: {
+    name: '',
+    lastname: '',
+    typeUser: '1',
+    photo: '',
+    email: '',
+    google_id: '',
+    facebook_id: ''
+  },
+  driver: {
     dln: '',
     expDateDln: '',
     birthDate: '',
     areaCode: '',
     phoneNumber: '',
-    sex: '',
     experience: '',
+    sex: '',
     address: '',
     zipCode: '',
     description: ''
+  },
+  company: {
+      tradename:'',
+      legalNumber:'',
+      address: '',
+      description:'',
+      areaCode:'',
+      phoneNumber:'',
+      zipCode: ''
   }
 }
 
 const types = {
   CREATE_NEW_USER: 'create_new_user',
+  SELECT_USER_TYPE:'select_user_type',
+  PROPS_BASE:'props_base',
+  DATA_DRIVER: 'DATA_DRIVER',
+  DATA_COMPANY: 'DATA_COMPANY'
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case types.CREATE_NEW_USER:
-      return { ...state, new_user: action.payload }
+    case types.PROPS_BASE:
+      return { ...state, base: action.payload }
+    case types.DATA_DRIVER:
+      return { ...state, driver: action.payload }
+    case types.DATA_COMPANY:
+      return { ...state, company: action.payload }
+    case types.SELECT_USER_TYPE:
+      return { ...state, typeUser: action.payload }
     default:
       throw new Error('Unexpected action');
   }
 }
 
 const UserProfile = ({ user, ...props }) => {
-  const [form] = Form.useForm();
+  console.log('user', user);
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log('state', state);
+
   useEffect(() => {
-    if (!user) return;
-    let new_user = state.new_user;
-    new_user.base.name = user.name || '';
-    new_user.base.lastname = user.lastname || '';
-    new_user.base.google_id = user.google_id || '';
-    new_user.base.facebook_id = user.facebook_id || '';
-    new_user.base.photo = user.photo || '';
-    new_user.base.email = user.email || '';
+    verifyUserType(user.typeUser)
+  }, []);
 
-    dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
-  }, [])
+  const verifyUserType = (typeUser) => {
+    dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
+  }
 
-  const onChangeInputs = (e, key, base) => {
-    let new_user = state.new_user;
-    let value = "";
-    switch (key) {
-      case 'experience':
-        value = e;
-        new_user[key] = value;
-        break;
-      default:
-        if (base) {
-          value = e.target.value;
-          new_user.base[key] = value;
-        } else {
-          value = e.target.value;
-          new_user[key] = value;
-        }
+  useEffect(() => {
+    //Esto carga las props iniciales
+    let base = state.base;
+    base.name = user.name || '';
+    base.lastname = user.lastname || '';
+    base.google_id = user.google_id || '';
+    base.facebook_id = user.facebook_id || '';
+    base.photo = user.photo || '';
+    base.email = user.email || '';
+    base.id = user._id || '';
+
+    if(user.typeUser == 1){
+      let driver = state.driver;
+      driver.dln = user.driver.dln;
+      driver.expDateDln = user.driver.expDateDln;
+      driver.birthDate = user.driver.birthDate;
+      driver.areaCode = user.driver.areaCode;
+      driver.phoneNumber = user.driver.phoneNumber;
+      driver.experience = user.driver.experience;
+      driver.sex = user.driver.sex;
+      driver.address = user.driver.address;
+      driver.zipCode = user.driver.zipCode;
+      driver.description = user.driver.description;
+    }else if(user.typeUser == 2){
+      let company = state.company;
+      company.tradename = user.company.tradename;
+      company.legalNumber = user.company.legalNumber;
+      company.areaCode = user.company.areaCode;
+      company.phoneNumber = user.company.phoneNumber;
+      company.logo = user.company.logo;
+      company.address = user.company.address;
+      company.description = user.company.description;
+      company.zipCode = user.company.zipCode;
     }
-    dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
+
+    dispatch({ type: types.PROPS_BASE, payload: base })
+  }, [user, state.typeUser]);
+
+  const onChangeBase = (e, key) => {
+    let base = state.base;
+    let value = "";
+
+    value = e.target.value;
+    base[key] = value;
+       
+    dispatch({ type: types.DATA_DRIVER, payload: base });
+  }
+
+  const onChangeDriver = (e, key) => {
+    let driver = state.driver;
+    let value = "";
+
+    if(key == 'experience'){
+      value = e;
+    }else{
+      value = e.target.value;
+    }
+    driver[key] = value;
+    dispatch({ type: types.DATA_DRIVER, payload: driver });
+  }
+  const onChangeCompany = (e, key) => {
+    let company = state.company;
+    let value = "";
+    
+    value = e.target.value;
+    company[key] = value;
+
+    dispatch({ type: types.DATA_COMPANY, payload: company });
   }
 
   const handleDatePicker = (obj, date, key) => {
-    let new_user = state.new_user;
-    state.new_user[key] = date
-    dispatch({ type: types.CREATE_NEW_USER, payload: new_user })
+    let data = state.typeUser ? state.driver : state.company ;
+    data[key] = date;
+    if(state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
+    else dispatch({ type: types.DATA_COMPANY, payload: data });
+  }
+
+  const resolveUserType = () => {
+    state.base.typeUser = state.typeUser;
+    switch(state.typeUser){
+      case 1:
+        return <DriverUser 
+        base={state.base}
+        driver={state.driver}
+        onChangeBase={onChangeBase}
+        onChangeDriver={onChangeDriver}
+        handleDatePicker={handleDatePicker} 
+        newDrivers={newDrivers}
+        />
+      case 2:
+        return <CompanyUser
+        base={state.base}
+        company={state.company}
+        onChangeBase={onChangeBase}
+        onChangeCompany={onChangeCompany}
+        newCompany={newCompany}
+        />
+      default:
+        return <WrapperSection row={24} mt={0}>
+        <div className="profile-driver__route">
+          <div className="title">
+            <Title>  Let's do this!  </Title>
+            <Text strong>Are you a driver or a company?</Text>
+          </div>
+          <div className="card-container">
+            <Card
+              hoverable={true}
+              onClick={() => selectUserType(1)}>
+              <img src='/static/images/driver.svg' />
+              <Text > Drivers </Text>
+            </Card>
+            <Card
+              hoverable={true}
+              onClick={() => selectUserType(2)}>
+              <img src='/static/images/truck.svg' />
+              <Text > Company </Text>
+            </Card>
+          </div>
+        </div>
+    </WrapperSection>
+    }
+  };
+
+  const selectUserType = (typeUser) => {
+    dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
 
   const newDrivers = async () => {
-    const { new_user } = state
-    console.log('new_user',new_user);
+    const { base } = state;
+    const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
+    const fullDriver = {
+      base: base,
+      dln: dln,
+      expDateDln: expDateDln,
+      birthDate: birthDate,
+      areaCode: areaCode,
+      phoneNumber: phoneNumber,
+      sex: sex,
+      experience: experience,
+      address: address,
+      zipCode: zipCode,
+      description: description
+    };
     try {
-      const { data } = await axios.post('/api/driver', new_user);
-      console.log('data', data);
+      const { data } = await axios.post('/api/driver', fullDriver);
+      notification['success']({
+        message: 'Success',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
     } catch (err) {
+      notification['error']({
+        message: 'error',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
       console.log(err);
     }
   };
 
-  return (
-    <>
-      <MainLayout title='Profile' user={user}>
-        <WrapperSection row={24} mt={0}>
-          <div className='profile-driver'>
-            <Row justify='center'>
-              <Col className='profile-driver__form' span={14}>
-                <Row justify='center'>
-                  <div className='avatar'>
-                    <Avatar src={state.new_user.base.photo} size={120} />
-                  </div>
-                </Row>
-                <Form
-                  layout='horizontal'
-                  form={form}>
-                  <Row gutter={[24]} justify='space-between' >
-                    <Col span={12}>
-                      <Form.Item>
-                        <Input
-                          size='large'
-                          placeholder="Name"
-                          value={state.new_user.base.name}
-                          onChange={(e) => onChangeInputs(e, 'name', 1)} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item>
-                        <Input
-                          size='large'
-                          placeholder="Last Name"
-                          value={state.new_user.base.lastname}
-                          onChange={(e) => onChangeInputs(e, 'lastname', 1)} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Form.Item>
-                    <Input
-                      size='large'
-                      placeholder="Mail"
-                      value={state.new_user.base.email}
-                      onChange={(e) => onChangeInputs(e, 'email', 1)} />
-                  </Form.Item>
-                  <Row gutter={[24]} justify='space-between' align='middle'>
-                    <Col span={12}>
-                      <Form.Item>
-                        <DatePicker
-                          size='large'
-                          style={{ width: '100%' }}
-                          placeholder="Birth Date"
-                          onChange={(obj, key) => handleDatePicker(obj, key, 'birthDate')} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item>
-                        <Radio.Group
-                          value={state.new_user.sex}
-                          onChange={(e) => onChangeInputs(e, 'sex', 0)}>
-                          <Radio value={0}>F</Radio>
-                          <Radio value={1}>M</Radio>
-                          <Radio value={2}>Other</Radio>
-                        </Radio.Group>
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={[24]} justify='space-between' align='middle'>
-                    <Col span={12}>
-                      <Form.Item>
-                        <Input
-                          disabled={state.is_cdl}
-                          size='large'
-                          placeholder="DLN"
-                          value={state.new_user.dln}
-                          onChange={(e) => onChangeInputs(e, 'dln', 0)} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item>
-                        <DatePicker
-                          size='large'
-                          placeholder="Experation Date"
-                          style={{ width: '100%' }}
-                          onChange={(obj, key) => handleDatePicker(obj, key, 'expDateDln')} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={[24]} justify='space-between' >
-                    <Col span={6}>
-                      <Form.Item>
-                        <Input
-                          size='large'
-                          placeholder="Area Code"
-                          value={state.new_user.areaCode}
-                          onChange={(e) => onChangeInputs(e, 'areaCode', 0)} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={18}>
-                      <Form.Item>
-                        <Input
-                          size='large'
-                          placeholder="Phone Number"
-                          value={state.new_user.phoneNumber}
-                          onChange={(e) => onChangeInputs(e, 'phoneNumber', 0)} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={[24]} justify='space-between' >
-                    <Col span={6}>
-                      <Form.Item>
-                        <Input
-                          size='large'
-                          placeholder="Zip Code"
-                          value={state.new_user.zipCode}
-                          onChange={(e) => onChangeInputs(e, 'zipCode', 0)} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={18}>
-                      <Form.Item>
-                        <Input
-                          size='large'
-                          placeholder="Address"
-                          value={state.new_user.Address}
-                          onChange={(e) => onChangeInputs(e, 'address', 0)} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Form>
-              </Col>
-              <Col className='profile-driver__form-small' span={14}>
-                <Form.Item label="Experience">
-                  <InputNumber
-                    size="large"
-                    min={1}
-                    max={100000}
-                    defaultValue={3}
-                    onChange={(e) => onChangeInputs(e, 'experience', 0)} />
-                </Form.Item>
-                <Form.Item>
-                  <TextArea
-                    rows={4}
-                    size='large'
-                    placeholder="Description"
-                    value={state.new_user.description}
-                    onChange={(e) => onChangeInputs(e, 'description', 0)} />
-                </Form.Item>
-                <Row gutter={[24]} justify='end' align='middle'>
-                  <Col span={6}>
-                    <Button
-                      onClick={newDrivers}
-                      type='primary'
-                      block
-                      size='large'>Save Information</Button>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </div>
-        </WrapperSection>
-      </MainLayout>
-    </>
-  )
-}
+  const newCompany = async () => {
+    const { base } = state;
+    const {tradename,legalNumber,areaCode,phoneNumber,logo,address,zipCode,description} = state.company;
+    base.typeUser = 2;
+    const fullCompany = {
+      base: base,
+      tradename: tradename,
+      legalNumber: legalNumber,
+      areaCode: areaCode,
+      phoneNumber: phoneNumber,
+      logo: logo,
+      address: address,
+      zipCode: zipCode,
+      description: description
+    };
+    try {
+      const { data } = await axios.post('/api/company', fullCompany);
+      notification['success']({
+        message: 'Success',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+    } catch (err) {
+      console.log(err);
+      notification['error']({
+        message: 'error',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+    }
+  };
 
-const WrapperSection = ({ children, row, mt, mb }) => {
   return (
-    <div style={{ marginTop: mt, marginBottom: mb }}>
+    <MainLayout title='Profile' user={user}>
+      <WrapperSection row={24} mt={0}>
+        {resolveUserType(state.typeUser)}
+      </WrapperSection>
+    </MainLayout>
+  )
+};
+
+
+const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
+  return (
+    <div style={{ 
+      background: `url('/static/images/bg-routes.jpg')`,
+      marginTop: marginTop, 
+      marginBottom: marginBottom,
+      backgroundSize:'contain',
+      }}>
       <Row justify='center' align='middle'>
         <Col span={row}>
           {children}
