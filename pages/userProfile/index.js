@@ -6,8 +6,7 @@ import {
   Typography,
   Input,
   Select,
-  Form,
-  Button,
+  Spin,
   Card
 } from 'antd';
 import axios from 'axios';
@@ -16,6 +15,8 @@ import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import DriverUser from './components/driverUser';
 import CompanyUser from './components/companyUser';
 import ResolveUserType from '../../middleware/resolveUserType';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -80,7 +81,7 @@ const reducer = (state, action) => {
 }
 
 const UserProfile = ({ user, ...props }) => {
-  const [form] = Form.useForm();
+  console.log('user', user);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -100,6 +101,9 @@ const UserProfile = ({ user, ...props }) => {
     base.facebook_id = user.facebook_id || '';
     base.photo = user.photo || '';
     base.email = user.email || '';
+
+    if(user.typeUser == 1)dispatch({ type: types.DATA_DRIVER, payload: user.driver});
+    else if (user.typeUser == 2) dispatch({ type: types.DATA_COMPANY, payload: user.company});
 
     dispatch({ type: types.PROPS_BASE, payload: base })
   }, [user, state.typeUser]);
@@ -139,15 +143,12 @@ const UserProfile = ({ user, ...props }) => {
 
   const handleDatePicker = (obj, date, key) => {
     let data = state.typeUser ? state.driver : state.company ;
-    console.log('[handleDatePicker] typeUser', state.typeUser);
     data[key] = date;
     if(state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
     else dispatch({ type: types.DATA_COMPANY, payload: data });
-    console.log('[handleDatePicker] data', data);
   }
 
   const resolveUserType = (typeUser) => {
-    console.log('[ResolveUserType] state', state);
     switch(typeUser){
       case 1:
         return <DriverUser 

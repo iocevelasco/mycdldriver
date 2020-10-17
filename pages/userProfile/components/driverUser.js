@@ -12,7 +12,7 @@ import {
   Radio,
   DatePicker,
 } from 'antd';
-
+import moment from 'moment';
 const { TextArea } = Input;
 
 const driverUser = (props) => {
@@ -51,8 +51,7 @@ const driverUser = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item
-              rules={[{ required: true, message: 'Please input your username!' }]}>
+            <Form.Item>
               <Input
                 size='large'
                 placeholder="Mail"
@@ -66,6 +65,8 @@ const driverUser = (props) => {
                     size='large'
                     style={{ width: '100%' }}
                     placeholder="Birth Date"
+                    value={moment(driver.birthDate)}
+                    defaultPickerValue={moment(driver.birthDate)}
                     onChange={(obj, key) => handleDatePicker(obj, key, 'birthDate')} />
                 </Form.Item>
               </Col>
@@ -93,11 +94,11 @@ const driverUser = (props) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label="Select"
-                  rules={[{ required: true, message: 'Please input your username!' }]}>
+                <Form.Item>
                   <DatePicker
                     size='large'
+                    value={moment(driver.expDateDln)}
+                    defaultPickerValue={moment(driver.expDateDln)}
                     placeholder="Experation Date"
                     style={{ width: '100%' }}
                     onChange={(obj, key) => handleDatePicker(obj, key, 'expDateDln')} />
@@ -139,7 +140,7 @@ const driverUser = (props) => {
                   <Input
                     size='large'
                     placeholder="Address"
-                    value={driver.Address}
+                    value={driver.address}
                     onChange={(e) => onChangeDriver(e, 'address')} />
                 </Form.Item>
               </Col>
