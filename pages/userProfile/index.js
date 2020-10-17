@@ -127,6 +127,29 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.DATA_DRIVER, payload: base });
   }
 
+  const onChangeCompany = (e, key, type) => {
+    let driver = state.driver;
+    let value = "";
+    switch (type){
+      case 1:
+        if(key == 'experience'){
+          value = e;
+        }else{
+          value = e.target.value;
+        }
+        driver[key] = value;
+        break;
+      case 2:
+        value = e.target.value;
+        driver[key] = value;
+        break;
+      default:
+        value = e.target.value;
+        driver[key] = value;
+        break;
+    };
+    dispatch({ type: types.DATA_DRIVER, payload: driver });
+  }
   const onChangeDriver = (e, key, type) => {
     let driver = state.driver;
     let value = "";
@@ -158,7 +181,7 @@ const UserProfile = ({ user, ...props }) => {
     else dispatch({ type: types.DATA_COMPANY, payload: data });
   }
 
-  const ResolveUserType = ({newDrivers, onChangeInputs, handleDatePicker}) => {
+  const ResolveUserType = () => {
     console.log('typeUser', user.typeUser);
     switch(user.typeUser){
       case 1:
@@ -175,7 +198,7 @@ const UserProfile = ({ user, ...props }) => {
         base={state.base}
         onChangeBase={onChangeBase}
         company={state.company}
-        onChangeInputs={onChangeInputs}
+        onChangeCompany={onChangeCompany}
         handleDatePicker={handleDatePicker}
         newDrivers={newDrivers}
         />
