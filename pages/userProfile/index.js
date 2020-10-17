@@ -6,14 +6,9 @@ import {
   Typography,
   Input,
   Select,
-  Avatar,
   Form,
   Button,
-  Switch,
-  InputNumber,
-  Radio,
-  DatePicker,
-  message
+  Card
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
@@ -63,15 +58,19 @@ const initialState = {
 const types = {
   CREATE_NEW_USER: 'create_new_user',
   SELECT_USER_TYPE:'select_user_type',
-  PROPS_BASE:'props_base'
+  PROPS_BASE:'props_base',
+  DATA_DRIVER: 'DATA_DRIVER',
+  DATA_COMPANY: 'DATA_COMPANY'
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
     case types.PROPS_BASE:
       return { ...state, base: action.payload }
-    case types.CREATE_NEW_USER:
+    case types.DATA_DRIVER:
       return { ...state, driver: action.payload }
+    case types.DATA_COMPANY:
+      return { ...state, company: action.payload }
     case types.SELECT_USER_TYPE:
       return { ...state, typeUser: action.payload }
     default:
@@ -104,9 +103,8 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.PROPS_BASE, payload: base })
   }, [user, state.typeUser]);
 
-  const onChangeInputs = (e, key, type) => {
-    let user = state;
-    console.log(user);
+  const onChangeBase = (e, key, type) => {
+    let base = state.base;
     let value = "";
     switch (type){
       case 1:
@@ -115,25 +113,49 @@ const UserProfile = ({ user, ...props }) => {
         }else{
           value = e.target.value;
         }
-        user.driver[key] = value;
+        base[key] = value;
         break;
       case 2:
         value = e.target.value;
-        user.company[key] = value;
+        base[key] = value;
         break;
       default:
         value = e.target.value;
-        user.base[key] = value;
+        base[key] = value;
         break;
     };
-    dispatch({ type: types.CREATE_NEW_USER, payload: user });
+    dispatch({ type: types.DATA_DRIVER, payload: base });
+  }
+
+  const onChangeDriver = (e, key, type) => {
+    let driver = state.driver;
+    let value = "";
+    switch (type){
+      case 1:
+        if(key == 'experience'){
+          value = e;
+        }else{
+          value = e.target.value;
+        }
+        driver[key] = value;
+        break;
+      case 2:
+        value = e.target.value;
+        driver[key] = value;
+        break;
+      default:
+        value = e.target.value;
+        driver[key] = value;
+        break;
+    };
+    dispatch({ type: types.DATA_DRIVER, payload: driver });
   }
 
   const handleDatePicker = (obj, date, key) => {
-    let user = state ;
-    console.log(user);
-    user.driver[key] = date;
-    dispatch({ type: types.CREATE_NEW_USER, payload: user });
+    let data = state.typeUser ? state.driver : state.company ;
+    data[key] = date;
+    if(state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
+    else dispatch({ type: types.DATA_COMPANY, payload: data });
   }
 
   const ResolveUserType = ({newDrivers, onChangeInputs, handleDatePicker}) => {
@@ -143,13 +165,15 @@ const UserProfile = ({ user, ...props }) => {
         return <DriverUser 
         driver={state.driver}
         base={state.base}
-        onChangeInputs={onChangeInputs}
+        onChangeBase={onChangeBase}
+        onChangeDriver={onChangeDriver}
         handleDatePicker={handleDatePicker} 
         newDrivers={newDrivers}
         />
       case 2:
         return <CompanyUser
         base={state.base}
+        onChangeBase={onChangeBase}
         company={state.company}
         onChangeInputs={onChangeInputs}
         handleDatePicker={handleDatePicker}
@@ -159,7 +183,8 @@ const UserProfile = ({ user, ...props }) => {
           return <DriverUser 
           driver={state.driver}
           base={state.base}
-          onChangeInputs={onChangeInputs}
+          onChangeBase={onChangeBase}
+          onChangeDriver={onChangeDriver}
           handleDatePicker={handleDatePicker} 
           newDrivers={newDrivers}
           />
@@ -208,8 +233,21 @@ const UserProfile = ({ user, ...props }) => {
             newDrivers={newDrivers}/> 
           ):( 
             <WrapperSection row={24} mt={0}>
-                <Button onClick={()=>selectUserType(2)}> Empresa </Button>
-                <Button onClick={()=>selectUserType(1)}> Chofer </Button>
+              <div className="profile-driver__route">
+                <div className="title">
+                  <Title> Addres </Title>
+                </div>
+                <div className="card-container">
+                  <div onClick={()=>selectUserType(2)}>
+                    <img src='/static/images/truck11.jpg' />
+                    <Text > Company </Text>
+                  </div>
+                  <div onClick={()=>selectUserType(1)}>
+                    <img src='/static/images/truck11.jpg' />
+                    <Text > Drivers </Text>
+                  </div>
+                </div>
+              </div>
             </WrapperSection>
           )
         }
