@@ -248,20 +248,25 @@ const UserProfile = ({ user, ...props }) => {
             <WrapperSection row={24} mt={0}>
               <div className="profile-driver__route">
                 <div className="title">
-                  <Title> Addres </Title>
+                  <Title>  Let's do this!  </Title>
+                  <Text>Are you a driver or a company?</Text>
                 </div>
                 <div className="card-container">
-                  <div onClick={()=>selectUserType(2)}>
-                    <img src='/static/images/truck.svg' />
-                    <Text > Company </Text>
-                  </div>
-                  <div onClick={()=>selectUserType(1)}>
+                  <Card
+                    hoverable={true}
+                    onClick={() => selectUserType(1)}>
                     <img src='/static/images/driver.svg' />
                     <Text > Drivers </Text>
-                  </div>
+                  </Card>
+                  <Card
+                    hoverable={true}
+                    onClick={() => selectUserType(2)}>
+                    <img src='/static/images/truck.svg' />
+                    <Text > Company </Text>
+                  </Card>
                 </div>
               </div>
-            </WrapperSection>
+          </WrapperSection>
           )
         }
       </WrapperSection>
@@ -272,7 +277,12 @@ const UserProfile = ({ user, ...props }) => {
 
 const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   return (
-    <div style={{marginTop:marginTop, marginBottom:marginBottom}}>
+    <div style={{ 
+      background: `url('/static/images/bg-routes.jpg')`,
+      marginTop: marginTop, 
+      marginBottom: marginBottom,
+      backgroundSize:'contain',
+      }}>
       <Row justify='center' align='middle'>
         <Col span={row}>
           {children}
@@ -281,7 +291,6 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
     </div>
   )
 }
-
 
 
 export default UserProfile;
