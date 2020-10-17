@@ -239,11 +239,11 @@ const UserProfile = ({ user, ...props }) => {
                 </div>
                 <div className="card-container">
                   <div onClick={()=>selectUserType(2)}>
-                    <img src='/static/images/truck11.jpg' />
+                    <img src='/static/images/truck.svg' />
                     <Text > Company </Text>
                   </div>
                   <div onClick={()=>selectUserType(1)}>
-                    <img src='/static/images/truck11.jpg' />
+                    <img src='/static/images/driver.svg' />
                     <Text > Drivers </Text>
                   </div>
                 </div>
