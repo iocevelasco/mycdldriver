@@ -33,6 +33,7 @@ const initialState = {
     typeUser: '1',
     photo: '',
     email: '',
+    sex: '',
     google_id: '',
     facebook_id: ''
   },
@@ -68,7 +69,6 @@ const types = {
 const reducer = (state, action) => {
   switch (action.type) {
     case types.PROPS_BASE:
-      console.log(action.payload);
       return { ...state, base: action.payload }
     case types.CREATE_NEW_USER:
       return { ...state, driver: action.payload }
@@ -82,14 +82,13 @@ const reducer = (state, action) => {
 const UserProfile = ({ user, ...props }) => {
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log('state', state);
 
   useEffect(() => {
     verifyUserType(user.typeUser)
   }, []);
 
-  const verifyUserType = (userType) => {
-    dispatch({ type: types.SELECT_USER_TYPE, payload: userType })
+  const verifyUserType = (typeUser) => {
+    dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
 
   useEffect(() => {
@@ -106,7 +105,8 @@ const UserProfile = ({ user, ...props }) => {
   }, [user, state.typeUser]);
 
   const onChangeInputs = (e, key, type) => {
-    let user = state.userType == 1 ? state.driver : state.company ;
+    let user = state;
+    console.log(user);
     let value = "";
     switch (type){
       case 1:
@@ -130,12 +130,14 @@ const UserProfile = ({ user, ...props }) => {
   }
 
   const handleDatePicker = (obj, date, key) => {
-    let user = state.userType == 1 ? state.driver : state.company ;
-    user[key] = date
+    let user = state ;
+    console.log(user);
+    user.driver[key] = date;
     dispatch({ type: types.CREATE_NEW_USER, payload: user });
   }
 
   const ResolveUserType = ({newDrivers, onChangeInputs, handleDatePicker}) => {
+    console.log('typeUser', user.typeUser);
     switch(user.typeUser){
       case 1:
         return <DriverUser 
@@ -145,7 +147,7 @@ const UserProfile = ({ user, ...props }) => {
         handleDatePicker={handleDatePicker} 
         newDrivers={newDrivers}
         />
-      default:
+      case 2:
         return <CompanyUser
         base={state.base}
         company={state.company}
@@ -153,11 +155,19 @@ const UserProfile = ({ user, ...props }) => {
         handleDatePicker={handleDatePicker}
         newDrivers={newDrivers}
         />
+        default:
+          return <DriverUser 
+          driver={state.driver}
+          base={state.base}
+          onChangeInputs={onChangeInputs}
+          handleDatePicker={handleDatePicker} 
+          newDrivers={newDrivers}
+          />
     }
   };
 
-  const selectUserType = (userType) => {
-    dispatch({ type: types.SELECT_USER_TYPE, payload: userType })
+  const selectUserType = (typeUser) => {
+    dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
 
 
