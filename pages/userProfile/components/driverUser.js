@@ -1,5 +1,4 @@
 import React from 'react';
-import MainLayout from '../../../components/layout';
 import {
   Row,
   Col,
@@ -9,17 +8,10 @@ import {
   Avatar,
   Form,
   Button,
-  Switch,
   InputNumber,
   Radio,
   DatePicker,
-  message
 } from 'antd';
-import axios from 'axios';
-import moment from 'moment';
-import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
-const { Title, Text } = Typography;
-const { Option } = Select;
 
 const { TextArea } = Input;
 
@@ -41,10 +33,7 @@ const driverUser = (props) => {
             layout='horizontal'>
             <Row gutter={[24]} justify='space-between' >
               <Col span={12}>
-                <Form.Item
-                  hasFeedback
-                  validateStatus={base.name.length <= 0 ? 'error' : 'success'}
-                  help="Should be combination of numbers & alphabets">
+                <Form.Item>
                   <Input
                     size='large'
                     placeholder="Name"
@@ -53,8 +42,7 @@ const driverUser = (props) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  rules={[{ required: true, message: 'Please input your username!' }]}>
+                <Form.Item>
                   <Input
                     size='large'
                     placeholder="Last Name"
@@ -163,8 +151,8 @@ const driverUser = (props) => {
             <InputNumber
               size="large"
               min={1}
-              max={100000}
-              defaultValue={3}
+              max={1000}
+              defaultValue={0}
               onChange={(e) => onChangeDriver(e, 'experience')} />
           </Form.Item>
           <Form.Item>

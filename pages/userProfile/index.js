@@ -15,6 +15,7 @@ import moment from 'moment';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import DriverUser from './components/driverUser';
 import CompanyUser from './components/companyUser';
+import ResolveUserType from '../../middleware/resolveUserType';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -145,10 +146,9 @@ const UserProfile = ({ user, ...props }) => {
     console.log('[handleDatePicker] data', data);
   }
 
-  const ResolveUserType = () => {
-    console.log('[ResolveUserType] typeUser', state.typeUser);
+  const resolveUserType = (typeUser) => {
     console.log('[ResolveUserType] state', state);
-    switch(state.typeUser){
+    switch(typeUser){
       case 1:
         return <DriverUser 
         driver={state.driver}
@@ -168,14 +168,28 @@ const UserProfile = ({ user, ...props }) => {
         newDrivers={newDrivers}
         />
       default:
-        return <DriverUser 
-        driver={state.driver}
-        base={state.base}
-        onChangeBase={onChangeBase}
-        onChangeDriver={onChangeDriver}
-        handleDatePicker={handleDatePicker} 
-        newDrivers={newDrivers}
-        />
+        return <WrapperSection row={24} mt={0}>
+        <div className="profile-driver__route">
+          <div className="title">
+            <Title>  Let's do this!  </Title>
+            <Text strong>Are you a driver or a company?</Text>
+          </div>
+          <div className="card-container">
+            <Card
+              hoverable={true}
+              onClick={() => selectUserType(1)}>
+              <img src='/static/images/driver.svg' />
+              <Text > Drivers </Text>
+            </Card>
+            <Card
+              hoverable={true}
+              onClick={() => selectUserType(2)}>
+              <img src='/static/images/truck.svg' />
+              <Text > Company </Text>
+            </Card>
+          </div>
+        </div>
+    </WrapperSection>
     }
   };
 
@@ -183,6 +197,7 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
 
+  console.log('state', state);
 
   const newDrivers = async () => {
     const { base } = state;
@@ -212,40 +227,7 @@ const UserProfile = ({ user, ...props }) => {
   return (
     <MainLayout title='Profile' user={user}>
       <WrapperSection row={24} mt={0}>
-        {
-          state.typeUser ? (
-           <ResolveUserType
-            onChangeBase={onChangeBase}
-            onChangeDriver={onChangeDriver}
-            onChangeCompany={onChangeCompany}
-            handleDatePicker={handleDatePicker}
-            userType={state.typeUser}
-            newDrivers={newDrivers}/> 
-          ):( 
-            <WrapperSection row={24} mt={0}>
-              <div className="profile-driver__route">
-                <div className="title">
-                  <Title>  Let's do this!  </Title>
-                  <Text strong>Are you a driver or a company?</Text>
-                </div>
-                <div className="card-container">
-                  <Card
-                    hoverable={true}
-                    onClick={() => selectUserType(1)}>
-                    <img src='/static/images/driver.svg' />
-                    <Text > Drivers </Text>
-                  </Card>
-                  <Card
-                    hoverable={true}
-                    onClick={() => selectUserType(2)}>
-                    <img src='/static/images/truck.svg' />
-                    <Text > Company </Text>
-                  </Card>
-                </div>
-              </div>
-          </WrapperSection>
-          )
-        }
+        {resolveUserType(state.typeUser)}
       </WrapperSection>
     </MainLayout>
   )
