@@ -148,11 +148,12 @@ const DriverUser = (props) => {
           </Row>
           <Row gutter={[24]} justify='end' align='middle'>
             <Col span={6}>
-              <Button
+              {!base.id && <Button
                 onClick={newCompany}
                 type='primary'
                 block
                 size='large'>Save Information</Button>
+              }
             </Col>
           </Row>
         </Col>

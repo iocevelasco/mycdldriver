@@ -102,27 +102,30 @@ const UserProfile = ({ user, ...props }) => {
     base.facebook_id = user.facebook_id || '';
     base.photo = user.photo || '';
     base.email = user.email || '';
+    base.id = user._id || '';
 
     if(user.typeUser == 1){
-      state.driver.dln = user.driver.dln;
-      state.driver.expDateDln = user.driver.expDateDln;
-      state.driver.birthDate = user.driver.birthDate;
-      state.driver.areaCode = user.driver.areaCode;
-      state.driver.phoneNumber = user.driver.phoneNumber;
-      state.driver.experience = user.driver.experience;
-      state.driver.sex = user.driver.sex;
-      state.driver.address = user.driver.address;
-      state.driver.zipCode = user.driver.zipCode;
-      state.driver.description = user.driver.description;
+      let driver = state.driver;
+      driver.dln = user.driver.dln;
+      driver.expDateDln = user.driver.expDateDln;
+      driver.birthDate = user.driver.birthDate;
+      driver.areaCode = user.driver.areaCode;
+      driver.phoneNumber = user.driver.phoneNumber;
+      driver.experience = user.driver.experience;
+      driver.sex = user.driver.sex;
+      driver.address = user.driver.address;
+      driver.zipCode = user.driver.zipCode;
+      driver.description = user.driver.description;
     }else if(user.typeUser == 2){
-      state.company.tradename = user.company.tradename;
-      state.company.legalNumber = user.company.legalNumber;
-      state.company.areaCode = user.company.areaCode;
-      state.company.phoneNumber = user.company.phoneNumber;
-      state.company.logo = user.company.logo;
-      state.company.address = user.company.address;
-      state.company.description = user.company.description;
-      state.company.zipCode = user.company.zipCode;
+      let company = state.company;
+      company.tradename = user.company.tradename;
+      company.legalNumber = user.company.legalNumber;
+      company.areaCode = user.company.areaCode;
+      company.phoneNumber = user.company.phoneNumber;
+      company.logo = user.company.logo;
+      company.address = user.company.address;
+      company.description = user.company.description;
+      company.zipCode = user.company.zipCode;
     }
 
     dispatch({ type: types.PROPS_BASE, payload: base })
@@ -148,7 +151,6 @@ const UserProfile = ({ user, ...props }) => {
       value = e.target.value;
     }
     driver[key] = value;
-    console.log('[ onChangeDriver ]', driver);
     dispatch({ type: types.DATA_DRIVER, payload: driver });
   }
   const onChangeCompany = (e, key) => {
@@ -163,7 +165,6 @@ const UserProfile = ({ user, ...props }) => {
 
   const handleDatePicker = (obj, date, key) => {
     let data = state.typeUser ? state.driver : state.company ;
-    console.log('[ handleDatePicker ] data', data);
     data[key] = date;
     if(state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
     else dispatch({ type: types.DATA_COMPANY, payload: data });
@@ -218,8 +219,6 @@ const UserProfile = ({ user, ...props }) => {
   const selectUserType = (typeUser) => {
     dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
-
-  console.log('state', state);
 
   const newDrivers = async () => {
     const { base } = state;
