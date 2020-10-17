@@ -51,7 +51,7 @@ const MainLayout = ({ children, title, user, router }) => {
     const menu = (
         <Menu>
           <Menu.Item>
-            <Link href='/profile'>
+            <Link href='/userProfile'>
                 <Button type='link'>
                     Profile
                 </Button>
