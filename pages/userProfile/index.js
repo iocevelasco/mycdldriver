@@ -31,7 +31,6 @@ const initialState = {
     typeUser: '1',
     photo: '',
     email: '',
-    sex: '',
     google_id: '',
     facebook_id: ''
   },
@@ -42,6 +41,7 @@ const initialState = {
     areaCode: '',
     phoneNumber: '',
     experience: '',
+    sex: '',
     address: '',
     zipCode: '',
     description: ''
@@ -83,6 +83,7 @@ const reducer = (state, action) => {
 const UserProfile = ({ user, ...props }) => {
   console.log('user', user);
   const [state, dispatch] = useReducer(reducer, initialState);
+  console.log('[ UserProfile ] user', user);
 
   useEffect(() => {
     verifyUserType(user.typeUser)
@@ -102,8 +103,27 @@ const UserProfile = ({ user, ...props }) => {
     base.photo = user.photo || '';
     base.email = user.email || '';
 
-    if(user.typeUser == 1)dispatch({ type: types.DATA_DRIVER, payload: user.driver});
-    else if (user.typeUser == 2) dispatch({ type: types.DATA_COMPANY, payload: user.company});
+    if(user.typeUser == 1){
+      state.driver.dln = user.driver.dln;
+      state.driver.expDateDln = user.driver.expDateDln;
+      state.driver.birthDate = user.driver.birthDate;
+      state.driver.areaCode = user.driver.areaCode;
+      state.driver.phoneNumber = user.driver.phoneNumber;
+      state.driver.experience = user.driver.experience;
+      state.driver.sex = user.driver.sex;
+      state.driver.address = user.driver.address;
+      state.driver.zipCode = user.driver.zipCode;
+      state.driver.description = user.driver.description;
+    }else if(user.typeUser == 2){
+      state.company.tradename = user.company.tradename;
+      state.company.legalNumber = user.company.legalNumber;
+      state.company.areaCode = user.company.areaCode;
+      state.company.phoneNumber = user.company.phoneNumber;
+      state.company.logo = user.company.logo;
+      state.company.address = user.company.address;
+      state.company.description = user.company.description;
+      state.company.zipCode = user.company.zipCode;
+    }
 
     dispatch({ type: types.PROPS_BASE, payload: base })
   }, [user, state.typeUser]);
@@ -128,7 +148,7 @@ const UserProfile = ({ user, ...props }) => {
       value = e.target.value;
     }
     driver[key] = value;
-        
+    console.log('[ onChangeDriver ]', driver);
     dispatch({ type: types.DATA_DRIVER, payload: driver });
   }
   const onChangeCompany = (e, key) => {
@@ -143,6 +163,7 @@ const UserProfile = ({ user, ...props }) => {
 
   const handleDatePicker = (obj, date, key) => {
     let data = state.typeUser ? state.driver : state.company ;
+    console.log('[ handleDatePicker ] data', data);
     data[key] = date;
     if(state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
     else dispatch({ type: types.DATA_COMPANY, payload: data });
@@ -153,8 +174,8 @@ const UserProfile = ({ user, ...props }) => {
     switch(state.typeUser){
       case 1:
         return <DriverUser 
-        driver={state.driver}
         base={state.base}
+        driver={state.driver}
         onChangeBase={onChangeBase}
         onChangeDriver={onChangeDriver}
         handleDatePicker={handleDatePicker} 
@@ -166,7 +187,6 @@ const UserProfile = ({ user, ...props }) => {
         company={state.company}
         onChangeBase={onChangeBase}
         onChangeCompany={onChangeCompany}
-        handleDatePicker={handleDatePicker}
         newCompany={newCompany}
         />
       default:
