@@ -33,6 +33,7 @@ const initialState = {
     typeUser: '1',
     photo: '',
     email: '',
+    sex: '',
     google_id: '',
     facebook_id: ''
   },
@@ -68,7 +69,6 @@ const types = {
 const reducer = (state, action) => {
   switch (action.type) {
     case types.PROPS_BASE:
-      console.log(action.payload);
       return { ...state, base: action.payload }
     case types.CREATE_NEW_USER:
       return { ...state, driver: action.payload }
@@ -82,14 +82,13 @@ const reducer = (state, action) => {
 const UserProfile = ({ user, ...props }) => {
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log('state', state);
 
   useEffect(() => {
     verifyUserType(user.typeUser)
   }, []);
 
-  const verifyUserType = (userType) => {
-    dispatch({ type: types.SELECT_USER_TYPE, payload: userType })
+  const verifyUserType = (typeUser) => {
+    dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
 
   useEffect(() => {
@@ -105,33 +104,40 @@ const UserProfile = ({ user, ...props }) => {
     dispatch({ type: types.PROPS_BASE, payload: base })
   }, [user, state.typeUser]);
 
-  const onChangeInputs = (e, key, base) => {
-    let user = state.userType == 1 ? state.driver : state.company ;
+  const onChangeInputs = (e, key, type) => {
+    let user = state;
+    console.log(user);
     let value = "";
-    switch (key) {
-      case 'experience':
-        value = e;
-        user[key] = value;
+    switch (type){
+      case 1:
+        if(key == 'experience'){
+          value = e;
+        }else{
+          value = e.target.value;
+        }
+        user.driver[key] = value;
+        break;
+      case 2:
+        value = e.target.value;
+        user.company[key] = value;
         break;
       default:
-        if (base) {
-          value = e.target.value;
-          user.base[key] = value;
-        } else {
-          value = e.target.value;
-          user[key] = value;
-        }
-    }
+        value = e.target.value;
+        user.base[key] = value;
+        break;
+    };
     dispatch({ type: types.CREATE_NEW_USER, payload: user });
   }
 
   const handleDatePicker = (obj, date, key) => {
-    let user = state.userType == 1 ? state.driver : state.company ;
-    user[key] = date
+    let user = state ;
+    console.log(user);
+    user.driver[key] = date;
     dispatch({ type: types.CREATE_NEW_USER, payload: user });
   }
 
   const ResolveUserType = ({newDrivers, onChangeInputs, handleDatePicker}) => {
+    console.log('typeUser', user.typeUser);
     switch(user.typeUser){
       case 1:
         return <DriverUser 
@@ -141,7 +147,7 @@ const UserProfile = ({ user, ...props }) => {
         handleDatePicker={handleDatePicker} 
         newDrivers={newDrivers}
         />
-      default:
+      case 2:
         return <CompanyUser
         base={state.base}
         company={state.company}
@@ -149,26 +155,40 @@ const UserProfile = ({ user, ...props }) => {
         handleDatePicker={handleDatePicker}
         newDrivers={newDrivers}
         />
+        default:
+          return <DriverUser 
+          driver={state.driver}
+          base={state.base}
+          onChangeInputs={onChangeInputs}
+          handleDatePicker={handleDatePicker} 
+          newDrivers={newDrivers}
+          />
     }
   };
 
-  const selectUserType = (userType) => {
-    dispatch({ type: types.SELECT_USER_TYPE, payload: userType })
+  const selectUserType = (typeUser) => {
+    dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
 
 
   const newDrivers = async () => {
-    const { driver, base } = state
-    driver.base = base
-    console.log('driver',driver);
+    const { base } = state;
+    const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
+    const fullDriver = {
+      base: base,
+      dln: dln,
+      expDateDln: expDateDln,
+      birthDate: birthDate,
+      areaCode: areaCode,
+      phoneNumber: phoneNumber,
+      sex: sex,
+      experience: experience,
+      address: address,
+      zipCode: zipCode,
+      description: description
+    };
     try {
-      const { data } = await axios.post('/api/driver', driver)
-      .then((success)=>{
-        console.log('success',success);
-      })
-      .catch((error)=>{
-        console.log('error',error);
-      })
+      const { data } = await axios.post('/api/driver', fullDriver);
       console.log('data', data);
     } catch (err) {
       console.log(err);
