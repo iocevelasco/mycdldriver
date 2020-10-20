@@ -106,8 +106,10 @@ const UserProfile = ({ user, ...props }) => {
     if(user.typeUser == 1){
       let driver = state.driver;
       driver.dln = user.driver.dln;
-      driver.expDateDln = user.driver.expDateDln;
-      driver.birthDate = user.driver.birthDate;
+      if(user.driver.expDateDln)
+        driver.expDateDln = user.driver.expDateDln || '';
+      if(user.driver.birthDate)
+        driver.birthDate = user.driver.birthDate || '';
       driver.areaCode = user.driver.areaCode;
       driver.phoneNumber = user.driver.phoneNumber;
       driver.experience = user.driver.experience;
