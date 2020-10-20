@@ -12,11 +12,10 @@ import {
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import DriverUser from './components/driverUser';
 import CompanyUser from './components/companyUser';
-import ResolveUserType from '../../middleware/resolveUserType';
-import { LoadingOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
+
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -36,8 +35,8 @@ const initialState = {
   },
   driver: {
     dln: '',
-    expDateDln: '',
-    birthDate: '',
+    expDateDln: moment(new Date()).format('MM DD YYYY'),
+    birthDate: moment(new Date()).format('MM DD YYYY'),
     areaCode: '',
     phoneNumber: '',
     experience: '',
@@ -165,10 +164,10 @@ const UserProfile = ({ user, ...props }) => {
   }
 
   const handleDatePicker = (obj, date, key) => {
-    let data = state.typeUser ? state.driver : state.company ;
-    data[key] = date;
-    if(state.typeUser) dispatch({ type: types.DATA_DRIVER, payload: data });
-    else dispatch({ type: types.DATA_COMPANY, payload: data });
+    let data = state.driver;
+    if(date === "") data[key] = moment(new Date()).format('MM DD YYYY')
+    else data[key] = date;
+    dispatch({ type: types.DATA_DRIVER, payload: data });
   }
 
   const resolveUserType = () => {
@@ -220,7 +219,7 @@ const UserProfile = ({ user, ...props }) => {
   const selectUserType = (typeUser) => {
     dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
-
+  console.log('[state]', state.driver);
   const newDrivers = async () => {
     const { base } = state;
     const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
@@ -237,6 +236,7 @@ const UserProfile = ({ user, ...props }) => {
       zipCode: zipCode,
       description: description
     };
+    console.log('[fullDriver]', fullDriver);
     try {
       const { data } = await axios.post('/api/driver', fullDriver);
       notification['success']({
