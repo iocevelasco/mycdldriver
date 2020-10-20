@@ -27,7 +27,84 @@ async function addCompany(user){
     return {user, company};
 }
 
+
+
+async function updateCompany(id, user){
+    let company = user.company;
+    const foundUser = await userModel.findOne({
+        _id: id
+    });
+    const foundCompany = await Model.findOne({
+        _id: foundUser.company
+    });
+
+    if(user.name){
+        foundUser.name = user.name;
+    }
+    if(user.lastname){
+        foundUser.lastname = user.lastname;
+    }
+    if(user.photo){
+        try {
+            if(foundUser.photo){
+                if(fs.unlinkSync("." + foundUser.photo)){
+                    foundUser.photo = user.photo;
+                }
+            }else{
+                foundUser.photo = user.photo;
+            }
+            
+        } catch(err) {
+            console.error(err);
+        }
+    }
+
+    if(company.tradename){
+        foundCompany.dln = company.dln;
+    }
+    if(company.logo){
+        try {
+            if(foundCompany.logo){
+                if(fs.unlinkSync("." + foundCompany.logo)){
+                    foundCompany.logo = company.logo;
+                }
+            }else{
+                foundCompany.logo = company.logo;
+            }
+            
+        } catch(err) {
+            console.error(err);
+        }
+    }
+    if(company.legalNumber){
+        foundCompany.legalNumber = company.legalNumber;
+    }
+    if(company.logo){
+        foundCompany.logo = company.logo;
+    }
+    if(company.areaCode){
+        foundCompany.areaCode = company.areaCode;
+    }
+    if(company.phoneNumber){
+        foundCompany.phoneNumber = company.phoneNumber;
+    }
+    if(company.address){
+        foundCompany.address = company.address;
+    }
+    if(company.description){
+        foundCompany.description = company.description;
+    }
+    if(company.zipCode){
+        foundCompany.zipCode = company.zipCode;
+    }
+    
+    await foundUser.save();
+    await foundCompany.save();
+    return true;
+}
+
 module.exports = {
     list: getCompany,
-    add: addCompany
+    add: addCompany,
+    update: updateCompany
 }
