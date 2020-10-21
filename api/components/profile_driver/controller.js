@@ -10,8 +10,8 @@ function getDriver(filter){
 function addDriver(driver, imageDln){
     return new Promise((resolve, reject) => {
         if(!driver){
-            console.error('[driverController] No driver data');
-            reject('[driverController] No driver data');
+            console.error('[driverController.addDriver] No driver data');
+            reject('[driverController.addDriver] No driver data');
             return false;
         }
 
@@ -48,6 +48,46 @@ function addDriver(driver, imageDln){
     
 }
 
+function updateDriver(id, driver, imageDln){
+    return new Promise(async (resolve, reject) => {
+        if(!id){
+            reject('[driverController.updateDriver] No user ID');
+            return false;
+        }
+        if(!driver){
+            reject('[driverController.updateDriver] No user data');
+            return false;
+        }
+
+        const fullDriver = {
+            dln: driver.dln,
+            expDateDln: driver.expDateDln,
+            birthDate: driver.birthDate,
+            areaCode: driver.areaCode,
+            phoneNumber: driver.phoneNumber,
+            sex: driver.sex,
+            experience: driver.experience,
+            address: driver.address,
+            zipCode: driver.zipCode,
+            description: driver.description
+        };
+        if(imageDln){
+            const fileUrl = imageDln ? config.publicRoute + config.filesRoute + '/' + imageDln.filename : '';
+            fullDriver.imageDln = fileUrl;
+        }
+
+        const user = {
+            name: driver.base.name,
+            lastname: driver.base.lastname,
+            photo: driver.base.photo,
+            driver: fullDriver
+        };
+        
+        const result = await store.update(id, user);
+        resolve(result);
+    });
+}
+
 function deleteDriver(id){
     return new Promise(async (resolve, reject) => {
         if(!id){
@@ -67,5 +107,6 @@ function deleteDriver(id){
 module.exports = {
     getDriver,
     addDriver,
+    updateDriver,
     deleteDriver
 }

@@ -6,6 +6,10 @@ const profileDriverSchema = mongoose.Schema({
         required: true,
         unique: true
     },
+    expDateDln: {
+        type: Date,
+        required: true
+    },
     birthDate: {
         type: Date,
         required: true

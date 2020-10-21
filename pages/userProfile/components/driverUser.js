@@ -17,7 +17,7 @@ const { TextArea } = Input;
 
 const driverUser = (props) => {
   const [form] = Form.useForm();
-  const { driver, onChangeBase, onChangeDriver, handleDatePicker, newDrivers, base} = props;
+  const { driver, onChangeBase, onChangeDriver, handleDatePicker, newDrivers, updateDriver, base} = props;
   return (
     <div className='profile-driver'>
       <Row justify='center'>
@@ -166,11 +166,16 @@ const driverUser = (props) => {
           </Form.Item>
           <Row gutter={[24]} justify='end' align='middle'>
             <Col span={6}>
-              {!base.id && <Button
+              {!base.id ? <Button
                 onClick={newDrivers}
                 type='primary'
                 block
                 size='large'>Save Information</Button>
+                : <Button
+                onClick={updateDriver}
+                type='primary'
+                block
+                size='large'>Update Information</Button>
               }
             </Col>
           </Row>
