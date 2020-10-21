@@ -80,7 +80,6 @@ const reducer = (state, action) => {
 }
 
 const UserProfile = ({ user, ...props }) => {
-  console.log('user', user);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -138,7 +137,7 @@ const UserProfile = ({ user, ...props }) => {
     value = e.target.value;
     base[key] = value;
        
-    dispatch({ type: types.DATA_DRIVER, payload: base });
+    dispatch({ type: types.PROPS_BASE, payload: base });
   }
 
   const onChangeDriver = (e, key) => {
@@ -181,6 +180,7 @@ const UserProfile = ({ user, ...props }) => {
         onChangeDriver={onChangeDriver}
         handleDatePicker={handleDatePicker} 
         newDrivers={newDrivers}
+        updateDriver={updateDriver}
         />
       case 2:
         return <CompanyUser
@@ -189,6 +189,7 @@ const UserProfile = ({ user, ...props }) => {
         onChangeBase={onChangeBase}
         onChangeCompany={onChangeCompany}
         newCompany={newCompany}
+        updateCompany={updateCompany}
         />
       default:
         return <WrapperSection row={24} mt={0}>
@@ -219,7 +220,7 @@ const UserProfile = ({ user, ...props }) => {
   const selectUserType = (typeUser) => {
     dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
   }
-  console.log('[state]', state.driver);
+  
   const newDrivers = async () => {
     const { base } = state;
     const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
@@ -253,6 +254,54 @@ const UserProfile = ({ user, ...props }) => {
       console.log(err);
     }
   };
+  
+  const updateDriver = async () => {
+    const header = {
+      headers: { Authorization: `Bearer ${user.token}` }
+    };
+    const { base } = state;
+    const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
+    const fullDriver = {
+      base: base,
+      dln: dln,
+      expDateDln: expDateDln,
+      birthDate: birthDate,
+      areaCode: areaCode,
+      phoneNumber: phoneNumber,
+      sex: sex,
+      experience: experience,
+      address: address,
+      zipCode: zipCode,
+      description: description
+    };
+    try {
+      const { data } = await axios.patch('/api/driver/' + user._id, fullDriver, header);
+      user.name = fullDriver.base.name;
+      user.lastname = fullDriver.base.lastname;
+      user.driver.birthDate = fullDriver.birthDate;
+      user.driver.dln = fullDriver.dln;
+      user.driver.expDateDln = fullDriver.expDateDln;
+      user.driver.areaCode = fullDriver.areaCode;
+      user.driver.phoneNumber = fullDriver.phoneNumber;
+      user.driver.experience = fullDriver.experience;
+      user.driver.sex = fullDriver.sex;
+      user.driver.address = fullDriver.address;
+      user.driver.zipCode = fullDriver.zipCode;
+      user.driver.description = fullDriver.description;
+      notification['success']({
+        message: 'Success',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+    } catch (err) {
+      notification['error']({
+        message: 'error',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+      console.log(err);
+    }
+  };
 
   const newCompany = async () => {
     const { base } = state;
@@ -271,6 +320,50 @@ const UserProfile = ({ user, ...props }) => {
     };
     try {
       const { data } = await axios.post('/api/company', fullCompany);
+      notification['success']({
+        message: 'Success',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+    } catch (err) {
+      console.log(err);
+      notification['error']({
+        message: 'error',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+    }
+  };
+
+  const updateCompany = async () => {
+    const header = {
+      headers: { Authorization: `Bearer ${user.token}` }
+    };
+    const { base } = state;
+    const {tradename,legalNumber,areaCode,phoneNumber,logo,address,zipCode,description} = state.company;
+    base.typeUser = 2;
+    const fullCompany = {
+      base: base,
+      tradename: tradename,
+      legalNumber: legalNumber,
+      areaCode: areaCode,
+      phoneNumber: phoneNumber,
+      logo: logo,
+      address: address,
+      zipCode: zipCode,
+      description: description
+    };
+    try {
+      const { data } = await axios.patch('/api/company/' + user._id, fullCompany, header);
+      user.name = fullCompany.base.name;
+      user.lastname = fullCompany.base.lastname;
+      user.company.tradename = fullCompany.tradename;
+      user.company.legalNumber = fullCompany.legalNumber;
+      user.company.areaCode = fullCompany.areaCode;
+      user.company.phoneNumber = fullCompany.phoneNumber;
+      user.company.address = fullCompany.address;
+      user.company.zipCode = fullCompany.zipCode;
+      user.company.description = fullCompany.description;
       notification['success']({
         message: 'Success',
         description:
