@@ -25,6 +25,16 @@ router.post('/', storage.single('imageCdl'), function (req, res) {
     });
 });
 
+router.patch('/:id', auth, storage.single('logo'), function (req, res){
+    controller.updateCompany(req.params.id, req.body, req.file)
+        .then((data) => {
+            response.success(req, res, data, 200);
+        })
+        .catch(e => {
+            response.error(req, res, 'Error interno', 500, e);
+        });
+});
+
 router.delete('/:id', auth, function (req, res) {
     controller.deleteCompany(req.params.id)
         .then(() => {

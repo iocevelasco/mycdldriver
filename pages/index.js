@@ -10,6 +10,7 @@ import mock_ranking from '../mock/ranking.json';
 import mock_jobs from '../mock/job_offerts.json';
 
 
+
 //View components
 import HeaderHome from './home/components/search';
 import OffertJobComp from './home/components/job_offerts';
