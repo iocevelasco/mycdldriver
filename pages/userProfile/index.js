@@ -12,9 +12,8 @@ import {
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import DriverUser from './components/driverUser';
-import CompanyUser from './components/companyUser';
 import { LoadingOutlined } from '@ant-design/icons';
+import Link from 'next/link'
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const { Title, Text } = Typography;
@@ -192,28 +191,7 @@ const UserProfile = ({ user, ...props }) => {
         updateCompany={updateCompany}
         />
       default:
-        return <WrapperSection row={24} mt={0}>
-        <div className="profile-driver__route">
-          <div className="title">
-            <Title>  Let's do this!  </Title>
-            <Text strong>Are you a driver or a company?</Text>
-          </div>
-          <div className="card-container">
-            <Card
-              hoverable={true}
-              onClick={() => selectUserType(1)}>
-              <img src='/static/images/driver.svg' />
-              <Text > Drivers </Text>
-            </Card>
-            <Card
-              hoverable={true}
-              onClick={() => selectUserType(2)}>
-              <img src='/static/images/truck.svg' />
-              <Text > Company </Text>
-            </Card>
-          </div>
-        </div>
-    </WrapperSection>
+        return
     }
   };
 
@@ -382,7 +360,30 @@ const UserProfile = ({ user, ...props }) => {
   return (
     <MainLayout title='Profile' user={user}>
       <WrapperSection row={24} mt={0}>
-        {resolveUserType(state.typeUser)}
+        <div className="profile-driver__route">
+          <div className="title">
+            <Title>  Let's do this!  </Title>
+            <Text strong>Are you a driver or a company?</Text>
+          </div>
+          <div className="card-container">
+            <Link href="/userProfile/driver">
+              <Card
+                hoverable={true}
+                onClick={() => selectUserType(1)}>
+                <img src='/static/images/driver.svg' />
+                <Text > Drivers </Text>
+              </Card>
+            </Link>
+            <Link href="/userProfile/company">
+              <Card
+                hoverable={true}
+                onClick={() => selectUserType(2)}>
+                <img src='/static/images/truck.svg' />
+                <Text > Company </Text>
+              </Card>
+              </Link>
+          </div>
+        </div>
       </WrapperSection>
     </MainLayout>
   )
