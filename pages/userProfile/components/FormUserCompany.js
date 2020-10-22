@@ -23,7 +23,7 @@ const { Option } = Select;
 
 const { TextArea } = Input;
 
-const DriverUser = (props) => {
+const FormUserCompany = (props) => {
   const { company, onChangeBase, onChangeCompany, newCompany, updateCompany, base} = props;
   const [form] = Form.useForm();
   return (
@@ -167,4 +167,4 @@ const DriverUser = (props) => {
   )
 }
 
-export default DriverUser;
+export default FormUserCompany;

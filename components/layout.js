@@ -69,6 +69,7 @@ const MainLayout = ({ children, title, user, router }) => {
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
+            <link rel="shortcut icon" href="../static/images/favicon.ico" />
         </Head>
         <Layout>
             <Header className='header-component'>
@@ -78,7 +79,7 @@ const MainLayout = ({ children, title, user, router }) => {
                             <img style={{height: 50}} src='/static/images/logo.svg' />
                         </Link>
                     </Col>
-                    <Col span={5}>
+                    <Col span={10}>
                     {
                         user ?
                         <Dropdown overlay={menu}>
@@ -92,13 +93,11 @@ const MainLayout = ({ children, title, user, router }) => {
                        </Dropdown>
                      : 
                             <Row justify='end' align='middle'>
-                                <Link >
-                                    <Button 
-                                    onClick={()=>setVisible(true)}
-                                    type="secondary" size='large'>
-                                        LOGIN
-                                    </Button>
-                                </Link>
+                                <Button 
+                                onClick={()=>setVisible(true)}
+                                type="secondary" size='large'>
+                                    LOGIN
+                                </Button>
                             </Row>   
                         }
                     </Col>
