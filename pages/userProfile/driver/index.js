@@ -119,14 +119,13 @@ const DriverView = ({ user, ...props }) => {
     dispatch({ type: types.DATA_DRIVER, payload: data });
   }
 
-
   const newDrivers = async () => {
-    const { base } = state;
-
-    const fullDriver = { base: base, ...state.driver };
+    const { base, driver } = state;
+    const fullDriver = { base: base, ...driver };
     console.log('[fullDriver]', fullDriver);
+
     try {
-      const { data } = await axios.post('/api/driver', fullDriver);
+      await axios.post('/api/driver', fullDriver);
       notification['success']({
         message: 'Success',
         description:
@@ -146,35 +145,11 @@ const DriverView = ({ user, ...props }) => {
     const header = {
       headers: { Authorization: `Bearer ${user.token}` }
     };
-    const { base } = state;
-    const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
-    const fullDriver = {
-      base: base,
-      dln: dln,
-      expDateDln: expDateDln,
-      birthDate: birthDate,
-      areaCode: areaCode,
-      phoneNumber: phoneNumber,
-      sex: sex,
-      experience: experience,
-      address: address,
-      zipCode: zipCode,
-      description: description
-    };
+    const { base, driver } = state;
+    const fullDriver = { base: base, ...driver };
+
     try {
       await axios.patch('/api/driver/' + user._id, fullDriver, header);
-      user.name = fullDriver.base.name;
-      user.lastname = fullDriver.base.lastname;
-      user.driver.birthDate = fullDriver.birthDate;
-      user.driver.dln = fullDriver.dln;
-      user.driver.expDateDln = fullDriver.expDateDln;
-      user.driver.areaCode = fullDriver.areaCode;
-      user.driver.phoneNumber = fullDriver.phoneNumber;
-      user.driver.experience = fullDriver.experience;
-      user.driver.sex = fullDriver.sex;
-      user.driver.address = fullDriver.address;
-      user.driver.zipCode = fullDriver.zipCode;
-      user.driver.description = fullDriver.description;
       notification['success']({
         message: 'Success',
         description:

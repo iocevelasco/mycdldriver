@@ -117,9 +117,9 @@ const CompanyView = ({ user, ...props }) => {
   }
 
   const newCompany = async () => {
-    const { base } = state;
+    const { base, company } = state;
     base.typeUser = 2;
-    const fullCompany = {base:base, ...state.company}
+    const fullCompany = {base:base, ...company}
     console.log('fullCompany',fullCompany);
     try {
       const { data } = await axios.post('/api/company', fullCompany);
@@ -142,9 +142,9 @@ const CompanyView = ({ user, ...props }) => {
     const header = {
       headers: { Authorization: `Bearer ${user.token}` }
     };
-    const { base } = state;
+    const { base, company } = state;
     base.typeUser = 2;
-    const fullCompany = {base:base, ...state.company}
+    const fullCompany = {base:base, ...company}
     try {
       await axios.patch('/api/company/' + user._id, fullCompany, header);
       notification['success']({

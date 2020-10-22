@@ -22,16 +22,14 @@ const UserProfile = ({ user, ...props }) => {
           <div className="card-container">
             <Link href="/userProfile/driver">
               <Card
-                hoverable={true}
-                onClick={() => selectUserType(1)}>
+                hoverable={true}>
                 <img src='/static/images/driver.svg' />
                 <Text > Drivers </Text>
               </Card>
             </Link>
             <Link href="/userProfile/company">
               <Card
-                hoverable={true}
-                onClick={() => selectUserType(2)}>
+                hoverable={true}>
                 <img src='/static/images/truck.svg' />
                 <Text > Company </Text>
               </Card>
