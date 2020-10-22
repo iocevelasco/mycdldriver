@@ -79,7 +79,7 @@ const MainLayout = ({ children, title, user, router }) => {
                             <img style={{height: 50}} src='/static/images/logo.svg' />
                         </Link>
                     </Col>
-                    <Col span={5}>
+                    <Col span={10}>
                     {
                         user ?
                         <Dropdown overlay={menu}>
