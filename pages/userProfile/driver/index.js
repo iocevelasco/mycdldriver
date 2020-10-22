@@ -47,18 +47,20 @@ const initialState = {
 }
 
 const types = {
-  CREATE_NEW_USER: 'create_new_user',
-  PROPS_BASE:'props_base',
+  PROPS_FULL: 'PROPS_FULL',
+  PROPS_BASE:'PROPS_BASE',
   DATA_DRIVER: 'DATA_DRIVER',
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case types.PROPS_BASE:
+    case types.PROPS_FULL:
       return { ...state, 
         base: action.payload.base,
         driver: action.payload.company 
        }
+    case types.PROPS_BASE:
+      return { ...state, base: action.payload }
     case types.DATA_DRIVER:
       return { ...state, driver: action.payload }
     default:
@@ -68,7 +70,7 @@ const reducer = (state, action) => {
 
 const DriverView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  console.log('user',user);
   useEffect(() => {
     //Esto carga las props iniciales
     let base = state.base;
@@ -79,14 +81,17 @@ const DriverView = ({ user, ...props }) => {
     base.photo = user.photo || '';
     base.email = user.email || '';
     base.id = user._id || '';
-
-    dispatch({ 
-      type: types.PROPS_BASE, 
-      payload: {
-        driver:user.driver,
-        base
-       }
-    });
+    if(user.typeUser){
+      dispatch({ 
+        type: types.PROPS_FULL, 
+        payload: {
+          driver:user.driver,
+          base
+         }
+      });
+    }else {
+      dispatch({type: types.PROPS_BASE, payload: base});
+    }
   }, [user]);
 
   const onChangeBase = (e, key) => {

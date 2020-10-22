@@ -31,7 +31,7 @@ class MyApp extends App {
 
     return (
       <NextContainer>
-          <Component {...props} />
+        <Component {...props} />
       </NextContainer>
     );
   }
