@@ -48,7 +48,6 @@ const initialState = {
 
 const types = {
   CREATE_NEW_USER: 'create_new_user',
-  SELECT_USER_TYPE:'select_user_type',
   PROPS_BASE:'props_base',
   DATA_DRIVER: 'DATA_DRIVER',
 }
@@ -56,26 +55,19 @@ const types = {
 const reducer = (state, action) => {
   switch (action.type) {
     case types.PROPS_BASE:
-      return { ...state, base: action.payload }
+      return { ...state, 
+        base: action.payload.base,
+        driver: action.payload.company 
+       }
     case types.DATA_DRIVER:
       return { ...state, driver: action.payload }
-    case types.SELECT_USER_TYPE:
-      return { ...state, typeUser: action.payload }
     default:
       throw new Error('Unexpected action');
   }
 }
 
 const DriverView = ({ user, ...props }) => {
-  
   const [state, dispatch] = useReducer(reducer, initialState);
-  useEffect(() => {
-    verifyUserType(user.typeUser)
-  }, []);
-
-  const verifyUserType = (typeUser) => {
-    dispatch({ type: types.SELECT_USER_TYPE, payload: typeUser })
-  }
 
   useEffect(() => {
     //Esto carga las props iniciales
@@ -88,18 +80,14 @@ const DriverView = ({ user, ...props }) => {
     base.email = user.email || '';
     base.id = user._id || '';
 
-    driver.birthDate = user.driver.birthDate || '';
-    driver.areaCode = user.driver.areaCode;
-    driver.phoneNumber = user.driver.phoneNumber;
-    driver.experience = user.driver.experience;
-    driver.sex = user.driver.sex;
-    driver.address = user.driver.address;
-    driver.zipCode = user.driver.zipCode;
-    driver.description = user.driver.description;
-
-
-    dispatch({ type: types.PROPS_BASE, payload: base })
-  }, [user, state.typeUser]);
+    dispatch({ 
+      type: types.PROPS_BASE, 
+      payload: {
+        driver:user.driver,
+        base
+       }
+    });
+  }, [user]);
 
   const onChangeBase = (e, key) => {
     let base = state.base;
@@ -134,20 +122,8 @@ const DriverView = ({ user, ...props }) => {
 
   const newDrivers = async () => {
     const { base } = state;
-    const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
-    const fullDriver = {
-      base: base,
-      dln: dln,
-      expDateDln: expDateDln,
-      birthDate: birthDate,
-      areaCode: areaCode,
-      phoneNumber: phoneNumber,
-      sex: sex,
-      experience: experience,
-      address: address,
-      zipCode: zipCode,
-      description: description
-    };
+
+    const fullDriver = { base: base, ...state.driver };
     console.log('[fullDriver]', fullDriver);
     try {
       const { data } = await axios.post('/api/driver', fullDriver);
