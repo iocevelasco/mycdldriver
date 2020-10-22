@@ -151,9 +151,12 @@ if (!dev && cluster.isMaster) {
       });
 
       server.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
-      server.get('/auth/facebook/callback', passport.authenticate('facebook',
-        { successRedirect: '/userProfile', failureRedirect: '/' }
-      ));
+      server.get('/auth/facebook/callback', passport.authenticate('facebook', { 
+        failureRedirect: '/' }
+      ),
+      function(req, res) {
+        res.redirect('/userProfile');
+      });
 
       const restrictAccess = (req, res, next) => {
         if (!req.isAuthenticated()) return res.redirect("/");
