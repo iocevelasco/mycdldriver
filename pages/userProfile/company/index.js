@@ -45,7 +45,6 @@ const initialState = {
 
 const types = {
   CREATE_NEW_USER: 'create_new_user',
-  SELECT_USER_TYPE:'select_user_type',
   PROPS_BASE:'props_base',
   PROPS_COMPANY: 'props_company'
 }
@@ -59,8 +58,6 @@ const reducer = (state, action) => {
        }
     case types.DATA_COMPANY:
       return { ...state, company: action.payload }
-    case types.SELECT_USER_TYPE:
-      return { ...state, typeUser: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -120,9 +117,9 @@ const CompanyView = ({ user, ...props }) => {
   }
 
   const newCompany = async () => {
-    const { base } = state;
+    const { base, company } = state;
     base.typeUser = 2;
-    const fullCompany = {base:state.base, ...state.company}
+    const fullCompany = {base:base, ...company}
     console.log('fullCompany',fullCompany);
     try {
       const { data } = await axios.post('/api/company', fullCompany);
@@ -145,20 +142,11 @@ const CompanyView = ({ user, ...props }) => {
     const header = {
       headers: { Authorization: `Bearer ${user.token}` }
     };
-    const { base } = state;
+    const { base, company } = state;
     base.typeUser = 2;
-    const fullCompany = {base:state.base, ...state.company}
+    const fullCompany = {base:base, ...company}
     try {
-      const { data } = await axios.patch('/api/company/' + user._id, fullCompany, header);
-      user.name = fullCompany.base.name;
-      user.lastname = fullCompany.base.lastname;
-      user.company.tradename = fullCompany.tradename;
-      user.company.legalNumber = fullCompany.legalNumber;
-      user.company.areaCode = fullCompany.areaCode;
-      user.company.phoneNumber = fullCompany.phoneNumber;
-      user.company.address = fullCompany.address;
-      user.company.zipCode = fullCompany.zipCode;
-      user.company.description = fullCompany.description;
+      await axios.patch('/api/company/' + user._id, fullCompany, header);
       notification['success']({
         message: 'Success',
         description:
