@@ -70,7 +70,6 @@ const reducer = (state, action) => {
 
 const DriverView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log('user',user);
   useEffect(() => {
     //Esto carga las props iniciales
     let base = state.base;
@@ -124,7 +123,6 @@ const DriverView = ({ user, ...props }) => {
   const newDrivers = async () => {
     const { base, driver } = state;
     const fullDriver = { base: base, ...driver };
-    console.log('[fullDriver]', fullDriver);
 
     try {
       await axios.post('/api/driver', fullDriver);
