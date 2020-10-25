@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from '../../../components/layout';
+import MainLayout from '../../../../components/layout';
 import {
   Row,
   Col,
@@ -7,8 +7,8 @@ import {
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import FormUserCompany from '../components/FormUserCompany';
-import SideNav from '../components/SideNavAdmin';
+import FormUserCompany from '../../components/FormUserCompany';
+import DrawerComponent from '../../components/SideNavAdmin';
 
 const initialState = {
   base: {
@@ -69,6 +69,7 @@ const CompanyView = ({ user, ...props }) => {
     }
   }, [user]);
 
+  console.log(['state'], state);
 
   const onChangeBase = (e, key) => {
     let base = state.base;
@@ -152,16 +153,15 @@ const CompanyView = ({ user, ...props }) => {
     updateCompany,
   }
 
-
   return (
     <MainLayout title='Profile' user={user}>
       <Row>
         <Col span={4}>
-          <SideNav userType={user.userType}/>
+          <DrawerComponent />
         </Col>
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
-             <p>dashboard</p>
+            <FormUserCompany {...formConfig} />
           </WrapperSection>
         </Col>
       </Row>
