@@ -34,16 +34,18 @@ const MainLayout = ({ children, title, user, router }) => {
         email:'',
         id:'',
         photo:'',
+        typeUser: ''
     });
 
     useEffect(()=>{
         if(!user) return
-        const { name, lastname, email, photo, google_id} = user;
+        const { name, lastname, email, photo, _id, typeUser} = user;
         setUserProps({ 
             name:name + " " + lastname,
             email:email,
-            id:google_id ,
+            id:_id ,
             photo:photo,
+            typeUser: typeUser
         }) 
     },[user])
 
@@ -51,7 +53,7 @@ const MainLayout = ({ children, title, user, router }) => {
     const menu = (
         <Menu style={{width: '200px', float:'right'}}>
           <Menu.Item>
-            <Link href='/userProfile'>
+            <Link href={userProps.typeUser === 1 ? '/userProfile/driver' : '/userProfile/company'}>
                 <Button type='link'>
                     Profile
                 </Button>
