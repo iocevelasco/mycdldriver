@@ -14,6 +14,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
 import FormUserCompany from '../components/FormUserCompany';
+import DrawerComponent from '../components/Drawer';
 import Link from 'next/link'
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
