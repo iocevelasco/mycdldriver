@@ -5,9 +5,11 @@ import {
   Row,
   Col,
 } from 'antd';
-import DrawerComponent from '../../components/SideNavAdmin';
+import SideNav from '../../../../components/loading';
 
-const initialState = {}
+const initialState = {
+  loading:false,
+}
 
 const types = {}
 
@@ -26,12 +28,13 @@ const ServiceCompanyView = ({ user, ...props }) => {
   return (
     <MainLayout title='Service' user={user}>
       <Row>
-        <Col span={4}>
-          <DrawerComponent />
-        </Col>
+       {
+          user.typeUser ? <SideNav typeUser={user.typeUser} /> : null
+        }
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
-            <p>Service view component</p>
+           {state.loading && <LoadingComp/>}
+            <p>DEMO VIEW COMPONENT</p>
           </WrapperSection>
         </Col>
       </Row>

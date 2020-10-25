@@ -182,7 +182,9 @@ const DriverView = ({ user, ...props }) => {
       <MainLayout title='Profile' user={user}>
         {state.loading && <SpinnerComp/>}
         <Row>
-          <SideNav typeUser={user.typeUser} />
+          {
+            user.typeUser ? <SideNav typeUser={user.typeUser} /> : null
+          }
           <Col span={20}>
             <WrapperSection row={24} mt={0}>
               <FormUserDriver {...formConfig} />
