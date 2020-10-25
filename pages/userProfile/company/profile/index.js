@@ -159,7 +159,7 @@ const CompanyProfileView = ({ user, ...props }) => {
     <MainLayout title='Profile' user={user}>
       <Row>
         {
-          user.typeUser ? <Col span={4}> <SideNav typeUser={user.typeUser} /></Col> : null
+          user.typeUser ? <SideNav typeUser={user.typeUser} /> : null
         }
         <Col span={user.typeUser? 20 : 24}>
           {state.loading && <LoadingComp/>}
