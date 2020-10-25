@@ -20,14 +20,14 @@ const UserProfile = ({ user, ...props }) => {
             <Title level={3}>Are you a driver or a company?</Title>
           </div>
           <div className="card-container">
-            <Link href="/userProfile/driver">
+            <Link href="/userProfile/driver/profile">
               <Card
                 hoverable={true}>
                 <img src='/static/images/driver.svg' />
                 <Text > Drivers </Text>
               </Card>
             </Link>
-            <Link href="/userProfile/company">
+            <Link href="/userProfile/company/profile">
               <Card
                 hoverable={true}>
                 <img src='/static/images/truck.svg' />
