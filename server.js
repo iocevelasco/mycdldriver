@@ -88,10 +88,10 @@ if (!dev && cluster.isMaster) {
           process.nextTick(function() {
             userController.loginProviderUser(profile.id, profile.emails[0].value, 1)
             .then((fullUser) => {
+              console.log(fullUser);
               return done(null, fullUser);
             })
             .catch(e => {
-              console.log('[ GoogleStrategy ] Usuario no registrado: ' + e);
               newUser = {
                 "name": profile.name.givenName,
                 "lastname": profile.name.familyName,
@@ -117,8 +117,6 @@ if (!dev && cluster.isMaster) {
           return done(null, fullUser);
         })
         .catch(e => {
-          console.log('[profile]', profile)
-          console.log('[ FacebookStrategy ] Usuario no registrado: ' + e);
           newUser = {
             "name": profile.name.givenName,
             "lastname": profile.name.familyName,
@@ -133,14 +131,14 @@ if (!dev && cluster.isMaster) {
       //CONFIGURACION PASSPORT
 
       //AUTENTICACION
-      server.get('/logout', async function(req, res) {
+      server.get('/logout', async (req, res) => {
         try{
           const header = {
             headers: { Authorization: `Bearer ${req.session.passport.user.token}` }
           };
-          await axios.post('/api/user/logoutall', {}, header);
+          await axios.post(config.host + ':' + config.port + '/api/user/logoutall', {}, header);
         }catch(e){
-          console.log('[ logout] error', e);
+          console.log('[ logout ]', e);
         }
         
         req.logout();
