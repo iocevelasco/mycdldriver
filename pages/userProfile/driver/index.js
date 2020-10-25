@@ -13,6 +13,7 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import FormUserDriver from '../components/FormUserDriver';
+import SpinnerComp from '../../../components/loading';
 import SideNav from '../components/SideNavAdmin';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -23,7 +24,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const initialState = {
-  typeUser: 0,
+  loading:true,
   base: {
     name: '',
     lastname: '',
@@ -175,19 +176,21 @@ const DriverView = ({ user, ...props }) => {
     newDrivers: newDrivers,
     updateDriver: updateDriver,
   }
-
-  return (
-    <MainLayout title='Profile' user={user}>
-      <Row>
-        <SideNav typeUser={user.typeUser} />
-        <Col span={20}>
-          <WrapperSection row={24} mt={0}>
-            <FormUserDriver {...formConfig} />
-          </WrapperSection>
-        </Col>
-      </Row>
-    </MainLayout>
-  )
+    return (
+      <MainLayout title='Profile' user={user}>
+        {state.loading && <SpinnerComp/>}
+        <Row>
+          {
+            user.typeUser ? <SideNav typeUser={user.typeUser} /> : null
+          }
+          <Col span={20}>
+            <WrapperSection row={24} mt={0}>
+              <FormUserDriver {...formConfig} />
+            </WrapperSection>
+          </Col>
+        </Row>
+      </MainLayout>
+    )
 };
 
 const WrapperSection = ({ children, row, marginTop, marginBottom }) => {

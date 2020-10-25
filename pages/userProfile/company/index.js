@@ -8,9 +8,11 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import FormUserCompany from '../components/FormUserCompany';
+import LoadingComp from '../../../components/loading';
 import SideNav from '../components/SideNavAdmin';
 
 const initialState = {
+  loading:true,
   base: {
     name: '',
     lastname: '',
@@ -155,11 +157,15 @@ const CompanyView = ({ user, ...props }) => {
 
   return (
     <MainLayout title='Profile' user={user}>
-      <Row>
-        <Col span={4}>
+      <Row justify='center' align='middle'>
+        {
+          user.userType && ( 
+          <Col span={4}>
           <SideNav userType={user.userType}/>
-        </Col>
+        </Col>)
+        }
         <Col span={20}>
+          {state.loading && <LoadingComp/>}
           <WrapperSection row={24} mt={0}>
              <p>dashboard</p>
           </WrapperSection>

@@ -8,9 +8,11 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
-import DrawerComponent from '../../components/SideNavAdmin';
+import SideNav from '../../components/SideNavAdmin';
+import LoadingComp from '../../../../components/loading';
 
 const initialState = {
+  loading:true,
   base: {
     name: '',
     lastname: '',
@@ -40,7 +42,7 @@ const types = {
 const reducer = (state, action) => {
   switch (action.type) {
     case types.PROPS_BASE:
-      return { ...state, base: action.payload }
+      return { ...state, base: action.payload, loading:false }
     case types.DATA_COMPANY:
       return { ...state, company: action.payload }
     default:
@@ -48,7 +50,7 @@ const reducer = (state, action) => {
   }
 }
 
-const CompanyView = ({ user, ...props }) => {
+const CompanyProfileView = ({ user, ...props }) => {
   console.log(user)
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -156,10 +158,11 @@ const CompanyView = ({ user, ...props }) => {
   return (
     <MainLayout title='Profile' user={user}>
       <Row>
-        <Col span={4}>
-          <DrawerComponent />
-        </Col>
-        <Col span={20}>
+        {
+          user.typeUser ? <SideNav typeUser={user.typeUser} /> : null
+        }
+        <Col span={user.typeUser? 20 : 24}>
+          {state.loading && <LoadingComp/>}
           <WrapperSection row={24} mt={0}>
             <FormUserCompany {...formConfig} />
           </WrapperSection>
@@ -188,4 +191,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
 }
 
 
-export default CompanyView;
+export default CompanyProfileView;
