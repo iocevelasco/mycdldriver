@@ -56,7 +56,7 @@ const types = {
 const reducer = (state, action) => {
   switch (action.type) {
     case types.PROPS_BASE:
-      return { ...state, base: action.payload }
+      return { ...state, base: action.payload}
     case types.DATA_DRIVER:
       return { ...state, driver: action.payload }
     case types.SELECT_USER_TYPE:
@@ -87,15 +87,11 @@ const DriverView = ({ user, ...props }) => {
     base.photo = user.photo || '';
     base.email = user.email || '';
     base.id = user._id || '';
-
-    driver.birthDate = user.driver.birthDate || '';
-    driver.areaCode = user.driver.areaCode;
-    driver.phoneNumber = user.driver.phoneNumber;
-    driver.experience = user.driver.experience;
-    driver.sex = user.driver.sex;
-    driver.address = user.driver.address;
-    driver.zipCode = user.driver.zipCode;
-    driver.description = user.driver.description;
+    if(user.typeUser){
+      let driver = user.driver;
+      
+      dispatch({ type: types.DATA_DRIVER, payload: driver })
+    }
 
 
     dispatch({ type: types.PROPS_BASE, payload: base })
@@ -171,34 +167,9 @@ const DriverView = ({ user, ...props }) => {
       headers: { Authorization: `Bearer ${user.token}` }
     };
     const { base } = state;
-    const {dln,expDateDln,birthDate,areaCode,phoneNumber,sex,experience,address,zipCode,description} = state.driver;
-    const fullDriver = {
-      base: base,
-      dln: dln,
-      expDateDln: expDateDln,
-      birthDate: birthDate,
-      areaCode: areaCode,
-      phoneNumber: phoneNumber,
-      sex: sex,
-      experience: experience,
-      address: address,
-      zipCode: zipCode,
-      description: description
-    };
+    const fullDriver = { base: base,...state.driver};
     try {
       await axios.patch('/api/driver/' + user._id, fullDriver, header);
-      user.name = fullDriver.base.name;
-      user.lastname = fullDriver.base.lastname;
-      user.driver.birthDate = fullDriver.birthDate;
-      user.driver.dln = fullDriver.dln;
-      user.driver.expDateDln = fullDriver.expDateDln;
-      user.driver.areaCode = fullDriver.areaCode;
-      user.driver.phoneNumber = fullDriver.phoneNumber;
-      user.driver.experience = fullDriver.experience;
-      user.driver.sex = fullDriver.sex;
-      user.driver.address = fullDriver.address;
-      user.driver.zipCode = fullDriver.zipCode;
-      user.driver.description = fullDriver.description;
       notification['success']({
         message: 'Success',
         description:

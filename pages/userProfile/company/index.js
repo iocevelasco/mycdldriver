@@ -53,10 +53,7 @@ const types = {
 const reducer = (state, action) => {
   switch (action.type) {
     case types.PROPS_BASE:
-      return { ...state, 
-        base: action.payload.base,
-        company: action.payload.company 
-       }
+      return { ...state, base: action.payload}
     case types.DATA_COMPANY:
       return { ...state, company: action.payload }
     case types.SELECT_USER_TYPE:
@@ -80,14 +77,11 @@ const CompanyView = ({ user, ...props }) => {
     base.photo = user.photo || '';
     base.email = user.email || '';
     base.id = user._id || '';
-
-    dispatch({ 
-      type: types.PROPS_BASE, 
-      payload: {
-        company:user.company,
-        base
-       }
-    });
+    dispatch({ type: types.PROPS_BASE, payload: base });
+    if(user.typeUser){
+      let company = user.company;
+      dispatch({ type: types.DATA_COMPANY, payload: company })
+    }
   }, [user]);
 
   console.log(['state'],state);
@@ -149,16 +143,7 @@ const CompanyView = ({ user, ...props }) => {
     base.typeUser = 2;
     const fullCompany = {base:state.base, ...state.company}
     try {
-      const { data } = await axios.patch('/api/company/' + user._id, fullCompany, header);
-      user.name = fullCompany.base.name;
-      user.lastname = fullCompany.base.lastname;
-      user.company.tradename = fullCompany.tradename;
-      user.company.legalNumber = fullCompany.legalNumber;
-      user.company.areaCode = fullCompany.areaCode;
-      user.company.phoneNumber = fullCompany.phoneNumber;
-      user.company.address = fullCompany.address;
-      user.company.zipCode = fullCompany.zipCode;
-      user.company.description = fullCompany.description;
+      await axios.patch('/api/company/' + user._id, fullCompany, header);
       notification['success']({
         message: 'Success',
         description:
