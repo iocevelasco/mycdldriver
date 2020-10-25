@@ -49,7 +49,7 @@ const MainLayout = ({ children, title, user, router }) => {
 
     
     const menu = (
-        <Menu>
+        <Menu style={{width: '200px', float:'right'}}>
           <Menu.Item>
             <Link href='/userProfile'>
                 <Button type='link'>

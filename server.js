@@ -13,6 +13,7 @@ const userController = require('./api/components/user/controller');
 const MemcachedStore = require('connect-memjs')(session);
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
+const axios = require('axios');
 
 const dev = config.dev;
 db(config.dbUrl);
@@ -132,7 +133,16 @@ if (!dev && cluster.isMaster) {
       //CONFIGURACION PASSPORT
 
       //AUTENTICACION
-      server.get('/logout', function(req, res) {
+      server.get('/logout', async function(req, res) {
+        try{
+          const header = {
+            headers: { Authorization: `Bearer ${req.session.passport.user.token}` }
+          };
+          await axios.post('/api/user/logoutall', {}, header);
+        }catch(e){
+          console.log('[ logout] error', e);
+        }
+        
         req.logout();
         res.redirect('/');
       });
@@ -144,18 +154,30 @@ if (!dev && cluster.isMaster) {
       }),
       function(req, res) {});
       server.get('/auth/google/callback', passport.authenticate('google', {
-        failureRedirect: '/'
+        failureRedirect: '/error'
       }),
       function(req, res) {
-        res.redirect('/userProfile');
+        if(req.session.passport.user.typeUser === 1){
+          res.redirect('/userProfile/driver');
+        }else if(req.session.passport.user.typeUser === 2){
+          res.redirect('/userProfile/company');
+        }else{
+          res.redirect('/userProfile');
+        }
       });
 
       server.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
       server.get('/auth/facebook/callback', passport.authenticate('facebook', { 
-        failureRedirect: '/' }
+        failureRedirect: '/error' }
       ),
       function(req, res) {
-        res.redirect('/userProfile');
+        if(req.session.passport.user.typeUser === 1){
+          res.redirect('/userProfile/driver');
+        }else if(req.session.passport.user.typeUser === 2){
+          res.redirect('/userProfile/company');
+        }else{
+          res.redirect('/userProfile');
+        }
       });
 
       const restrictAccess = (req, res, next) => {
