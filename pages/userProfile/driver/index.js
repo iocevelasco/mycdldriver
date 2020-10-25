@@ -13,7 +13,7 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import FormUserDriver from '../components/FormUserDriver';
-import DrawerComponent from '../components/Drawer';
+import SideNav from '../components/SideNavAdmin';
 import { LoadingOutlined } from '@ant-design/icons';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -181,9 +181,7 @@ const DriverView = ({ user, ...props }) => {
   return (
     <MainLayout title='Profile' user={user}>
       <Row>
-        <Col span={4}>
-          <DrawerComponent/>
-        </Col>
+        <SideNav typeUser={user.typeUser} />
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
             <FormUserDriver {...formConfig} />
