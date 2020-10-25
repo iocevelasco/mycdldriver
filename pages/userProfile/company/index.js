@@ -3,27 +3,16 @@ import MainLayout from '../../../components/layout';
 import {
   Row,
   Col,
-  Typography,
-  Input,
-  Select,
-  Spin,
-  Card,
   notification
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import { LoadingOutlined } from '@ant-design/icons';
 import FormUserCompany from '../components/FormUserCompany';
-import DrawerComponent from '../components/Drawer';
-import Link from 'next/link'
-
-const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-const { Title, Text } = Typography;
-const { Option } = Select;
-
-const { TextArea } = Input;
+import LoadingComp from '../../../components/loading';
+import SideNav from '../components/SideNavAdmin';
 
 const initialState = {
+  loading:true,
   base: {
     name: '',
     lastname: '',
@@ -34,26 +23,26 @@ const initialState = {
     facebook_id: ''
   },
   company: {
-      tradename:'',
-      legalNumber:'',
-      address: '',
-      description:'',
-      areaCode:'',
-      phoneNumber:'',
-      zipCode: ''
+    tradename: '',
+    legalNumber: '',
+    address: '',
+    description: '',
+    areaCode: '',
+    phoneNumber: '',
+    zipCode: ''
   }
 }
 
 const types = {
   CREATE_NEW_USER: 'create_new_user',
-  PROPS_BASE:'props_base',
+  PROPS_BASE: 'props_base',
   PROPS_COMPANY: 'props_company'
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
     case types.PROPS_BASE:
-      return { ...state, base: action.payload}
+      return { ...state, base: action.payload }
     case types.DATA_COMPANY:
       return { ...state, company: action.payload }
     default:
@@ -76,13 +65,12 @@ const CompanyView = ({ user, ...props }) => {
     base.email = user.email || '';
     base.id = user._id || '';
     dispatch({ type: types.PROPS_BASE, payload: base });
-    if(user.typeUser){
+    if (user.typeUser) {
       let company = user.company;
       dispatch({ type: types.DATA_COMPANY, payload: company })
     }
   }, [user]);
 
-  console.log(['state'],state);
 
   const onChangeBase = (e, key) => {
     let base = state.base;
@@ -90,14 +78,14 @@ const CompanyView = ({ user, ...props }) => {
 
     value = e.target.value;
     base[key] = value;
-       
+
     dispatch({ type: types.PROPS_BASE, payload: base });
   }
 
   const onChangeCompany = (e, key) => {
     let company = state.company;
     let value = "";
-    
+
     value = e.target.value;
     company[key] = value;
 
@@ -106,7 +94,7 @@ const CompanyView = ({ user, ...props }) => {
 
   const handleDatePicker = (obj, date, key) => {
     let data = state.driver;
-    if(date === "") data[key] = moment(new Date()).format('MM DD YYYY')
+    if (date === "") data[key] = moment(new Date()).format('MM DD YYYY')
     else data[key] = date;
     dispatch({ type: types.DATA_DRIVER, payload: data });
   }
@@ -114,8 +102,8 @@ const CompanyView = ({ user, ...props }) => {
   const newCompany = async () => {
     const { base, company } = state;
     base.typeUser = 2;
-    const fullCompany = {base:base, ...company}
-    console.log('fullCompany',fullCompany);
+    const fullCompany = { base: base, ...company }
+    console.log('fullCompany', fullCompany);
     try {
       const { data } = await axios.post('/api/company', fullCompany);
       notification['success']({
@@ -139,7 +127,7 @@ const CompanyView = ({ user, ...props }) => {
     };
     const { base, company } = state;
     base.typeUser = 2;
-    const fullCompany = {base:base, ...company}
+    const fullCompany = { base: base, ...company }
     try {
       await axios.patch('/api/company/' + user._id, fullCompany, header);
       notification['success']({
@@ -161,16 +149,28 @@ const CompanyView = ({ user, ...props }) => {
     company: state.company,
     onChangeBase,
     onChangeCompany,
-    handleDatePicker, 
+    handleDatePicker,
     newCompany,
     updateCompany,
   }
 
+
   return (
     <MainLayout title='Profile' user={user}>
-        <WrapperSection row={24} mt={0}>
-          <FormUserCompany {...formConfig}/>
-      </WrapperSection>
+      <Row justify='center' align='middle'>
+        {
+          user.userType && ( 
+          <Col span={4}>
+          <SideNav userType={user.userType}/>
+        </Col>)
+        }
+        <Col span={20}>
+          {state.loading && <LoadingComp/>}
+          <WrapperSection row={24} mt={0}>
+             <p>dashboard</p>
+          </WrapperSection>
+        </Col>
+      </Row>
     </MainLayout>
   )
 };
@@ -178,12 +178,12 @@ const CompanyView = ({ user, ...props }) => {
 
 const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   return (
-    <div style={{ 
+    <div style={{
       background: `url('/static/images/bg-routes.jpg')`,
-      marginTop: marginTop, 
+      marginTop: marginTop,
       marginBottom: marginBottom,
-      backgroundSize:'contain',
-      }}>
+      backgroundSize: 'contain',
+    }}>
       <Row justify='center' align='middle'>
         <Col span={row}>
           {children}
