@@ -13,6 +13,7 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import FormUserDriver from '../components/FormUserDriver';
+import DrawerComponent from '../components/Drawer';
 import { LoadingOutlined } from '@ant-design/icons';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -34,8 +35,8 @@ const initialState = {
   },
   driver: {
     dln: '',
-    expDateDln: moment(new Date()).format('MM DD YYYY'),
-    birthDate: moment(new Date()).format('MM DD YYYY'),
+    expDateDln: '',
+    birthDate: '',
     areaCode: '',
     phoneNumber: '',
     experience: '',
@@ -48,19 +49,20 @@ const initialState = {
 
 const types = {
   PROPS_FULL: 'PROPS_FULL',
-  PROPS_BASE:'PROPS_BASE',
+  PROPS_BASE: 'PROPS_BASE',
   DATA_DRIVER: 'DATA_DRIVER',
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
     case types.PROPS_FULL:
-      return { ...state, 
+      return {
+        ...state,
         base: action.payload.base,
-        driver: action.payload.company 
-       }
+        driver: action.payload.company
+      }
     case types.PROPS_BASE:
-      return { ...state, base: action.payload}
+      return { ...state, base: action.payload }
     case types.DATA_DRIVER:
       return { ...state, driver: action.payload }
     default:
@@ -70,7 +72,7 @@ const reducer = (state, action) => {
 
 const DriverView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log('user',user);
+  console.log('user', user);
   useEffect(() => {
     //Esto carga las props iniciales
     let base = state.base;
@@ -81,9 +83,9 @@ const DriverView = ({ user, ...props }) => {
     base.photo = user.photo || '';
     base.email = user.email || '';
     base.id = user._id || '';
-    if(user.typeUser){
+    if (user.typeUser) {
       let driver = user.driver;
-      
+
       dispatch({ type: types.DATA_DRIVER, payload: driver })
     }
 
@@ -97,7 +99,7 @@ const DriverView = ({ user, ...props }) => {
 
     value = e.target.value;
     base[key] = value;
-       
+
     dispatch({ type: types.PROPS_BASE, payload: base });
   }
 
@@ -105,9 +107,9 @@ const DriverView = ({ user, ...props }) => {
     let driver = state.driver;
     let value = "";
 
-    if(key == 'experience'){
+    if (key == 'experience') {
       value = e;
-    }else{
+    } else {
       value = e.target.value;
     }
     driver[key] = value;
@@ -116,7 +118,7 @@ const DriverView = ({ user, ...props }) => {
 
   const handleDatePicker = (obj, date, key) => {
     let data = state.driver;
-    if(date === "") data[key] = moment(new Date()).format('MM DD YYYY')
+    if (date === "") data[key] = moment(new Date()).format('MM DD YYYY')
     else data[key] = date;
     dispatch({ type: types.DATA_DRIVER, payload: data });
   }
@@ -142,13 +144,13 @@ const DriverView = ({ user, ...props }) => {
       console.log(err);
     }
   };
-  
+
   const updateDriver = async () => {
     const header = {
       headers: { Authorization: `Bearer ${user.token}` }
     };
     const { base } = state;
-    const fullDriver = { base: base,...state.driver};
+    const fullDriver = { base: base, ...state.driver };
     try {
       await axios.patch('/api/driver/' + user._id, fullDriver, header);
       notification['success']({
@@ -171,29 +173,35 @@ const DriverView = ({ user, ...props }) => {
     driver: state.driver,
     onChangeBase: onChangeBase,
     onChangeDriver: onChangeDriver,
-    handleDatePicker: handleDatePicker, 
-    newDrivers:newDrivers,
-    updateDriver:updateDriver,
+    handleDatePicker: handleDatePicker,
+    newDrivers: newDrivers,
+    updateDriver: updateDriver,
   }
 
   return (
     <MainLayout title='Profile' user={user}>
-        <WrapperSection row={24} mt={0}>
-          <FormUserDriver {...formConfig}/>
-      </WrapperSection>
+      <Row>
+        <Col span={4}>
+          <DrawerComponent/>
+        </Col>
+        <Col span={20}>
+          <WrapperSection row={24} mt={0}>
+            <FormUserDriver {...formConfig} />
+          </WrapperSection>
+        </Col>
+      </Row>
     </MainLayout>
   )
 };
 
-
 const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   return (
-    <div style={{ 
+    <div style={{
       background: `url('/static/images/bg-routes.jpg')`,
-      marginTop: marginTop, 
+      marginTop: marginTop,
       marginBottom: marginBottom,
-      backgroundSize:'contain',
-      }}>
+      backgroundSize: 'contain',
+    }}>
       <Row justify='center' align='middle'>
         <Col span={row}>
           {children}
@@ -202,6 +210,5 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
     </div>
   )
 }
-
 
 export default DriverView;

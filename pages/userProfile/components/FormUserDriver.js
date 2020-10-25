@@ -60,7 +60,7 @@ const driverUser = (props) => {
             </Form.Item>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
-                <Form.Item>
+                <Form.Item label='Birth Date'>
                   <DatePicker
                     size='large'
                     style={{ width: '100%' }}
@@ -94,7 +94,7 @@ const driverUser = (props) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item>
+                <Form.Item label='Experation Date'>
                   <DatePicker
                     size='large'
                     defaultValue={moment(new Date()).format('MM DD YYYY')}
