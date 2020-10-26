@@ -158,7 +158,7 @@ if (!dev && cluster.isMaster) {
         if(req.session.passport.user.typeUser === 1){
           res.redirect('/userProfile/driver');
         }else if(req.session.passport.user.typeUser === 2){
-          res.redirect('/userProfile/company');
+          res.redirect('/userProfile/company/profile');
         }else{
           res.redirect('/userProfile');
         }
@@ -172,7 +172,7 @@ if (!dev && cluster.isMaster) {
         if(req.session.passport.user.typeUser === 1){
           res.redirect('/userProfile/driver');
         }else if(req.session.passport.user.typeUser === 2){
-          res.redirect('/userProfile/company');
+          res.redirect('/userProfile/company/profile');
         }else{
           res.redirect('/userProfile');
         }
