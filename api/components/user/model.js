@@ -62,6 +62,10 @@ const userSchema = mongoose.Schema({
       token: {
          type: String,
          required: true
+      },
+      date: {
+         type: Date,
+         default: Date.now
       }
    }]
  })
@@ -89,7 +93,11 @@ const userSchema = mongoose.Schema({
     if (!validator.isEmail(email)) {
       throw new Error({ error: 'Invalid login credentials' });
     }
-    const user = await User.findOne({ email} );
+    const user = await User.findOne({ email} )
+      .select("-__v")
+      .populate('driver', "-_id -__v")
+      .populate('company', "-_id -__v");
+
     if (!user) {
        throw new Error({ error: 'Invalid login credentials' });
     }

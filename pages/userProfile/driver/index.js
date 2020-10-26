@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import MainLayout from '../../../components/layout';
 import {
   Row,
@@ -13,7 +13,6 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import FormUserDriver from '../components/FormUserDriver';
-import SpinnerComp from '../../../components/loading';
 import SideNav from '../components/SideNavAdmin';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -24,7 +23,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const initialState = {
-  loading:true,
+  loading:false,
   base: {
     name: '',
     lastname: '',
@@ -52,6 +51,7 @@ const types = {
   PROPS_FULL: 'PROPS_FULL',
   PROPS_BASE: 'PROPS_BASE',
   DATA_DRIVER: 'DATA_DRIVER',
+  LOADING: 'LOADING',
 }
 
 const reducer = (state, action) => {
@@ -64,8 +64,10 @@ const reducer = (state, action) => {
       }
     case types.PROPS_BASE:
       return { ...state, base: action.payload }
-    case types.DATA_DRIVER:
-      return { ...state, driver: action.payload }
+      case types.DATA_DRIVER:
+        return { ...state, driver: action.payload }
+        case types.LOADING:
+          return { ...state, loading: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -73,7 +75,6 @@ const reducer = (state, action) => {
 
 const DriverView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log('user', user);
   useEffect(() => {
     //Esto carga las props iniciales
     let base = state.base;
@@ -127,7 +128,6 @@ const DriverView = ({ user, ...props }) => {
   const newDrivers = async () => {
     const { base, driver } = state;
     const fullDriver = { base: base, ...driver };
-    console.log('[fullDriver]', fullDriver);
 
     try {
       await axios.post('/api/driver', fullDriver);
@@ -152,14 +152,20 @@ const DriverView = ({ user, ...props }) => {
     };
     const { base } = state;
     const fullDriver = { base: base, ...state.driver };
-    try {
+    try { 
+      dispatch({ type: types.LOADING, payload: true });
+      console.log('loader activo', state.loading);
       await axios.patch('/api/driver/' + user._id, fullDriver, header);
+      //dispatch({ type: types.LOADING, payload: false });
+      console.log('loader false 1', state.loading);
       notification['success']({
         message: 'Success',
         description:
           "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
       });
     } catch (err) {
+      //dispatch({ type: types.LOADING, payload: false });
+      console.log('loader false 2', state.loading);
       notification['error']({
         message: 'error',
         description:
@@ -179,8 +185,7 @@ const DriverView = ({ user, ...props }) => {
     updateDriver: updateDriver,
   }
     return (
-      <MainLayout title='Profile' user={user}>
-        {state.loading && <SpinnerComp/>}
+      <MainLayout title='Profile' user={user} loading={state.loading}>
         <Row>
           {
             user.typeUser ? <SideNav typeUser={user.typeUser} /> : null
