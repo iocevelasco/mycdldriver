@@ -30,7 +30,8 @@ const { Content, Header } = Layout;
 const MainLayout = ({ children, title, user, loading, router }) => {
     const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
-
+    
+    console.log('loader', loader);
     const [userProps, setUserProps] = useState({ 
         name:'',
         email:'',
@@ -49,10 +50,11 @@ const MainLayout = ({ children, title, user, loading, router }) => {
             photo:photo,
             typeUser: typeUser
         }) 
-    },[user]);
-    
+    },[user])
+
     useEffect(()=>{
-        if(loader){
+        setLoader(loading);
+        if(loading){
             document.body.style.overflowY = "hidden"
         }else{
             document.body.style.overflowY = "auto"
@@ -87,7 +89,7 @@ const MainLayout = ({ children, title, user, loading, router }) => {
         </Head>
         <Layout>
             <Header className='header-component'>
-                {loader && <SpinnerComp/>}
+                {loader ? <SpinnerComp/> : null}
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">

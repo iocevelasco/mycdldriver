@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import MainLayout from '../../../components/layout';
+import MainLayout from '../../../../components/layout';
 import {
   Row,
   Col,
@@ -12,8 +12,8 @@ import {
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import FormUserDriver from '../components/FormUserDriver';
-import SideNav from '../components/SideNavAdmin';
+import FormUserDriver from '../../components/FormUserDriver';
+import SideNav from '../../components/SideNavAdmin';
 import { LoadingOutlined } from '@ant-design/icons';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -73,7 +73,7 @@ const reducer = (state, action) => {
   }
 }
 
-const DriverView = ({ user, ...props }) => {
+const DriverProfileView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     //Esto carga las props iniciales
@@ -220,4 +220,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   )
 }
 
-export default DriverView;
+export default DriverProfileView;

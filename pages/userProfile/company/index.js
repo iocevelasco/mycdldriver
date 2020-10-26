@@ -51,7 +51,6 @@ const reducer = (state, action) => {
 }
 
 const CompanyView = ({ user, ...props }) => {
-  console.log(user)
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
