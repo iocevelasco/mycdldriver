@@ -3,6 +3,7 @@ import { withRouter } from 'next/router';
 import Head from 'next/head'
 import Footer from './footer';
 import Link from 'next/link';
+import SpinnerComp from '../components/loading';
 import { 
     Layout, 
     Row, 
@@ -26,39 +27,56 @@ import '../styles/index.less';
 const { Text, Title } = Typography;
 const { Content, Header } = Layout;
 
-const MainLayout = ({ children, title, user, router }) => {
+const MainLayout = ({ children, title, user, loading, router }) => {
     const [visible, setVisible] = useState(false);
-
+    const [loader, setLoader] = useState(loading);
+    
+    console.log('loader', loader);
     const [userProps, setUserProps] = useState({ 
         name:'',
         email:'',
         id:'',
         photo:'',
+        typeUser: ''
     });
 
     useEffect(()=>{
         if(!user) return
-        const { name, lastname, email, photo, google_id} = user;
+        const { name, lastname, email, photo, _id, typeUser} = user;
         setUserProps({ 
             name:name + " " + lastname,
             email:email,
-            id:google_id ,
+            id:_id ,
             photo:photo,
+            typeUser: typeUser
         }) 
     },[user])
 
-    
+    useEffect(()=>{
+        setLoader(loading);
+        if(loading){
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+            document.body.style.overflowY = "hidden"
+        }else{
+            document.body.style.overflowY = "auto"
+        }
+    },[loading]);
+       
     const menu = (
-        <Menu>
+        <Menu style={{width: '200px', float:'right'}}>
           <Menu.Item>
-            <Link href='/profile'>
+            <Link href={userProps.typeUser === 1 ? '/userProfile/driver' : '/userProfile/company'}>
                 <Button type='link'>
                     Profile
                 </Button>
             </Link>
           </Menu.Item>
           <Menu.Item >
-            <Button type='link' onClick={()=>router.push('/logout')} >
+            <Button type='link' onClick={()=>{
+                setLoader(true);
+                router.push('/logout')
+                }} >
                 Logout
             </Button>
           </Menu.Item>
@@ -69,16 +87,18 @@ const MainLayout = ({ children, title, user, router }) => {
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
+            <link rel="shortcut icon" href="../static/images/favicon.ico" />
         </Head>
         <Layout>
             <Header className='header-component'>
+                {loader ? <SpinnerComp/> : null}
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
                             <img style={{height: 50}} src='/static/images/logo.svg' />
                         </Link>
                     </Col>
-                    <Col span={5}>
+                    <Col span={10}>
                     {
                         user ?
                         <Dropdown overlay={menu}>
@@ -92,13 +112,11 @@ const MainLayout = ({ children, title, user, router }) => {
                        </Dropdown>
                      : 
                             <Row justify='end' align='middle'>
-                                <Link >
-                                    <Button 
-                                    onClick={()=>setVisible(true)}
-                                    type="secondary" size='large'>
-                                        LOGIN
-                                    </Button>
-                                </Link>
+                                <Button 
+                                onClick={()=>setVisible(true)}
+                                type="secondary" size='large'>
+                                    LOGIN
+                                </Button>
                             </Row>   
                         }
                     </Col>
@@ -120,11 +138,19 @@ const MainLayout = ({ children, title, user, router }) => {
                         <Title level={3}>Welcome!</Title>
                         <Text>Sign in for MyCDL</Text>
                     </div>
-                    <Button onClick={()=>router.push('/auth/google')} icon={<GoogleOutlined />} block size='large' >
+                    <Button onClick={()=>{
+                            setLoader(true);
+                            setVisible(false);
+                            router.push('/auth/google');
+                        }} icon={<GoogleOutlined />} block size='large' >
                       Continue with Google
                     </Button>
 
-                    <Button onClick={()=>router.push('/auth/facebook')} block size='large' style={{background:'#1877f2', color:'#fff'}} icon={<FacebookOutlined />} >
+                    <Button onClick={()=>{
+                            setLoader(true);
+                            setVisible(false);
+                            router.push('/auth/facebook');
+                        }} block size='large' style={{background:'#1877f2', color:'#fff'}} icon={<FacebookOutlined />} >
                         Continue with facebook     
                     </Button>
                 </div>

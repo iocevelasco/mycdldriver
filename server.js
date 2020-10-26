@@ -13,6 +13,7 @@ const userController = require('./api/components/user/controller');
 const MemcachedStore = require('connect-memjs')(session);
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
+const axios = require('axios');
 
 const dev = config.dev;
 db(config.dbUrl);
@@ -87,10 +88,10 @@ if (!dev && cluster.isMaster) {
           process.nextTick(function() {
             userController.loginProviderUser(profile.id, profile.emails[0].value, 1)
             .then((fullUser) => {
+              console.log(fullUser);
               return done(null, fullUser);
             })
             .catch(e => {
-              console.log('[ GoogleStrategy ] Usuario no registrado: ' + e);
               newUser = {
                 "name": profile.name.givenName,
                 "lastname": profile.name.familyName,
@@ -116,8 +117,6 @@ if (!dev && cluster.isMaster) {
           return done(null, fullUser);
         })
         .catch(e => {
-          console.log('[profile]', profile)
-          console.log('[ FacebookStrategy ] Usuario no registrado: ' + e);
           newUser = {
             "name": profile.name.givenName,
             "lastname": profile.name.familyName,
@@ -132,7 +131,16 @@ if (!dev && cluster.isMaster) {
       //CONFIGURACION PASSPORT
 
       //AUTENTICACION
-      server.get('/logout', function(req, res) {
+      server.get('/logout', async (req, res) => {
+        try{
+          const header = {
+            headers: { Authorization: `Bearer ${req.session.passport.user.token}` }
+          };
+          await axios.post(config.host + ':' + config.port + '/api/user/logoutall', {}, header);
+        }catch(e){
+          console.log('[ logout ]', e);
+        }
+        
         req.logout();
         res.redirect('/');
       });
@@ -144,16 +152,31 @@ if (!dev && cluster.isMaster) {
       }),
       function(req, res) {});
       server.get('/auth/google/callback', passport.authenticate('google', {
-        failureRedirect: '/'
+        failureRedirect: '/error'
       }),
       function(req, res) {
-        res.redirect('/userProfile');
+        if(req.session.passport.user.typeUser === 1){
+          res.redirect('/userProfile/driver');
+        }else if(req.session.passport.user.typeUser === 2){
+          res.redirect('/userProfile/company/profile');
+        }else{
+          res.redirect('/userProfile');
+        }
       });
 
       server.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
-      server.get('/auth/facebook/callback', passport.authenticate('facebook',
-        { successRedirect: '/userProfile', failureRedirect: '/' }
-      ));
+      server.get('/auth/facebook/callback', passport.authenticate('facebook', { 
+        failureRedirect: '/error' }
+      ),
+      function(req, res) {
+        if(req.session.passport.user.typeUser === 1){
+          res.redirect('/userProfile/driver');
+        }else if(req.session.passport.user.typeUser === 2){
+          res.redirect('/userProfile/company/profile');
+        }else{
+          res.redirect('/userProfile');
+        }
+      });
 
       const restrictAccess = (req, res, next) => {
         if (!req.isAuthenticated()) return res.redirect("/");

@@ -23,8 +23,8 @@ const { Option } = Select;
 
 const { TextArea } = Input;
 
-const DriverUser = (props) => {
-  const { company, onChangeBase, onChangeCompany, newCompany, base} = props;
+const FormUserCompany = (props) => {
+  const { company, onChangeBase, onChangeCompany, newCompany, updateCompany, base} = props;
   const [form] = Form.useForm();
   return (
     <div className='profile-driver'>
@@ -148,11 +148,16 @@ const DriverUser = (props) => {
           </Row>
           <Row gutter={[24]} justify='end' align='middle'>
             <Col span={6}>
-              {!base.id && <Button
+              {!base.id ? <Button
                 onClick={newCompany}
                 type='primary'
                 block
                 size='large'>Save Information</Button>
+                : <Button
+                onClick={updateCompany}
+                type='primary'
+                block
+                size='large'>Update Information</Button>
               }
             </Col>
           </Row>
@@ -162,4 +167,4 @@ const DriverUser = (props) => {
   )
 }
 
-export default DriverUser;
+export default FormUserCompany;

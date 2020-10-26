@@ -14,51 +14,6 @@ async function getUser(filterUser){
     return list;
 }
 
-async function addUser(user){
-    const myUser = new Model(user);
-    await myUser.save();
-    const {_id, typeUser, name, lastname, photo, email, provider_id, password, date} = myUser;
-    const token = await myUser.generateAuthToken();
-    return { _id, typeUser, name, lastname, photo, email, provider_id, password, date, token };
-}
-
-async function updateUser(id, user){
-    const foundUser = await Model.findOne({
-        _id: id
-    });
-
-    if(user.name){
-        foundUser.name = user.name;
-    }
-    if(user.lastname){
-        foundUser.lastname = user.lastname;
-    }
-    if(user.photo){
-        try {
-            if(foundUser.photo){
-                if(fs.unlinkSync("." + foundUser.photo)){
-                    foundUser.photo = user.photo;
-                }
-            }else{
-                foundUser.photo = user.photo;
-            }
-            
-        } catch(err) {
-            console.error(err);
-        }
-    }
-    if(user.email){
-        foundUser.email = user.email;
-    }
-    if(user.password){
-        foundUser.password = user.password;
-    }
-    
-
-    const newUser = await foundUser.save();
-    return newUser;
-}
-
 async function deleteUser(id){
     const foundUser = await Model.findOne({
         _id: id
@@ -186,8 +141,6 @@ async function logoutAll(id){
 
 module.exports = {
     list: getUser,
-    add: addUser,
-    update: updateUser,
     delete: deleteUser,
     login: loginUser,
     logout: logoutUser,

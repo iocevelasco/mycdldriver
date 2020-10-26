@@ -10,8 +10,8 @@ function getCompany(filter){
 function addCompany(company, logo){
     return new Promise((resolve, reject) => {
         if(!company){
-            console.error('[companyController] No company data');
-            reject('[companyController] No company data');
+            console.error('[companyController.addCompany] No company data');
+            reject('[companyController.addCompany] No company data');
             return false;
         }
         const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
@@ -44,6 +44,43 @@ function addCompany(company, logo){
     
 }
 
+function updateCompany(id, company, logo){
+    return new Promise(async (resolve, reject) => {
+        if(!id){
+            reject('[companyController.updateCompany] No user ID');
+            return false;
+        }
+        if(!company){
+            reject('[companyController.updateCompany] No user data');
+            return false;
+        }
+
+        const fullCompany = {
+            tradename: company.tradename,
+            legalNumber: company.legalNumber,
+            areaCode: company.areaCode,
+            phoneNumber: company.phoneNumber,
+            address: company.address,
+            description: company.description,
+            zipCode: company.zipCode
+        };
+        if(logo){
+            const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
+            fullCompany.logo = fileUrl;
+        }
+
+        const user = {
+            name: company.base.name,
+            lastname: company.base.lastname,
+            photo: company.base.photo,
+            company: fullCompany
+        };
+        
+        const result = await store.update(id, user);
+        resolve(result);
+    });
+}
+
 function deleteCompany(id){
     return new Promise(async (resolve, reject) => {
         if(!id){
@@ -63,5 +100,6 @@ function deleteCompany(id){
 module.exports = {
     getCompany,
     addCompany,
+    updateCompany,
     deleteCompany
 }

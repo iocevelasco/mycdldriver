@@ -10,6 +10,7 @@ import mock_ranking from '../mock/ranking.json';
 import mock_jobs from '../mock/job_offerts.json';
 
 
+
 //View components
 import HeaderHome from './home/components/search';
 import OffertJobComp from './home/components/job_offerts';
@@ -47,7 +48,7 @@ const reducer = (state, action) => {
   }
 }
 
-const  Home = ({ user }) => {
+const  Home = ({ user, loading }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const  Home = ({ user }) => {
 
   return (
     <>
-      <MainLayout title='Welcome' user={user}>
+      <MainLayout title='Welcome' user={user} loading={loading}>
         <HeaderHome />
         <WrapperSection row={20} arginTop={0}>
           <CarouselComp carousel_data={state.carousel_data} />

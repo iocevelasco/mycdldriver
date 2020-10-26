@@ -17,7 +17,7 @@ const { TextArea } = Input;
 
 const driverUser = (props) => {
   const [form] = Form.useForm();
-  const { driver, onChangeBase, onChangeDriver, handleDatePicker, newDrivers, base} = props;
+  const { driver, onChangeBase, onChangeDriver, handleDatePicker, newDrivers, updateDriver, base} = props;
   return (
     <div className='profile-driver'>
       <Row justify='center'>
@@ -60,13 +60,13 @@ const driverUser = (props) => {
             </Form.Item>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
-                <Form.Item>
+                <Form.Item label='Birth Date'>
                   <DatePicker
                     size='large'
                     style={{ width: '100%' }}
                     placeholder="Birth Date"
                     value={moment(driver.birthDate)}
-                    defaultPickerValue={moment(driver.birthDate)}
+                    defaultValue={moment(new Date()).format('MM DD YYYY')}
                     onChange={(obj, key) => handleDatePicker(obj, key, 'birthDate')} />
                 </Form.Item>
               </Col>
@@ -94,11 +94,11 @@ const driverUser = (props) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item>
+                <Form.Item label='Experation Date'>
                   <DatePicker
                     size='large'
+                    defaultValue={moment(new Date()).format('MM DD YYYY')}
                     value={moment(driver.expDateDln)}
-                    defaultPickerValue={moment(driver.expDateDln)}
                     placeholder="Experation Date"
                     style={{ width: '100%' }}
                     onChange={(obj, key) => handleDatePicker(obj, key, 'expDateDln')} />
@@ -166,11 +166,16 @@ const driverUser = (props) => {
           </Form.Item>
           <Row gutter={[24]} justify='end' align='middle'>
             <Col span={6}>
-              {!base.id && <Button
+              {!base.id ? <Button
                 onClick={newDrivers}
                 type='primary'
                 block
                 size='large'>Save Information</Button>
+                : <Button
+                onClick={updateDriver}
+                type='primary'
+                block
+                size='large'>Update Information</Button>
               }
             </Col>
           </Row>
