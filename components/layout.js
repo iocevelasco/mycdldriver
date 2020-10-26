@@ -49,14 +49,15 @@ const MainLayout = ({ children, title, user, loading, router }) => {
             photo:photo,
             typeUser: typeUser
         }) 
-    },[user])
+    },[user]);
+    
     useEffect(()=>{
         if(loader){
             document.body.style.overflowY = "hidden"
         }else{
             document.body.style.overflowY = "auto"
         }
-    });
+    },[loading]);
        
     const menu = (
         <Menu style={{width: '200px', float:'right'}}>
