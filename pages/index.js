@@ -48,7 +48,7 @@ const reducer = (state, action) => {
   }
 }
 
-const  Home = ({ user }) => {
+const  Home = ({ user, loading }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const  Home = ({ user }) => {
 
   return (
     <>
-      <MainLayout title='Welcome' user={user}>
+      <MainLayout title='Welcome' user={user} loading={loading}>
         <HeaderHome />
         <WrapperSection row={20} arginTop={0}>
           <CarouselComp carousel_data={state.carousel_data} />

@@ -10,9 +10,9 @@ import Link from 'next/link'
 
 const { Title, Text } = Typography;
 
-const UserProfile = ({ user, ...props }) => {
+const UserProfile = ({ user, loading, ...props }) => {
   return (
-    <MainLayout title='Profile' user={user}>
+    <MainLayout title='Profile' user={user} loading={loading}>
       <WrapperSection row={24} mt={0}>
         <div className="profile-driver__route">
           <div className="title">
