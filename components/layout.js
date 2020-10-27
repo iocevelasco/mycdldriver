@@ -51,7 +51,10 @@ const MainLayout = ({ children, title, user, loading, router }) => {
         }) 
     },[user])
     useEffect(()=>{
-        if(loader){
+        setLoader(loading);
+        if(loading){
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
             document.body.style.overflowY = "hidden"
         }else{
             document.body.style.overflowY = "auto"
