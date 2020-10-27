@@ -64,10 +64,10 @@ const reducer = (state, action) => {
       }
     case types.PROPS_BASE:
       return { ...state, base: action.payload }
-      case types.DATA_DRIVER:
-        return { ...state, driver: action.payload }
-      case types.LOADING:
-        return { ...state, loading: action.payload }
+    case types.DATA_DRIVER:
+      return { ...state, driver: action.payload }
+    case types.LOADING:
+      return { ...state, loading: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -158,7 +158,6 @@ const DriverView = ({ user, ...props }) => {
       dispatch({ type: types.LOADING, payload: true });
       console.log('loader activo', state.loading);
       await axios.patch('/api/driver/' + user._id, fullDriver, header);
-      //dispatch({ type: types.LOADING, payload: false });
       dispatch({ type: types.LOADING, payload: false });
       console.log('loader false 1', state.loading);
       notification['success']({

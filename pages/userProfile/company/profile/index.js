@@ -37,7 +37,7 @@ const types = {
   CREATE_NEW_USER: 'create_new_user',
   PROPS_BASE: 'props_base',
   PROPS_COMPANY: 'props_company',
-  LOADING: 'LOADING',
+  LOADING: 'LOADING'
 }
 
 const reducer = (state, action) => {
@@ -134,7 +134,9 @@ const CompanyProfileView = ({ user, ...props }) => {
     base.typeUser = 2;
     const fullCompany = { base: base, ...company }
     try {
+      dispatch({ type: types.LOADING, payload: true });
       await axios.patch('/api/company/' + user._id, fullCompany, header);
+      dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
         description:
@@ -142,6 +144,7 @@ const CompanyProfileView = ({ user, ...props }) => {
       });
     } catch (err) {
       console.log(err);
+      dispatch({ type: types.LOADING, payload: false });
       notification['error']({
         message: 'error',
         description:
@@ -162,9 +165,7 @@ const CompanyProfileView = ({ user, ...props }) => {
   return (
     <MainLayout title='Profile' user={user} loading={state.loading}>
       <Row>
-        {
-          user.typeUser ? <SideNav typeUser={user.typeUser} /> : null
-        }
+        <SideNav typeUser={user.typeUser} /> 
         <Col span={user.typeUser? 20 : 24}>
           {state.loading && <LoadingComp/>}
           <WrapperSection row={24} mt={0}>
