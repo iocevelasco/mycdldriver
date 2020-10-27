@@ -36,7 +36,8 @@ const initialState = {
 const types = {
   CREATE_NEW_USER: 'create_new_user',
   PROPS_BASE: 'props_base',
-  PROPS_COMPANY: 'props_company'
+  PROPS_COMPANY: 'props_company',
+  LOADING: 'LOADING'
 }
 
 const reducer = (state, action) => {
@@ -45,6 +46,8 @@ const reducer = (state, action) => {
       return { ...state, base: action.payload, loading:false }
     case types.DATA_COMPANY:
       return { ...state, company: action.payload }
+    case types.LOADING:
+      return { ...state, loading: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -130,7 +133,9 @@ const CompanyProfileView = ({ user, ...props }) => {
     base.typeUser = 2;
     const fullCompany = { base: base, ...company }
     try {
+      dispatch({ type: types.LOADING, payload: true });
       await axios.patch('/api/company/' + user._id, fullCompany, header);
+      dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
         description:
@@ -138,6 +143,7 @@ const CompanyProfileView = ({ user, ...props }) => {
       });
     } catch (err) {
       console.log(err);
+      dispatch({ type: types.LOADING, payload: false });
       notification['error']({
         message: 'error',
         description:
