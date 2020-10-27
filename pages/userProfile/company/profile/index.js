@@ -158,9 +158,7 @@ const CompanyProfileView = ({ user, ...props }) => {
   return (
     <MainLayout title='Profile' user={user}>
       <Row>
-        {
-          user.typeUser ? <SideNav typeUser={user.typeUser} /> : null
-        }
+        <SideNav typeUser={user.typeUser} /> 
         <Col span={user.typeUser? 20 : 24}>
           {state.loading && <LoadingComp/>}
           <WrapperSection row={24} mt={0}>
