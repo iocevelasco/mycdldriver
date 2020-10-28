@@ -35,7 +35,8 @@ exports.error = function(req, res, message, status, detail){
 
     res.status(statusCode).send({
         error: 1,
-        mensaje: statusMessage
+        mensaje: statusMessage,
+        detalle: detail
     });
     console.error(detail);
 }

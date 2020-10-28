@@ -230,7 +230,7 @@ router.post('/', storage.single('imageDln'), function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.patch('/:id', auth, storage.single('imageDln'), function (req, res){
+router.patch('/:id', auth(1), storage.single('imageDln'), function (req, res){
     controller.updateDriver(req.params.id, req.body, req.file)
         .then((data) => {
           response.success(req, res, data, 200);

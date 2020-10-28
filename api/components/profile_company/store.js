@@ -27,8 +27,6 @@ async function addCompany(user){
     return {user, company};
 }
 
-
-
 async function updateCompany(id, user){
     let company = user.company;
     const foundUser = await userModel.findOne({
