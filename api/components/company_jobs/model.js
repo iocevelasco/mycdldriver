@@ -35,6 +35,14 @@ const CompanyJobsSchema = mongoose.Schema({
     company: {
         type: Schema.ObjectId,
         ref: 'ProfileCompany',
+    },
+    logo: {
+       type: String,
+       trim: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 });
 
