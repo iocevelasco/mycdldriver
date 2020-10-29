@@ -30,7 +30,8 @@ const { Content, Header } = Layout;
 const MainLayout = ({ children, title, user, loading, router }) => {
     const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
-
+    
+    console.log('loader', loader);
     const [userProps, setUserProps] = useState({ 
         name:'',
         email:'',
@@ -50,6 +51,7 @@ const MainLayout = ({ children, title, user, loading, router }) => {
             typeUser: typeUser
         }) 
     },[user])
+
     useEffect(()=>{
         setLoader(loading);
         if(loading){
@@ -59,7 +61,7 @@ const MainLayout = ({ children, title, user, loading, router }) => {
         }else{
             document.body.style.overflowY = "auto"
         }
-    });
+    },[loading]);
        
     const menu = (
         <Menu style={{width: '200px', float:'right'}}>
@@ -89,7 +91,7 @@ const MainLayout = ({ children, title, user, loading, router }) => {
         </Head>
         <Layout>
             <Header className='header-component'>
-                {loader && <SpinnerComp/>}
+                {loader ? <SpinnerComp/> : null}
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">

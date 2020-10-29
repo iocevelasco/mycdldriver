@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import MainLayout from '../../../components/layout';
+import MainLayout from '../../../../components/layout';
 import {
   Row,
   Col,
@@ -12,8 +12,8 @@ import {
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import FormUserDriver from '../components/FormUserDriver';
-import SideNav from '../components/SideNavAdmin';
+import FormUserDriver from '../../components/FormUserDriver';
+import SideNav from '../../components/SideNavAdmin';
 import { LoadingOutlined } from '@ant-design/icons';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -64,16 +64,16 @@ const reducer = (state, action) => {
       }
     case types.PROPS_BASE:
       return { ...state, base: action.payload }
-    case types.DATA_DRIVER:
-      return { ...state, driver: action.payload }
-    case types.LOADING:
-      return { ...state, loading: action.payload }
+      case types.DATA_DRIVER:
+        return { ...state, driver: action.payload }
+      case types.LOADING:
+        return { ...state, loading: action.payload }
     default:
       throw new Error('Unexpected action');
   }
 }
 
-const DriverView = ({ user, ...props }) => {
+const DriverProfileView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     //Esto carga las props iniciales
@@ -158,6 +158,7 @@ const DriverView = ({ user, ...props }) => {
       dispatch({ type: types.LOADING, payload: true });
       console.log('loader activo', state.loading);
       await axios.patch('/api/driver/' + user._id, fullDriver, header);
+      //dispatch({ type: types.LOADING, payload: false });
       dispatch({ type: types.LOADING, payload: false });
       console.log('loader false 1', state.loading);
       notification['success']({
@@ -219,4 +220,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   )
 }
 
-export default DriverView;
+export default DriverProfileView;

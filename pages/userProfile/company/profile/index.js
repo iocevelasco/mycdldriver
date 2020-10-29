@@ -54,7 +54,6 @@ const reducer = (state, action) => {
 }
 
 const CompanyProfileView = ({ user, ...props }) => {
-  console.log(user)
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -72,9 +71,9 @@ const CompanyProfileView = ({ user, ...props }) => {
       let company = user.company;
       dispatch({ type: types.DATA_COMPANY, payload: company })
     }
+    dispatch({ type: types.LOADING, payload: false });
   }, [user]);
 
-  console.log(['state'], state);
 
   const onChangeBase = (e, key) => {
     let base = state.base;
@@ -107,9 +106,11 @@ const CompanyProfileView = ({ user, ...props }) => {
     const { base, company } = state;
     base.typeUser = 2;
     const fullCompany = { base: base, ...company }
+    dispatch({ type: types.LOADING, payload: true });
     console.log('fullCompany', fullCompany);
     try {
-      const { data } = await axios.post('/api/company', fullCompany);
+      await axios.post('/api/company', fullCompany);
+      dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
         description:
@@ -162,7 +163,7 @@ const CompanyProfileView = ({ user, ...props }) => {
   }
 
   return (
-    <MainLayout title='Profile' user={user}>
+    <MainLayout title='Profile' user={user} loading={state.loading}>
       <Row>
         <SideNav typeUser={user.typeUser} /> 
         <Col span={user.typeUser? 20 : 24}>

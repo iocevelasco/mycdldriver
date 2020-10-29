@@ -77,7 +77,7 @@ router.get('/', function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.delete('/:id', auth, function (req, res) {
+router.delete('/:id', auth(), function (req, res) {
     controller.deleteUser(req.params.id)
         .then(() => {
             response.success(req, res, `Usuario ${req.params.id} eliminado`, 200);
@@ -187,7 +187,7 @@ router.post('/login', async(req, res) => {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
- router.post('/logout', auth, async (req, res) => {
+ router.post('/logout', auth(), async (req, res) => {
     controller.logoutUser(req.user._id, req.token)
     .then((user) => {
         response.success(req, res, user, 200);
@@ -212,7 +212,7 @@ router.post('/login', async(req, res) => {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.post('/logoutall', auth, async(req, res) => {
+router.post('/logoutall', auth(), async(req, res) => {
     controller.logoutAll(req.user._id)
     .then((user) => {
         response.success(req, res, user, 200);
