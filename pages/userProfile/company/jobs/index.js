@@ -19,7 +19,7 @@ import axios from 'axios';
 import WrapperSection from '../../../../components/wrapperSection';
 import SideNav from '../../components/SideNavAdmin';
 import { PlusOutlined } from '@ant-design/icons';
-const { TextArea } = Input;
+//const { TextArea } = Input;
 
 const initialState = {
   loading: false,
