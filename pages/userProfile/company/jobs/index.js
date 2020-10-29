@@ -340,7 +340,9 @@ const Jobs = ({ user }) => {
                   key={ind}
                   actions={[
                     <Button onClick={()=>deleteJob(item._id)} icon={<DeleteOutlined />}>Delete</Button>,
-                    <Button onClick={()=>editJob(item)} icon={<EditOutlined />}>Edit</Button>,
+                    <Button onClick={
+                      ()=>editJob(item),
+                      ()=> dispatch({type:types.SHOW_DRAWER})} icon={<EditOutlined />}>Edit</Button>,
                   ]}
                  >
                   <List.Item.Meta
@@ -360,6 +362,92 @@ const Jobs = ({ user }) => {
             </WrapperSection>
           </Col>
         </Row>
+        <Drawer
+          title={`Edit Job`} 
+          placement="right"
+          closable={true}
+          width={680}
+          onClose={()=> dispatch({type:types.SHOW_DRAWER})}
+          visible={state.visible}>
+       <Form
+                form={form}
+                name="user-driver"
+                initialValues={{ remember: true }}
+                layout='horizontal'>
+                <Form.Item>
+                  <Input
+                    size='large'
+                    placeholder="Name"
+                    value={state.newJob.title}
+                    onChange={(e) => onChangeJob(e, 'title')} />
+                </Form.Item>
+                <Form.Item>
+                  <TextArea
+                    rows={4}
+                    size='large'
+                    placeholder="Description"
+                    value={state.newJob.description}
+                    onChange={(e) => onChangeJob(e, 'description')} />
+                </Form.Item>
+                <Form.Item>
+                  <Input
+                    size='large'
+                    placeholder="City"
+                    value={state.newJob.city}
+                    onChange={(e) => onChangeJob(e, 'city')} />
+                </Form.Item>
+                <Form.Item>
+                  <Radio.Group
+                    value={state.newJob.time}
+                    onChange={(e) => onChangeJob(e, 'time')}>
+                    <Radio value={0}>Part-time</Radio>
+                    <Radio value={1}>Full-time</Radio>
+                    <Radio value={2}>Eventual</Radio>
+                  </Radio.Group>
+                </Form.Item>
+                <Form.Item>
+                {
+                  state.tags.map((tag, index) => {
+                  const tagElem = (
+                    <Tag
+                      className="edit-tag"
+                      key={tag}
+                      closable={index !== 0}
+                      onClose={() => handleClose(tag)}
+                    >
+                      <span>{tag}</span>
+                    </Tag>
+                  );
+                    return tagElem;
+                  })}
+                  {state.inputVisible && (
+                    <Input
+                      ref={saveInputRef}
+                      type="text"
+                      size="large"
+                      value={state.inputValue}
+                      onChange={(e) => handlerTags(e, 'create')}
+                      onPressEnter={handleInputConfirm}
+                      onBlur={handleInputConfirm}
+                    />
+                  )}
+                  {!state.inputVisible && (
+                    <Tag onClick={showInput}>
+                      <PlusOutlined /> New Tag
+                    </Tag>
+                  )}
+                </Form.Item>
+                  <Col span={6}>
+                    <Button
+                      onClick={newCompanyJob}
+                      type='primary'
+                      block
+                      size='large'>Save Information</Button>
+                  </Col>
+                <Form.Item>
+                </Form.Item>
+              </Form>
+        </Drawer>
       </MainLayout >
     </>
   )
