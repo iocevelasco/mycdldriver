@@ -5,15 +5,21 @@ function capitalize(text) {
 }
 
 async function saveTags(tags){
-    let array = await Promise.all(tags.map(async (tag) => { 
-        let element = new TagsModel(tag);
-        const tagEncontrado = await TagsModel.findOneAndUpdate(
-            {name: capitalize(tag.name)},
-            {name: capitalize(element.name)},
-            {upsert: true, new: true, rawResult: true}
-        );
-        return tagEncontrado.value._id;
-    }));
+    let array = [];
+    try{
+        array = await Promise.all(tags.map(async (tag) => { 
+            let element = new TagsModel(tag);
+            const tagEncontrado = await TagsModel.findOneAndUpdate(
+                {name: capitalize(tag.name)},
+                {name: capitalize(element.name)},
+                {upsert: true, new: true, rawResult: true}
+            );
+            return tagEncontrado.value._id;
+        }));
+    }catch(e){
+        console.log(e);
+    }
+    
     return array;
 }
 
@@ -26,7 +32,7 @@ function getJobs(filterCompany){
             };
         }
         result = JobsModel.find(filter)
-            .select("-__v -company")
+            .select("-__v")
             .populate('tags');
 
         resolve(result);
