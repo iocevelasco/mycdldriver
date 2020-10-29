@@ -148,7 +148,6 @@ const Jobs = ({ user }) => {
         break;
       case 'edit':
         const tagsEdit = state.tagsEdit.filter(tag => tag !== removedTag);
-        console.log('tagsEdit', tagsEdit);
         dispatch({ type: types.SET_CURRENT_TAGS, payload: tagsEdit });
         break;
     }
