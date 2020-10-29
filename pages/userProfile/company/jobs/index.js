@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import { withRouter } from 'next/router';
 import axios from 'axios';
-import WrapperSection from '../../../../components/wrapperSection';
+import WrapperSection from '../../../../components/WrapperSection';
 import SideNav from '../../components/SideNavAdmin';
 import { PlusOutlined } from '@ant-design/icons';
 //const { TextArea } = Input;
