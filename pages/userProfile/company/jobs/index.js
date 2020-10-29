@@ -3,6 +3,7 @@ import MainLayout from '../../../../components/layout';
 import {
   Row,
   Col,
+  Button,
   Typography,
   Input,
   Form,
@@ -10,7 +11,8 @@ import {
   Radio,
   Select,
   Tag,
-  Card
+  Card,
+  notification
 } from 'antd';
 import { withRouter } from 'next/router';
 import axios from 'axios';
@@ -40,7 +42,8 @@ const types = {
   ADD_TAGS:'add_tags',
   EDIT_CURRENT_TAG:'edit_current_tags',
   SHOW_INPUT_TAG:'show_input_tag',
-  REMOVE_TAGS:'remove_tags'
+  REMOVE_TAGS:'remove_tags',
+  LOADING: 'LOADING'
 }
 
 const reducer = (state, action) => {
@@ -57,6 +60,8 @@ const reducer = (state, action) => {
       return { ...state, tags:action.payload }
     case types.SHOW_INPUT_TAG:
       return { ...state, inputVisible:action.payload }
+    case types.LOADING:
+      return { ...state, loading: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -66,7 +71,6 @@ const Jobs = ({ user }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  console.log('state', state.newJob);
 
 
   const onChangeJob = (e, key) => {
@@ -115,6 +119,66 @@ const Jobs = ({ user }) => {
     } })
   };
 
+  const newCompanyJob = async () => {
+    const { newJob, tags } = state;
+    let tagsJob = tags.map((tag)=>{
+      return {name: tag}
+    });
+    newJob.tags = tagsJob;
+    console.log('Job completo', newJob);
+    dispatch({ type: types.LOADING, payload: true });
+    try {
+      const header = {
+        headers: { Authorization: `Bearer ${user.token}` }
+      };
+      const result = await axios.post('/api/company/jobs', newJob, header);
+      console.log(result);
+      dispatch({ type: types.LOADING, payload: false });
+      notification['success']({
+        message: 'Success',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+    } catch (err) {
+      console.log(err);
+      notification['error']({
+        message: 'error',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+    }
+  };
+
+  const updateCompanyJob = async () => {
+    const { newJob, tags } = state;
+    let tagsJob = tags.map((tag)=>{
+      return {name: tag}
+    });
+    newJob.tags = tagsJob;
+    console.log('Job completo', newJob);
+    dispatch({ type: types.LOADING, payload: true });
+    try {
+      const header = {
+        headers: { Authorization: `Bearer ${user.token}` }
+      };
+      const result = await axios.patch('/api/company/jobs/5f9a3b17e1a4b5113051b10b', newJob, header);
+      console.log(result);
+      dispatch({ type: types.LOADING, payload: false });
+      notification['success']({
+        message: 'Success',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+    } catch (err) {
+      console.log(err);
+      notification['error']({
+        message: 'error',
+        description:
+          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+      });
+    }
+  };
+
   const stylesWrapper = {
     marginTop:16,
   }
@@ -136,7 +200,7 @@ const Jobs = ({ user }) => {
                     size='large'
                     placeholder="Name"
                     value={state.newJob.title}
-                    onChange={(e) => onChangeJob(e, 'name')} />
+                    onChange={(e) => onChangeJob(e, 'title')} />
                 </Form.Item>
                 <Form.Item>
                   <TextArea
@@ -193,6 +257,15 @@ const Jobs = ({ user }) => {
                       <PlusOutlined /> New Tag
                     </Tag>
                   )}
+                </Form.Item>
+                  <Col span={6}>
+                    <Button
+                      onClick={updateCompanyJob}
+                      type='primary'
+                      block
+                      size='large'>Save Information</Button>
+                  </Col>
+                <Form.Item>
                 </Form.Item>
               </Form>
             </WrapperSection>
