@@ -31,7 +31,6 @@ const MainLayout = ({ children, title, user, loading, router }) => {
     const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
     
-    console.log('loader', loader);
     const [userProps, setUserProps] = useState({ 
         name:'',
         email:'',

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import MainLayout from '../../../../components/layout';
 import {
   Row,
@@ -32,45 +32,69 @@ const initialState = {
     city: '',
     time: '',
   },
+  editJob: {
+    _id: '',
+    title: '',
+    description: '',
+    city: '',
+    time: '',
+  },
   tags: [],
+  tagsEdit: [],
   inputVisible: false,
+  inputEditVisible: false,
   inputValue: '',
   editInputIndex: -1,
   editInputValue: '',
   jobByCompany:[],
-  visible:true
+  visible:false
 }
 
 const types = {
   JOB_DATA: 'carousel_data',
-  HANDLER_TAGS:'handler_tag',
-  ADD_TAGS:'add_tags',
-  EDIT_CURRENT_TAG:'edit_current_tags',
-  SHOW_INPUT_TAG:'show_input_tag',
+  JOB_EDIT_DATA: 'JOB_EDIT_DATA',
+  HANDLER_TAGS:'HANDLER_TAGS',
+  ADD_TAGS:'ADD_TAGS',
+  ADD_CURRENT_TAGS:'ADD_CURRENT_TAGS',
+  EDIT_CURRENT_TAG:'EDIT_CURRENT_TAG',
+  SHOW_INPUT_TAG:'SHOW_INPUT_TAG',
+  SHOW_INPUT_TAG_EDIT:'SHOW_INPUT_TAG_EDIT',
   REMOVE_TAGS:'remove_tags',
   LOADING: 'LOADING',
   GET_JOBS: 'GET_JOBS',
-  SHOW_DRAWER:'SHOW_DRAWER'
+  EDIT_JOB: 'EDIT_JOB',
+  SHOW_DRAWER:'SHOW_DRAWER',
+  SET_CURRENT_TAGS: 'SET_CURRENT_TAGS'
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
     case types.JOB_DATA:
-      return { ...state, base: action.payload, loading: false }
+      return { ...state, newJob: action.payload, loading: false }
+    case types.JOB_EDIT_DATA:
+      return { ...state, editJob: action.payload, loading: false }
     case types.HANDLER_TAGS:
       return { ...state, inputValue:action.payload }
     case types.EDIT_CURRENT_TAG:
       return { ...state, editInputValue:action.payload }
     case types.ADD_TAGS:
       return { ...state, ...action.payload}
+    case types.ADD_CURRENT_TAGS:
+      return { ...state, ...action.payload}
+    case types.SET_CURRENT_TAGS:
+      return { ...state, tagsEdit: action.payload}
     case types.REMOVE_TAGS:
       return { ...state, tags:action.payload }
     case types.SHOW_INPUT_TAG:
       return { ...state, inputVisible:action.payload }
+    case types.SHOW_INPUT_TAG_EDIT:
+      return { ...state, inputEditVisible:action.payload }
     case types.LOADING:
       return { ...state, loading: action.payload }
     case types.GET_JOBS:
       return { ...state, jobByCompany: action.payload, loading: false }
+    case types.EDIT_JOB:
+      return { ...state, editJob: action.payload }
     case types.SHOW_DRAWER:
       return { ...state, visible:!state.visible }
     default:
@@ -90,13 +114,11 @@ const Jobs = ({ user }) => {
   useEffect(()=>{
     fetchJobPositionData();
   },[])
-  console.log('state', state);
   
   const fetchJobPositionData = async () => {
     try{
-      const { data } = await axios.get('/api/company/jobs/private', header);
-      dispatch({ type: types.GET_JOBS, payload: data.mensaje });
-      
+      const {data} = await axios.get('/api/company/jobs/private', header);
+      dispatch({ type: types.GET_JOBS, payload: data.data });
     }catch(err){
       console.log(err);
     }
@@ -110,25 +132,51 @@ const Jobs = ({ user }) => {
     dispatch({ type: types.JOB_DATA, payload: newJob });
   }
 
-  const handleClose = removedTag => {
-    const tags = state.tags.filter(tag => tag !== removedTag);
-    dispatch({ type: types.ADD_TAGS, payload: tags });
+  const onChangeEditJob = (e, key) => {
+    let editJob = state.editJob;
+    let value = "";
+    value = e.target.value;
+    editJob[key] = value;
+    dispatch({ type: types.JOB_EDIT_DATA, payload: editJob });
+  }
+
+  const handleClose = (removedTag, key) => {
+    switch(key){
+      case 'create':
+        const tags = state.tags.filter(tag => tag !== removedTag);
+        dispatch({ type: types.ADD_TAGS, payload: tags });
+        break;
+      case 'edit':
+        const tagsEdit = state.tagsEdit.filter(tag => tag !== removedTag);
+        dispatch({ type: types.ADD_CURRENT_TAGS, payload: tagsEdit });
+        break;
+    }
   };
 
   const handlerTags = (e, key) => {
-    if(key == 'create'){
-      return dispatch({ type: types.HANDLER_TAGS, payload: e.target.value });
+    switch(key){
+      case 'create':
+        return dispatch({ type: types.HANDLER_TAGS, payload: e.target.value });
+      case 'edit':
+        return dispatch({ type: types.EDIT_CURRENT_TAG, payload: e.target.value });
+      default:
+        return dispatch({ type: types.HANDLER_TAGS, payload: e.target.value });
     }
   }
 
-  const showInput = () => {
-    dispatch({ type: types.SHOW_INPUT_TAG, payload: true });
+  const showInput = (key) => {
+    switch(key){
+      case 'create':
+        dispatch({ type: types.SHOW_INPUT_TAG, payload: true });
+        break;
+      case 'edit': 
+        dispatch({ type: types.SHOW_INPUT_TAG_EDIT, payload: true });
+        break;
+      default: 
+        dispatch({ type: types.SHOW_INPUT_TAG, payload: true });
+        break;
+    }
   };
-
-  const handleInputChange = e => {
-    this.setState({ inputValue: e.target.value });
-  };
-
 
   const saveInputRef = input => {
     input = input;
@@ -145,6 +193,21 @@ const Jobs = ({ user }) => {
       tags,
       inputVisible: false,
       inputValue: '',
+    } })
+  };
+
+  const handleInputEditConfirm = () => {
+    const { editInputValue } = state;
+    let { tagsEdit } = state;
+    console.log('editInputValue', editInputValue);
+
+    if (editInputValue && tagsEdit.indexOf(editInputValue) === -1) {
+      tagsEdit = [...tagsEdit, editInputValue];
+    }console.log('tagsEdit', tagsEdit);
+    dispatch({ type: types.ADD_CURRENT_TAGS, payload:{
+      tagsEdit,
+      inputEditVisible: false,
+      editInputValue: '',
     } })
   };
 
@@ -169,7 +232,14 @@ const Jobs = ({ user }) => {
   };
   
   const editJob = (job) => {
-
+    try{
+      const tagsEdit = job.tags.map((tag)=> tag.name);
+      dispatch({type: types.EDIT_JOB, payload:job});
+      dispatch({type: types.SET_CURRENT_TAGS, payload: tagsEdit });
+      dispatch({type: types.SHOW_DRAWER});
+    }catch(e){
+      console.log(e);
+    }
   }
 
   const newCompanyJob = async () => {
@@ -200,14 +270,15 @@ const Jobs = ({ user }) => {
   };
 
   const updateCompanyJob = async () => {
-    const { newJob, tags } = state;
-    let tagsJob = tags.map((tag)=>{
+    const { editJob, tagsEdit } = state;
+    let tagsJob = tagsEdit.map((tag)=>{
       return {name: tag}
     });
-    newJob.tags = tagsJob;
+    editJob.tags = tagsJob;
+    dispatch({type: types.SHOW_DRAWER});
     dispatch({ type: types.LOADING, payload: true });
     try {
-      const result = await axios.patch('/api/company/jobs/5f9a3b17e1a4b5113051b10b', newJob, header);
+      await axios.patch('/api/company/jobs/' + editJob._id, editJob, header);
       fetchJobPositionData();
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({
@@ -285,7 +356,7 @@ const Jobs = ({ user }) => {
                       className="edit-tag"
                       key={tag}
                       closable={index !== 0}
-                      onClose={() => handleClose(tag)}
+                      onClose={() => handleClose(tag, 'create')}
                     >
                       <span>{tag}</span>
                     </Tag>
@@ -304,7 +375,7 @@ const Jobs = ({ user }) => {
                     />
                   )}
                   {!state.inputVisible && (
-                    <Tag onClick={showInput}>
+                    <Tag onClick={() => showInput('create')}>
                       <PlusOutlined /> New Tag
                     </Tag>
                   )}
@@ -340,9 +411,7 @@ const Jobs = ({ user }) => {
                   key={ind}
                   actions={[
                     <Button onClick={()=>deleteJob(item._id)} icon={<DeleteOutlined />}>Delete</Button>,
-                    <Button onClick={
-                      ()=>editJob(item),
-                      ()=> dispatch({type:types.SHOW_DRAWER})} icon={<EditOutlined />}>Edit</Button>,
+                    <Button onClick={()=>editJob(item)} icon={<EditOutlined />}>Edit</Button>,
                   ]}
                  >
                   <List.Item.Meta
@@ -378,28 +447,28 @@ const Jobs = ({ user }) => {
                   <Input
                     size='large'
                     placeholder="Name"
-                    value={state.newJob.title}
-                    onChange={(e) => onChangeJob(e, 'title')} />
+                    value={state.editJob.title}
+                    onChange={(e) => onChangeEditJob(e, 'title')} />
                 </Form.Item>
                 <Form.Item>
                   <TextArea
                     rows={4}
                     size='large'
                     placeholder="Description"
-                    value={state.newJob.description}
-                    onChange={(e) => onChangeJob(e, 'description')} />
+                    value={state.editJob.description}
+                    onChange={(e) => onChangeEditJob(e, 'description')} />
                 </Form.Item>
                 <Form.Item>
                   <Input
                     size='large'
                     placeholder="City"
-                    value={state.newJob.city}
-                    onChange={(e) => onChangeJob(e, 'city')} />
+                    value={state.editJob.city}
+                    onChange={(e) => onChangeEditJob(e, 'city')} />
                 </Form.Item>
                 <Form.Item>
                   <Radio.Group
-                    value={state.newJob.time}
-                    onChange={(e) => onChangeJob(e, 'time')}>
+                    value={state.editJob.time}
+                    onChange={(e) => onChangeEditJob(e, 'time')}>
                     <Radio value={0}>Part-time</Radio>
                     <Radio value={1}>Full-time</Radio>
                     <Radio value={2}>Eventual</Radio>
@@ -407,39 +476,39 @@ const Jobs = ({ user }) => {
                 </Form.Item>
                 <Form.Item>
                 {
-                  state.tags.map((tag, index) => {
+                  state.tagsEdit.map((tag, index) => {
                   const tagElem = (
                     <Tag
                       className="edit-tag"
                       key={tag}
                       closable={index !== 0}
-                      onClose={() => handleClose(tag)}
+                      onClose={() => handleClose(tag, 'edit')}
                     >
                       <span>{tag}</span>
                     </Tag>
                   );
                     return tagElem;
                   })}
-                  {state.inputVisible && (
+                  {state.inputEditVisible && (
                     <Input
                       ref={saveInputRef}
                       type="text"
                       size="large"
-                      value={state.inputValue}
-                      onChange={(e) => handlerTags(e, 'create')}
-                      onPressEnter={handleInputConfirm}
-                      onBlur={handleInputConfirm}
+                      value={state.editInputValue}
+                      onChange={(e) => handlerTags(e, 'edit')}
+                      onPressEnter={handleInputEditConfirm}
+                      onBlur={handleInputEditConfirm}
                     />
                   )}
-                  {!state.inputVisible && (
-                    <Tag onClick={showInput}>
+                  {!state.inputEditVisible && (
+                    <Tag onClick={() => showInput('edit')}>
                       <PlusOutlined /> New Tag
                     </Tag>
                   )}
                 </Form.Item>
                   <Col span={6}>
                     <Button
-                      onClick={newCompanyJob}
+                      onClick={updateCompanyJob}
                       type='primary'
                       block
                       size='large'>Save Information</Button>
