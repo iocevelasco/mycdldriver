@@ -148,7 +148,8 @@ const Jobs = ({ user }) => {
         break;
       case 'edit':
         const tagsEdit = state.tagsEdit.filter(tag => tag !== removedTag);
-        dispatch({ type: types.ADD_CURRENT_TAGS, payload: tagsEdit });
+        console.log('tagsEdit', tagsEdit);
+        dispatch({ type: types.SET_CURRENT_TAGS, payload: tagsEdit });
         break;
     }
   };
@@ -199,11 +200,10 @@ const Jobs = ({ user }) => {
   const handleInputEditConfirm = () => {
     const { editInputValue } = state;
     let { tagsEdit } = state;
-    console.log('editInputValue', editInputValue);
 
     if (editInputValue && tagsEdit.indexOf(editInputValue) === -1) {
       tagsEdit = [...tagsEdit, editInputValue];
-    }console.log('tagsEdit', tagsEdit);
+    }
     dispatch({ type: types.ADD_CURRENT_TAGS, payload:{
       tagsEdit,
       inputEditVisible: false,
