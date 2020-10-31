@@ -27,6 +27,7 @@ import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 const { Text, Title } = Typography
 const initialState = {
   loading: false,
+  loadingJobsList:true,
   newJob: {
     title: '',
     description: '',
@@ -52,7 +53,7 @@ const initialState = {
 }
 
 const types = {
-  JOB_DATA: 'carousel_data',
+  JOB_DATA: 'JOB_DATA',
   JOB_EDIT_DATA: 'JOB_EDIT_DATA',
   HANDLER_TAGS:'HANDLER_TAGS',
   ADD_TAGS:'ADD_TAGS',
@@ -65,7 +66,8 @@ const types = {
   GET_JOBS: 'GET_JOBS',
   EDIT_JOB: 'EDIT_JOB',
   SHOW_DRAWER:'SHOW_DRAWER',
-  SET_CURRENT_TAGS: 'SET_CURRENT_TAGS'
+  SET_CURRENT_TAGS: 'SET_CURRENT_TAGS',
+  LOADING_GET_JOBS:'LOADING_GET_JOBS'
 }
 
 const reducer = (state, action) => {
@@ -93,11 +95,13 @@ const reducer = (state, action) => {
     case types.LOADING:
       return { ...state, loading: action.payload }
     case types.GET_JOBS:
-      return { ...state, jobByCompany: action.payload, loading: false }
+      return { ...state, jobByCompany: action.payload, loadingJobsList: false, loading:false }
     case types.EDIT_JOB:
       return { ...state, editJob: action.payload }
     case types.SHOW_DRAWER:
       return { ...state, visible:!state.visible }
+    case types.LOADING_GET_JOBS:
+      return { ...state, loadingJobsList:!state.loadingJobsList }
     default:
       throw new Error('Unexpected action');
   }
@@ -118,6 +122,7 @@ const CompanyJobView = ({ user }) => {
   
   const fetchJobPositionData = async () => {
     try{
+      dispatch({ type: types.LOADING_GET_JOBS});
       const {data} = await axios.get('/api/company/jobs/private', header);
       dispatch({ type: types.GET_JOBS, payload: data.data });
     }catch(err){
@@ -220,14 +225,14 @@ const CompanyJobView = ({ user }) => {
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Done! the position has been deleted."
       });
     } catch (err) {
       console.log(err);
       notification['error']({
         message: 'error',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Sorry! We couldn't delete this position, please try again."
       });
     }
   };
@@ -256,14 +261,14 @@ const CompanyJobView = ({ user }) => {
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Success ! Your position has been created"
       });
     } catch (err) {
       console.log(err);
       notification['error']({
         message: 'error',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Sorry! We couldn't create this position, please try again. "
       });
     }
   };
@@ -283,14 +288,14 @@ const CompanyJobView = ({ user }) => {
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Success ! Your position has been edited correctly"
       });
     } catch (err) {
       console.log(err);
       notification['error']({
         message: 'error',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Sorry! We couldn't save changes, please try again"
       });
     }
   };
@@ -404,6 +409,8 @@ const CompanyJobView = ({ user }) => {
             <List
               itemLayout="vertical"
               size="large"
+              loading={state.loadingJobsList}
+              rowKey='_id'
               pagination={{
                 onChange: page => {
                   console.log(page);
@@ -422,9 +429,16 @@ const CompanyJobView = ({ user }) => {
                     avatar={<Avatar size={80} shape='square' src='https://www.flaticon.com/svg/static/icons/svg/664/664468.svg' />}
                     title={<a href={item.href}>{item.title}</a>}
                     description={
-                      <div>
+                      <div className='list-job-container'>
                        <Text strong> {item.city} </Text>
                        <Text> {item.description}</Text>
+                       <div>
+                       {
+                         item.tags.map((e,i)=>{
+                           return <Tag> {e.name} </Tag>
+                          })
+                        }
+                        </div>
                       </div>
                       }
                   />
