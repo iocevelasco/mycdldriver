@@ -15,7 +15,8 @@ import {
   List,
   notification,
   Avatar,
-  Drawer
+  Drawer,
+  Divider
 } from 'antd';
 import { withRouter } from 'next/router';
 import axios from 'axios';
@@ -23,7 +24,7 @@ import WrapperSection from '../../components/WrapperSection';
 import SideNav from '../../components/SideNavAdmin';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
-const { Text } = Typography
+const { Text, Title } = Typography
 const initialState = {
   loading: false,
   newJob: {
@@ -252,8 +253,6 @@ const CompanyJobView = ({ user }) => {
     try {
       await axios.post('/api/company/jobs', newJob, header);
       fetchJobPositionData();
-
-      dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
         description:
@@ -309,9 +308,14 @@ const CompanyJobView = ({ user }) => {
       <MainLayout title='Jobs' user={user} loading={state.loading}>
         <Row>
           <SideNav typeUser={user.typeUser} /> 
-          <Col span={20}>
+          <Col span={20} className="profile-company__jobs">
              {/* // CRUM JOBS */}
-            <WrapperSection row={12} styles={wrapperForm}>
+            <WrapperSection row={20} styles={wrapperForm}>
+              <div className="title" >
+                <Title level={3}> Create and Edit your position </Title>
+                <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
+              </div>
+              <Divider/>
               <Form
                 form={form}
                 name="user-driver"
@@ -320,7 +324,7 @@ const CompanyJobView = ({ user }) => {
                 <Form.Item>
                   <Input
                     size='large'
-                    placeholder="Name"
+                    placeholder="Title/ Position name"
                     value={state.newJob.title}
                     onChange={(e) => onChangeJob(e, 'title')} />
                 </Form.Item>
@@ -328,7 +332,7 @@ const CompanyJobView = ({ user }) => {
                   <TextArea
                     rows={4}
                     size='large'
-                    placeholder="Description"
+                    placeholder="Job Description"
                     value={state.newJob.description}
                     onChange={(e) => onChangeJob(e, 'description')} />
                 </Form.Item>
@@ -367,7 +371,8 @@ const CompanyJobView = ({ user }) => {
                     <Input
                       ref={saveInputRef}
                       type="text"
-                      size="large"
+                      size="small"
+                      className="tag-input"
                       value={state.inputValue}
                       onChange={(e) => handlerTags(e, 'create')}
                       onPressEnter={handleInputConfirm}
@@ -375,7 +380,7 @@ const CompanyJobView = ({ user }) => {
                     />
                   )}
                   {!state.inputVisible && (
-                    <Tag onClick={() => showInput('create')}>
+                    <Tag className="site-tag-plus" onClick={() => showInput('create')}>
                       <PlusOutlined /> New Tag
                     </Tag>
                   )}
@@ -385,7 +390,7 @@ const CompanyJobView = ({ user }) => {
                       onClick={newCompanyJob}
                       type='primary'
                       block
-                      size='large'>Save Information</Button>
+                      size='large'>Create Job position</Button>
                   </Col>
                 <Form.Item>
                 </Form.Item>
@@ -412,10 +417,9 @@ const CompanyJobView = ({ user }) => {
                   actions={[
                     <Button onClick={()=>deleteJob(item._id)} icon={<DeleteOutlined />}>Delete</Button>,
                     <Button onClick={()=>editJob(item)} icon={<EditOutlined />}>Edit</Button>,
-                  ]}
-                 >
+                  ]}>
                   <List.Item.Meta
-                    avatar={<Avatar size={80} src={item.avatar} />}
+                    avatar={<Avatar size={80} shape='square' src='https://www.flaticon.com/svg/static/icons/svg/664/664468.svg' />}
                     title={<a href={item.href}>{item.title}</a>}
                     description={
                       <div>
@@ -438,7 +442,7 @@ const CompanyJobView = ({ user }) => {
           width={680}
           onClose={()=> dispatch({type:types.SHOW_DRAWER})}
           visible={state.visible}>
-       <Form
+            <Form
                 form={form}
                 name="user-driver"
                 initialValues={{ remember: true }}
