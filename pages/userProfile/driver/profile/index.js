@@ -124,7 +124,7 @@ const DriverProfileView = ({ user, ...props }) => {
     else data[key] = date;
     dispatch({ type: types.DATA_DRIVER, payload: data });
   }
-  console.log('loading',state.loading);
+
   const newDrivers = async () => {
     const { base, driver } = state;
     const fullDriver = { base: base, ...driver };
@@ -156,11 +156,9 @@ const DriverProfileView = ({ user, ...props }) => {
     const fullDriver = { base: base, ...state.driver };
     try { 
       dispatch({ type: types.LOADING, payload: true });
-      console.log('loader activo', state.loading);
       await axios.patch('/api/driver/' + user._id, fullDriver, header);
       //dispatch({ type: types.LOADING, payload: false });
       dispatch({ type: types.LOADING, payload: false });
-      console.log('loader false 1', state.loading);
       notification['success']({
         message: 'Success',
         description:

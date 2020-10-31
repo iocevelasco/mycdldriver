@@ -10,9 +10,11 @@ import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
 import LoadingComp from '../../../../components/loading';
+import { withRouter } from 'next/router';
 
 const initialState = {
   loading:true,
+  userLogin:false,
   base: {
     name: '',
     lastname: '',
@@ -37,7 +39,8 @@ const types = {
   CREATE_NEW_USER: 'create_new_user',
   PROPS_BASE: 'props_base',
   PROPS_COMPANY: 'props_company',
-  LOADING: 'LOADING'
+  LOADING: 'LOADING',
+  LOGIN_SUCCCESS: 'LOGIN_SUCCCESS'
 }
 
 const reducer = (state, action) => {
@@ -48,6 +51,8 @@ const reducer = (state, action) => {
       return { ...state, company: action.payload }
     case types.LOADING:
       return { ...state, loading: action.payload }
+    case types.LOGIN_SUCCCESS:
+      return { ...state, userLogin: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -55,6 +60,12 @@ const reducer = (state, action) => {
 
 const CompanyProfileView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  
+  const configSection = {
+    title:'Profile',
+    user:{user},
+    loading:state.loading,
+  }
 
   useEffect(() => {
     //Esto carga las props iniciales
@@ -107,10 +118,12 @@ const CompanyProfileView = ({ user, ...props }) => {
     base.typeUser = 2;
     const fullCompany = { base: base, ...company }
     dispatch({ type: types.LOADING, payload: true });
-    console.log('fullCompany', fullCompany);
     try {
       await axios.post('/api/company', fullCompany);
       dispatch({ type: types.LOADING, payload: false });
+      dispatch({ type: types.LOGIN_SUCCCESS, payload: true });
+      window.location.reload(false);
+      props.router.push('/userProfile/company/profile');
       notification['success']({
         message: 'Success',
         description:
@@ -163,9 +176,9 @@ const CompanyProfileView = ({ user, ...props }) => {
   }
 
   return (
-    <MainLayout title='Profile' user={user} loading={false}>
+    <MainLayout {...configSection}>
       <Row>
-        <SideNav typeUser={user.typeUser} /> 
+       <SideNav typeUser={user.typeUser} currentLocation='1' />
         <Col span={user.typeUser? 20 : 24}>
           {state.loading && <LoadingComp/>}
           <WrapperSection row={24} mt={0}>
@@ -196,4 +209,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
 }
 
 
-export default CompanyProfileView;
+export default withRouter(CompanyProfileView);

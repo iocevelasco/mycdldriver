@@ -25,15 +25,21 @@ const reducer = (state, action) => {
 
 const ServiceCompanyView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  
+  const configSection = {
+    title:'Services',
+    user:{user},
+    loading:state.loading,
+  }
 
   useEffect(() => {
     dispatch({ type: types.TEAM_DATA });
   }, [user]);
 
   return (
-    <MainLayout title='Services' user={user}  loading={state.loading}>
+    <MainLayout {...configSection}>
       <Row>
-       {user.typeUser ? <SideNav typeUser={user.typeUser} /> : null}
+       {user.typeUser ? <SideNav typeUser={user.typeUser} currentLocation='3' /> : null}
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
               <BuildSection/>

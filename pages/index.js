@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import MainLayout from '../components/layout';
 import { Row, Col, Typography, Input, Select } from 'antd';
-import { withRouter } from 'next/router'
+import { withRouter } from 'next/router';
 import CarouselComp from '../components/carousel';
 import axios from 'axios';
 

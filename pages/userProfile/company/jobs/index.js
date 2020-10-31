@@ -7,9 +7,7 @@ import {
   Typography,
   Input,
   Form,
-  DatePicker,
   Radio,
-  Select,
   Tag,
   Card,
   List,
@@ -109,6 +107,14 @@ const reducer = (state, action) => {
 
 const CompanyJobView = ({ user }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  
+  const configSection = {
+    title:'Jobs',
+    user:{user},
+    loading:state.loading,
+    currentLocation:'4'
+  }
+
   const [form] = Form.useForm();
   const { TextArea } = Input;
   
@@ -310,14 +316,14 @@ const CompanyJobView = ({ user }) => {
 
   return (
     <>
-      <MainLayout title='Jobs' user={user} loading={state.loading}>
+      <MainLayout {...configSection}>
         <Row>
           <SideNav typeUser={user.typeUser} /> 
           <Col span={20} className="profile-company__jobs">
              {/* // CRUM JOBS */}
             <WrapperSection row={20} styles={wrapperForm}>
               <div className="title" >
-                <Title level={3}> Create and Edit your position </Title>
+                <Title level={3}> Create and edit your position </Title>
                 <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
               </div>
               <Divider/>

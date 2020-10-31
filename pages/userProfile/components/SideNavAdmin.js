@@ -9,7 +9,8 @@ import {
 } from '@ant-design/icons';
 import Link from 'next/link';
 
-const SideNavAdmin = ({ typeUser }) => {
+const SideNavAdmin = ({ typeUser, currentLocation }) => {
+  console.log('typeUser',typeUser);
   const [menuOptions, setOptions] = useState([]);
 
   useEffect(() => {
@@ -62,13 +63,12 @@ const SideNavAdmin = ({ typeUser }) => {
       icon: <DashboardOutlined />
     },
   ]
-  if (typeUser) {
     return (
       <Col span={4}
         style={{ background: '#001529' }}>
         <Menu
           style={{ width: '100%' }}
-          defaultSelectedKeys={['0']}
+          defaultSelectedKeys={[currentLocation]}
           mode='vertical'
           theme='dark'>
           {
@@ -84,9 +84,6 @@ const SideNavAdmin = ({ typeUser }) => {
         </Menu>
       </Col>
     )
-  } else {
-    return null
-  }
 };
 
 export default SideNavAdmin;

@@ -24,6 +24,7 @@ const reducer = (state, action) => {
 }
 
 const ServiceCompanyView = ({ user, ...props }) => {
+  console.log('user, index',user);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -33,7 +34,9 @@ const ServiceCompanyView = ({ user, ...props }) => {
   return (
     <MainLayout title='Team' user={user}  loading={state.loading}>
       <Row>
-       {user.typeUser ? <SideNav typeUser={user.typeUser} /> : null}
+       <SideNav 
+       currentLocation='0'
+       typeUser={user.typeUser} /> 
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
               <BuildSection/>
