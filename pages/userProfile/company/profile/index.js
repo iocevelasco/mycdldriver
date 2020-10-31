@@ -163,7 +163,7 @@ const CompanyProfileView = ({ user, ...props }) => {
   }
 
   return (
-    <MainLayout title='Profile' user={user} loading={state.loading}>
+    <MainLayout title='Profile' user={user} loading={false}>
       <Row>
         <SideNav typeUser={user.typeUser} /> 
         <Col span={user.typeUser? 20 : 24}>

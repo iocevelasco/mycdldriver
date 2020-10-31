@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import propTypes from 'prop-types';
 import { withRouter } from 'next/router';
 import Head from 'next/head'
 import Footer from './footer';
@@ -158,4 +159,13 @@ const MainLayout = ({ children, title, user, loading, router }) => {
     </>
     )
 }
+
+MainLayout.propTypes = {
+  children: propTypes.array.isRequired,
+  title: propTypes.string.isRequired,
+  user: propTypes.object,
+  loading: propTypes.bool.isRequired,
+  router :propTypes.object
+}
+
 export default withRouter(MainLayout);
