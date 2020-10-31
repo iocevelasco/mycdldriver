@@ -102,7 +102,7 @@ const reducer = (state, action) => {
   }
 }
 
-const Jobs = ({ user }) => {
+const CompanyJobView = ({ user }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -522,4 +522,4 @@ const Jobs = ({ user }) => {
   )
 }
 
-export default withRouter(Jobs);
+export default withRouter(CompanyJobView);

@@ -15,6 +15,8 @@ module.exports = withLess({
     modifyVars: themeVariables, // antd custom color
   },
   webpack: (config, { isServer }) => {
+    console.log(config)
+    config.resolve.alias['components'] = path.resolve('./components')
     if (isServer) {
       const antStyles = /antd\/.*?\/style.*?/
       const origExternals = [...config.externals]

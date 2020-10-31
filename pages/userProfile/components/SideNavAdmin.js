@@ -34,7 +34,7 @@ const SideNavAdmin = ({ typeUser }) => {
       icon: <TeamOutlined />
     },
     {
-      path: '/userProfile/company/service',
+      path: '/userProfile/company/services',
       section_name: 'Services',
       icon: <ToolOutlined />
     },
