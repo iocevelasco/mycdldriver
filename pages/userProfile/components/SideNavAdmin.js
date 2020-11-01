@@ -10,7 +10,7 @@ import {
 import Link from 'next/link';
 
 const SideNavAdmin = ({ typeUser, currentLocation }) => {
-  console.log('typeUser',typeUser);
+
   const [menuOptions, setOptions] = useState([]);
 
   useEffect(() => {
@@ -63,6 +63,7 @@ const SideNavAdmin = ({ typeUser, currentLocation }) => {
       icon: <DashboardOutlined />
     },
   ]
+  if (typeUser) {
     return (
       <Col span={4}
         style={{ background: '#001529' }}>
@@ -84,6 +85,9 @@ const SideNavAdmin = ({ typeUser, currentLocation }) => {
         </Menu>
       </Col>
     )
+  } else {
+    return null
+  }
 };
 
 export default SideNavAdmin;
