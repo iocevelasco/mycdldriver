@@ -1,14 +1,15 @@
 import React, { useEffect, useReducer } from 'react';
 import MainLayout from '../components/layout';
-import { Row, Col, Typography, Input, Select } from 'antd';
+import { Row, Col, Typography, Input, Select, Button, Tooltip } from 'antd';
+import {DeleteOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import CarouselComp from '../components/carousel';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
 //mock
 import mock_ranking from '../mock/ranking.json';
 import mock_jobs from '../mock/job_offerts.json';
-
 
 
 //View components
@@ -48,10 +49,25 @@ const reducer = (state, action) => {
   }
 }
 
-const  Home = ({ user, loading }) => {
+function mapStateToProps(state){
+  return {
+      user: state.user
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    handlerUserProps: data => {
+      dispatch({ type: 'USER_DATA', payload: data });
+    },
+  }
+};
+
+const  Home = ({ user, loading, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    props.handlerUserProps(user);
     fetchData();
     fetchPosition();
   }, [])
@@ -105,6 +121,11 @@ const  Home = ({ user, loading }) => {
             }
           </Row>
         </WrapperSection>
+        <div className='delete-user'>
+          <Tooltip title=" Borrar usuario">
+            <Button shape="circle" icon={<DeleteOutlined/>}/>
+          </Tooltip>
+        </div>
       </MainLayout>
     </>
   )
@@ -122,4 +143,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   )
 }
 
-export default withRouter(Home);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

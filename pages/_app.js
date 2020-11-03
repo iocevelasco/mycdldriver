@@ -1,6 +1,7 @@
 import React from "react";
 import App, { Container as NextContainer } from "next/app";
-import Head from "next/head";
+import withReduxStore from '../lib/with-redux-store'
+import { Provider } from 'react-redux';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -24,8 +25,7 @@ class MyApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
-
+    const { Component, pageProps, reduxStore } = this.props;
     const props = {
       ...pageProps,
       user: this.state.user,
@@ -34,10 +34,12 @@ class MyApp extends App {
 
     return (
       <NextContainer>
-        <Component {...props} />
+        <Provider store={reduxStore}>
+          <Component {...props} />
+        </Provider>
       </NextContainer>
     );
   }
 }
 
-export default MyApp;
+export default withReduxStore(MyApp);

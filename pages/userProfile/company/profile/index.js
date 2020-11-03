@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from '../../../../components/layout';
+import MainLayout from 'components/layout';
 import {
   Row,
   Col,
@@ -10,11 +10,13 @@ import passport from 'passport';
 import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
-import LoadingComp from '../../../../components/loading';
+import LoadingComp from 'components/loading';
 import { withRouter } from 'next/router';
 const LocalStrategy = require('passport-local').Strategy;
 const userController = require('../../../../api/components/user/controller');
 
+import { connect } from 'react-redux';
+import { WrapperSection } from 'components/helpers' 
 const initialState = {
   loading:true,
   userLogin:false,
@@ -70,6 +72,22 @@ passport.use(new LocalStrategy( function(email, done) {
   }
 ));
 
+// CONNECT WITH REDUX
+function mapStateToProps(state){
+  return {
+      userProps: state.userProps
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    handlerUserProps: data => {
+      dispatch({ type: 'USER_DATA', payload: data });
+    },
+  }
+};
+
+
 const CompanyProfileView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   
@@ -91,8 +109,7 @@ const CompanyProfileView = ({ user, ...props }) => {
     base.id = user._id || '';
     dispatch({ type: types.PROPS_BASE, payload: base });
     if (user.typeUser) {
-      let company = user.company;
-      dispatch({ type: types.DATA_COMPANY, payload: company })
+      dispatch({ type: types.DATA_COMPANY, payload: user.company })
     }
     dispatch({ type: types.LOADING, payload: false });
   }, [user]);
@@ -131,15 +148,15 @@ const CompanyProfileView = ({ user, ...props }) => {
     const fullCompany = { base: base, ...company }
     dispatch({ type: types.LOADING, payload: true });
     try {
-      await axios.post('/api/company', fullCompany);
+      const { data } = await axios.post('/api/company', fullCompany);
       dispatch({ type: types.LOADING, payload: false });
-      dispatch({ type: types.LOGIN_SUCCCESS, payload: true });
-      //window.location.reload(false);
-      //props.router.push('/userProfile/company/profile');
+      props.handlerUserProps(data);
+      window.location.reload(false);
       passport.authenticate('local')(req, res, function () {
         console.log('entro', req);
         res.redirect('/');
       })
+      props.router.push('/userProfile/company/jobs');
       notification['success']({
         message: 'Success',
         description:
@@ -191,13 +208,20 @@ const CompanyProfileView = ({ user, ...props }) => {
     updateCompany,
   }
 
+  const styleWrapper = {
+    background: `url('/static/images/bg-routes.jpg')`,
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundSize: 'contain',
+  }
+
   return (
     <MainLayout {...configSection}>
       <Row>
-       <SideNav typeUser={user.typeUser} currentLocation='1' />
+       <SideNav currentLocation='1' />
         <Col span={user.typeUser? 20 : 24}>
           {state.loading && <LoadingComp/>}
-          <WrapperSection row={24} mt={0}>
+          <WrapperSection row={24} style={styleWrapper}>
             <FormUserCompany {...formConfig} />
           </WrapperSection>
         </Col>
@@ -206,23 +230,6 @@ const CompanyProfileView = ({ user, ...props }) => {
   )
 };
 
-
-const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
-  return (
-    <div style={{
-      background: `url('/static/images/bg-routes.jpg')`,
-      marginTop: marginTop,
-      marginBottom: marginBottom,
-      backgroundSize: 'contain',
-    }}>
-      <Row justify='center' align='middle'>
-        <Col span={row}>
-          {children}
-        </Col>
-      </Row>
-    </div>
-  )
-}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProfileView));
 
 
-export default withRouter(CompanyProfileView);

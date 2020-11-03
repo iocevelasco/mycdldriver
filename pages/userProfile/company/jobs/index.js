@@ -1,5 +1,5 @@
-import React, { useEffect, useReducer, useState } from 'react';
-import MainLayout from '../../../../components/layout';
+import React, { useEffect, useReducer } from 'react';
+import MainLayout from 'components/layout';
 import {
   Row,
   Col,
