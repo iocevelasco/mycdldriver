@@ -13,7 +13,7 @@ import Link from 'next/link';
 // CONNECT WITH REDUX
 function mapStateToProps(state){
   return {
-    typeUser: state.userRedux.props.typeUser
+    typeUser: state.userRedux
   }
 }
 

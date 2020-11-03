@@ -65,9 +65,7 @@ function mapDispatchToProps(dispatch){
 
 const  Home = ({ user, loading, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
   useEffect(() => {
-    props.handlerUserProps(user);
     fetchData();
     fetchPosition();
   }, [])
@@ -81,6 +79,20 @@ const  Home = ({ user, loading, ...props }) => {
         console.log('err', err)
       })
   }
+
+  const DeleteUser = async () => {
+    const header = {
+      headers: { Authorization: `Bearer ${user.token}` }
+    };
+    await axios.delete('/api/user/' + user._id, header)
+    .then((response) => {
+      dispatch({ type: types.carousel_data, payload: response.data.parners });
+    })
+    .catch((err) => {
+      console.log('err', err)
+    })
+  }
+
 
   const fetchPosition = async () => {
     dispatch({ type: types.positions, payload: mock_jobs.jobs_offers });
@@ -123,7 +135,7 @@ const  Home = ({ user, loading, ...props }) => {
         </WrapperSection>
         <div className='delete-user'>
           <Tooltip title=" Borrar usuario">
-            <Button shape="circle" icon={<DeleteOutlined/>}/>
+            <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined/>}/>
           </Tooltip>
         </div>
       </MainLayout>
