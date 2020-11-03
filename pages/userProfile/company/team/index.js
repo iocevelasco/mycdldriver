@@ -5,7 +5,7 @@ import {
   Col,
 } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
-import { WrapperSection, BuildSection } from '../../../login/node_modules/components/helpers';
+import { WrapperSection, BuildSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 
 const initialState = {

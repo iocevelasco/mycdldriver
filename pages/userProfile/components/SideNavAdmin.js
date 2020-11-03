@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, Col } from 'antd';
+import { connect } from 'react-redux';
 import {
   HomeOutlined,
   UserOutlined,
@@ -9,10 +10,15 @@ import {
 } from '@ant-design/icons';
 import Link from 'next/link';
 
+// CONNECT WITH REDUX
+function mapStateToProps(state){
+  return {
+    typeUser: state.userRedux.props.typeUser
+  }
+}
+
 const SideNavAdmin = ({ typeUser, currentLocation }) => {
-
   const [menuOptions, setOptions] = useState([]);
-
   useEffect(() => {
     if (typeUser == 1) setOptions(driverOption);
     else if (typeUser == 2) setOptions(companyOption);
@@ -90,4 +96,4 @@ const SideNavAdmin = ({ typeUser, currentLocation }) => {
   }
 };
 
-export default SideNavAdmin;
+export default connect(mapStateToProps)(SideNavAdmin);

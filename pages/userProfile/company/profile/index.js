@@ -63,13 +63,13 @@ const reducer = (state, action) => {
 // CONNECT WITH REDUX
 function mapStateToProps(state){
   return {
-      users: state.users
+      userProps: state.userProps
   }
 }
 
 function mapDispatchToProps(dispatch){
   return {
-    handlerPropsUser: data => {
+    handlerUserProps: data => {
       dispatch({ type: 'USER_DATA', payload: data });
     },
   }
@@ -99,7 +99,6 @@ const CompanyProfileView = ({ user, ...props }) => {
     if (user.typeUser) {
       dispatch({ type: types.DATA_COMPANY, payload: user.company })
     }
-    props.handlerPropsUser(user.company);
     dispatch({ type: types.LOADING, payload: false });
   }, [user]);
 
@@ -137,11 +136,11 @@ const CompanyProfileView = ({ user, ...props }) => {
     const fullCompany = { base: base, ...company }
     dispatch({ type: types.LOADING, payload: true });
     try {
-      await axios.post('/api/company', fullCompany);
+      const { data } = await axios.post('/api/company', fullCompany);
       dispatch({ type: types.LOADING, payload: false });
-      dispatch({ type: types.LOGIN_SUCCCESS, payload: true });
+      props.handlerUserProps(data);
       window.location.reload(false);
-      props.router.push('/userProfile/company/profile');
+      props.router.push('/userProfile/company/jobs');
       notification['success']({
         message: 'Success',
         description:
@@ -203,7 +202,7 @@ const CompanyProfileView = ({ user, ...props }) => {
   return (
     <MainLayout {...configSection}>
       <Row>
-       <SideNav typeUser={user.typeUser} currentLocation='1' />
+       <SideNav currentLocation='1' />
         <Col span={user.typeUser? 20 : 24}>
           {state.loading && <LoadingComp/>}
           <WrapperSection row={24} style={styleWrapper}>
