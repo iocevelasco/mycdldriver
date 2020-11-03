@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import MainLayout from 'components/layout';
+import MainLayout from '../../../components/layout';
 import {
   Row,
   Col,
@@ -12,7 +12,7 @@ import {
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import FormUserDriver from '../../components/FormUserDriver';
+import FormUserDriver from '../components/FormUserDriver';
 import SideNav from '../../components/SideNavAdmin';
 import { LoadingOutlined } from '@ant-design/icons';
 

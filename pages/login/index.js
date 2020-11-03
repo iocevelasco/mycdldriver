@@ -1,7 +1,6 @@
 import React from 'react';
-import { useEffect } from 'react';
 import MainLayout from '../../components/layout';
-import { WrapperSection } from '../login/node_modules/components/helpers';
+import {WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import {
   Row,
@@ -13,26 +12,8 @@ import Link from 'next/link'
 
 const { Title, Text } = Typography;
 
-function mapStateToProps(state){
-  return {
-      users: state.users
-  }
-}
-
-function mapDispatchToProps(){
-  return {
-    handleDrawer: data => {
-      dispatch({ type: 'USER_DATA', payload: data });
-    },
-  }
-};
-
-
 const UserProfile = ({ user, loading, ...props }) => {
-  useEffect(()=>{
-    props.handleDrawer(user);
-  },[]);
-  
+ 
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
     marginTop: marginTop, 
@@ -69,5 +50,16 @@ const UserProfile = ({ user, loading, ...props }) => {
     </MainLayout>
   )
 };
+
+
+function mapStateToProps(state){
+  return {
+      users: state.users
+  }
+}
+
+function mapDispatchToProps(){
+  return 
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);

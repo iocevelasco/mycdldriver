@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import MainLayout from '../components/layout';
-import { Row, Col, Typography, Input, Select } from 'antd';
+import { Row, Col, Typography, Input, Select, Button, Tooltip } from 'antd';
+import {DeleteOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import CarouselComp from '../components/carousel';
 import axios from 'axios';
@@ -105,6 +106,11 @@ const  Home = ({ user, loading }) => {
             }
           </Row>
         </WrapperSection>
+        <div className='delete-user'>
+          <Tooltip title=" Borrar usuario">
+            <Button shape="circle" icon={<DeleteOutlined/>}/>
+          </Tooltip>
+        </div>
       </MainLayout>
     </>
   )

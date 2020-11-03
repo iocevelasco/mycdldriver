@@ -24,7 +24,6 @@ const reducer = (state, action) => {
 }
 
 const ServiceCompanyView = ({ user, ...props }) => {
-  console.log('user, index',user);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
