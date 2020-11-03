@@ -7,6 +7,7 @@ import {
 import SideNav from '../components/SideNavAdmin';
 import { WrapperSection, BuildSection } from 'components/helpers';
 import { withRouter } from 'next/router';
+import { connect } from 'react-redux';
 
 const initialState = {
   loading:false,
@@ -23,17 +24,36 @@ const reducer = (state, action) => {
   }
 }
 
+function mapStateToProps(state){
+  return {
+      userRedux: state.userRedux
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    handlerUserProps: data => {
+      dispatch({ type: 'USER_DATA', payload: data });
+    },
+  }
+};
+
+
+
 const ServiceCompanyView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    props.handlerUserProps(user);
     dispatch({ type: types.TEAM_DATA });
   }, [user]);
 
   return (
     <MainLayout title='Team' user={user}  loading={state.loading}>
       <Row>
-       {user.typeUser ? <SideNav typeUser={user.typeUser} /> : null}
+       <SideNav 
+       currentLocation='0'
+       typeUser={user.typeUser} /> 
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
               <BuildSection/>
@@ -45,4 +65,5 @@ const ServiceCompanyView = ({ user, ...props }) => {
 };
 
 
-export default withRouter(ServiceCompanyView);
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ServiceCompanyView));

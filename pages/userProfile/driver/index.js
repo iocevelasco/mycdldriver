@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import MainLayout from '../../../components/layout';
+import MainLayout from 'components/layout';
 import {
   Row,
   Col,
@@ -159,7 +159,6 @@ const DriverView = ({ user, ...props }) => {
       console.log('loader activo', state.loading);
       await axios.patch('/api/driver/' + user._id, fullDriver, header);
       dispatch({ type: types.LOADING, payload: false });
-      console.log('loader false 1', state.loading);
       notification['success']({
         message: 'Success',
         description:
@@ -167,7 +166,6 @@ const DriverView = ({ user, ...props }) => {
       });
     } catch (err) {
       //dispatch({ type: types.LOADING, payload: false });
-      console.log('loader false 2', state.loading);
       notification['error']({
         message: 'error',
         description:
