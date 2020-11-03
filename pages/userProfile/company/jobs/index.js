@@ -29,6 +29,9 @@ const initialState = {
   newJob: {
     title: '',
     description: '',
+    areaCode: '',
+    phoneNumber: '',
+    email: '',
     city: '',
     time: '',
   },
@@ -36,6 +39,9 @@ const initialState = {
     _id: '',
     title: '',
     description: '',
+    areaCode: '',
+    phoneNumber: '',
+    email: '',
     city: '',
     time: '',
   },
@@ -347,6 +353,33 @@ const CompanyJobView = ({ user }) => {
                     value={state.newJob.description}
                     onChange={(e) => onChangeJob(e, 'description')} />
                 </Form.Item>
+                <Row gutter={[24]} justify='space-between' >
+                  <Col span={6}>
+                    <Form.Item>
+                      <Input
+                        size='large'
+                        placeholder="Area Code"
+                        value={state.newJob.areaCode}
+                        onChange={(e) => onChangeJob(e, 'areaCode')} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={18}>
+                    <Form.Item>
+                      <Input
+                        size='large'
+                        placeholder="Phone Number"
+                        value={state.newJob.phoneNumber}
+                        onChange={(e) => onChangeJob(e, 'phoneNumber')} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Form.Item>
+                  <Input
+                    size='large'
+                    placeholder="Email"
+                    value={state.newJob.email}
+                    onChange={(e) => onChangeJob(e, 'email')} />
+                </Form.Item>
                 <Form.Item>
                   <Input
                     size='large'
@@ -481,6 +514,33 @@ const CompanyJobView = ({ user }) => {
                     placeholder="Description"
                     value={state.editJob.description}
                     onChange={(e) => onChangeEditJob(e, 'description')} />
+                </Form.Item>
+                <Row gutter={[24]} justify='space-between' >
+                  <Col span={6}>
+                    <Form.Item>
+                      <Input
+                        size='large'
+                        placeholder="Area Code"
+                        value={state.editJob.areaCode}
+                        onChange={(e) => onChangeEditJob(e, 'areaCode')} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={18}>
+                    <Form.Item>
+                      <Input
+                        size='large'
+                        placeholder="Phone Number"
+                        value={state.editJob.phoneNumber}
+                        onChange={(e) => onChangeEditJob(e, 'phoneNumber')} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Form.Item>
+                  <Input
+                    size='large'
+                    placeholder="Email"
+                    value={state.editJob.email}
+                    onChange={(e) => onChangeEditJob(e, 'email')} />
                 </Form.Item>
                 <Form.Item>
                   <Input

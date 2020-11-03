@@ -80,6 +80,14 @@ const MainLayout = ({ children, title, user, loading, router }) => {
                 Logout
             </Button>
           </Menu.Item>
+          <Menu.Item >
+            <Button type='link' onClick={()=>{
+                setLoader(true);
+                router.push('/deleteuser')
+                }} >
+                Delete
+            </Button>
+          </Menu.Item>
 
         </Menu>
       );

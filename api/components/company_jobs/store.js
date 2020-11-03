@@ -78,6 +78,15 @@ async function updateJob(id, job, company){
     if(job.time){
         foundJob.time = job.time;
     }
+    if(job.areaCode){
+        foundJob.areaCode = job.areaCode;
+    }
+    if(job.phoneNumber){
+        foundJob.phoneNumber = job.phoneNumber;
+    }
+    if(job.email){
+        foundJob.email = job.email;
+    }
     if(job.tags.length > 0){
         const listTags = await saveTags(job.tags);
         if(listTags){

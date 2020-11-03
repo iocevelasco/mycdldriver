@@ -6,11 +6,14 @@ import {
   notification
 } from 'antd';
 import axios from 'axios';
+import passport from 'passport';
 import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
 import LoadingComp from '../../../../components/loading';
 import { withRouter } from 'next/router';
+const LocalStrategy = require('passport-local').Strategy;
+const userController = require('../../../../api/components/user/controller');
 
 const initialState = {
   loading:true,
@@ -57,6 +60,15 @@ const reducer = (state, action) => {
       throw new Error('Unexpected action');
   }
 }
+
+passport.use(new LocalStrategy( function(email, done) {
+  userController.loginAfterRegUser(email, function(error, user){
+      if(error) { return done(error); }
+      if (!user) { return done(null, false, { message: 'Unknown user ' + email });}
+      return done(null, user);
+      });
+  }
+));
 
 const CompanyProfileView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -122,8 +134,12 @@ const CompanyProfileView = ({ user, ...props }) => {
       await axios.post('/api/company', fullCompany);
       dispatch({ type: types.LOADING, payload: false });
       dispatch({ type: types.LOGIN_SUCCCESS, payload: true });
-      window.location.reload(false);
-      props.router.push('/userProfile/company/profile');
+      //window.location.reload(false);
+      //props.router.push('/userProfile/company/profile');
+      passport.authenticate('local')(req, res, function () {
+        console.log('entro', req);
+        res.redirect('/');
+      })
       notification['success']({
         message: 'Success',
         description:
