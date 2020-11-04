@@ -7,6 +7,13 @@ import {
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection, BuildSection } from 'components/helpers';
 import { withRouter } from 'next/router';
+import { connect } from 'react-redux';
+
+function mapStateToProps(state){
+  return {
+      user: state.user
+  }
+}
 
 const initialState = {
   loading:false,
@@ -50,5 +57,4 @@ const ServiceCompanyView = ({ user, ...props }) => {
   )
 };
 
-
-export default withRouter(ServiceCompanyView);
+export default withRouter(connect(mapStateToProps)(ServiceCompanyView));
