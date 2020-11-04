@@ -88,7 +88,7 @@ if (!dev && cluster.isMaster) {
           process.nextTick(function() {
             userController.loginProviderUser(profile.id, profile.emails[0].value, 1)
             .then((fullUser) => {
-              console.log(fullUser);
+              fullUser.isLogin = true;
               return done(null, fullUser);
             })
             .catch(e => {
@@ -101,7 +101,6 @@ if (!dev && cluster.isMaster) {
                 "typeUser": 0,
                 "isLogin":true
               };
-              console.log(newUser);
               return done(null, newUser);
             });
           });
@@ -115,6 +114,7 @@ if (!dev && cluster.isMaster) {
       }, function(accessToken, refreshToken, profile, done) {
         userController.loginProviderUser(profile.id, profile.emails[0].value, 2)
         .then((fullUser) => {
+          fullUser.isLogin = true;
           return done(null, fullUser);
         })
         .catch(e => {
@@ -145,20 +145,6 @@ if (!dev && cluster.isMaster) {
         
         req.logout();
         res.redirect('/');
-      });
-      server.get('/deleteuser', async (req, res) => {
-        try{
-          let cabecera = {
-            headers: { Authorization: `Bearer ${req.session.passport.user.token}` }
-          };
-          console.log('header', cabecera);
-          const result = await axios.delete(config.host + ':' + config.port + '/api/user/' + req.session.passport.user._id , {}, cabecera);
-          console.log('result', result);
-          req.logout();
-          res.redirect('/');
-        }catch(e){
-          console.log('[ deleteUser ]', e);
-        }
       });
       server.get('/auth/google', passport.authenticate('google', {
         scope: [

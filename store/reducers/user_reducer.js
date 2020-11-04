@@ -31,10 +31,11 @@ const updateUserCompany = (props) => {
 }
 
 const updateUserDrive = (props) => {
-    let { user, driver } = props.data;
+    console.log(props);
+    let { user, driver } = props;
     return {
         type: types.UPDATE_USER_DRIVER,
-        payload: {...user, ...driver}
+        payload: {...user, driver:driver}
     }
 }
 

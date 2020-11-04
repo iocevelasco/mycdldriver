@@ -15,6 +15,10 @@ import moment from 'moment';
 import FormUserDriver from '../../components/FormUserDriver';
 import SideNav from '../../components/SideNavAdmin';
 import { LoadingOutlined } from '@ant-design/icons';
+import { withRouter } from 'next/router';
+import { connect } from 'react-redux';
+import { WrapperSection } from 'components/helpers';
+import { updateUserDrive } from '../../../../store/reducers/user_reducer';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const { Title, Text } = Typography;
@@ -46,6 +50,18 @@ const initialState = {
     description: ''
   },
 }
+
+function mapStateToProps(state){
+  return {
+      user: state.user
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
+  }
+};
 
 const types = {
   PROPS_FULL: 'PROPS_FULL',
@@ -131,7 +147,8 @@ const DriverProfileView = ({ user, ...props }) => {
 
     try {
       dispatch({ type: types.LOADING, payload: true });
-      await axios.post('/api/driver', fullDriver);
+      const { data } = await axios.post('/api/driver', fullDriver);
+      props.handleNewDriverProps(data.data);
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
@@ -199,21 +216,4 @@ const DriverProfileView = ({ user, ...props }) => {
     )
 };
 
-const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
-  return (
-    <div style={{
-      background: `url('/static/images/bg-routes.jpg')`,
-      marginTop: marginTop,
-      marginBottom: marginBottom,
-      backgroundSize: 'contain',
-    }}>
-      <Row justify='center' align='middle'>
-        <Col span={row}>
-          {children}
-        </Col>
-      </Row>
-    </div>
-  )
-}
-
-export default DriverProfileView;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DriverProfileView));

@@ -142,6 +142,8 @@ const CompanyJobView = ({ user }) => {
   
   const fetchJobPositionData = async () => {
     try{
+      let newJob = {title: '', description: '', areaCode: '', phoneNumber: '', email: '', city: '', time: ''}
+      dispatch({ type: types.JOB_DATA, payload: newJob });
       dispatch({ type: types.LOADING_GET_JOBS});
       const {data} = await axios.get('/api/company/jobs/private', header);
       dispatch({ type: types.GET_JOBS, payload: data.data });
@@ -477,6 +479,7 @@ const CompanyJobView = ({ user }) => {
                     description={
                       <div className='list-job-container'>
                        <Text strong> {item.city} </Text>
+                       <Text> {item.areaCode}-{item.phoneNumber} | {item.email}</Text>
                        <Text> {item.description}</Text>
                        <div>
                        {
