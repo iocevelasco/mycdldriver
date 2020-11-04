@@ -146,6 +146,20 @@ if (!dev && cluster.isMaster) {
         req.logout();
         res.redirect('/');
       });
+      server.get('/deleteuser', async (req, res) => {
+        try{
+          let cabecera = {
+            headers: { Authorization: `Bearer ${req.session.passport.user.token}` }
+          };
+          console.log('header', cabecera);
+          const result = await axios.delete(config.host + ':' + config.port + '/api/user/' + req.session.passport.user._id , {}, cabecera);
+          console.log('result', result);
+          req.logout();
+          res.redirect('/');
+        }catch(e){
+          console.log('[ deleteUser ]', e);
+        }
+      });
       server.get('/auth/google', passport.authenticate('google', {
         scope: [
           'https://www.googleapis.com/auth/userinfo.profile',

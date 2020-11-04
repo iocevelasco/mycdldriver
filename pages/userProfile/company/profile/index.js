@@ -6,11 +6,15 @@ import {
   notification
 } from 'antd';
 import axios from 'axios';
+import passport from 'passport';
 import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
 import LoadingComp from 'components/loading';
 import { withRouter } from 'next/router';
+const LocalStrategy = require('passport-local').Strategy;
+const userController = require('../../../../api/components/user/controller');
+
 import { connect } from 'react-redux';
 import { updateUserCompany } from '@store/reducers/user_reducer';
 import { WrapperSection } from 'components/helpers';
@@ -61,6 +65,14 @@ const reducer = (state, action) => {
   }
 }
 
+passport.use(new LocalStrategy( function(email, done) {
+  userController.loginAfterRegUser(email, function(error, user){
+      if(error) { return done(error); }
+      if (!user) { return done(null, false, { message: 'Unknown user ' + email });}
+      return done(null, user);
+      });
+  }
+));
 
 // CONNECT WITH REDUX
 function mapStateToProps(state){
