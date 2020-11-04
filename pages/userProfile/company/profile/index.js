@@ -63,7 +63,7 @@ const reducer = (state, action) => {
 // CONNECT WITH REDUX
 function mapStateToProps(state){
   return {
-      userProps: state.userProps
+      user: state.user
   }
 }
 

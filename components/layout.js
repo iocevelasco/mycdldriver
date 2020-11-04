@@ -5,6 +5,7 @@ import Head from 'next/head'
 import Footer from './footer';
 import Link from 'next/link';
 import SpinnerComp from '../components/loading';
+import {connect} from 'react-redux';
 import { 
     Layout, 
     Row, 
@@ -27,6 +28,12 @@ import '../styles/index.less';
 
 const { Text, Title } = Typography;
 const { Content, Header } = Layout;
+
+function mapStateToProps(state){
+    return {
+        user: state.user
+    }
+}
 
 const MainLayout = ({ children, title, user, loading, router }) => {
     const [visible, setVisible] = useState(false);
@@ -100,7 +107,7 @@ const MainLayout = ({ children, title, user, loading, router }) => {
                     </Col>
                     <Col span={10}>
                     {
-                        user ?
+                        user.typeUser ?
                         <Dropdown overlay={menu}>
                              <Row justify='end' align='middle'>
                                 <Space size='large'>
@@ -168,4 +175,4 @@ MainLayout.propTypes = {
   router :propTypes.object
 }
 
-export default withRouter(MainLayout);
+export default withRouter(connect(mapStateToProps)(MainLayout));

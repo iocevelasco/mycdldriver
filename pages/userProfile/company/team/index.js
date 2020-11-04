@@ -39,9 +39,8 @@ const TeamCompanyView = ({ user, ...props }) => {
   return (
     <MainLayout {...configSection}>
       <Row>
-       {user.typeUser ? <SideNav 
-       currentLocation='2'
-       typeUser={user.typeUser} /> : null }
+        <SideNav 
+         currentLocation='2' /> 
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
               <BuildSection/>

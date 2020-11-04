@@ -52,8 +52,7 @@ const ServiceCompanyView = ({ user, ...props }) => {
     <MainLayout title='Team' user={user}  loading={state.loading}>
       <Row>
        <SideNav 
-       currentLocation='0'
-       typeUser={user.typeUser} /> 
+       currentLocation='0'/> 
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
               <BuildSection/>

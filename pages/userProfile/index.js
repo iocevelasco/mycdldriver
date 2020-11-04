@@ -13,12 +13,13 @@ import Link from 'next/link'
 const { Title, Text } = Typography;
 
 const UserProfile = ({ user, loading, ...props }) => {  
+  
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
-    marginTop: marginTop, 
-    marginBottom: marginBottom,
+    marginTop: 24, 
+    marginBottom: 24,
     backgroundSize:'contain',
-    }
+  }
 
   return (
     <MainLayout title='Profile' user={user} loading={loading}>

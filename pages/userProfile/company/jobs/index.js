@@ -318,7 +318,7 @@ const CompanyJobView = ({ user }) => {
     <>
       <MainLayout {...configSection}>
         <Row>
-          <SideNav typeUser={user.typeUser} /> 
+          <SideNav /> 
           <Col span={20} className="profile-company__jobs">
              {/* // CRUM JOBS */}
             <WrapperSection row={20} styles={wrapperForm}>
