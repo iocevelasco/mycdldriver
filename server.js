@@ -98,7 +98,8 @@ if (!dev && cluster.isMaster) {
                 "google_id": profile.id,
                 "photo": profile.photos[0].value,
                 "email": profile.emails[0].value,
-                "typeUser": 0
+                "typeUser": 0,
+                "isLogin":true
               };
               console.log(newUser);
               return done(null, newUser);
@@ -123,7 +124,8 @@ if (!dev && cluster.isMaster) {
             "facebook_id": profile.id,
             "photo": profile.photos[0].value,
             "email": profile.emails[0].value,
-            "typeUser": 0
+            "typeUser": 0,
+            "isLogin":true
           };
           return done(null, newUser);
         });

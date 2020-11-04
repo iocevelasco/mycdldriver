@@ -13,12 +13,14 @@ import Link from 'next/link';
 // CONNECT WITH REDUX
 function mapStateToProps(state){
   return {
-    typeUser: state.userRedux.props.typeUser
+    user: state.user
   }
 }
 
-const SideNavAdmin = ({ typeUser, currentLocation }) => {
+const SideNavAdmin = ({ user, currentLocation }) => {
   const [menuOptions, setOptions] = useState([]);
+  const { typeUser } = user;
+  
   useEffect(() => {
     if (typeUser == 1) setOptions(driverOption);
     else if (typeUser == 2) setOptions(companyOption);

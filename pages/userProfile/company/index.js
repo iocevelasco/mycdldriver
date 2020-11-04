@@ -48,14 +48,20 @@ const ServiceCompanyView = ({ user, ...props }) => {
     dispatch({ type: types.TEAM_DATA });
   }, [user]);
 
+  const stylesWrapper = {
+    background: `url('/static/images/bg-routes.jpg')`,
+    marginTop: 24, 
+    marginBottom: 24,
+    backgroundSize:'contain',
+  }
+
   return (
     <MainLayout title='Team' user={user}  loading={state.loading}>
       <Row>
        <SideNav 
-       currentLocation='0'
-       typeUser={user.typeUser} /> 
+       currentLocation='0'/> 
         <Col span={20}>
-          <WrapperSection row={24} mt={0}>
+          <WrapperSection style={stylesWrapper} row={24}>
               <BuildSection/>
           </WrapperSection>
         </Col>

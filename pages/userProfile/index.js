@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import MainLayout from '../../components/layout';
-import { WrapperSection } from '../login/node_modules/components/helpers';
+import { WrapperSection } from 'components/helpers';
 import {
   Row,
   Col,
@@ -13,16 +13,17 @@ import Link from 'next/link'
 const { Title, Text } = Typography;
 
 const UserProfile = ({ user, loading, ...props }) => {  
+  
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
-    marginTop: marginTop, 
-    marginBottom: marginBottom,
+    paddingTop: 24, 
+    paddingBottom: 24,
     backgroundSize:'contain',
-    }
+  }
 
   return (
     <MainLayout title='Profile' user={user} loading={loading}>
-      <WrapperSection {...stylesWrapper}>
+      <WrapperSection styles={stylesWrapper}>
         <div className="profile-driver__route">
           <div className="title">
             <Title level={4}>  Let's do this!  </Title>
