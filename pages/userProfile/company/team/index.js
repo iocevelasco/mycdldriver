@@ -1,40 +1,49 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from '../../../../components/layout';
-import WrapperSection from '../../../../components/WrapperSection';
+import MainLayout from 'components/layout';
 import {
   Row,
   Col,
 } from 'antd';
-import SideNav from '../../../../components/loading';
+import SideNav from '../../components/SideNavAdmin';
+import { WrapperSection, BuildSection } from 'components/helpers';
+import { withRouter } from 'next/router';
 
 const initialState = {
   loading:false,
 }
-
-const types = {}
-
+const types = {
+  TEAM_DATA: 'team_data',
+}
 const reducer = (state, action) => {
   switch (action.type) {
+  case types.TEAM_DATA:
+    return { ...state, loading: false }
     default:
       throw new Error('Unexpected action');
   }
 }
 
-const ServiceCompanyView = ({ user, ...props }) => {
+const TeamCompanyView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  
+  const configSection = {
+    title:'Our Drivers',
+    user:{user},
+    loading:state.loading,
+  }
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    dispatch({ type: types.TEAM_DATA });
+  }, [user]);
 
   return (
-    <MainLayout title='Service' user={user}>
+    <MainLayout {...configSection}>
       <Row>
-       {
-          user.typeUser ? <SideNav typeUser={user.typeUser} /> : null
-        }
+        <SideNav 
+         currentLocation='2' /> 
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
-           {state.loading && <LoadingComp/>}
-            <p>DEMO VIEW COMPONENT</p>
+              <BuildSection/>
           </WrapperSection>
         </Col>
       </Row>
@@ -43,4 +52,4 @@ const ServiceCompanyView = ({ user, ...props }) => {
 };
 
 
-export default ServiceCompanyView;
+export default withRouter(TeamCompanyView);

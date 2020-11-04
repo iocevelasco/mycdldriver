@@ -1,14 +1,15 @@
 import React, { useEffect, useReducer } from 'react';
 import MainLayout from '../components/layout';
-import { Row, Col, Typography, Input, Select } from 'antd';
-import { withRouter } from 'next/router'
+import { Row, Col, Typography, Input, Select, Button, Tooltip } from 'antd';
+import {DeleteOutlined } from '@ant-design/icons';
+import { withRouter } from 'next/router';
 import CarouselComp from '../components/carousel';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
 //mock
 import mock_ranking from '../mock/ranking.json';
 import mock_jobs from '../mock/job_offerts.json';
-
 
 
 //View components
@@ -48,9 +49,14 @@ const reducer = (state, action) => {
   }
 }
 
-const  Home = ({ user, loading }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+function mapStateToProps(state){
+  return {
+      user: state.user
+  }
+}
 
+const  Home = ({ user, loading, ...props }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     fetchData();
     fetchPosition();
@@ -65,6 +71,17 @@ const  Home = ({ user, loading }) => {
         console.log('err', err)
       })
   }
+
+  const DeleteUser = async () => {
+    const header = {
+      headers: { Authorization: `Bearer ${user.token}` }
+    };
+    await axios.delete('/api/user/' + user._id, header)
+    .catch((err) => {
+      console.log('err', err)
+    })
+  }
+
 
   const fetchPosition = async () => {
     dispatch({ type: types.positions, payload: mock_jobs.jobs_offers });
@@ -105,6 +122,11 @@ const  Home = ({ user, loading }) => {
             }
           </Row>
         </WrapperSection>
+        <div className='delete-user'>
+          <Tooltip title=" Borrar usuario">
+            <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined/>}/>
+          </Tooltip>
+        </div>
       </MainLayout>
     </>
   )
@@ -122,4 +144,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   )
 }
 
-export default withRouter(Home);
+export default withRouter(connect(mapStateToProps)(Home));

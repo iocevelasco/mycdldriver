@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from '../../../../components/layout';
+import MainLayout from 'components/layout';
 import {
   Row,
   Col,
@@ -9,10 +9,15 @@ import axios from 'axios';
 import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
-import LoadingComp from '../../../../components/loading';
+import LoadingComp from 'components/loading';
+import { withRouter } from 'next/router';
+import { connect } from 'react-redux';
+import { updateUserCompany } from '@store/reducers/user_reducer';
+import { WrapperSection } from 'components/helpers';
 
 const initialState = {
   loading:true,
+  userLogin:false,
   base: {
     name: '',
     lastname: '',
@@ -37,7 +42,8 @@ const types = {
   CREATE_NEW_USER: 'create_new_user',
   PROPS_BASE: 'props_base',
   PROPS_COMPANY: 'props_company',
-  LOADING: 'LOADING'
+  LOADING: 'LOADING',
+  LOGIN_SUCCCESS: 'LOGIN_SUCCCESS'
 }
 
 const reducer = (state, action) => {
@@ -48,13 +54,36 @@ const reducer = (state, action) => {
       return { ...state, company: action.payload }
     case types.LOADING:
       return { ...state, loading: action.payload }
+    case types.LOGIN_SUCCCESS:
+      return { ...state, userLogin: action.payload }
     default:
       throw new Error('Unexpected action');
   }
 }
 
+
+// CONNECT WITH REDUX
+function mapStateToProps(state){
+  return {
+      user: state.user
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    handlreNewUserProps: (newProps) => dispatch(updateUserCompany(newProps)),
+  }
+};
+
+
 const CompanyProfileView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  
+  const configSection = {
+    title:'Profile',
+    user:{user},
+    loading:state.loading,
+  }
 
   useEffect(() => {
     //Esto carga las props iniciales
@@ -68,8 +97,7 @@ const CompanyProfileView = ({ user, ...props }) => {
     base.id = user._id || '';
     dispatch({ type: types.PROPS_BASE, payload: base });
     if (user.typeUser) {
-      let company = user.company;
-      dispatch({ type: types.DATA_COMPANY, payload: company })
+      dispatch({ type: types.DATA_COMPANY, payload: user.company })
     }
     dispatch({ type: types.LOADING, payload: false });
   }, [user]);
@@ -107,10 +135,10 @@ const CompanyProfileView = ({ user, ...props }) => {
     base.typeUser = 2;
     const fullCompany = { base: base, ...company }
     dispatch({ type: types.LOADING, payload: true });
-    console.log('fullCompany', fullCompany);
     try {
-      await axios.post('/api/company', fullCompany);
+      const { data } = await axios.post('/api/company', fullCompany);
       dispatch({ type: types.LOADING, payload: false });
+      props.handlreNewUserProps(data.data);
       notification['success']({
         message: 'Success',
         description:
@@ -162,13 +190,20 @@ const CompanyProfileView = ({ user, ...props }) => {
     updateCompany,
   }
 
+  const styleWrapper = {
+    background: `url('/static/images/bg-routes.jpg')`,
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundSize: 'contain',
+  }
+
   return (
-    <MainLayout title='Profile' user={user} loading={state.loading}>
+    <MainLayout {...configSection}>
       <Row>
-        <SideNav typeUser={user.typeUser} /> 
+       <SideNav currentLocation='1' />
         <Col span={user.typeUser? 20 : 24}>
           {state.loading && <LoadingComp/>}
-          <WrapperSection row={24} mt={0}>
+          <WrapperSection row={24} styles={styleWrapper}>
             <FormUserCompany {...formConfig} />
           </WrapperSection>
         </Col>
@@ -177,23 +212,6 @@ const CompanyProfileView = ({ user, ...props }) => {
   )
 };
 
-
-const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
-  return (
-    <div style={{
-      background: `url('/static/images/bg-routes.jpg')`,
-      marginTop: marginTop,
-      marginBottom: marginBottom,
-      backgroundSize: 'contain',
-    }}>
-      <Row justify='center' align='middle'>
-        <Col span={row}>
-          {children}
-        </Col>
-      </Row>
-    </div>
-  )
-}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProfileView));
 
 
-export default CompanyProfileView;

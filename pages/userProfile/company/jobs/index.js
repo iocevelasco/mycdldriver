@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from '../../../../components/layout';
+import MainLayout from 'components/layout';
 import {
   Row,
   Col,
@@ -7,79 +7,122 @@ import {
   Typography,
   Input,
   Form,
-  DatePicker,
   Radio,
-  Select,
   Tag,
   Card,
   List,
   notification,
   Avatar,
-  Drawer
+  Drawer,
+  Divider
 } from 'antd';
+import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import axios from 'axios';
-import WrapperSection from '../../../../components/wrapperSection';
+import WrapperSection from '../../components/WrapperSection';
 import SideNav from '../../components/SideNavAdmin';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
-const { Text } = Typography
+const { Text, Title } = Typography
 const initialState = {
   loading: false,
+  loadingJobsList:true,
   newJob: {
     title: '',
     description: '',
     city: '',
     time: '',
   },
+  editJob: {
+    _id: '',
+    title: '',
+    description: '',
+    city: '',
+    time: '',
+  },
   tags: [],
+  tagsEdit: [],
   inputVisible: false,
+  inputEditVisible: false,
   inputValue: '',
   editInputIndex: -1,
   editInputValue: '',
   jobByCompany:[],
-  visible:true
+  visible:false
 }
 
 const types = {
-  JOB_DATA: 'carousel_data',
-  HANDLER_TAGS:'handler_tag',
-  ADD_TAGS:'add_tags',
-  EDIT_CURRENT_TAG:'edit_current_tags',
-  SHOW_INPUT_TAG:'show_input_tag',
+  JOB_DATA: 'JOB_DATA',
+  JOB_EDIT_DATA: 'JOB_EDIT_DATA',
+  HANDLER_TAGS:'HANDLER_TAGS',
+  ADD_TAGS:'ADD_TAGS',
+  ADD_CURRENT_TAGS:'ADD_CURRENT_TAGS',
+  EDIT_CURRENT_TAG:'EDIT_CURRENT_TAG',
+  SHOW_INPUT_TAG:'SHOW_INPUT_TAG',
+  SHOW_INPUT_TAG_EDIT:'SHOW_INPUT_TAG_EDIT',
   REMOVE_TAGS:'remove_tags',
   LOADING: 'LOADING',
   GET_JOBS: 'GET_JOBS',
-  SHOW_DRAWER:'SHOW_DRAWER'
+  EDIT_JOB: 'EDIT_JOB',
+  SHOW_DRAWER:'SHOW_DRAWER',
+  SET_CURRENT_TAGS: 'SET_CURRENT_TAGS',
+  LOADING_GET_JOBS:'LOADING_GET_JOBS'
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
     case types.JOB_DATA:
-      return { ...state, base: action.payload, loading: false }
+      return { ...state, newJob: action.payload, loading: false }
+    case types.JOB_EDIT_DATA:
+      return { ...state, editJob: action.payload, loading: false }
     case types.HANDLER_TAGS:
       return { ...state, inputValue:action.payload }
     case types.EDIT_CURRENT_TAG:
       return { ...state, editInputValue:action.payload }
     case types.ADD_TAGS:
       return { ...state, ...action.payload}
+    case types.ADD_CURRENT_TAGS:
+      return { ...state, ...action.payload}
+    case types.SET_CURRENT_TAGS:
+      return { ...state, tagsEdit: action.payload}
     case types.REMOVE_TAGS:
       return { ...state, tags:action.payload }
     case types.SHOW_INPUT_TAG:
       return { ...state, inputVisible:action.payload }
+    case types.SHOW_INPUT_TAG_EDIT:
+      return { ...state, inputEditVisible:action.payload }
     case types.LOADING:
       return { ...state, loading: action.payload }
     case types.GET_JOBS:
-      return { ...state, jobByCompany: action.payload, loading: false }
+      return { ...state, jobByCompany: action.payload, loadingJobsList: false, loading:false }
+    case types.EDIT_JOB:
+      return { ...state, editJob: action.payload }
     case types.SHOW_DRAWER:
       return { ...state, visible:!state.visible }
+    case types.LOADING_GET_JOBS:
+      return { ...state, loadingJobsList:!state.loadingJobsList }
     default:
       throw new Error('Unexpected action');
   }
 }
 
-const Jobs = ({ user }) => {
+// CONNECT WITH REDUX
+function mapStateToProps(state){
+  return {
+      user: state.user
+  }
+}
+
+const CompanyJobView = ({ user }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  
+  const configSection = {
+    title:'Jobs',
+    user:{user},
+    loading:state.loading,
+    currentLocation:'4'
+  }
+
   const [form] = Form.useForm();
   const { TextArea } = Input;
   
@@ -90,13 +133,12 @@ const Jobs = ({ user }) => {
   useEffect(()=>{
     fetchJobPositionData();
   },[])
-  console.log('state', state);
   
   const fetchJobPositionData = async () => {
     try{
-      const { data } = await axios.get('/api/company/jobs/private', header);
-      dispatch({ type: types.GET_JOBS, payload: data.mensaje });
-      
+      dispatch({ type: types.LOADING_GET_JOBS});
+      const {data} = await axios.get('/api/company/jobs/private', header);
+      dispatch({ type: types.GET_JOBS, payload: data.data });
     }catch(err){
       console.log(err);
     }
@@ -110,25 +152,51 @@ const Jobs = ({ user }) => {
     dispatch({ type: types.JOB_DATA, payload: newJob });
   }
 
-  const handleClose = removedTag => {
-    const tags = state.tags.filter(tag => tag !== removedTag);
-    dispatch({ type: types.ADD_TAGS, payload: tags });
+  const onChangeEditJob = (e, key) => {
+    let editJob = state.editJob;
+    let value = "";
+    value = e.target.value;
+    editJob[key] = value;
+    dispatch({ type: types.JOB_EDIT_DATA, payload: editJob });
+  }
+
+  const handleClose = (removedTag, key) => {
+    switch(key){
+      case 'create':
+        const tags = state.tags.filter(tag => tag !== removedTag);
+        dispatch({ type: types.ADD_TAGS, payload: tags });
+        break;
+      case 'edit':
+        const tagsEdit = state.tagsEdit.filter(tag => tag !== removedTag);
+        dispatch({ type: types.ADD_CURRENT_TAGS, payload: tagsEdit });
+        break;
+    }
   };
 
   const handlerTags = (e, key) => {
-    if(key == 'create'){
-      return dispatch({ type: types.HANDLER_TAGS, payload: e.target.value });
+    switch(key){
+      case 'create':
+        return dispatch({ type: types.HANDLER_TAGS, payload: e.target.value });
+      case 'edit':
+        return dispatch({ type: types.EDIT_CURRENT_TAG, payload: e.target.value });
+      default:
+        return dispatch({ type: types.HANDLER_TAGS, payload: e.target.value });
     }
   }
 
-  const showInput = () => {
-    dispatch({ type: types.SHOW_INPUT_TAG, payload: true });
+  const showInput = (key) => {
+    switch(key){
+      case 'create':
+        dispatch({ type: types.SHOW_INPUT_TAG, payload: true });
+        break;
+      case 'edit': 
+        dispatch({ type: types.SHOW_INPUT_TAG_EDIT, payload: true });
+        break;
+      default: 
+        dispatch({ type: types.SHOW_INPUT_TAG, payload: true });
+        break;
+    }
   };
-
-  const handleInputChange = e => {
-    this.setState({ inputValue: e.target.value });
-  };
-
 
   const saveInputRef = input => {
     input = input;
@@ -148,6 +216,21 @@ const Jobs = ({ user }) => {
     } })
   };
 
+  const handleInputEditConfirm = () => {
+    const { editInputValue } = state;
+    let { tagsEdit } = state;
+    console.log('editInputValue', editInputValue);
+
+    if (editInputValue && tagsEdit.indexOf(editInputValue) === -1) {
+      tagsEdit = [...tagsEdit, editInputValue];
+    }console.log('tagsEdit', tagsEdit);
+    dispatch({ type: types.ADD_CURRENT_TAGS, payload:{
+      tagsEdit,
+      inputEditVisible: false,
+      editInputValue: '',
+    } })
+  };
+
   const deleteJob = async (id) => {
     dispatch({ type: types.LOADING, payload: true });
     try {
@@ -156,20 +239,27 @@ const Jobs = ({ user }) => {
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Done! the position has been deleted."
       });
     } catch (err) {
       console.log(err);
       notification['error']({
         message: 'error',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Sorry! We couldn't delete this position, please try again."
       });
     }
   };
   
   const editJob = (job) => {
-
+    try{
+      const tagsEdit = job.tags.map((tag)=> tag.name);
+      dispatch({type: types.EDIT_JOB, payload:job});
+      dispatch({type: types.SET_CURRENT_TAGS, payload: tagsEdit });
+      dispatch({type: types.SHOW_DRAWER});
+    }catch(e){
+      console.log(e);
+    }
   }
 
   const newCompanyJob = async () => {
@@ -182,45 +272,44 @@ const Jobs = ({ user }) => {
     try {
       await axios.post('/api/company/jobs', newJob, header);
       fetchJobPositionData();
-
-      dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Success ! Your position has been created"
       });
     } catch (err) {
       console.log(err);
       notification['error']({
         message: 'error',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Sorry! We couldn't create this position, please try again. "
       });
     }
   };
 
   const updateCompanyJob = async () => {
-    const { newJob, tags } = state;
-    let tagsJob = tags.map((tag)=>{
+    const { editJob, tagsEdit } = state;
+    let tagsJob = tagsEdit.map((tag)=>{
       return {name: tag}
     });
-    newJob.tags = tagsJob;
+    editJob.tags = tagsJob;
+    dispatch({type: types.SHOW_DRAWER});
     dispatch({ type: types.LOADING, payload: true });
     try {
-      const result = await axios.patch('/api/company/jobs/5f9a3b17e1a4b5113051b10b', newJob, header);
+      await axios.patch('/api/company/jobs/' + editJob._id, editJob, header);
       fetchJobPositionData();
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Success ! Your position has been edited correctly"
       });
     } catch (err) {
       console.log(err);
       notification['error']({
         message: 'error',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Sorry! We couldn't save changes, please try again"
       });
     }
   };
@@ -235,12 +324,17 @@ const Jobs = ({ user }) => {
 
   return (
     <>
-      <MainLayout title='Jobs' user={user} loading={state.loading}>
+      <MainLayout {...configSection}>
         <Row>
-          <SideNav typeUser={user.typeUser} /> 
-          <Col span={20}>
+          <SideNav /> 
+          <Col span={20} className="profile-company__jobs">
              {/* // CRUM JOBS */}
-            <WrapperSection row={12} styles={wrapperForm}>
+            <WrapperSection row={20} styles={wrapperForm}>
+              <div className="title" >
+                <Title level={3}> Create and edit your position </Title>
+                <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
+              </div>
+              <Divider/>
               <Form
                 form={form}
                 name="user-driver"
@@ -249,7 +343,7 @@ const Jobs = ({ user }) => {
                 <Form.Item>
                   <Input
                     size='large'
-                    placeholder="Name"
+                    placeholder="Title/ Position name"
                     value={state.newJob.title}
                     onChange={(e) => onChangeJob(e, 'title')} />
                 </Form.Item>
@@ -257,7 +351,7 @@ const Jobs = ({ user }) => {
                   <TextArea
                     rows={4}
                     size='large'
-                    placeholder="Description"
+                    placeholder="Job Description"
                     value={state.newJob.description}
                     onChange={(e) => onChangeJob(e, 'description')} />
                 </Form.Item>
@@ -285,7 +379,7 @@ const Jobs = ({ user }) => {
                       className="edit-tag"
                       key={tag}
                       closable={index !== 0}
-                      onClose={() => handleClose(tag)}
+                      onClose={() => handleClose(tag, 'create')}
                     >
                       <span>{tag}</span>
                     </Tag>
@@ -296,7 +390,8 @@ const Jobs = ({ user }) => {
                     <Input
                       ref={saveInputRef}
                       type="text"
-                      size="large"
+                      size="small"
+                      className="tag-input"
                       value={state.inputValue}
                       onChange={(e) => handlerTags(e, 'create')}
                       onPressEnter={handleInputConfirm}
@@ -304,7 +399,7 @@ const Jobs = ({ user }) => {
                     />
                   )}
                   {!state.inputVisible && (
-                    <Tag onClick={showInput}>
+                    <Tag className="site-tag-plus" onClick={() => showInput('create')}>
                       <PlusOutlined /> New Tag
                     </Tag>
                   )}
@@ -314,7 +409,7 @@ const Jobs = ({ user }) => {
                       onClick={newCompanyJob}
                       type='primary'
                       block
-                      size='large'>Save Information</Button>
+                      size='large'>Create Job position</Button>
                   </Col>
                 <Form.Item>
                 </Form.Item>
@@ -328,6 +423,8 @@ const Jobs = ({ user }) => {
             <List
               itemLayout="vertical"
               size="large"
+              loading={state.loadingJobsList}
+              rowKey='_id'
               pagination={{
                 onChange: page => {
                   console.log(page);
@@ -340,18 +437,22 @@ const Jobs = ({ user }) => {
                   key={ind}
                   actions={[
                     <Button onClick={()=>deleteJob(item._id)} icon={<DeleteOutlined />}>Delete</Button>,
-                    <Button onClick={
-                      ()=>editJob(item),
-                      ()=> dispatch({type:types.SHOW_DRAWER})} icon={<EditOutlined />}>Edit</Button>,
-                  ]}
-                 >
+                    <Button onClick={()=>editJob(item)} icon={<EditOutlined />}>Edit</Button>,
+                  ]}>
                   <List.Item.Meta
-                    avatar={<Avatar size={80} src={item.avatar} />}
+                    avatar={<Avatar size={80} shape='square' src='https://www.flaticon.com/svg/static/icons/svg/664/664468.svg' />}
                     title={<a href={item.href}>{item.title}</a>}
                     description={
-                      <div>
+                      <div className='list-job-container'>
                        <Text strong> {item.city} </Text>
                        <Text> {item.description}</Text>
+                       <div>
+                       {
+                         item.tags.map((e,i)=>{
+                           return <Tag> {e.name} </Tag>
+                          })
+                        }
+                        </div>
                       </div>
                       }
                   />
@@ -369,7 +470,7 @@ const Jobs = ({ user }) => {
           width={680}
           onClose={()=> dispatch({type:types.SHOW_DRAWER})}
           visible={state.visible}>
-       <Form
+            <Form
                 form={form}
                 name="user-driver"
                 initialValues={{ remember: true }}
@@ -378,28 +479,28 @@ const Jobs = ({ user }) => {
                   <Input
                     size='large'
                     placeholder="Name"
-                    value={state.newJob.title}
-                    onChange={(e) => onChangeJob(e, 'title')} />
+                    value={state.editJob.title}
+                    onChange={(e) => onChangeEditJob(e, 'title')} />
                 </Form.Item>
                 <Form.Item>
                   <TextArea
                     rows={4}
                     size='large'
                     placeholder="Description"
-                    value={state.newJob.description}
-                    onChange={(e) => onChangeJob(e, 'description')} />
+                    value={state.editJob.description}
+                    onChange={(e) => onChangeEditJob(e, 'description')} />
                 </Form.Item>
                 <Form.Item>
                   <Input
                     size='large'
                     placeholder="City"
-                    value={state.newJob.city}
-                    onChange={(e) => onChangeJob(e, 'city')} />
+                    value={state.editJob.city}
+                    onChange={(e) => onChangeEditJob(e, 'city')} />
                 </Form.Item>
                 <Form.Item>
                   <Radio.Group
-                    value={state.newJob.time}
-                    onChange={(e) => onChangeJob(e, 'time')}>
+                    value={state.editJob.time}
+                    onChange={(e) => onChangeEditJob(e, 'time')}>
                     <Radio value={0}>Part-time</Radio>
                     <Radio value={1}>Full-time</Radio>
                     <Radio value={2}>Eventual</Radio>
@@ -407,39 +508,39 @@ const Jobs = ({ user }) => {
                 </Form.Item>
                 <Form.Item>
                 {
-                  state.tags.map((tag, index) => {
+                  state.tagsEdit.map((tag, index) => {
                   const tagElem = (
                     <Tag
                       className="edit-tag"
                       key={tag}
                       closable={index !== 0}
-                      onClose={() => handleClose(tag)}
+                      onClose={() => handleClose(tag, 'edit')}
                     >
                       <span>{tag}</span>
                     </Tag>
                   );
                     return tagElem;
                   })}
-                  {state.inputVisible && (
+                  {state.inputEditVisible && (
                     <Input
                       ref={saveInputRef}
                       type="text"
                       size="large"
-                      value={state.inputValue}
-                      onChange={(e) => handlerTags(e, 'create')}
-                      onPressEnter={handleInputConfirm}
-                      onBlur={handleInputConfirm}
+                      value={state.editInputValue}
+                      onChange={(e) => handlerTags(e, 'edit')}
+                      onPressEnter={handleInputEditConfirm}
+                      onBlur={handleInputEditConfirm}
                     />
                   )}
-                  {!state.inputVisible && (
-                    <Tag onClick={showInput}>
+                  {!state.inputEditVisible && (
+                    <Tag onClick={() => showInput('edit')}>
                       <PlusOutlined /> New Tag
                     </Tag>
                   )}
                 </Form.Item>
                   <Col span={6}>
                     <Button
-                      onClick={newCompanyJob}
+                      onClick={updateCompanyJob}
                       type='primary'
                       block
                       size='large'>Save Information</Button>
@@ -453,4 +554,4 @@ const Jobs = ({ user }) => {
   )
 }
 
-export default withRouter(Jobs);
+export default withRouter(connect(mapStateToProps)(CompanyJobView));
