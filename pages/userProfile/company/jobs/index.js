@@ -142,6 +142,8 @@ const CompanyJobView = ({ user }) => {
   
   const fetchJobPositionData = async () => {
     try{
+      let newJob = {title: '', description: '', areaCode: '', phoneNumber: '', email: '', city: '', time: ''}
+      dispatch({ type: types.JOB_DATA, payload: newJob });
       dispatch({ type: types.LOADING_GET_JOBS});
       const {data} = await axios.get('/api/company/jobs/private', header);
       dispatch({ type: types.GET_JOBS, payload: data.data });
@@ -225,11 +227,10 @@ const CompanyJobView = ({ user }) => {
   const handleInputEditConfirm = () => {
     const { editInputValue } = state;
     let { tagsEdit } = state;
-    console.log('editInputValue', editInputValue);
 
     if (editInputValue && tagsEdit.indexOf(editInputValue) === -1) {
       tagsEdit = [...tagsEdit, editInputValue];
-    }console.log('tagsEdit', tagsEdit);
+    }
     dispatch({ type: types.ADD_CURRENT_TAGS, payload:{
       tagsEdit,
       inputEditVisible: false,
