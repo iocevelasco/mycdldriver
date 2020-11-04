@@ -16,6 +16,7 @@ import {
   Drawer,
   Divider
 } from 'antd';
+import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import axios from 'axios';
 import WrapperSection from '../../components/WrapperSection';
@@ -102,6 +103,13 @@ const reducer = (state, action) => {
       return { ...state, loadingJobsList:!state.loadingJobsList }
     default:
       throw new Error('Unexpected action');
+  }
+}
+
+// CONNECT WITH REDUX
+function mapStateToProps(state){
+  return {
+      user: state.user
   }
 }
 
@@ -546,4 +554,4 @@ const CompanyJobView = ({ user }) => {
   )
 }
 
-export default withRouter(CompanyJobView);
+export default withRouter(connect(mapStateToProps)(CompanyJobView));
