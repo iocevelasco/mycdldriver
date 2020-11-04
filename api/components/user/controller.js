@@ -73,6 +73,21 @@ function loginProviderUser(provider_id, email, type){
     });
 }
 
+function loginAfterRegUser(email){
+    return new Promise(async (resolve, reject) => {
+        if(!email){
+            reject('Invalid data');
+            return false;
+        }
+        const result = await store.loginAfterRegUser(email);
+        if(result){
+            resolve(result);
+        }else{
+            reject('[ USER CONTROLLER ] Usuario no registrado');
+        }
+    });
+}
+
 function logoutUser(id, token){
     return new Promise(async (resolve, reject) => {
         if(!token){
@@ -102,5 +117,6 @@ module.exports = {
     logoutUser,
     logoutAll,
     addUserDirect,
-    loginProviderUser
+    loginProviderUser,
+    loginAfterRegUser
 }

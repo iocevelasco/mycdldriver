@@ -121,6 +121,36 @@ async function loginProviderUser(provider, mail, type){
     }
 }
 
+async function loginAfterRegUser(mail){
+    try {
+        const user = await Model.findOne({email: mail})
+        .select("-__v")
+        .populate('driver', "-_id -__v")
+        .populate('company', "-_id -__v");
+
+        const token = await user.generateAuthToken();
+        const login = {
+            "_id": user._id,
+            "name": user.name,
+            "lastname": user.lastname,
+            "typeUser": user.typeUser,
+            "photo": user.photo,
+            "email": user.email,
+            "google_id": user.google_id,
+            "facebook_id": user.facebook_id,
+            "date": user.date,
+            "token": token,
+            "driver": user.driver,
+            "company": user.company
+        }
+        return login;
+        
+    }catch(error){
+        console.log("[ USER STORE ] error: " + error);
+        return false;
+    }
+}
+
 async function logoutUser(id, tokenUser){
     const foundUser = await Model.findOne({
         _id: id
@@ -145,5 +175,6 @@ module.exports = {
     login: loginUser,
     logout: logoutUser,
     logoutAll,
-    loginProviderUser
+    loginProviderUser,
+    loginAfterRegUser
 }

@@ -5,6 +5,8 @@ import Head from 'next/head'
 import Footer from './footer';
 import Link from 'next/link';
 import SpinnerComp from '../components/loading';
+import {connect} from 'react-redux';
+import { logoutUser } from '@store/reducers/user_reducer';
 import { 
     Layout, 
     Row, 
@@ -28,7 +30,19 @@ import '../styles/index.less';
 const { Text, Title } = Typography;
 const { Content, Header } = Layout;
 
-const MainLayout = ({ children, title, user, loading, router }) => {
+function mapStateToProps(state){
+    return {
+        user: state.user
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+      handleLogout: () => dispatch(logoutUser())
+    }
+  };
+
+const MainLayout = ({ children, title, user, loading, router, ...props }) => {
     const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
     
@@ -75,9 +89,18 @@ const MainLayout = ({ children, title, user, loading, router }) => {
           <Menu.Item >
             <Button type='link' onClick={()=>{
                 setLoader(true);
+                props.handleLogout();
                 router.push('/logout')
                 }} >
                 Logout
+            </Button>
+          </Menu.Item>
+          <Menu.Item >
+            <Button type='link' onClick={()=>{
+                setLoader(true);
+                router.push('/deleteuser')
+                }} >
+                Delete
             </Button>
           </Menu.Item>
 
@@ -95,12 +118,12 @@ const MainLayout = ({ children, title, user, loading, router }) => {
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
-                            <img style={{height: 50}} src='/static/images/logo.svg' />
+                           <img style={{height: 50}} src='/static/images/logo.svg' />
                         </Link>
                     </Col>
                     <Col span={10}>
                     {
-                        user ?
+                        user.isLogin ?
                         <Dropdown overlay={menu}>
                              <Row justify='end' align='middle'>
                                 <Space size='large'>
@@ -168,4 +191,4 @@ MainLayout.propTypes = {
   router :propTypes.object
 }
 
-export default withRouter(MainLayout);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainLayout));

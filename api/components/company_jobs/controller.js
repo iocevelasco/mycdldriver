@@ -31,6 +31,18 @@ function addJob(job, company, logo){
                 console.error('[companyJobsController.addJob] No city data');
                 reject('No city data');
                 return false; 
+            case !job.areaCode:
+                console.error('[companyJobsController.addJob] No areaCode data');
+                reject('No areaCode data');
+                return false; 
+            case !job.phoneNumber:
+                console.error('[companyJobsController.addJob] No phoneNumber data');
+                reject('No phoneNumber data');
+                return false; 
+            case !job.email:
+                console.error('[companyJobsController.addJob] No email data');
+                reject('No email data');
+                return false; 
             case !job.time:
                 console.error('[companyJobsController.addJob] No time data');
                 reject('No time data');

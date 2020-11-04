@@ -6,13 +6,19 @@ import {
   notification
 } from 'antd';
 import axios from 'axios';
+import passport from 'passport';
 import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
 import LoadingComp from 'components/loading';
 import { withRouter } from 'next/router';
+const LocalStrategy = require('passport-local').Strategy;
+const userController = require('../../../../api/components/user/controller');
+
 import { connect } from 'react-redux';
-import { WrapperSection } from 'components/helpers' 
+import { updateUserCompany } from '@store/reducers/user_reducer';
+import { WrapperSection } from 'components/helpers';
+
 const initialState = {
   loading:true,
   userLogin:false,
@@ -59,19 +65,25 @@ const reducer = (state, action) => {
   }
 }
 
+passport.use(new LocalStrategy( function(email, done) {
+  userController.loginAfterRegUser(email, function(error, user){
+      if(error) { return done(error); }
+      if (!user) { return done(null, false, { message: 'Unknown user ' + email });}
+      return done(null, user);
+      });
+  }
+));
 
 // CONNECT WITH REDUX
 function mapStateToProps(state){
   return {
-      userProps: state.userProps
+      user: state.user
   }
 }
 
 function mapDispatchToProps(dispatch){
   return {
-    handlerUserProps: data => {
-      dispatch({ type: 'USER_DATA', payload: data });
-    },
+    handlreNewUserProps: (newProps) => dispatch(updateUserCompany(newProps)),
   }
 };
 
@@ -138,9 +150,7 @@ const CompanyProfileView = ({ user, ...props }) => {
     try {
       const { data } = await axios.post('/api/company', fullCompany);
       dispatch({ type: types.LOADING, payload: false });
-      props.handlerUserProps(data);
-      window.location.reload(false);
-      props.router.push('/userProfile/company/jobs');
+      props.handlreNewUserProps(data.data);
       notification['success']({
         message: 'Success',
         description:
@@ -194,8 +204,8 @@ const CompanyProfileView = ({ user, ...props }) => {
 
   const styleWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
-    marginTop: 20,
-    marginBottom: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
     backgroundSize: 'contain',
   }
 
@@ -205,7 +215,7 @@ const CompanyProfileView = ({ user, ...props }) => {
        <SideNav currentLocation='1' />
         <Col span={user.typeUser? 20 : 24}>
           {state.loading && <LoadingComp/>}
-          <WrapperSection row={24} style={styleWrapper}>
+          <WrapperSection row={24} styles={styleWrapper}>
             <FormUserCompany {...formConfig} />
           </WrapperSection>
         </Col>
