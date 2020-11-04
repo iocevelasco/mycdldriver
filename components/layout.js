@@ -107,7 +107,7 @@ const MainLayout = ({ children, title, user, loading, router }) => {
                     </Col>
                     <Col span={10}>
                     {
-                        user.typeUser ?
+                        user.isLogin ?
                         <Dropdown overlay={menu}>
                              <Row justify='end' align='middle'>
                                 <Space size='large'>
