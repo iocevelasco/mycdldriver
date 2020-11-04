@@ -479,6 +479,7 @@ const CompanyJobView = ({ user }) => {
                     description={
                       <div className='list-job-container'>
                        <Text strong> {item.city} </Text>
+                       <Text> {item.areaCode}-{item.phoneNumber} | {item.email}</Text>
                        <Text> {item.description}</Text>
                        <div>
                        {

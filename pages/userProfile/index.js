@@ -8,11 +8,32 @@ import {
   Typography,
   Card
 } from 'antd';
-import Link from 'next/link'
+import Link from 'next/link';
+import { withRouter } from 'next/router';
+import { connect } from 'react-redux';
 
 const { Title, Text } = Typography;
 
-const UserProfile = ({ user, loading, ...props }) => {  
+function mapStateToProps(state){
+  return {
+      user: state.user
+  }
+}
+
+const UserProfile = ({ user, ...props }) => { 
+
+  useEffect(() => {
+    switch(user.typeUser){
+      case 1:
+        props.router.push('/userProfile/driver');
+        break;
+      case 2:
+        props.router.push('/userProfile/company');
+        break;
+      default:
+        break;
+    }
+  }, [user.typeUser]);
   
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
@@ -22,7 +43,7 @@ const UserProfile = ({ user, loading, ...props }) => {
   }
 
   return (
-    <MainLayout title='Profile' user={user} loading={loading}>
+    <MainLayout title='Profile' user={user}>
       <WrapperSection styles={stylesWrapper}>
         <div className="profile-driver__route">
           <div className="title">
@@ -51,5 +72,4 @@ const UserProfile = ({ user, loading, ...props }) => {
   )
 };
 
-export default UserProfile;
-
+export default withRouter(connect(mapStateToProps)(UserProfile));

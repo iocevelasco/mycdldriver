@@ -45,6 +45,7 @@ function mapDispatchToProps(dispatch){
 const MainLayout = ({ children, title, user, loading, router, ...props }) => {
     const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
+    console.log('[ user MainLayout ]', user);
     
     const [userProps, setUserProps] = useState({ 
         name:'',
@@ -95,15 +96,6 @@ const MainLayout = ({ children, title, user, loading, router, ...props }) => {
                 Logout
             </Button>
           </Menu.Item>
-          <Menu.Item >
-            <Button type='link' onClick={()=>{
-                setLoader(true);
-                router.push('/deleteuser')
-                }} >
-                Delete
-            </Button>
-          </Menu.Item>
-
         </Menu>
       );
 
@@ -134,14 +126,14 @@ const MainLayout = ({ children, title, user, loading, router, ...props }) => {
                             </Row>
                        </Dropdown>
                      : 
-                            <Row justify='end' align='middle'>
-                                <Button 
-                                onClick={()=>setVisible(true)}
-                                type="secondary" size='large'>
-                                    LOGIN
-                                </Button>
-                            </Row>   
-                        }
+                        <Row justify='end' align='middle'>
+                            <Button 
+                            onClick={()=>setVisible(true)}
+                            type="secondary" size='large'>
+                                LOGIN
+                            </Button>
+                        </Row>   
+                    }
                     </Col>
                 </Row>
             </Header>
