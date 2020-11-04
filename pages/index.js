@@ -55,15 +55,8 @@ function mapStateToProps(state){
   }
 }
 
-function mapDispatchToProps(dispatch){
-  return {
-    handlerUserProps: data => {
-      dispatch({ type: 'USER_DATA', payload: data });
-    },
-  }
-};
-
 const  Home = ({ user, loading, ...props }) => {
+  console.log('user, home', user);
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     fetchData();
@@ -85,9 +78,6 @@ const  Home = ({ user, loading, ...props }) => {
       headers: { Authorization: `Bearer ${user.token}` }
     };
     await axios.delete('/api/user/' + user._id, header)
-    .then((response) => {
-      dispatch({ type: types.carousel_data, payload: response.data.parners });
-    })
     .catch((err) => {
       console.log('err', err)
     })
@@ -155,4 +145,4 @@ const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
   )
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
+export default withRouter(connect(mapStateToProps)(Home));

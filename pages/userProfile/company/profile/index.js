@@ -12,6 +12,7 @@ import SideNav from '../../components/SideNavAdmin';
 import LoadingComp from 'components/loading';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
+import { updateUserProps } from '@store/reducers/user_reducer';
 import { WrapperSection } from 'components/helpers' 
 const initialState = {
   loading:true,
@@ -69,9 +70,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return {
-    handlerUserProps: data => {
-      dispatch({ type: 'USER_DATA', payload: data });
-    },
+    handlreNewUserProps: (newProps) => dispatch(updateUserProps(newProps)),
   }
 };
 
@@ -137,10 +136,9 @@ const CompanyProfileView = ({ user, ...props }) => {
     dispatch({ type: types.LOADING, payload: true });
     try {
       const { data } = await axios.post('/api/company', fullCompany);
+      console.log('data', data);
       dispatch({ type: types.LOADING, payload: false });
-      props.handlerUserProps(data);
-      window.location.reload(false);
-      props.router.push('/userProfile/company/jobs');
+      props.handlreNewUserProps(data);
       notification['success']({
         message: 'Success',
         description:
@@ -194,8 +192,8 @@ const CompanyProfileView = ({ user, ...props }) => {
 
   const styleWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
-    marginTop: 20,
-    marginBottom: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
     backgroundSize: 'contain',
   }
 
@@ -205,7 +203,7 @@ const CompanyProfileView = ({ user, ...props }) => {
        <SideNav currentLocation='1' />
         <Col span={user.typeUser? 20 : 24}>
           {state.loading && <LoadingComp/>}
-          <WrapperSection row={24} style={styleWrapper}>
+          <WrapperSection row={24} styles={styleWrapper}>
             <FormUserCompany {...formConfig} />
           </WrapperSection>
         </Col>

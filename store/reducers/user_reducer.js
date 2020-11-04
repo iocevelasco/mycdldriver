@@ -1,12 +1,15 @@
 const types = {
     USER_DATA:'USER_DATA',
     UPDATE_USER_DATA:'UPDATE_USER_DATA',
+    LOGIN_SUCCESS:'LOGIN_SUCCESS',
+    LOGOUT_SUCCESS:'LOGOUT_SUCCESS'
 }
 
 const initialState = {
     name: '',
     lastname: '',
     typeUser: 0,
+    isLogin:false,
     photo:'',
     email: '',
     google_id: '',
@@ -18,6 +21,7 @@ const initialState = {
 }
 
 const updateUserProps = (props) => {
+    console.log('props', props);
     return {
       type: UPDATE_USER_DATA,
       payload: props
@@ -33,9 +37,10 @@ const getInitialPropsUser = (props) => {
 
 const userReducer  = (state = initialState, action) =>{
     switch(action.type){
-        case types.USER_DATA:
-            return {...state, ...action.payload}
+        case types.LOGIN_SUCCESS:
+            return {...state, ...action.payload, isLogin:true}
         case types.UPDATE_USER_DATA:
+            console.log('payload', action.payload)
             return {...state, ...action.payload}
         default:
             return state;

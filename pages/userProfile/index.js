@@ -16,14 +16,14 @@ const UserProfile = ({ user, loading, ...props }) => {
   
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
-    marginTop: 24, 
-    marginBottom: 24,
+    paddingTop: 24, 
+    paddingBottom: 24,
     backgroundSize:'contain',
   }
 
   return (
     <MainLayout title='Profile' user={user} loading={loading}>
-      <WrapperSection {...stylesWrapper}>
+      <WrapperSection styles={stylesWrapper}>
         <div className="profile-driver__route">
           <div className="title">
             <Title level={4}>  Let's do this!  </Title>
