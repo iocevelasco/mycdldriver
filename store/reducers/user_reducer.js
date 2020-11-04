@@ -1,8 +1,10 @@
 const types = {
     USER_DATA:'USER_DATA',
-    UPDATE_USER_DATA:'UPDATE_USER_DATA',
+    UPDATE_USER_COMPANY:'UPDATE_USER_COMPANY',
+    UPDATE_USER_DRIVER:'UPDATE_USER_DRIVER',
     LOGIN_SUCCESS:'LOGIN_SUCCESS',
-    LOGOUT_SUCCESS:'LOGOUT_SUCCESS'
+    LOGOUT_SUCCESS:'LOGOUT_SUCCESS',
+    LOGOUT_USER:'LOGOUT_USER'
 }
 
 const initialState = {
@@ -20,17 +22,46 @@ const initialState = {
     company:null,
 }
 
-const updateUserProps = (props) => {
-    console.log('props', props);
+const updateUserCompany = (props) => {
+    let { user, company } = props;
     return {
-      type: UPDATE_USER_DATA,
-      payload: props
+        type: types.UPDATE_USER_COMPANY,
+        payload: {...user, company:company}
     }
 }
 
+const updateUserDrive = (props) => {
+    let { user, driver } = props.data;
+    return {
+        type: types.UPDATE_USER_DRIVER,
+        payload: {...user, ...driver}
+    }
+}
+
+const logoutUser = () => {
+    const state = {
+        name: '',
+        lastname: '',
+        typeUser: 0,
+        isLogin:false,
+        photo:'',
+        email: '',
+        google_id: '',
+        facebook_id: '',
+        date:'',
+        token:null,
+        driver: null,
+        company:null,
+    }
+    return {
+        type: types.LOGOUT_USER,
+        payload: state
+        }
+    }
+
 const getInitialPropsUser = (props) => {
     return {
-        type: UPDATE_USER_DATA,
+        type: types.UPDATE_USER_DATA,
         payload: props
       }
 }
@@ -38,9 +69,12 @@ const getInitialPropsUser = (props) => {
 const userReducer  = (state = initialState, action) =>{
     switch(action.type){
         case types.LOGIN_SUCCESS:
-            return {...state, ...action.payload, isLogin:true}
-        case types.UPDATE_USER_DATA:
-            console.log('payload', action.payload)
+            return {...state, ...action.payload}
+        case types.UPDATE_USER_DRIVER:
+            return {...state, ...action.payload}
+        case types.UPDATE_USER_COMPANY:
+            return {...state, ...action.payload}
+        case types.LOGOUT_USER:
             return {...state, ...action.payload}
         default:
             return state;
@@ -50,6 +84,8 @@ const userReducer  = (state = initialState, action) =>{
 export {
     types,
     userReducer,
-    updateUserProps,
-    getInitialPropsUser
+    updateUserCompany,
+    updateUserDrive,
+    getInitialPropsUser,
+    logoutUser
 } ;

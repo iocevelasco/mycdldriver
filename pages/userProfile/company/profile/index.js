@@ -12,8 +12,9 @@ import SideNav from '../../components/SideNavAdmin';
 import LoadingComp from 'components/loading';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
-import { updateUserProps } from '@store/reducers/user_reducer';
-import { WrapperSection } from 'components/helpers' 
+import { updateUserCompany } from '@store/reducers/user_reducer';
+import { WrapperSection } from 'components/helpers';
+
 const initialState = {
   loading:true,
   userLogin:false,
@@ -70,7 +71,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return {
-    handlreNewUserProps: (newProps) => dispatch(updateUserProps(newProps)),
+    handlreNewUserProps: (newProps) => dispatch(updateUserCompany(newProps)),
   }
 };
 
@@ -136,9 +137,8 @@ const CompanyProfileView = ({ user, ...props }) => {
     dispatch({ type: types.LOADING, payload: true });
     try {
       const { data } = await axios.post('/api/company', fullCompany);
-      console.log('data', data);
       dispatch({ type: types.LOADING, payload: false });
-      props.handlreNewUserProps(data);
+      props.handlreNewUserProps(data.data);
       notification['success']({
         message: 'Success',
         description:

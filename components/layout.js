@@ -6,6 +6,7 @@ import Footer from './footer';
 import Link from 'next/link';
 import SpinnerComp from '../components/loading';
 import {connect} from 'react-redux';
+import { logoutUser } from '@store/reducers/user_reducer';
 import { 
     Layout, 
     Row, 
@@ -35,7 +36,13 @@ function mapStateToProps(state){
     }
 }
 
-const MainLayout = ({ children, title, user, loading, router }) => {
+function mapDispatchToProps(dispatch){
+    return {
+      handleLogout: () => dispatch(logoutUser())
+    }
+  };
+
+const MainLayout = ({ children, title, user, loading, router, ...props }) => {
     const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
     
@@ -82,6 +89,7 @@ const MainLayout = ({ children, title, user, loading, router }) => {
           <Menu.Item >
             <Button type='link' onClick={()=>{
                 setLoader(true);
+                props.handleLogout();
                 router.push('/logout')
                 }} >
                 Logout
@@ -102,7 +110,7 @@ const MainLayout = ({ children, title, user, loading, router }) => {
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
-                            <img style={{height: 50}} src='/static/images/logo.svg' />
+                           <img style={{height: 50}} src='/static/images/logo.svg' />
                         </Link>
                     </Col>
                     <Col span={10}>
@@ -175,4 +183,4 @@ MainLayout.propTypes = {
   router :propTypes.object
 }
 
-export default withRouter(connect(mapStateToProps)(MainLayout));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainLayout));

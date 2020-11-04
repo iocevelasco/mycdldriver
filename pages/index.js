@@ -56,7 +56,6 @@ function mapStateToProps(state){
 }
 
 const  Home = ({ user, loading, ...props }) => {
-  console.log('user, home', user);
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     fetchData();
