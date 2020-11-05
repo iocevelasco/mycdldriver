@@ -10,7 +10,6 @@ import axios from 'axios';
 import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
-import LoadingComp from 'components/loading';
 import { withRouter } from 'next/router';
 import Link from 'next/link';
 import {LeftOutlined}from '@ant-design/icons';
