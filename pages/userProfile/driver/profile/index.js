@@ -55,7 +55,7 @@ const initialState = {
 function mapStateToProps(state){
   return {
       user: state.user, 
-      userCreated:state.user.isLogin
+      isUseSucces: state.user.typeUser
   }
 }
 
@@ -219,9 +219,11 @@ const DriverProfileView = ({ user, ...props }) => {
           <SideNav /> 
           <Col span={20}>
             <WrapperSection styles={stylesWrapper} row={24} mt={0}>
-              <Link href="/userProfile">
-                <Button shape="round" size="large" icon={<LeftOutlined />} type='primary'> Go Back </Button>
-              </Link>
+            {
+                !props.isUseSucces ? <Link href="/userProfile">
+                  <Button shape="round" size="large" icon={<LeftOutlined />} type='primary'> Go Back </Button>
+                </Link> : null
+              }
               <FormUserDriver {...formConfig} />
             </WrapperSection>
           </Col>
