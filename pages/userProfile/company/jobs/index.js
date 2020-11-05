@@ -25,7 +25,7 @@ import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography
 const initialState = {
-  loading: false,
+  loading: true,
   loadingJobsList:true,
   newJob: {
     title: '',
@@ -138,7 +138,7 @@ const CompanyJobView = ({ user }) => {
   
   useEffect(()=>{
     fetchJobPositionData();
-  },[])
+  },[]);
   
   const fetchJobPositionData = async () => {
     try{
