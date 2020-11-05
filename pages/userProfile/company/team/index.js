@@ -9,7 +9,7 @@ import { WrapperSection, BuildSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 
 const initialState = {
-  loading:false,
+  loading:true,
 }
 const types = {
   TEAM_DATA: 'team_data',

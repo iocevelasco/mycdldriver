@@ -16,7 +16,7 @@ function mapStateToProps(state){
 }
 
 const initialState = {
-  loading:false,
+  loading:true,
 }
 const types = {
   TEAM_DATA: 'team_data',
@@ -46,10 +46,10 @@ const ServiceCompanyView = ({ user, ...props }) => {
   return (
     <MainLayout {...configSection}>
       <Row>
-       {user.typeUser ? <SideNav typeUser={user.typeUser} currentLocation='3' /> : null}
+       <SideNav currentLocation='3' /> 
         <Col span={20}>
           <WrapperSection row={24} mt={0}>
-              <BuildSection/>
+              <BuildSection section='Services' />
           </WrapperSection>
         </Col>
       </Row>

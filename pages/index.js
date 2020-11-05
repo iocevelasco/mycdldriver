@@ -91,7 +91,7 @@ const  Home = ({ user, loading, ...props }) => {
 
   return (
     <>
-      <MainLayout title='Welcome' user={user} loading={loading}>
+      <MainLayout title='Welcome' user={user} bgActive={false} loading={loading}>
         <HeaderHome />
         <WrapperSection row={20} arginTop={0}>
           <CarouselComp carousel_data={state.carousel_data} />
@@ -122,7 +122,7 @@ const  Home = ({ user, loading, ...props }) => {
             }
           </Row>
         </WrapperSection>
-        <div className='delete-user' style={{display: 'none'}}>
+        <div className='delete-user' style={{display: 'block'}}>
           <Tooltip title=" Borrar usuario">
             <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined/>}/>
           </Tooltip>

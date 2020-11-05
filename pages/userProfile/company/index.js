@@ -50,17 +50,17 @@ const ServiceCompanyView = ({ user, ...props }) => {
 
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
-    marginTop: 24, 
-    marginBottom: 24,
+    paddingTop: 24, 
+    paddingBottom: 24,
     backgroundSize:'contain',
   }
 
   return (
     <MainLayout title='Team' user={user}  loading={state.loading}>
-      <Row>
+      <Row display='flex' justify='center'>
        <SideNav 
        currentLocation='0'/> 
-        <Col span={20}>
+        <Col span={props.userCreated ? 24: 20}>
           <WrapperSection style={stylesWrapper} row={24}>
               <BuildSection/>
           </WrapperSection>
