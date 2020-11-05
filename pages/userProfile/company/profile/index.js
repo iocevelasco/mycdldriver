@@ -66,7 +66,8 @@ const reducer = (state, action) => {
 // CONNECT WITH REDUX
 function mapStateToProps(state){
   return {
-      user: state.user
+      user: state.user, 
+      isUseSucces: state.user.typeUser
   }
 }
 
@@ -204,9 +205,11 @@ const CompanyProfileView = ({ user, ...props }) => {
        <SideNav currentLocation='1' />
         <Col span={20}>
           <WrapperSection row={24} styles={styleWrapper}>
-             <Link href="/userProfile">
+            {
+              !props.isUseSucces ? <Link href="/userProfile">
                 <Button shape="round" size="large" icon={<LeftOutlined />} type='primary'> Go Back </Button>
-              </Link>
+              </Link> : null
+            }
             <FormUserCompany {...formConfig} />
           </WrapperSection>
         </Col>

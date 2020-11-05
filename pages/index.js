@@ -122,7 +122,7 @@ const  Home = ({ user, loading, ...props }) => {
             }
           </Row>
         </WrapperSection>
-        <div className='delete-user' style={{display: 'none'}}>
+        <div className='delete-user' style={{display: 'block'}}>
           <Tooltip title=" Borrar usuario">
             <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined/>}/>
           </Tooltip>
