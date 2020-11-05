@@ -3,15 +3,16 @@ import MainLayout from 'components/layout';
 import {
   Row,
   Col,
-  notification
+  notification,
+  Button
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
-import LoadingComp from 'components/loading';
 import { withRouter } from 'next/router';
-
+import Link from 'next/link';
+import {LeftOutlined}from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { updateUserCompany } from '@store/reducers/user_reducer';
 import { WrapperSection } from 'components/helpers';
@@ -199,11 +200,13 @@ const CompanyProfileView = ({ user, ...props }) => {
 
   return (
     <MainLayout {...configSection}>
-      <Row>
+      <Row display='flex' justify='center'>
        <SideNav currentLocation='1' />
-        <Col span={user.typeUser? 20 : 24}>
-          {state.loading && <LoadingComp/>}
+        <Col span={20}>
           <WrapperSection row={24} styles={styleWrapper}>
+             <Link href="/userProfile">
+                <Button shape="round" size="large" icon={<LeftOutlined />} type='primary'> Go Back </Button>
+              </Link>
             <FormUserCompany {...formConfig} />
           </WrapperSection>
         </Col>

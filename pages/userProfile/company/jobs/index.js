@@ -19,13 +19,13 @@ import {
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import axios from 'axios';
-import WrapperSection from '../../components/WrapperSection';
+import WrapperSection from '../../components/wrapperSection';
 import SideNav from '../../components/SideNavAdmin';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography
 const initialState = {
-  loading: false,
+  loading: true,
   loadingJobsList:true,
   newJob: {
     title: '',
@@ -138,7 +138,7 @@ const CompanyJobView = ({ user }) => {
   
   useEffect(()=>{
     fetchJobPositionData();
-  },[])
+  },[]);
   
   const fetchJobPositionData = async () => {
     try{
@@ -176,7 +176,7 @@ const CompanyJobView = ({ user }) => {
         break;
       case 'edit':
         const tagsEdit = state.tagsEdit.filter(tag => tag !== removedTag);
-        dispatch({ type: types.ADD_CURRENT_TAGS, payload: tagsEdit });
+        dispatch({ type: types.SET_CURRENT_TAGS, payload: tagsEdit });
         break;
     }
   };

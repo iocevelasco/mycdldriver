@@ -42,7 +42,7 @@ function mapDispatchToProps(dispatch){
     }
   };
 
-const MainLayout = ({ children, title, user, loading, router, ...props }) => {
+const MainLayout = ({ children, title, user, loading, router, bgActive, ...props }) => {
     const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
     console.log('[ user MainLayout ]', user);
@@ -77,7 +77,10 @@ const MainLayout = ({ children, title, user, loading, router, ...props }) => {
             document.body.style.overflowY = "auto"
         }
     },[loading]);
-       
+    let bg = !bgActive ? { 
+        background: `url('/static/images/bg-routes.jpg')`,
+        backgroundSize:'contain',
+        } : {}
     const menu = (
         <Menu style={{width: '200px', float:'right'}}>
           <Menu.Item>
@@ -138,7 +141,9 @@ const MainLayout = ({ children, title, user, loading, router, ...props }) => {
                 </Row>
             </Header>
             <Content>
-                {children}
+                <div style={bg}>
+                    {children}
+                </div>
             </Content>
             <Footer />
             <Modal

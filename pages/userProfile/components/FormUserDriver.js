@@ -148,11 +148,11 @@ const driverUser = (props) => {
           </Form>
         </Col>
         <Col className='profile-driver__form-small' span={14}>
-          <Form.Item label="Experience">
+          <Form.Item label="Years of experience ">
             <InputNumber
               size="large"
-              min={1}
-              max={1000}
+              min={0}
+              max={100}
               defaultValue={0}
               onChange={(e) => onChangeDriver(e, 'experience')} />
           </Form.Item>
@@ -160,7 +160,7 @@ const driverUser = (props) => {
             <TextArea
               rows={4}
               size='large'
-              placeholder="Description"
+              placeholder="Telling us about your background"
               value={driver.description}
               onChange={(e) => onChangeDriver(e, 'description')} />
           </Form.Item>
