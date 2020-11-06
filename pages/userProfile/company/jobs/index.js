@@ -21,6 +21,7 @@ import { withRouter } from 'next/router';
 import axios from 'axios';
 import WrapperSection from '../../components/wrapperSection';
 import SideNav from '../../components/SideNavAdmin';
+import SearchLocation from '../../components/SearchLocationInput';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography
@@ -361,6 +362,9 @@ const CompanyJobView = ({ user }) => {
                     placeholder="Job Description"
                     value={state.newJob.description}
                     onChange={(e) => onChangeJob(e, 'description')} />
+                </Form.Item>
+                <Form.Item>
+                  { /*<SearchLocation onChange={() => null} /> */}
                 </Form.Item>
                 <Row gutter={[24]} justify='space-between' >
                   <Col span={6}>
