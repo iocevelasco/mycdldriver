@@ -1,11 +1,13 @@
 import React, { useEffect, useReducer } from 'react';
 import MainLayout from '../components/layout';
 import { Row, Col, Typography, Input, Select, Button, Tooltip } from 'antd';
-import {DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import CarouselComp from '../components/carousel';
+import { WrapperSection } from 'components/helpers';
+import { fetchJobPositionData } from '../store/reducers/lading_reducer';
 import { connect } from 'react-redux';
-import axios from 'axios';
+
 
 //mock
 import mock_ranking from '../mock/ranking.json';
@@ -26,7 +28,7 @@ const initialState = {
   sponsors: [],
   search_name: '',
   carousel_data: [],
-  positions: [],
+  jobs: [],
   ranking: [],
 }
 
@@ -51,26 +53,33 @@ const reducer = (state, action) => {
 
 function mapStateToProps(state){
   return {
-      user: state.user
+      user: state.user, 
+      jobs: state.landing.jobs
   }
 }
 
-const  Home = ({ user, loading, ...props }) => {
+function mapDispatchToProps(dispatch){
+  return {
+    fetchJobs: () => dispatch(fetchJobPositionData())
+  }
+}
+
+const  Home = ({ 
+  user, 
+  loading, 
+  jobs, 
+  fetchJobs, 
+  ...props 
+}) => {
+
   const [state, dispatch] = useReducer(reducer, initialState);
+  
   useEffect(() => {
-    fetchData();
+    fetchJobs();
     fetchPosition();
   }, [])
 
-  const fetchData = async () => {
-    await axios.get(`https://run.mocky.io/v3/0c407a99-66de-453f-8a8c-35d4d4a6e3fb`)
-      .then((response) => {
-        dispatch({ type: types.carousel_data, payload: response.data.parners });
-      })
-      .catch((err) => {
-        console.log('err', err)
-      })
-  }
+
 
   const DeleteUser = async () => {
     const header = {
@@ -88,24 +97,21 @@ const  Home = ({ user, loading, ...props }) => {
     dispatch({ type: types.ranking, payload: mock_ranking.ranking });
 
   }
-
+  const wrapperStyle = {
+    marginTop:16,
+    marginBottom:16
+  }
   return (
     <>
       <MainLayout title='Welcome' user={user} bgActive={false} loading={loading}>
         <HeaderHome />
-        <WrapperSection row={20} arginTop={0}>
+        <WrapperSection row={20} style={wrapperStyle}  >
           <CarouselComp carousel_data={state.carousel_data} />
         </WrapperSection>
-        <WrapperSection row={18} arginTop={32}>
-          {
-            state.positions.map((e, i) => {
-              return (
-                <OffertJobComp key={i} {...e} />
-              )
-            })
-          }
+        <WrapperSection row={18}>
+            <OffertJobComp jobs={jobs} />
         </WrapperSection>
-        <WrapperSection row={18} marginTop={32} marginBottom={32}>
+        <WrapperSection row={18} style={wrapperStyle} >
           <Row justify='center' align='middle' gutter={[16]} style={{marginTop:24}}>
             <Col span={14}>
               <Title style={{textAlign: 'center'}}>Our Drivers</Title>
@@ -132,16 +138,4 @@ const  Home = ({ user, loading, ...props }) => {
   )
 }
 
-const WrapperSection = ({ children, row, marginTop, marginBottom }) => {
-  return (
-    <div style={{marginTop:marginTop, marginBottom:marginBottom}}>
-      <Row justify='center' align='middle'>
-        <Col span={row}>
-          {children}
-        </Col>
-      </Row>
-    </div>
-  )
-}
-
-export default withRouter(connect(mapStateToProps)(Home));
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Home));

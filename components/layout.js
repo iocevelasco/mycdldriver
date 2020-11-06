@@ -45,7 +45,6 @@ function mapDispatchToProps(dispatch){
 const MainLayout = ({ children, title, user, loading, router, bgActive, ...props }) => {
     const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
-    console.log('[ user MainLayout ]', user);
     
     const [userProps, setUserProps] = useState({ 
         name:'',
