@@ -1,12 +1,19 @@
 import React from 'react';
 import { Row, Col, Typography, Input, DatePicker, Select } from 'antd';
+import { connect } from 'react-redux';
 
 const { Title } = Typography;
 const { Option } = Select;
 
 const { Search } = Input;
 
-const SearchComponent = (props) => {
+function mapStateToProps(state){
+  return {
+      citys_available: state.landing.citys_available
+  }
+}
+
+const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available}) => {
   return (
     <>
         <div className="home-header"
@@ -24,7 +31,8 @@ const SearchComponent = (props) => {
                     <Search
                       placeholder="input search text"
                       size='large'
-                      onSearch={value => console.log(value)}
+                      value={filter_selected.input}
+                      onSearch={e => handlerSearch(e, 'input')}
                       style={{ width: '100%' }}
                     />
                   </Col>
@@ -32,13 +40,23 @@ const SearchComponent = (props) => {
                       <Input.Group size="large">
                         <Row gutter={[16, 16]}>
                           <Col span={5}>
-                          <Select size="large" style={{ width: '100%' }}  defaultValue="Zhejiang">
-                            <Option value="Zhejiang">Zhejiang</Option>
-                            <Option value="Jiangsu">Jiangsu</Option>
+                          <Select 
+                            size="large"
+                            style={{ width: '100%' }}
+                            value={filter_selected.city}
+                            placeholder="City"
+                            onChange={e => handlerSearch(e, 'city')}>
+                              {
+                                citys_available.map((e, i)=>(
+                                  <Option key={i}value={e}>{e}</Option>
+                                ))
+                              }
                           </Select>
                           </Col>
                           <Col span={8}>
-                            <DatePicker size="large" style={{ width: '100%' }} />
+                            <DatePicker 
+                            onChange={e => handlerSearch(e, 'date')}
+                            size="large" style={{ width: '100%' }} />
                           </Col>
                         </Row>
                       </Input.Group>
@@ -53,4 +71,5 @@ const SearchComponent = (props) => {
 }
 
 
-export default SearchComponent;
+export default connect(mapStateToProps)(HeaderLandingComp);
+

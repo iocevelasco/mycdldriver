@@ -10,6 +10,7 @@ import {
   Button
 } from 'antd';
 import Link from 'next/link';
+import moment from 'moment';
 
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 
@@ -23,9 +24,6 @@ const JobListComp = ({ jobs }) => {
       bordered={false}
       dataSource={jobs}
       pagination={{
-        onChange: page => {
-          console.log(page);
-        },
         pageSize: 10,
       }}
       renderItem={item => (
@@ -42,16 +40,16 @@ const JobListComp = ({ jobs }) => {
                 style={{ width: '100%', marginTop: 24, }}>
                 <div className='home--job-offert'>
                   <div className='thumbnails'>
-                    <Avatar size={120} src={item.image} />
+                    <Avatar size={120} src={item.logo} />
                   </div>
                   <div className='job-offert__description'>
                     <div>
                       <Title level={3}> {item.title} </Title>
                       <div>
                         <Text> Addres </Text>
-                        <Text strong> {item.address} </Text> <Text strong > | </Text>
+                        <Text strong> {item.city} </Text> <Text strong > | </Text>
                         <Text> Date </Text>
-                        <Text strong> {item.date} </Text>
+                        <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
                       </div>
                       <Text> {item.description} </Text>
                       <div>
