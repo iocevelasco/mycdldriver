@@ -26,16 +26,41 @@ async function saveTags(tags){
 function getJobs(filterCompany){
     return new Promise((resolve, reject) => {
         let filter = {};
-        if(filterCompany !== null){
+        let filterOr = [];
+        if(filterCompany.company){
             filter = {
                 company: filterCompany,
             };
         }
+        if(filterCompany.input){
+            filterOr.push({title: new RegExp(filterCompany.input, 'i')});
+            filterOr.push({description: new RegExp(filterCompany.input, 'i')});
+        }
+        if(filterCompany.city){
+            filterOr.push({city: new RegExp(filterCompany.city, 'i')});
+        }
+        if(filterCompany.date){
+            filterOr.push({date: filterCompany.date});
+        }
+        if(filterOr.length > 1){
+            filter = {$or: filterOr};
+        }else if(filterOr.length == 1 && filterCompany.input){
+            filter = {
+                title: new RegExp(filterCompany.input, 'i'),
+                description: new RegExp(filterCompany.input, 'i')
+            };
+        }else if(filterOr.length == 1 && filterCompany.city){
+            filter = {
+                city: new RegExp(filterCompany.city, 'i')
+            };
+        }
+        console.log('filter', filter);
         result = JobsModel.find(filter)
             .select("-__v")
             .populate('tags');
 
         resolve(result);
+        resolve(true);
     });
 }
 

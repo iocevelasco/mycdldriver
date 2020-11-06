@@ -6,8 +6,16 @@ const response = require('../../network/response');
 const controller = require('./controller');
 
 router.get('/', function (req, res) {
-    const filter = null;
-    controller.getJob(filter)
+    controller.getJob(req.query)
+    .then((jobList) => {
+        response.success(req, res, jobList, 200);
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
+});
+
+router.get('/detail/:id', function (req, res) {
+    controller.getJob(req.body)
     .then((jobList) => {
         response.success(req, res, jobList, 200);
     }).catch(e => {
@@ -16,7 +24,9 @@ router.get('/', function (req, res) {
 });
 
 router.get('/private', auth(2), function (req, res) {
-    const filter = req.user.company || null;
+    const filter = {
+        company: req.user.company || null
+    };
     controller.getJob(filter)
     .then((jobList) => {
         response.success(req, res, jobList, 200);
