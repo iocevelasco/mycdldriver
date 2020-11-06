@@ -31,7 +31,6 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available}) =
                     <Search
                       placeholder="input search text"
                       size='large'
-                      value={filter_selected.input}
                       onSearch={e => handlerSearch(e, 'input')}
                       style={{ width: '100%' }}
                     />

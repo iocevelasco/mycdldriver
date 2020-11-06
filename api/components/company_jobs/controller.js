@@ -3,7 +3,20 @@ const config = require('../../config');
 
 function getJob(filter){
     return new Promise((resolve, reject) => {
-        resolve(store.list(filter));
+        let filterQuery = {}; 
+        if(filter.company){
+            filterQuery.company = filter.company;
+        }
+        if(filter.input){
+            filterQuery.input = filter.input;
+        }
+        if(filter.city){
+            filterQuery.city = filter.city;
+        }
+        if(filter.date){
+            filterQuery.date = filter.date;
+        }
+        resolve(store.list(filterQuery));
     });
 }
 
