@@ -3,6 +3,7 @@ const user = require('../components/user/network');
 const driver = require('../components/profile_driver/network');
 const company = require('../components/profile_company/network');
 const companyJobs = require('../components/company_jobs/network');
+const files = require('../components/files/network');
 const url_api = "/api";
 
 const routes = function(server){
@@ -16,6 +17,7 @@ const routes = function(server){
     server.use(url_api + '/driver', driver);
     server.use(url_api + '/company', company);
     server.use(url_api + '/company/jobs', companyJobs);
+    server.use(url_api + '/files', files);
 };
 
 module.exports = routes;
