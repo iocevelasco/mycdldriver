@@ -7,6 +7,8 @@ import CarouselComp from '../components/carousel';
 import { WrapperSection } from 'components/helpers';
 import { fetchJobPositionData } from '../store/reducers/lading_reducer';
 import { connect } from 'react-redux';
+import queryString from "query-string";
+import moment from "moment";
 
 
 //mock
@@ -15,7 +17,7 @@ import mock_jobs from '../mock/job_offerts.json';
 
 
 //View components
-import HeaderHome from './home/components/search';
+import HeaderLandingComp from './home/components/header_home';
 import OffertJobComp from './home/components/job_offerts';
 import RankingComp from './home/components/ranking';
 
@@ -29,23 +31,28 @@ const initialState = {
   search_name: '',
   carousel_data: [],
   jobs: [],
+  query:'',
   ranking: [],
+  filter_selected:{}
 }
 
 const types = {
   carousel_data: 'carousel_data',
   positions: 'positions',
-  ranking: 'ranking',
+  FILTER_SELECTED: 'ranking',
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
     case types.carousel_data:
       return { ...state, carousel_data: action.payload }
-    case types.positions:
-      return { ...state, positions: action.payload }
     case types.ranking:
       return { ...state, ranking: action.payload }
+    case types.FILTER_SELECTED:
+      return { ...state, 
+        filter_selected: action.payload.filters,
+        query:action.payload.query
+      }
     default:
       throw new Error('Unexpected action');
   }
@@ -60,7 +67,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return {
-    fetchJobs: () => dispatch(fetchJobPositionData())
+    fetchJobs: (query) => dispatch(fetchJobPositionData(query))
   }
 }
 
@@ -75,10 +82,29 @@ const  Home = ({
   const [state, dispatch] = useReducer(reducer, initialState);
   
   useEffect(() => {
-    fetchJobs();
+    fetchJobs(state.query);
     fetchPosition();
-  }, [])
+  }, [state.query])
 
+  const handlerSearch = (e, key) => {
+    let value = "";
+    console.log(e,key);
+    if(key == 'input') value = e;
+    else if(key == 'city') value = e;
+    else if(key === 'date') value = moment(e._d).format('DD-MM-YY')
+    
+    let filters = state.filter_selected;
+
+    filters[key] = value;
+    const stringify = queryString.stringify(filters);
+    dispatch({ 
+      type: types.FILTER_SELECTED, 
+      payload:{ 
+        query:stringify,
+        filters:filters
+      }  
+    });
+  }
 
 
   const DeleteUser = async () => {
@@ -93,18 +119,21 @@ const  Home = ({
 
 
   const fetchPosition = async () => {
-    dispatch({ type: types.positions, payload: mock_jobs.jobs_offers });
     dispatch({ type: types.ranking, payload: mock_ranking.ranking });
-
   }
+
   const wrapperStyle = {
     marginTop:16,
     marginBottom:16
   }
+
   return (
     <>
       <MainLayout title='Welcome' user={user} bgActive={false} loading={loading}>
-        <HeaderHome />
+        <HeaderLandingComp 
+          handlerSearch={handlerSearch}
+          filter_selected={state.filter_selected}
+         />
         <WrapperSection row={20} style={wrapperStyle}  >
           <CarouselComp carousel_data={state.carousel_data} />
         </WrapperSection>
