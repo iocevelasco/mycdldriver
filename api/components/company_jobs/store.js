@@ -1,4 +1,5 @@
 const {TagsModel, JobsModel} = require('./model');
+const fs = require('fs');
 
 function capitalize(text) {
     return text.replace(/\b\w/g , function(m){ return m.toUpperCase(); } );
@@ -28,9 +29,7 @@ function getJobs(filterCompany){
         let filter = {};
         let filterOr = [];
         if(filterCompany.company){
-            filter = {
-                company: filterCompany,
-            };
+            filter = filterCompany;
         }
         if(filterCompany.input){
             filterOr.push({title: new RegExp(filterCompany.input, 'i')});
@@ -111,6 +110,14 @@ async function updateJob(id, job, company){
     }
     if(job.email){
         foundJob.email = job.email;
+    }
+    if(job.logo){
+        try {
+            fs.unlinkSync("." + foundJob.photo);
+        } catch(err) {
+            console.error(err);
+        }
+        foundJob.logo = job.logo;
     }
     if(job.tags.length > 0){
         const listTags = await saveTags(job.tags);

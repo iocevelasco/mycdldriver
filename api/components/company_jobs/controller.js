@@ -20,7 +20,7 @@ function getJob(filter){
     });
 }
 
-function addJob(job, company, logo){
+function addJob(job, company){
     return new Promise((resolve, reject) => {
         job.company = company;
         switch(job){
@@ -61,10 +61,10 @@ function addJob(job, company, logo){
                 reject('No time data');
                 return false; 
         }
-        if(logo){
+        /*if(logo){
             const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
             job.logo = fileUrl;
-        }
+        }*/
         const JobResolve = store.add(job); 
         resolve(JobResolve);
     });
@@ -76,10 +76,6 @@ function updateJob(id, job, company, logo){
             console.error('[companyJobsController.updateJob] No company data');
             reject({status: 400, message: 'No company data'});
             return false;
-        }
-        if(logo){
-            const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
-            job.logo = fileUrl;
         }
         const result = store.update(id, job, company);
         switch(result.status){
