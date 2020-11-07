@@ -195,7 +195,7 @@ const CompanyJobView = ({ user }) => {
     headers: {
       authorization: 'authorization-text',
     },
-    onChange(info) {
+    async onChange(info) {
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
@@ -213,13 +213,32 @@ const CompanyJobView = ({ user }) => {
         return file;
       });
       if(state.editing){
-        console.log('foto edit', fileList);
+        if(state.editPhoto.length > 0){
+          try{
+            const file = {
+              foto: state.editPhoto[0].response.data.file
+            };
+            await axios.post(`/api/files/delete`, file);
+          }catch(e){
+            console.log(e);
+          }
+        }
         dispatch({ type: types.EDIT_PHOTO, payload: fileList});
       }else{
+        if(state.newPhoto.length > 0){
+          try{
+            const file = {
+              foto: state.newPhoto[0].response.data.file
+            };
+            await axios.post(`/api/files/delete`, file);
+          }catch(e){
+            console.log(e);
+          }
+        }
         dispatch({ type: types.NEW_PHOTO, payload: fileList});
       }
       
-    },
+    }
   };
 
   const onChangeEditJob = (e, key) => {
