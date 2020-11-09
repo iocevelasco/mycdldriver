@@ -9,7 +9,7 @@ import { fetchJobPositionData } from '../store/reducers/lading_reducer';
 import { connect } from 'react-redux';
 import queryString from "query-string";
 import moment from "moment";
-
+import axios from 'axios';
 
 //mock
 import mock_ranking from '../mock/ranking.json';
