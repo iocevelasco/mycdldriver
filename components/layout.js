@@ -22,6 +22,7 @@ import {
 import { 
     GoogleOutlined, 
     FacebookOutlined, 
+    UserOutlined,
     DownOutlined} 
 from '@ant-design/icons';
 
@@ -112,7 +113,7 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
-                           <img style={{height: 50}} src='/static/images/logo.svg' />
+                           <img src='/static/images/logo.svg' />
                         </Link>
                     </Col>
                     <Col span={10}>
@@ -130,6 +131,7 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                      : 
                         <Row justify='end' align='middle'>
                             <Button 
+                            icon={<UserOutlined/>}
                             onClick={()=>setVisible(true)}
                             type="secondary" size='large'>
                                 LOGIN

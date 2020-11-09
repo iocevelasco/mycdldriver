@@ -31,7 +31,6 @@ const updateUserCompany = (props) => {
 }
 
 const updateUserDrive = (props) => {
-    console.log(props);
     let { user, driver } = props;
     return {
         type: types.UPDATE_USER_DRIVER,
@@ -53,12 +52,13 @@ const logoutUser = () => {
         token:null,
         driver: null,
         company:null,
+        deviceType: 'desktop'
     }
     return {
         type: types.LOGOUT_USER,
         payload: state
         }
-    }
+}
 
 const getInitialPropsUser = (props) => {
     return {
@@ -77,6 +77,8 @@ const userReducer  = (state = initialState, action) =>{
             return {...state, ...action.payload}
         case types.LOGOUT_USER:
             return {...state, ...action.payload}
+        case types.DEVICETYPE:
+            return {...state, deviceType:action.payload}
         default:
             return state;
     }

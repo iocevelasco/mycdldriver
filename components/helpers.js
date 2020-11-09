@@ -2,11 +2,11 @@ import React from 'react';
 import { Row, Col, Image, Typography } from 'antd';
 const { Title, Text } = Typography
 
-const WrapperSection = ({ children, row, styles }) => {
+const WrapperSection = ({ children, xs, row, styles }) => {
   return (
     <div style={styles}>
       <Row justify='center' align='middle'>
-        <Col span={row}>
+        <Col xs={xs} lg={row} md={row}>
           {children}
         </Col>
       </Row>

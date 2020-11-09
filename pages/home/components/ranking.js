@@ -17,7 +17,7 @@ const RankingComp = ({ full_name, ranking, address, image }) => {
   const stars = [1,2,3,4,5]
   return (
     <>
-    <Col className="home--ranking" span={6}>
+    <Col className="home--ranking" lg={6} md={12} sm={22}>
       <Card
        hoverable={true}
         cover={
