@@ -35,8 +35,8 @@ router.get('/private', auth(2), function (req, res) {
     });
 });
 
-router.post('/', auth(2), storage.single('logo'), function (req, res) {
-    controller.addJob(req.body, req.user.company, req.file)
+router.post('/', auth(2), function (req, res) {
+    controller.addJob(req.body, req.user.company)
     .then((Job) => {
         response.success(req, res, Job, 201);
     }).catch(e => {
@@ -45,8 +45,8 @@ router.post('/', auth(2), storage.single('logo'), function (req, res) {
     });
 });
 
-router.patch('/:id', auth(2), storage.single('logo'), function (req, res){
-    controller.updateJob(req.params.id, req.body, req.user.company, req.file)
+router.patch('/:id', auth(2), function (req, res){
+    controller.updateJob(req.params.id, req.body, req.user.company)
         .then((data) => {
             response.success(req, res, data, 200);
         })

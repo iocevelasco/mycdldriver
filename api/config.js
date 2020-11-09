@@ -16,6 +16,7 @@ const config = {
         google: {
             clientID: process.env.GOOGLE_CLIENT_ID || '762087274564-vhbjmlqm5vc8qmc9slkd8tjtkh447dut.apps.googleusercontent.com',
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || '2EjAZAVFLJFjLLBxBS2Z0d5y',
+            clientApiKey: process.env.GOOGLE_API_KEY || 'AIzaSyDSOUjBm0pendidM_fv3BkFnWFm2h2UXHI',
             callbackURL: process.env.GOOGLE_CALLBACK || 'http://localhost:3000/auth/google/callback'
         },
         facebook: {
