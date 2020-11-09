@@ -193,7 +193,7 @@ const CompanyJobView = ({ user }) => {
     name: 'logo',
     action: '/api/files',
     headers: {
-      authorization: 'authorization-text',
+      authorization: 'authorization-text'
     },
     async onChange(info) {
       if (info.file.status !== 'uploading') {
@@ -301,7 +301,7 @@ const CompanyJobView = ({ user }) => {
     dispatch({ type: types.ADD_TAGS, payload:{
       tags,
       inputVisible: false,
-      inputValue: '',
+      inputValue: ''
     } })
   };
 
@@ -315,7 +315,7 @@ const CompanyJobView = ({ user }) => {
     dispatch({ type: types.ADD_CURRENT_TAGS, payload:{
       tagsEdit,
       inputEditVisible: false,
-      editInputValue: '',
+      editInputValue: ''
     } })
   };
 
