@@ -5,13 +5,26 @@ import { Provider } from 'react-redux';
 
 
 class MyApp extends App {
+  constructor(props) {
+    super(props);
+    this.state = { 
+      deviceType : 'desktop'
+    }
+   }
+
+   componentWillMount() {
+    if (typeof window !== "undefined") {
+      if(window.innerWidth < 480) this.setState({deviceType:'phone'})
+      else this.setState({deviceType:'desktop'})
+    }
+   }
+
   render() {
     const { Component, reduxStore } = this.props;
-
     return (
       <NextContainer>
         <Provider store={reduxStore}>
-          <Component />
+          <Component {...this.state} />
         </Provider>
       </NextContainer>
     );

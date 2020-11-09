@@ -13,7 +13,7 @@ import moment from "moment";
 
 //mock
 import mock_ranking from '../mock/ranking.json';
-import mock_jobs from '../mock/job_offerts.json';
+
 
 
 //View components
@@ -76,9 +76,8 @@ const  Home = ({
   loading, 
   jobs, 
   fetchJobs, 
-  ...props 
+  deviceType 
 }) => {
-
   const [state, dispatch] = useReducer(reducer, initialState);
   
   useEffect(() => {
@@ -88,7 +87,6 @@ const  Home = ({
 
   const handlerSearch = (e, key) => {
     let value = "";
-    console.log(e,key);
     if(key == 'input') value = e;
     else if(key == 'city') value = e;
     else if(key === 'date') value = moment(e._d).format('DD-MM-YY')
@@ -134,20 +132,20 @@ const  Home = ({
           handlerSearch={handlerSearch}
           filter_selected={state.filter_selected}
          />
-        <WrapperSection row={20} style={wrapperStyle}  >
+        <WrapperSection xs={24} row={20} style={wrapperStyle}  >
           <CarouselComp carousel_data={state.carousel_data} />
         </WrapperSection>
-        <WrapperSection row={18}>
-            <OffertJobComp jobs={jobs} />
+        <WrapperSection xs={24}  row={18}>
+            <OffertJobComp jobs={jobs} deviceType={deviceType}/>
         </WrapperSection>
-        <WrapperSection row={18} style={wrapperStyle} >
+        <WrapperSection xs={24} row={18} style={wrapperStyle} >
           <Row justify='center' align='middle' gutter={[16]} style={{marginTop:24}}>
             <Col span={14}>
               <Title style={{textAlign: 'center'}}>Our Drivers</Title>
               <Text style={{textAlign: 'center', display:'flex'}}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
             </Col>
           </Row>
-          <Row justify='center' align='middle' gutter={[16]}>
+          <Row justify='center' align='middle' gutter={[16, 16]}>
             {
               state.ranking.map((e, ind) => {
                 return (

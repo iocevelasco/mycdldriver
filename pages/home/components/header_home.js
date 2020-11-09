@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 const { Title } = Typography;
 const { Option } = Select;
-
 const { Search } = Input;
 
 function mapStateToProps(state){
@@ -13,7 +12,8 @@ function mapStateToProps(state){
   }
 }
 
-const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available}) => {
+const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available, ...props}) => {
+  console.log(props)
   return (
     <>
         <div className="home-header"
@@ -21,7 +21,7 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available}) =
             background: `url('/static/images/truck11.jpg')`
           }}>
           <Row justify='center' align='middle'>
-            <Col span={18}>
+            <Col xs={24} lg={18} md={18}>
               <div className="home-header__input-container">
                 <Title> TEAMWORK & LOYALTY <br />
                       DRIVING OUR SUCCESS
@@ -31,7 +31,6 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available}) =
                     <Search
                       placeholder="input search text"
                       size='large'
-                      value={filter_selected.input}
                       onSearch={e => handlerSearch(e, 'input')}
                       style={{ width: '100%' }}
                     />
@@ -39,7 +38,7 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available}) =
                   <Col span={24} style={{marginTop: 16}}>
                       <Input.Group size="large">
                         <Row gutter={[16, 16]}>
-                          <Col span={5}>
+                          <Col  xs={10} lg={5} md={5}>
                           <Select 
                             size="large"
                             style={{ width: '100%' }}
@@ -53,7 +52,7 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available}) =
                               }
                           </Select>
                           </Col>
-                          <Col span={8}>
+                          <Col  xs={14} lg={8} md={8}>
                             <DatePicker 
                             onChange={e => handlerSearch(e, 'date')}
                             size="large" style={{ width: '100%' }} />
