@@ -7,7 +7,7 @@ function getDriver(filter){
     });
 }
 
-function addDriver(driver, imageDln){
+function addDriver(driver){
     return new Promise((resolve, reject) => {
         if(!driver){
             console.error('[driverController.addDriver] No driver data');
@@ -15,11 +15,9 @@ function addDriver(driver, imageDln){
             return false;
         }
 
-        const fileUrl = imageDln ? config.publicRoute + config.filesRoute + '/' + imageDln.filename : '';
-
         const fullDriver = {
             dln: driver.dln,
-            imageDln: fileUrl,
+            imageDln: driver.imageDln,
             expDateDln: driver.expDateDln,
             birthDate: driver.birthDate,
             areaCode: driver.areaCode,
@@ -48,7 +46,7 @@ function addDriver(driver, imageDln){
     
 }
 
-function updateDriver(id, driver, imageDln){
+function updateDriver(id, driver){
     return new Promise(async (resolve, reject) => {
         if(!id){
             reject('[driverController.updateDriver] No user ID');
@@ -61,6 +59,7 @@ function updateDriver(id, driver, imageDln){
 
         const fullDriver = {
             dln: driver.dln,
+            imageDln: driver.imageDln,
             expDateDln: driver.expDateDln,
             birthDate: driver.birthDate,
             areaCode: driver.areaCode,
@@ -71,10 +70,6 @@ function updateDriver(id, driver, imageDln){
             zipCode: driver.zipCode,
             description: driver.description
         };
-        if(imageDln){
-            const fileUrl = imageDln ? config.publicRoute + config.filesRoute + '/' + imageDln.filename : '';
-            fullDriver.imageDln = fileUrl;
-        }
 
         const user = {
             name: driver.base.name,

@@ -8,16 +8,18 @@ import {
   Avatar,
   Form,
   Button,
+  Upload,
   InputNumber,
   Radio,
   DatePicker,
 } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import moment from 'moment';
 const { TextArea } = Input;
 
 const driverUser = (props) => {
   const [form] = Form.useForm();
-  const { driver, onChangeBase, onChangeDriver, handleDatePicker, newDrivers, updateDriver, base} = props;
+  const { driver, onChangeBase, onChangeDriver, handleDatePicker, newDrivers, updateDriver, base, beforeUpload, propsUpload, imageDln} = props;
   return (
     <div className='profile-driver'>
       <Row justify='center'>
@@ -148,14 +150,24 @@ const driverUser = (props) => {
           </Form>
         </Col>
         <Col className='profile-driver__form-small' span={14}>
-          <Form.Item label="Years of experience ">
-            <InputNumber
-              size="large"
-              min={0}
-              max={100}
-              defaultValue={0}
-              onChange={(e) => onChangeDriver(e, 'experience')} />
-          </Form.Item>
+          <Row gutter={[24]} justify='space-between' >
+            <Form.Item label="Years of experience ">
+              <InputNumber
+                size="large"
+                min={0}
+                max={100}
+                defaultValue={0}
+                onChange={(e) => onChangeDriver(e, 'experience')} />
+            </Form.Item>
+            <Form.Item>
+              <Upload {...propsUpload}
+                fileList={imageDln}
+                beforeUpload={beforeUpload}
+              >
+                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              </Upload>
+            </Form.Item>
+          </Row>
           <Form.Item>
             <TextArea
               rows={4}
