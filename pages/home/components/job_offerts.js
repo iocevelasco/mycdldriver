@@ -1,8 +1,5 @@
-import { useRouter } from 'next/router'
 import React from 'react';
 import {
-  Row,
-  Col,
   List,
   Card,
   Avatar,
@@ -11,8 +8,6 @@ import {
 } from 'antd';
 import Link from 'next/link';
 import moment from 'moment';
-
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography
 const { Meta } = Card;
@@ -36,8 +31,8 @@ const JobListComp = ({ jobs, deviceType }) => {
             }}}>
               {
                 deviceType === 'desktop' 
-                ? <DescriptionMobile item={item}/> 
-                : <DescriptionDesktop item={item}/>
+                ? <DescriptionDesktop item={item}/> 
+                : <DescriptionMobile item={item}/>
               }
             </Link>
         </List.Item>
@@ -49,7 +44,6 @@ const JobListComp = ({ jobs, deviceType }) => {
 
 
 const DescriptionDesktop = ({item}) => {
-  console.log(item)
   return (
       <Card
       bodyStyle={{
