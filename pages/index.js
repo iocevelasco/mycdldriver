@@ -135,7 +135,7 @@ const  Home = ({
         <WrapperSection xs={24} row={20} style={wrapperStyle}  >
           <CarouselComp carousel_data={state.carousel_data} />
         </WrapperSection>
-        <WrapperSection xs={24}  row={18}>
+        <WrapperSection xs={24} row={18}>
             <OffertJobComp jobs={jobs} deviceType={deviceType}/>
         </WrapperSection>
         <WrapperSection xs={24} row={18} style={wrapperStyle} >
