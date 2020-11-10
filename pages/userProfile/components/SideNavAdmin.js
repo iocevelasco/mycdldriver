@@ -71,7 +71,6 @@ const SideNavAdmin = ({ user, currentLocation }) => {
       icon: <DashboardOutlined />
     },
   ]
-  if (typeUser) {
     return (
       <Col span={4}
         style={{ background: '#001529' }}>
@@ -93,9 +92,6 @@ const SideNavAdmin = ({ user, currentLocation }) => {
         </Menu>
       </Col>
     )
-  } else {
-    return null
-  }
-};
+}
 
 export default connect(mapStateToProps)(SideNavAdmin);
