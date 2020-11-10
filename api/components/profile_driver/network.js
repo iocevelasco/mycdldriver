@@ -178,8 +178,8 @@ router.get('/', function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.post('/', storage.single('imageDln'), function (req, res) {
-    controller.addDriver(req.body, req.user, req.file)
+router.post('/', function (req, res) {
+    controller.addDriver(req.body, req.user)
     .then((fullDriver) => {
         response.success(req, res, fullDriver, 201);
     }).catch(e => {
@@ -230,8 +230,8 @@ router.post('/', storage.single('imageDln'), function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.patch('/:id', auth(1), storage.single('imageDln'), function (req, res){
-    controller.updateDriver(req.params.id, req.body, req.file)
+router.patch('/:id', auth(1), function (req, res){
+    controller.updateDriver(req.params.id, req.body)
         .then((data) => {
           response.success(req, res, data, 200);
         })

@@ -36,8 +36,8 @@ const JobListComp = ({ jobs, deviceType }) => {
             }}}>
               {
                 deviceType === 'desktop' 
-                ? <DescriptionDesktop item={item}/> 
-                : <DescriptionMobile item={item}/>
+                ? <DescriptionMobile item={item}/> 
+                : <DescriptionDesktop item={item}/>
               }
             </Link>
         </List.Item>
@@ -48,7 +48,8 @@ const JobListComp = ({ jobs, deviceType }) => {
 }
 
 
-const DescriptionMobile = (item) => {
+const DescriptionDesktop = ({item}) => {
+  console.log(item)
   return (
       <Card
       bodyStyle={{
@@ -88,7 +89,7 @@ const DescriptionMobile = (item) => {
   )
 }
 
-const DescriptionDesktop = (item) => {
+const DescriptionMobile = ({item}) => {
  return (<Card
   bodyStyle={{
     padding: 0

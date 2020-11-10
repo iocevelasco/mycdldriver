@@ -142,7 +142,7 @@ router.get('/', function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.post('/', storage.single('logo'), function (req, res) {
+router.post('/', function (req, res) {
 
     controller.addCompany(req.body, req.user)
     .then((fullCompany) => {
@@ -189,8 +189,8 @@ router.post('/', storage.single('logo'), function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.patch('/:id', auth(2), storage.single('logo'), function (req, res){
-    controller.updateCompany(req.params.id, req.body, req.file)
+router.patch('/:id', auth(2), function (req, res){
+    controller.updateCompany(req.params.id, req.body)
         .then((data) => {
             response.success(req, res, data, 200);
         })

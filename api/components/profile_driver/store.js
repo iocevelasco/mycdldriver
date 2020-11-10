@@ -45,17 +45,11 @@ async function updateDriver(id, user){
     }
     if(user.photo){
         try {
-            if(foundUser.photo){
-                if(fs.unlinkSync("." + foundUser.photo)){
-                    foundUser.photo = user.photo;
-                }
-            }else{
-                foundUser.photo = user.photo;
-            }
-            
+            fs.unlinkSync("." + foundUser.photo);
         } catch(err) {
             console.error(err);
         }
+        foundUser.photo = user.photo;
     }
 
     if(driver.dln){
@@ -69,17 +63,11 @@ async function updateDriver(id, user){
     }
     if(driver.imageDln){
         try {
-            if(foundDriver.imageDln){
-                if(fs.unlinkSync("." + foundDriver.imageDln)){
-                    foundDriver.imageDln = driver.imageDln;
-                }
-            }else{
-                foundDriver.imageDln = driver.imageDln;
-            }
-            
+            fs.unlinkSync("." + foundDriver.imageDln);
         } catch(err) {
             console.error(err);
         }
+        foundDriver.imageDln = driver.imageDln;
     }
     if(driver.areaCode){
         foundDriver.areaCode = driver.areaCode;

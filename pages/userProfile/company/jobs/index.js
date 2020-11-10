@@ -8,6 +8,8 @@ import {
   Input,
   Form,
   Radio,
+  Upload,
+  message,
   Tag,
   Card,
   List,
@@ -22,12 +24,13 @@ import axios from 'axios';
 import WrapperSection from '../../components/wrapperSection';
 import SideNav from '../../components/SideNavAdmin';
 import SearchLocation from '../../components/SearchLocationInput';
-import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography
 const initialState = {
   loading: true,
   loadingJobsList:true,
+  editing: false,
   newJob: {
     title: '',
     description: '',
@@ -52,6 +55,8 @@ const initialState = {
   inputVisible: false,
   inputEditVisible: false,
   inputValue: '',
+  newPhoto: [],
+  editPhoto: [],
   editInputIndex: -1,
   editInputValue: '',
   jobByCompany:[],
@@ -73,7 +78,10 @@ const types = {
   EDIT_JOB: 'EDIT_JOB',
   SHOW_DRAWER:'SHOW_DRAWER',
   SET_CURRENT_TAGS: 'SET_CURRENT_TAGS',
-  LOADING_GET_JOBS:'LOADING_GET_JOBS'
+  LOADING_GET_JOBS:'LOADING_GET_JOBS',
+  NEW_PHOTO: 'NEW_PHOTO',
+  EDIT_PHOTO: 'EDIT_PHOTO',
+  EDITING: 'EDITING'
 }
 
 const reducer = (state, action) => {
@@ -108,6 +116,12 @@ const reducer = (state, action) => {
       return { ...state, visible:!state.visible }
     case types.LOADING_GET_JOBS:
       return { ...state, loadingJobsList:!state.loadingJobsList }
+    case types.NEW_PHOTO:
+      return { ...state, newPhoto:action.payload }
+    case types.EDIT_PHOTO:
+      return { ...state, editPhoto:action.payload }
+    case types.EDITING:
+      return { ...state, editing:!state.editing }
     default:
       throw new Error('Unexpected action');
   }
@@ -143,13 +157,15 @@ const CompanyJobView = ({ user }) => {
   
   const fetchJobPositionData = async () => {
     try{
-      let newJob = {title: '', description: '', areaCode: '', phoneNumber: '', email: '', city: '', time: ''}
+      let newJob = {title: '', description: '', areaCode: '', logo: '', phoneNumber: '', email: '', city: '', time: ''}
       dispatch({ type: types.JOB_DATA, payload: newJob });
       dispatch({ type: types.LOADING_GET_JOBS});
+      dispatch({ type: types.NEW_PHOTO, payload: ''});
       const {data} = await axios.get('/api/company/jobs/private', header);
+      console.log(data);
       dispatch({ type: types.GET_JOBS, payload: data.data });
     }catch(err){
-      console.log(err);
+      console.log('fetchJobPositionData', err);
     }
   }
 
@@ -160,6 +176,70 @@ const CompanyJobView = ({ user }) => {
     newJob[key] = value;
     dispatch({ type: types.JOB_DATA, payload: newJob });
   }
+
+  function beforeUpload(file) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
+
+  const propsUpload = {
+    name: 'logo',
+    action: '/api/files',
+    headers: {
+      authorization: 'authorization-text'
+    },
+    async onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+      if(state.editing){
+        if(state.editPhoto.length > 0){
+          try{
+            const file = {
+              foto: state.editPhoto[0].response.data.file
+            };
+            await axios.post(`/api/files/delete`, file);
+          }catch(e){
+            console.log(e);
+          }
+        }
+        dispatch({ type: types.EDIT_PHOTO, payload: fileList});
+      }else{
+        if(state.newPhoto.length > 0){
+          try{
+            const file = {
+              foto: state.newPhoto[0].response.data.file
+            };
+            await axios.post(`/api/files/delete`, file);
+          }catch(e){
+            console.log(e);
+          }
+        }
+        dispatch({ type: types.NEW_PHOTO, payload: fileList});
+      }
+      
+    }
+  };
 
   const onChangeEditJob = (e, key) => {
     let editJob = state.editJob;
@@ -221,7 +301,7 @@ const CompanyJobView = ({ user }) => {
     dispatch({ type: types.ADD_TAGS, payload:{
       tags,
       inputVisible: false,
-      inputValue: '',
+      inputValue: ''
     } })
   };
 
@@ -235,7 +315,7 @@ const CompanyJobView = ({ user }) => {
     dispatch({ type: types.ADD_CURRENT_TAGS, payload:{
       tagsEdit,
       inputEditVisible: false,
-      editInputValue: '',
+      editInputValue: ''
     } })
   };
 
@@ -265,6 +345,7 @@ const CompanyJobView = ({ user }) => {
       dispatch({type: types.EDIT_JOB, payload:job});
       dispatch({type: types.SET_CURRENT_TAGS, payload: tagsEdit });
       dispatch({type: types.SHOW_DRAWER});
+      dispatch({type: types.EDITING});
     }catch(e){
       console.log(e);
     }
@@ -276,6 +357,9 @@ const CompanyJobView = ({ user }) => {
       return {name: tag}
     });
     newJob.tags = tagsJob;
+    if(state.newPhoto.length > 0){
+      newJob.logo = state.newPhoto[0].response.data.file;
+    }
     dispatch({ type: types.LOADING, payload: true });
     try {
       await axios.post('/api/company/jobs', newJob, header);
@@ -301,6 +385,11 @@ const CompanyJobView = ({ user }) => {
       return {name: tag}
     });
     editJob.tags = tagsJob;
+    console.log('tamaño del arreglo', state.editPhoto.length);
+    if(state.editPhoto.length > 0){
+      editJob.logo = state.editPhoto[0].response.data.file;
+    }
+    console.log('editJob', editJob);
     dispatch({type: types.SHOW_DRAWER});
     dispatch({ type: types.LOADING, payload: true });
     try {
@@ -364,7 +453,13 @@ const CompanyJobView = ({ user }) => {
                     onChange={(e) => onChangeJob(e, 'description')} />
                 </Form.Item>
                 <Form.Item>
-                  { /*<SearchLocation onChange={() => null} /> */}
+                  <SearchLocation onChange={() => null} /> 
+                  <Upload {...propsUpload}
+                    fileList={state.newPhoto}
+                    beforeUpload={beforeUpload}
+                  >
+                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  </Upload>
                 </Form.Item>
                 <Row gutter={[24]} justify='space-between' >
                   <Col span={6}>
@@ -507,7 +602,11 @@ const CompanyJobView = ({ user }) => {
           placement="right"
           closable={true}
           width={680}
-          onClose={()=> dispatch({type:types.SHOW_DRAWER})}
+          onClose={()=> {
+            dispatch({type:types.SHOW_DRAWER});  
+            dispatch({type: types.EDITING});
+            dispatch({ type: types.EDIT_PHOTO, payload: ''});
+          }}
           visible={state.visible}>
             <Form
                 form={form}
@@ -528,6 +627,14 @@ const CompanyJobView = ({ user }) => {
                     placeholder="Description"
                     value={state.editJob.description}
                     onChange={(e) => onChangeEditJob(e, 'description')} />
+                </Form.Item>
+                <Form.Item>
+                  <Upload {...propsUpload}
+                    fileList={state.editPhoto}
+                    beforeUpload={beforeUpload}
+                  >
+                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  </Upload>
                 </Form.Item>
                 <Row gutter={[24]} justify='space-between' >
                   <Col span={6}>
