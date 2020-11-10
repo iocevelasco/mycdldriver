@@ -141,7 +141,8 @@ const CompanyJobView = ({ user }) => {
     title:'Jobs',
     user:{user},
     loading:state.loading,
-    currentLocation:'4'
+    currentLocation:'4',
+    bgActive:false
   }
 
   const [form] = Form.useForm();
@@ -162,7 +163,6 @@ const CompanyJobView = ({ user }) => {
       dispatch({ type: types.LOADING_GET_JOBS});
       dispatch({ type: types.NEW_PHOTO, payload: ''});
       const {data} = await axios.get('/api/company/jobs/private', header);
-      console.log(data);
       dispatch({ type: types.GET_JOBS, payload: data.data });
     }catch(err){
       console.log('fetchJobPositionData', err);
@@ -174,6 +174,14 @@ const CompanyJobView = ({ user }) => {
     let value = "";
     value = e.target.value;
     newJob[key] = value;
+    dispatch({ type: types.JOB_DATA, payload: newJob });
+  }
+
+  console.log('state', state.newJob)
+  const updateQuery = (formatted_address) => {
+    console.log('formatted_address',formatted_address)
+    let newJob = state.newJob;
+    newJob['city'] = formatted_address;
     dispatch({ type: types.JOB_DATA, payload: newJob });
   }
 
@@ -389,7 +397,6 @@ const CompanyJobView = ({ user }) => {
     if(state.editPhoto.length > 0){
       editJob.logo = state.editPhoto[0].response.data.file;
     }
-    console.log('editJob', editJob);
     dispatch({type: types.SHOW_DRAWER});
     dispatch({ type: types.LOADING, payload: true });
     try {
@@ -424,9 +431,9 @@ const CompanyJobView = ({ user }) => {
       <MainLayout {...configSection}>
         <Row>
           <SideNav /> 
-          <Col span={20} className="profile-company__jobs">
+          <Col span={18} className="profile-company__jobs">
              {/* // CRUM JOBS */}
-            <WrapperSection row={20} styles={wrapperForm}>
+            <WrapperSection row={16} styles={wrapperForm}>
               <div className="title" >
                 <Title level={3}> Create and edit your position </Title>
                 <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
@@ -453,7 +460,6 @@ const CompanyJobView = ({ user }) => {
                     onChange={(e) => onChangeJob(e, 'description')} />
                 </Form.Item>
                 <Form.Item>
-                  <SearchLocation onChange={() => null} /> 
                   <Upload {...propsUpload}
                     fileList={state.newPhoto}
                     beforeUpload={beforeUpload}
@@ -488,13 +494,7 @@ const CompanyJobView = ({ user }) => {
                     value={state.newJob.email}
                     onChange={(e) => onChangeJob(e, 'email')} />
                 </Form.Item>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="City"
-                    value={state.newJob.city}
-                    onChange={(e) => onChangeJob(e, 'city')} />
-                </Form.Item>
+                <SearchLocation updateQuery={updateQuery}/>
                 <Form.Item>
                   <Radio.Group
                     value={state.newJob.time}
@@ -573,7 +573,7 @@ const CompanyJobView = ({ user }) => {
                     <Button onClick={()=>editJob(item)} icon={<EditOutlined />}>Edit</Button>,
                   ]}>
                   <List.Item.Meta
-                    avatar={<Avatar size={80} shape='square' src='https://www.flaticon.com/svg/static/icons/svg/664/664468.svg' />}
+                    avatar={<Avatar size={80} shape='square' src={item.logo} />}
                     title={<a href={item.href}>{item.title}</a>}
                     description={
                       <div className='list-job-container'>

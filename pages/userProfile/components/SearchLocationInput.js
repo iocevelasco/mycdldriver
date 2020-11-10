@@ -38,10 +38,9 @@ async function handlePlaceSelect(updateQuery) {
   const addressObject = autoComplete.getPlace();
   const query = addressObject.formatted_address;
   updateQuery(query);
-  console.log(addressObject);
 }
 
-function SearchLocationInput() {
+function SearchLocationInput({updateQuery}) {
   const [query, setQuery] = useState("");
   const autoCompleteRef = useRef(null);
 
@@ -51,13 +50,17 @@ function SearchLocationInput() {
       () => handleScriptLoad(setQuery, autoCompleteRef)
     );
   }, []);
+  
+  useEffect(() => {
+    updateQuery(query)
+  },[query])
 
   return (
     <div className="search-location-input">
       <input
         size='large'
         ref={autoCompleteRef}
-        onChange={event => setQuery(event.target.value)}
+        onChange={event =>  setQuery(event.target.value)}
         placeholder="Enter a City"
         value={query}
       />
