@@ -12,8 +12,11 @@ import {
   Switch,
   InputNumber
 } from 'antd';
-import axios from 'axios';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import { WrapperSection } from 'components/helpers';
+import { withRouter } from 'next/router';
+import axios from 'axios';
+
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -38,8 +41,7 @@ const initialState = {
 }
 
 const types = {
-  carousel_data: 'carousel_data',
-  positions: 'positions',
+  FETCH_DETAIL: 'FETCH_DETAIL',
   ranking: 'ranking',
 }
 
@@ -47,8 +49,8 @@ const reducer = (state, action) => {
   switch (action.type) {
     case types.carousel_data:
       return { ...state, carousel_data: action.payload }
-    case types.positions:
-      return { ...state, positions: action.payload }
+    case types.FETCH_DETAIL:
+      return { ...state, ...action.payload }
     case types.ranking:
       return { ...state, ranking: action.payload }
     default:
@@ -56,13 +58,25 @@ const reducer = (state, action) => {
   }
 }
 
-const JobOffert = ({ user }) => {
+const JobOffert = ({ user, router }) => {
   const [form] = Form.useForm();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [formLayout, setFormLayout] = useState('horizontal');
 
   useEffect(() => {
+   let job_id = router.query.id
+   fetchJobDetails(job_id);
   }, [])
+
+  const fetchJobDetails = async (job_id) => {
+    try{
+      const { data } = await axios.get(`/company/jobs/detail/${job_id}`)
+      console.log(data)
+      dispatch({ type: types.FETCH_DETAIL})
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   const onChange = (e, key) => {
     const newDash = state.dashboard;
@@ -80,7 +94,7 @@ const JobOffert = ({ user }) => {
     wrapperCol: { span: 14 },
   }
 
-  const { title, image, description, address, date, expire_date, company_name } = state
+  const { title, image, description, address, date } = state
 
   return (
     <>
@@ -217,18 +231,5 @@ const JobOffert = ({ user }) => {
   )
 }
 
-const WrapperSection = ({ children, row, mt, mb }) => {
-  return (
-    <div style={{ marginTop: mt, marginBottom: mb }}>
-      <Row justify='center' align='middle'>
-        <Col span={row}>
-          {children}
-        </Col>
-      </Row>
-    </div>
-  )
-}
 
-
-
-export default JobOffert;
+export default withRouter(JobOffert);
