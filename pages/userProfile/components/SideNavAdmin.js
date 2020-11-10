@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, Col } from 'antd';
+import { Menu, Col,   Button, } from 'antd';
 import { connect } from 'react-redux';
 import {
   HomeOutlined,
   UserOutlined,
   TeamOutlined,
   ToolOutlined,
-  DashboardOutlined
+  DashboardOutlined, 
+  LeftOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
 
 // CONNECT WITH REDUX
 function mapStateToProps(state){
   return {
-    user: state.user
+    user: state.user,
+    isUseSucces: state.user.typeUser
   }
 }
 
-const SideNavAdmin = ({ user, currentLocation }) => {
+const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
   const [menuOptions, setOptions] = useState([]);
   const { typeUser } = user;
   
@@ -90,6 +92,21 @@ const SideNavAdmin = ({ user, currentLocation }) => {
             })
           }
         </Menu>
+        {
+        !isUseSucces ? <Link href="/userProfile">
+          <Button 
+            shape="round" 
+            size="large" 
+            icon={<LeftOutlined />}
+            type='primary'
+            style={{
+              marginTop: 16,
+              width: '90%',
+              marginLeft: 12,
+            }}
+            > Go Back </Button>
+        </Link> : null
+        }
       </Col>
     )
 }

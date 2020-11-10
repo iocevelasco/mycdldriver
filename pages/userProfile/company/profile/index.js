@@ -4,7 +4,6 @@ import {
   Row,
   Col,
   notification,
-  Button,
   message,
 } from 'antd';
 import axios from 'axios';
@@ -12,8 +11,6 @@ import moment from 'moment';
 import FormUserCompany from '../../components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
 import { withRouter } from 'next/router';
-import Link from 'next/link';
-import {LeftOutlined}from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { updateUserCompany } from '@store/reducers/user_reducer';
 import { WrapperSection } from 'components/helpers';
@@ -71,8 +68,7 @@ const reducer = (state, action) => {
 // CONNECT WITH REDUX
 function mapStateToProps(state){
   return {
-      user: state.user, 
-      isUseSucces: state.user.typeUser
+      user: state.user,
   }
 }
 
@@ -205,11 +201,12 @@ const CompanyProfileView = ({ user, ...props }) => {
           "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
       });
     } catch (err) {
+      dispatch({ type: types.LOADING, payload: false });
       console.log(err);
       notification['error']({
         message: 'error',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Sorry! An error occurred while saving changes! Please try again."
       });
     }
   };
@@ -239,7 +236,7 @@ const CompanyProfileView = ({ user, ...props }) => {
       notification['error']({
         message: 'error',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "Sorry! An error occurred while saving changes! Please try again."
       });
     }
   };
@@ -269,11 +266,6 @@ const CompanyProfileView = ({ user, ...props }) => {
        <SideNav currentLocation='1' />
         <Col span={20}>
           <WrapperSection row={24} styles={styleWrapper}>
-            {
-              !props.isUseSucces ? <Link href="/userProfile">
-                <Button shape="round" size="large" icon={<LeftOutlined />} type='primary'> Go Back </Button>
-              </Link> : null
-            }
             <FormUserCompany {...formConfig} />
           </WrapperSection>
         </Col>

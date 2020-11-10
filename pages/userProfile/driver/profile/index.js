@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import MainLayout from 'components/layout';
 import {
   Row,
@@ -7,8 +7,6 @@ import {
   Input,
   Select,
   Spin,
-  Card,
-  Button,
   message,
   notification
 } from 'antd';
@@ -16,12 +14,10 @@ import axios from 'axios';
 import moment from 'moment';
 import FormUserDriver from '../../components/FormUserDriver';
 import SideNav from '../../components/SideNavAdmin';
-import { LeftOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { WrapperSection } from 'components/helpers';
 import { updateUserDrive } from '../../../../store/reducers/user_reducer';
-import Link from 'next/link';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -57,7 +53,6 @@ const initialState = {
 function mapStateToProps(state){
   return {
       user: state.user, 
-      isUseSucces: state.user.typeUser
   }
 }
 
@@ -283,11 +278,6 @@ const DriverProfileView = ({ user, ...props }) => {
           <SideNav /> 
           <Col span={20}>
             <WrapperSection styles={stylesWrapper} row={24} mt={0}>
-            {
-                !props.isUseSucces ? <Link href="/userProfile">
-                  <Button shape="round" size="large" icon={<LeftOutlined />} type='primary'> Go Back </Button>
-                </Link> : null
-              }
               <FormUserDriver {...formConfig} />
             </WrapperSection>
           </Col>

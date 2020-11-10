@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Typography, Input, Space, Select, Button } from 'antd';
+import { fetchJobPositionData } from '../../../store/reducers/lading_reducer';
 import { connect } from 'react-redux';
 
 const { Title } = Typography;
@@ -12,7 +13,13 @@ function mapStateToProps(state) {
   }
 }
 
-const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available, ...props }) => {
+function mapDispatchToProps(dispatch){
+  return {
+    fetchJobs: (query) => dispatch(fetchJobPositionData(query))
+  }
+}
+
+const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available, query, fetchJobs }) => {
   return (
     <>
       <div className="home-header"
@@ -30,7 +37,12 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available, ..
                   <Input
                     placeholder="Search your new job"
                     size='large'
-                    onSearch={e => handlerSearch(e, 'input')} />
+                    onChange={e => handlerSearch(e, 'input')}
+                    onKeyPress={event => {
+                      if (event.key === 'Enter') {
+                        fetchJobs(query)
+                      }
+                    }} />
                 </Col>
                 <Col xs={24} lg={8} md={8}>
                   <Select
@@ -47,7 +59,16 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available, ..
                   </Select>
                 </Col>
                 <Col xs={24} lg={4} md={4}>
-                  <Button size="large" style={{width: '100%'}} type="primary">Search </Button>
+                  <Button 
+                    onClick={()=>fetchJobs(query)}
+                    onKeyPress={event => {
+                      if (event.key === 'Enter') {
+                        fetchJobs(query)
+                      }
+                    }}
+                    size="large" 
+                    style={{width: '100%'}}
+                    type="primary">Search </Button>
                 </Col>
               </Row>
             </div>
@@ -59,5 +80,5 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available, ..
 }
 
 
-export default connect(mapStateToProps)(HeaderLandingComp);
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderLandingComp);
 
