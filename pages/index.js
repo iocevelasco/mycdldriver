@@ -14,17 +14,12 @@ import axios from 'axios';
 //mock
 import mock_ranking from '../mock/ranking.json';
 
-
-
 //View components
 import HeaderLandingComp from './home/components/header_home';
 import OffertJobComp from './home/components/job_offerts';
 import RankingComp from './home/components/ranking';
 
 const { Title, Text } = Typography;
-const { Option } = Select;
-
-const { Search } = Input;
 
 const initialState = {
   sponsors: [],
@@ -83,13 +78,14 @@ const  Home = ({
   useEffect(() => {
     fetchJobs(state.query);
     fetchPosition();
-  }, [state.query])
+  }, [])
+
+  console.log(state.query)
 
   const handlerSearch = (e, key) => {
     let value = "";
-    if(key == 'input') value = e;
+    if(key == 'input') value = e.target.value;
     else if(key == 'city') value = e;
-    else if(key === 'date') value = moment(e._d).format('DD-MM-YY')
     
     let filters = state.filter_selected;
 
@@ -131,11 +127,12 @@ const  Home = ({
         <HeaderLandingComp 
           handlerSearch={handlerSearch}
           filter_selected={state.filter_selected}
+          query={state.query}
          />
         <WrapperSection xs={24} row={20} style={wrapperStyle}  >
           <CarouselComp carousel_data={state.carousel_data} />
         </WrapperSection>
-        <WrapperSection xs={24}  row={18}>
+        <WrapperSection xs={24} row={18}>
             <OffertJobComp jobs={jobs} deviceType={deviceType}/>
         </WrapperSection>
         <WrapperSection xs={24} row={18} style={wrapperStyle} >
@@ -165,4 +162,4 @@ const  Home = ({
   )
 }
 
-export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Home));
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Home)); 
