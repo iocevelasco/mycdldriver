@@ -7,14 +7,13 @@ function getCompany(filter){
     });
 }
 
-function addCompany(company, logo){
+function addCompany(company){
     return new Promise((resolve, reject) => {
         if(!company){
             console.error('[companyController.addCompany] No company data');
             reject('[companyController.addCompany] No company data');
             return false;
         }
-        const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
 
         const fullCompany = {
             tradename: company.tradename,
@@ -24,7 +23,8 @@ function addCompany(company, logo){
             logo: fileUrl,
             address: company.address,
             description: company.description,
-            zipCode: company.zipCode
+            zipCode: company.zipCode,
+            logo: company.logo
         };
 
         const user = {
@@ -44,7 +44,7 @@ function addCompany(company, logo){
     
 }
 
-function updateCompany(id, company, logo){
+function updateCompany(id, company){
     return new Promise(async (resolve, reject) => {
         if(!id){
             reject('[companyController.updateCompany] No user ID');
@@ -62,12 +62,9 @@ function updateCompany(id, company, logo){
             phoneNumber: company.phoneNumber,
             address: company.address,
             description: company.description,
-            zipCode: company.zipCode
+            zipCode: company.zipCode,
+            logo: company.logo
         };
-        if(logo){
-            const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
-            fullCompany.logo = fileUrl;
-        }
 
         const user = {
             name: company.base.name,

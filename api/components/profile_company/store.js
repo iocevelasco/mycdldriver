@@ -44,17 +44,11 @@ async function updateCompany(id, user){
     }
     if(user.photo){
         try {
-            if(foundUser.photo){
-                if(fs.unlinkSync("." + foundUser.photo)){
-                    foundUser.photo = user.photo;
-                }
-            }else{
-                foundUser.photo = user.photo;
-            }
-            
+            fs.unlinkSync("." + foundUser.photo);
         } catch(err) {
             console.error(err);
         }
+        foundUser.photo = user.photo;
     }
 
     if(company.tradename){
@@ -62,17 +56,11 @@ async function updateCompany(id, user){
     }
     if(company.logo){
         try {
-            if(foundCompany.logo){
-                if(fs.unlinkSync("." + foundCompany.logo)){
-                    foundCompany.logo = company.logo;
-                }
-            }else{
-                foundCompany.logo = company.logo;
-            }
-            
+            fs.unlinkSync("." + foundCompany.logo);
         } catch(err) {
             console.error(err);
         }
+        foundCompany.logo = company.logo;
     }
     if(company.legalNumber){
         foundCompany.legalNumber = company.legalNumber;

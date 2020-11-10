@@ -9,6 +9,7 @@ import {
   Avatar,
   Form,
   Button,
+  Upload,
   Switch,
   InputNumber,
   Radio,
@@ -17,14 +18,14 @@ import {
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import { CloseOutlined, CheckOutlined, UploadOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 const { TextArea } = Input;
 
 const FormUserCompany = (props) => {
-  const { company, onChangeBase, onChangeCompany, newCompany, updateCompany, base} = props;
+  const { company, onChangeBase, onChangeCompany, newCompany, updateCompany, base, beforeUpload, propsUpload, logo} = props;
   const [form] = Form.useForm();
   return (
     <div className='profile-driver'>
@@ -113,7 +114,7 @@ const FormUserCompany = (props) => {
         </Col>
         <Col className='profile-driver__form-small' span={14}>
           <Row gutter={[24]} justify='space-between' >
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item
                 rules={[{ required: true, message: 'Please input your username!' }]}>
                 <Input
@@ -121,6 +122,18 @@ const FormUserCompany = (props) => {
                   placeholder="Trade Name"
                   value={company.tradename}
                   onChange={(e) => onChangeCompany(e, 'tradename')} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[24]} justify='space-between' >
+            <Col span={12}>
+              <Form.Item>
+                <Upload {...propsUpload}
+                  fileList={logo}
+                  beforeUpload={beforeUpload}
+                >
+                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                </Upload>
               </Form.Item>
             </Col>
             <Col span={12}>

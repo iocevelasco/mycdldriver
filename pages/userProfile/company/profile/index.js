@@ -4,7 +4,8 @@ import {
   Row,
   Col,
   notification,
-  Button
+  Button,
+  message,
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
@@ -20,6 +21,7 @@ import { WrapperSection } from 'components/helpers';
 const initialState = {
   loading:true,
   userLogin:false,
+  logo: [],
   base: {
     name: '',
     lastname: '',
@@ -45,6 +47,7 @@ const types = {
   PROPS_BASE: 'props_base',
   PROPS_COMPANY: 'props_company',
   LOADING: 'LOADING',
+  UPLOAD_IMAGE: 'UPLOAD_IMAGE',
   LOGIN_SUCCCESS: 'LOGIN_SUCCCESS'
 }
 
@@ -58,6 +61,8 @@ const reducer = (state, action) => {
       return { ...state, loading: action.payload }
     case types.LOGIN_SUCCCESS:
       return { ...state, userLogin: action.payload }
+    case types.UPLOAD_IMAGE:
+      return { ...state, logo:action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -125,6 +130,56 @@ const CompanyProfileView = ({ user, ...props }) => {
     dispatch({ type: types.DATA_COMPANY, payload: company });
   }
 
+  function beforeUpload(file) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
+
+  const propsUpload = {
+    name: 'logo',
+    action: '/api/files',
+    headers: {
+      authorization: 'authorization-text'
+    },
+    async onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+      
+      if(state.logo.length > 0){
+        try{
+          const file = {
+            foto: state.logo[0].response.data.file
+          };
+          await axios.post(`/api/files/delete`, file);
+        }catch(e){
+          console.log(e);
+        }
+      }
+      dispatch({ type: types.UPLOAD_IMAGE, payload: fileList});
+    }
+  };
+
   const handleDatePicker = (obj, date, key) => {
     let data = state.driver;
     if (date === "") data[key] = moment(new Date()).format('MM DD YYYY')
@@ -135,6 +190,9 @@ const CompanyProfileView = ({ user, ...props }) => {
   const newCompany = async () => {
     const { base, company } = state;
     base.typeUser = 2;
+    if(state.logo.length > 0){
+      company.logo = state.logo[0].response.data.file;
+    }
     const fullCompany = { base: base, ...company }
     dispatch({ type: types.LOADING, payload: true });
     try {
@@ -162,6 +220,9 @@ const CompanyProfileView = ({ user, ...props }) => {
     };
     const { base, company } = state;
     base.typeUser = 2;
+    if(state.logo.length > 0){
+      company.logo = state.logo[0].response.data.file;
+    }
     const fullCompany = { base: base, ...company }
     try {
       dispatch({ type: types.LOADING, payload: true });
@@ -185,11 +246,14 @@ const CompanyProfileView = ({ user, ...props }) => {
   const formConfig = {
     base: state.base,
     company: state.company,
+    logo: state.logo,
     onChangeBase,
     onChangeCompany,
     handleDatePicker,
     newCompany,
     updateCompany,
+    beforeUpload,
+    propsUpload
   }
 
   const styleWrapper = {

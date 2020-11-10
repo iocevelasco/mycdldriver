@@ -9,6 +9,7 @@ import {
   Spin,
   Card,
   Button,
+  message,
   notification
 } from 'antd';
 import axios from 'axios';
@@ -29,6 +30,7 @@ const { TextArea } = Input;
 
 const initialState = {
   loading:false,
+  imageDln: [],
   base: {
     name: '',
     lastname: '',
@@ -70,6 +72,7 @@ const types = {
   PROPS_BASE: 'PROPS_BASE',
   DATA_DRIVER: 'DATA_DRIVER',
   LOADING: 'LOADING',
+  LOGIN_SUCCCESS: 'LOGIN_SUCCCESS'
 }
 
 const reducer = (state, action) => {
@@ -82,10 +85,12 @@ const reducer = (state, action) => {
       }
     case types.PROPS_BASE:
       return { ...state, base: action.payload }
-      case types.DATA_DRIVER:
-        return { ...state, driver: action.payload }
-      case types.LOADING:
-        return { ...state, loading: action.payload }
+    case types.DATA_DRIVER:
+      return { ...state, driver: action.payload }
+    case types.LOADING:
+      return { ...state, loading: action.payload }
+    case types.UPLOAD_IMAGE:
+      return { ...state, imageDln:action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -136,6 +141,56 @@ const DriverProfileView = ({ user, ...props }) => {
     dispatch({ type: types.DATA_DRIVER, payload: driver });
   }
 
+  function beforeUpload(file) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
+
+  const propsUpload = {
+    name: 'logo',
+    action: '/api/files',
+    headers: {
+      authorization: 'authorization-text'
+    },
+    async onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+      
+      if(state.imageDln.length > 0){
+        try{
+          const file = {
+            foto: state.imageDln[0].response.data.file
+          };
+          await axios.post(`/api/files/delete`, file);
+        }catch(e){
+          console.log(e);
+        }
+      }
+      dispatch({ type: types.UPLOAD_IMAGE, payload: fileList});
+    }
+  };
+
   const handleDatePicker = (obj, date, key) => {
     let data = state.driver;
     if (date === "") data[key] = moment(new Date()).format('MM DD YYYY')
@@ -145,6 +200,9 @@ const DriverProfileView = ({ user, ...props }) => {
 
   const newDrivers = async () => {
     const { base, driver } = state;
+    if(state.imageDln.length > 0){
+      driver.imageDln = state.imageDln[0].response.data.file;
+    }
     const fullDriver = { base: base, ...driver };
 
     try {
@@ -173,6 +231,9 @@ const DriverProfileView = ({ user, ...props }) => {
       headers: { Authorization: `Bearer ${user.token}` }
     };
     const { base } = state;
+    if(state.imageDln.length > 0){
+      state.driver.imageDln = state.imageDln[0].response.data.file;
+    }
     const fullDriver = { base: base, ...state.driver };
     try { 
       dispatch({ type: types.LOADING, payload: true });
@@ -199,11 +260,14 @@ const DriverProfileView = ({ user, ...props }) => {
   const formConfig = {
     base: state.base,
     driver: state.driver,
+    imageDln: state.imageDln,
     onChangeBase: onChangeBase,
     onChangeDriver: onChangeDriver,
     handleDatePicker: handleDatePicker,
     newDrivers: newDrivers,
     updateDriver: updateDriver,
+    beforeUpload,
+    propsUpload
   }
 
   const stylesWrapper = {

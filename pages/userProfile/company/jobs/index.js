@@ -453,7 +453,7 @@ const CompanyJobView = ({ user }) => {
                     onChange={(e) => onChangeJob(e, 'description')} />
                 </Form.Item>
                 <Form.Item>
-                  { /*<SearchLocation onChange={() => null} /> */}
+                  <SearchLocation onChange={() => null} /> 
                   <Upload {...propsUpload}
                     fileList={state.newPhoto}
                     beforeUpload={beforeUpload}
