@@ -10,10 +10,8 @@ import Link from 'next/link';
 import moment from 'moment';
 
 const { Text, Title } = Typography
-const { Meta } = Card;
 
 const JobListComp = ({ jobs, deviceType }) => {
-  console.log('deviceType',deviceType)
   return (
     <>
     <List
