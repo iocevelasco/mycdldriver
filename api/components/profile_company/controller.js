@@ -20,7 +20,6 @@ function addCompany(company){
             legalNumber: company.legalNumber,
             areaCode: company.areaCode,
             phoneNumber: company.phoneNumber,
-            logo: fileUrl,
             address: company.address,
             description: company.description,
             zipCode: company.zipCode,
