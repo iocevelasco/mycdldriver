@@ -10,16 +10,46 @@ import {
   Form,
   Button,
   Switch,
-  InputNumber
+  InputNumber,
+  Drawer
 } from 'antd';
-import axios from 'axios';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import FormUserDriver from 'components/FormUserDriver';
+import { WrapperSection } from 'components/helpers';
+import { withRouter } from 'next/router';
+import { handlerModalLogin } from '@store/reducers/landing_reducer';
+import { connect } from 'react-redux';
+import moment from 'moment';
+import axios from 'axios';
+
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 const { TextArea } = Input;
 
 const initialState = {
+  visible:true,
+  base: {
+    name: '',
+    lastname: '',
+    typeUser: '1',
+    photo: '',
+    email: '',
+    google_id: '',
+    facebook_id: ''
+  },
+  driver: {
+    dln: '',
+    expDateDln: moment(new Date).format('DD MM'),
+    birthDate: moment(new Date).format('DD MM'),
+    areaCode: '',
+    phoneNumber: '',
+    experience: '',
+    sex: '',
+    address: '',
+    zipCode: '',
+    description: ''
+  },
   title: "Position Name",
   image: "https://image.freepik.com/vector-gratis/truck-logo-vector-imagen-archivo_56473-238.jpg",
   postion_id: 0,
@@ -38,31 +68,81 @@ const initialState = {
 }
 
 const types = {
-  carousel_data: 'carousel_data',
-  positions: 'positions',
-  ranking: 'ranking',
+  FETCH_DETAIL: 'FETCH_DETAIL',
+  SHOW_DRAWER:'SHOW_DRAWER',
+  PROPS_BASE: 'PROPS_BASE',
+  PROPS_DRIVER: 'PROPS_DRIVER'
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
     case types.carousel_data:
       return { ...state, carousel_data: action.payload }
-    case types.positions:
-      return { ...state, positions: action.payload }
-    case types.ranking:
-      return { ...state, ranking: action.payload }
+    case types.FETCH_DETAIL:
+      return { ...state, ...action.payload }
+    case types.SHOW_DRAWER:
+     return { ...state, visible:action.payload }
+     case types.PROPS_BASE:
+      return { ...state, base: action.payload }
+      case types.PROPS_DRIVER:
+        return { ...state, driver: action.payload }
     default:
       throw new Error('Unexpected action');
   }
 }
 
-const JobOffert = ({ user }) => {
-  const [form] = Form.useForm();
+
+function mapStateToProps(state) {
+  return {
+    isUserRegistry:state.user.typeUser,
+    user:state.user
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    handleModal:(prop) => dispatch(handlerModalLogin(prop))
+  }
+}
+
+const JobOffert = ({ user, router, isUserRegistry, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [formLayout, setFormLayout] = useState('horizontal');
 
   useEffect(() => {
+    //Esto carga las props iniciales
+    let base = state.base;
+    base.name = user.name || '';
+    base.lastname = user.lastname || '';
+    base.google_id = user.google_id || '';
+    base.facebook_id = user.facebook_id || '';
+    base.photo = user.photo || '';
+    base.email = user.email || '';
+    base.id = user._id || '';
+    if (user.typeUser == 1) {
+      let driver = user.driver;
+      dispatch({ type: types.PROPS_DRIVER, payload: driver })
+    }
+
+
+    dispatch({ type: types.PROPS_BASE, payload: base })
+  }, [user, state.typeUser]);
+  
+  console.log('state',state)
+  
+  useEffect(() => {
+   let job_id = router.query.id
+   fetchJobDetails(job_id);
   }, [])
+
+  const fetchJobDetails = async (job_id) => {
+    try{
+      const { data } = await axios.get(`/api/company/jobs/detail/${job_id}`)
+      console.log(data);
+      dispatch({ type: types.FETCH_DETAIL, payload:data});
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   const onChange = (e, key) => {
     const newDash = state.dashboard;
@@ -80,8 +160,12 @@ const JobOffert = ({ user }) => {
     wrapperCol: { span: 14 },
   }
 
-  const { title, image, description, address, date, expire_date, company_name } = state
-
+  const { title, image, description, address, date } = state
+  
+  const formConfig = {
+    base: state.base,
+    driver: state.driver,
+  }
   return (
     <>
       <MainLayout title='Welcome' user={user}>
@@ -105,109 +189,21 @@ const JobOffert = ({ user }) => {
                   </div>
                 </div>
                 <Text className='description'>{description}</Text>
+                {
+                  !isUserRegistry && <Button onClick={()=> props.handleModal(true)}>Apply</Button>
+                }
               </Col>
               <Col className='job-offert__form' span={10}>
-                <Form
-                  labelCol={{ span: 4 }}
-                  wrapperCol={{ span: 24 }}
-                  layout='horizontal'
-                  form={form}>
-                  <Form.Item>
-                    <Input
-                      size='large'
-                      placeholder="First Name"
-                      onChange={(e) => onChange(e, 'name')} />
-                  </Form.Item>
-                  <Form.Item>
-                    <Input
-                      size='large'
-                      placeholder="Last Name"
-                      onChange={(e) => onChange(e, 'last-name')} />
-                  </Form.Item>
-                  <Form.Item>
-                    <Input
-                      size='large'
-                      placeholder="Mail"
-                      onChange={(e) => onChange(e, 'Mail')} />
-                  </Form.Item>
-                  <Row gutter={[24]} justify='space-between' align='middle'>
-                  <Col span={13}>
-                    <Form.Item>
-                    <Row gutter={[24]} justify='space-between' >
-                        <Col span={8}>
-                          <Text style={{color:'#fff'}}> Age </Text>
-                        </Col>
-                        <Col span={14}>
-                          <InputNumber 
-                          min={1} 
-                          max={10} 
-                          defaultValue={3}
-                          onChange={onChange} />
-                        </Col>
-                    </Row>
-                    </Form.Item>
-                  </Col>
-                  <Col span={11}>
-                   <Form.Item>
-                      <Row gutter={[24]} justify='space-between' >
-                        <Col span={16}>
-                          <Text style={{color:'#fff'}}> Do you have CDL-A? </Text>
-                        </Col>
-                        <Col span={8}>
-                          <Switch 
-                          checkedChildren={<CheckOutlined />}
-                          unCheckedChildren={<CloseOutlined />} />
-                        </Col>
-                      </Row> 
-                    </Form.Item>
-                  </Col>
-                  </Row>
-                  <Form.Item>
-                    <Row gutter={[24]} justify='space-between' >
-                      <Col span={10}>
-                        <Input
-                          size='large'
-                          placeholder="Area Code"
-                          onChange={(e) => onChange(e, 'last-name')} />
-
-                      </Col>
-                      <Col span={14}>
-                        <Input
-                          size='large'
-                          placeholder="Phone Number"
-                          onChange={(e) => onChange(e, 'last-name')} />
-                      </Col>
-                    </Row>
-                  </Form.Item>
-                  <Form.Item>
-                    <Input
-                      size='large'
-                      placeholder="Zip Code"
-                      onChange={(e) => onChange(e, 'zip-code')} />
-                  </Form.Item>
-                  <Form.Item>
-                  <Select 
-                    placeholder="Experience"
-                    size='large'
-                    onChange={(e) => onChange(e, 'Mail')}>
-                      {
-                        state.experience.map((e,i)=>{
-                        return <Option key={i} value={e.key}>{e.value}</Option>
-                        })
-                      }
-                    </Select>
-                  </Form.Item>
-                  <Form.Item>
-                    <TextArea
-                      rows={4} 
-                      size='large'
-                      placeholder="Zip Code"
-                      onChange={(e) => onChange(e, 'zip-code')} />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button style={{color:'#FF2A39'}} block size='large'>Submit</Button>
-                  </Form.Item>
-                </Form>
+              <Drawer
+                title='Complete login'
+                placement="right"
+                closable={true}
+                width={680}
+                onClose={()=> {
+                dispatch({type:types.SHOW_DRAWER})}}
+                visible={state.visible}>
+                    <FormUserDriver {...formConfig}/>
+                </Drawer>
               </Col>
             </Row>
           </div>
@@ -217,18 +213,4 @@ const JobOffert = ({ user }) => {
   )
 }
 
-const WrapperSection = ({ children, row, mt, mb }) => {
-  return (
-    <div style={{ marginTop: mt, marginBottom: mb }}>
-      <Row justify='center' align='middle'>
-        <Col span={row}>
-          {children}
-        </Col>
-      </Row>
-    </div>
-  )
-}
-
-
-
-export default JobOffert;
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(JobOffert)); 

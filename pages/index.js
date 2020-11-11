@@ -5,7 +5,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import CarouselComp from '../components/carousel';
 import { WrapperSection } from 'components/helpers';
-import { fetchJobPositionData } from '../store/reducers/lading_reducer';
+import { fetchJobPositionData } from '../store/reducers/landing_reducer';
 import { connect } from 'react-redux';
 import queryString from "query-string";
 import moment from "moment";

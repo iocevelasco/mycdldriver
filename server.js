@@ -158,9 +158,9 @@ if (!dev && cluster.isMaster) {
       }),
       function(req, res) {
         if(req.session.passport.user.typeUser === 1){
-          res.redirect('/userProfile/driver');
+          res.redirect('/userProfile/driver/profile');
         }else if(req.session.passport.user.typeUser === 2){
-          res.redirect('/userProfile/company');
+          res.redirect('/userProfile/company/profile');
         }else{
           res.redirect('/userProfile');
         }
@@ -172,9 +172,9 @@ if (!dev && cluster.isMaster) {
       ),
       function(req, res) {
         if(req.session.passport.user.typeUser === 1){
-          res.redirect('/userProfile/driver');
+          res.redirect('/userProfile/driver/profile');
         }else if(req.session.passport.user.typeUser === 2){
-          res.redirect('/userProfile/company');
+          res.redirect('/userProfile/company/profile');
         }else{
           res.redirect('/userProfile');
         }
