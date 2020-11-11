@@ -73,7 +73,7 @@ const DescriptionDesktop = ({item}) => {
             query: { id: item._id },
             }}
             >
-            <Button type='primary'> Apply </Button>
+            <Button type='primary'> VIEW MORE </Button>
           </Link>
         </div>
       </div>

@@ -20,10 +20,11 @@ const { TextArea } = Input;
 const driverUser = (props) => {
   const [form] = Form.useForm();
   const { driver, onChangeBase, onChangeDriver, handleDatePicker, newDrivers, updateDriver, base, beforeUpload, propsUpload, imageDln} = props;
+  
   return (
     <div className='profile-driver'>
       <Row justify='center'>
-        <Col className='profile-driver__form' span={14}>
+        <Col className='profile-driver__form' span={24}>
           <Row justify='center'>
             <div className='avatar'>
               <Avatar src={base.photo} size={120} />
@@ -149,7 +150,7 @@ const driverUser = (props) => {
             </Row>
           </Form>
         </Col>
-        <Col className='profile-driver__form-small' span={14}>
+        <Col className='profile-driver__form-small' span={24}>
           <Row gutter={[24]} justify='space-between' >
             <Form.Item label="Years of experience ">
               <InputNumber

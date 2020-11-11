@@ -15,7 +15,6 @@ import {
   List,
   notification,
   Avatar,
-  Drawer,
   Divider
 } from 'antd';
 import { connect } from 'react-redux';
