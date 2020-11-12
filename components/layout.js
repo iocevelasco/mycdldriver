@@ -6,7 +6,7 @@ import Footer from './footer';
 import Link from 'next/link';
 import SpinnerComp from '../components/loading';
 import {connect} from 'react-redux';
-import { logoutUser } from '@store/reducers/user_reducer';
+import { logoutUser, getCurrentLocation } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import ModalLogin from 'components/modal_login';
 import { 
@@ -39,7 +39,8 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return {
       handleLogout: () => dispatch(logoutUser()),
-      handleModal:(prop) => dispatch(handlerModalLogin(prop))
+      handleModal:(prop) => dispatch(handlerModalLogin(prop)),
+      handleLocation:(path) => dispatch(getCurrentLocation(path))
     }
   };
 
@@ -134,7 +135,7 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                             icon={<UserOutlined/>}
                             onClick={()=> {
                                 props.handleModal(true);
-                                console.log('location', router.pathname);
+                                props.handleLocation(router.pathname);
                             }}
                             type="secondary" size='large'>
                                 Login
