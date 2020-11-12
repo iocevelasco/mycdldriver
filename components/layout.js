@@ -44,7 +44,6 @@ function mapDispatchToProps(dispatch){
   };
 
 const MainLayout = ({ children, title, user, loading, router, bgActive, ...props }) => {
-    const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
     
     const [userProps, setUserProps] = useState({ 
@@ -133,7 +132,10 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                             <Button 
                             shape="round" 
                             icon={<UserOutlined/>}
-                            onClick={()=> props.handleModal(true)}
+                            onClick={()=> {
+                                props.handleModal(true);
+                                console.log(props.location.pathname);
+                            }}
                             type="secondary" size='large'>
                                 Login
                             </Button>
