@@ -30,15 +30,6 @@ const initialState = {
   },
 }
 
-
-const updateUserDrive = (props) => {
-  let { user, driver } = props;
-  return {
-      type: types.UPDATE_USER_DRIVER,
-      payload: {...user, driver:driver}
-  }
-}
-
 const onChangeDriver = (e, key) => {
   let company = state.company;
   let value = "";
@@ -48,28 +39,6 @@ const onChangeDriver = (e, key) => {
   return { type: types.DATA_COMPANY, payload: company };
 }
 
-
-const logoutUser = () => {
-  const state = {
-      name: '',
-      lastname: '',
-      typeUser: 0,
-      isLogin:false,
-      photo:'',
-      email: '',
-      google_id: '',
-      facebook_id: '',
-      date:'',
-      token:null,
-      driver: null,
-      company:null,
-      deviceType: 'desktop'
-  }
-  return {
-      type: types.LOGOUT_USER,
-      payload: state
-      }
-}
 
 const userDriverReducer  = (state = initialState, action) =>{
   switch(action.type){

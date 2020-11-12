@@ -19,6 +19,7 @@ import { MessageSucces } from 'components/helpers';
 import { WrapperSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
+import { onChangeDriver } from '@store/reducers/user_driver';
 import { connect } from 'react-redux';
 import JobListComp from '../home/components/job_offerts';
 import moment from 'moment';
@@ -104,7 +105,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch){
   return {
-    handleModal:(prop) => dispatch(handlerModalLogin(prop))
+    handleDataDriver:(prop, key) => dispatch(onChangeDriver(prop, key))
   }
 }
 
