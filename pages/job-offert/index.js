@@ -105,7 +105,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch){
   return {
-    handleDataDriver:(prop, key) => dispatch(onChangeDriver(prop, key))
+    handleDataDriver:(prop, key) => dispatch(onChangeDriver(prop, key)),
+    handleModal:(prop) => dispatch(handlerModalLogin(prop))
   }
 }
 

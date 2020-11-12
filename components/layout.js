@@ -40,7 +40,7 @@ function mapDispatchToProps(dispatch){
     return {
       handleLogout: () => dispatch(logoutUser()),
       handleModal:(prop) => dispatch(handlerModalLogin(prop)),
-      handleLocation:(path) => dispatch(getCurrentLocation(path))
+      handleLocation:(location) => dispatch(getCurrentLocation(location))
     }
   };
 
