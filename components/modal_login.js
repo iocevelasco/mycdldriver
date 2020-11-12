@@ -6,6 +6,7 @@ import {
   Modal,
   Button,
 } from 'antd';
+import axios from 'axios';
 
 import { 
   GoogleOutlined, 
@@ -28,6 +29,7 @@ function mapDispatchToProps(dispatch){
 };
 
 const ModalLogin = ({visible_modal_login, router, ...props}) => {
+  console.log(router);
   return (
       <Modal
       visible={visible_modal_login}
@@ -41,8 +43,9 @@ const ModalLogin = ({visible_modal_login, router, ...props}) => {
               <Title level={3}>Welcome!</Title>
               <Text>Sign in for MyCDL</Text>
           </div>
-          <Button onClick={()=>{
-                  props.handleModal(false)
+          <Button onClick={async ()=>{
+                  props.handleModal(false);
+                  await axios.post('/prevpath', {prevpath: router.pathname, asPath: router.asPath});
                   router.push('/auth/google');
               }} icon={<GoogleOutlined />} block size='large' >
             Continue with Google
