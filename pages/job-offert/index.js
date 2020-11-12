@@ -15,10 +15,12 @@ import {
 } from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import FormUserDriver from 'components/FormUserDriver';
+import { MessageSucces } from 'components/helpers';
 import { WrapperSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import { connect } from 'react-redux';
+import JobListComp from '../home/components/job_offerts';
 import moment from 'moment';
 import axios from 'axios';
 
@@ -29,6 +31,7 @@ const { TextArea } = Input;
 
 const initialState = {
   visible:true,
+  showSucces:false,
   base: {
     name: '',
     lastname: '',
@@ -165,14 +168,20 @@ const JobOffert = ({ user, router, isUserRegistry, ...props }) => {
   const formConfig = {
     base: state.base,
     driver: state.driver,
+    isProfile:false,
+    buttonApply: <Button 
+    size='large' 
+    shape="round"
+    block
+    type='primary'> Apply </Button>
   }
   return (
     <>
       <MainLayout title='Welcome' user={user}>
-        <WrapperSection row={24} mt={0}>
+        <WrapperSection row={22} mt={0}>
           <div className='job-offert'>
             <Row>
-              <Col className='job-offert__detaill' span={14}>
+              <Col className='job-offert__detaill' span={13}>
                 <div className="header"
                   style={{
                     backgroundImage: `url('/static/images/truck3.jpg')`
@@ -190,19 +199,44 @@ const JobOffert = ({ user, router, isUserRegistry, ...props }) => {
                 </div>
                 <Text className='description'>{description}</Text>
                 {
-                  !isUserRegistry && <Button onClick={()=> props.handleModal(true)}>Apply</Button>
+                  !isUserRegistry ? <Button 
+                  shape="round" 
+                  size="large"
+                  type='primary'
+                  style={{
+                    marginTop: 16,
+                    width: '90%',
+                    marginLeft: 12,
+                  }}
+                  onClick={()=> props.handleModal(true)}>Completa el login y aplica a esta posicion</Button> : 
+                  <Button 
+                  shape="round" 
+                  size="large"
+                  type='primary'
+                  style={{
+                    marginTop: 16,
+                    width: '90%',
+                    marginLeft: 12,
+                  }}
+                  onClick={()=> dispatch({type:types.SHOW_DRAWER, payload:true})}>Apply</Button>
                 }
               </Col>
-              <Col className='job-offert__form' span={10}>
+              <Col className='job-offert__list' span={10}>
+                <Row justify='center' align='middle'>
+                  <JobListComp/>
+                </Row>
               <Drawer
-                title='Complete login'
+                title='Completa tu postulacion'
                 placement="right"
                 closable={true}
                 width={680}
+                mask={false}
                 onClose={()=> {
                 dispatch({type:types.SHOW_DRAWER})}}
                 visible={state.visible}>
-                    <FormUserDriver {...formConfig}/>
+                  {
+                    !state.showSucces ? <FormUserDriver {...formConfig}/> : <MessageSucces/>
+                  }
                 </Drawer>
               </Col>
             </Row>

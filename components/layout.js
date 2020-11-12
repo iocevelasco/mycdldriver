@@ -131,10 +131,11 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                      : 
                         <Row justify='end' align='middle'>
                             <Button 
+                            shape="round" 
                             icon={<UserOutlined/>}
                             onClick={()=> props.handleModal(true)}
                             type="secondary" size='large'>
-                                LOGIN
+                                Login
                             </Button>
                         </Row>   
                     }
