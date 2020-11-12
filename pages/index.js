@@ -7,6 +7,7 @@ import CarouselComp from '../components/carousel';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import queryString from "query-string";
+import { fetchJobPositionData } from '../store/reducers/landing_reducer';
 import moment from "moment";
 import axios from 'axios';
 
