@@ -141,8 +141,8 @@ const JobOffert = ({ user, router, isUserRegistry, ...props }) => {
   const fetchJobDetails = async (job_id) => {
     try{
       const { data } = await axios.get(`/api/company/jobs/detail/${job_id}`)
-      console.log(data);
-      dispatch({ type: types.FETCH_DETAIL, payload:data});
+      console.log('[jobOffert]', data);
+      dispatch({ type: types.FETCH_DETAIL, payload:data.data});
     }catch(err){
       console.log(err)
     }

@@ -15,9 +15,10 @@ router.get('/', function (req, res) {
 });
 
 router.get('/detail/:id', function (req, res) {
-    controller.getJob(req.body)
+    
+    controller.getJob({id: req.params.id})
     .then((jobList) => {
-        response.success(req, res, jobList, 200);
+        response.success(req, res, jobList[0], 200);
     }).catch(e => {
         response.error(req, res, 'Unexpected Error', 500, e);
     });

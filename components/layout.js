@@ -134,7 +134,7 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                             icon={<UserOutlined/>}
                             onClick={()=> {
                                 props.handleModal(true);
-                                console.log(props.location.pathname);
+                                console.log('location', router.pathname);
                             }}
                             type="secondary" size='large'>
                                 Login

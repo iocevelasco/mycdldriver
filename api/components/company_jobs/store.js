@@ -31,6 +31,9 @@ function getJobs(filterCompany){
         if(filterCompany.company){
             filter = filterCompany;
         }
+        if(filterCompany.id){
+            filter = {_id: filterCompany.id};
+        }
         if(filterCompany.input){
             filterOr.push({title: new RegExp(filterCompany.input, 'i')});
             filterOr.push({description: new RegExp(filterCompany.input, 'i')});
@@ -56,6 +59,7 @@ function getJobs(filterCompany){
         console.log('filter', filter);
         result = JobsModel.find(filter)
             .select("-__v")
+            .populate('company')
             .populate('tags');
 
         resolve(result);

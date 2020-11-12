@@ -4,6 +4,9 @@ const config = require('../../config');
 function getJob(filter){
     return new Promise((resolve, reject) => {
         let filterQuery = {}; 
+        if(filter.id){
+            filterQuery.id = filter.id;
+        }
         if(filter.company){
             filterQuery.company = filter.company;
         }
