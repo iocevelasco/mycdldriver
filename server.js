@@ -14,9 +14,6 @@ const MemcachedStore = require('connect-memjs')(session);
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const axios = require('axios');
-const LocalStorage = require('node-localstorage').LocalStorage;
-
-localStorage = new LocalStorage('./scratch');
 
 const dev = config.dev;
 db(config.dbUrl);
@@ -40,7 +37,7 @@ if (!dev && cluster.isMaster) {
     .then(() => {
       const server = express();
       server.use(bodyParser.json());
-      
+
       if (!dev) {
         server.use(session({
           secret: 'ClydeIsASquirrel',
