@@ -7,7 +7,7 @@ import CarouselComp from '../components/carousel';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import queryString from "query-string";
-import { fetchJobPositionData } from '../store/reducers/landing_reducer';
+import { fetchJobPositionData, deviceType } from '../store/reducers/landing_reducer';
 import moment from "moment";
 import axios from 'axios';
 
@@ -61,24 +61,25 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return {
-    fetchJobs: (query) => dispatch(fetchJobPositionData(query))
+    fetchJobs: (query) => dispatch(fetchJobPositionData(query)),
+    handleDeviceType: (props) => dispatch(deviceType(props))
   }
 }
 
 const  Home = ({ 
   user, 
   loading,
-  fetchJobs, 
-  deviceType
+  fetchJobs,
+  deviceType,
+  ...props
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  
+
   useEffect(() => {
+    props.handleDeviceType(deviceType)
     fetchJobs(state.query);
     fetchPosition();
   }, [])
-
-  console.log(state.query)
 
   const handlerSearch = (e, key) => {
     let value = "";
@@ -131,7 +132,7 @@ const  Home = ({
           <CarouselComp carousel_data={state.carousel_data} />
         </WrapperSection>
         <WrapperSection xs={24} row={18}>
-            <OffertJobComp deviceType={deviceType}/>
+            <OffertJobComp/>
         </WrapperSection>
         <WrapperSection xs={24} row={18} style={wrapperStyle} >
           <Row justify='center' align='middle' gutter={[16]} style={{marginTop:24}}>

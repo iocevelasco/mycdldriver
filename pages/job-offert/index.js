@@ -110,7 +110,7 @@ function mapDispatchToProps(dispatch){
   }
 }
 
-const JobOffert = ({ user, router, isUserRegistry, ...props }) => {
+const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -131,18 +131,15 @@ const JobOffert = ({ user, router, isUserRegistry, ...props }) => {
 
     dispatch({ type: types.PROPS_BASE, payload: base })
   }, [user, state.typeUser]);
-  
-  console.log('state',state)
-  
+    
   useEffect(() => {
    let job_id = router.query.id
    fetchJobDetails(job_id);
-  }, [])
+  }, [router.query.id])
 
   const fetchJobDetails = async (job_id) => {
     try{
       const { data } = await axios.get(`/api/company/jobs/detail/${job_id}`)
-      console.log('[jobOffert]', data);
       dispatch({ type: types.FETCH_DETAIL, payload:data.data});
     }catch(err){
       console.log(err)
@@ -225,7 +222,7 @@ const JobOffert = ({ user, router, isUserRegistry, ...props }) => {
               </Col>
               <Col className='job-offert__list' span={10}>
                 <Row justify='center' align='middle'>
-                  <JobListComp/>
+                  <JobListComp small={true} />
                 </Row>
               <Drawer
                 title='Completa tu postulacion'

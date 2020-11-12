@@ -18,6 +18,7 @@ const { Text, Title } = Typography
 function mapStateToProps(state){
   return {
       jobs: state.landing.jobs, 
+      deviceType: state.landing.deviceType
   }
 }
 
@@ -29,8 +30,7 @@ function mapDispatchToProps(dispatch){
 }
 
 
-const JobListComp = ({ jobs, deviceType, fetchJobs }) => {
-
+const JobListComp = ({ jobs, deviceType, fetchJobs, small}) => {
   useEffect(() => {
     fetchJobs({});
   }, [])
@@ -52,7 +52,7 @@ const JobListComp = ({ jobs, deviceType, fetchJobs }) => {
             }}}>
               {
                 deviceType === 'desktop' 
-                ? <DescriptionDesktop item={item}/> 
+                ? <DescriptionDesktop item={item} small={small}/> 
                 : <DescriptionMobile item={item}/>
               }
             </Link>
@@ -63,8 +63,7 @@ const JobListComp = ({ jobs, deviceType, fetchJobs }) => {
   );
 }
 
-
-const DescriptionDesktop = ({item}) => {
+const DescriptionDesktop = ({item, small}) => {
   return (
       <Card
       bodyStyle={{
@@ -84,7 +83,9 @@ const DescriptionDesktop = ({item}) => {
               <Text> Date </Text>
               <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
             </div>
-            <Text> {item.description} </Text>
+            {
+              !small && <Text> {item.description} </Text>
+            }
             <div>
             </div>
           </div>
