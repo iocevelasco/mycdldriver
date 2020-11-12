@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Typography, Input, Space, Select, Button } from 'antd';
-import { fetchJobPositionData } from '../../../store/reducers/lading_reducer';
+import { fetchJobPositionData } from '@store/reducers/landing_reducer';
 import { connect } from 'react-redux';
 
 const { Title } = Typography;

@@ -5,7 +5,6 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import CarouselComp from '../components/carousel';
 import { WrapperSection } from 'components/helpers';
-import { fetchJobPositionData } from '../store/reducers/lading_reducer';
 import { connect } from 'react-redux';
 import queryString from "query-string";
 import moment from "moment";
@@ -55,8 +54,7 @@ const reducer = (state, action) => {
 
 function mapStateToProps(state){
   return {
-      user: state.user, 
-      jobs: state.landing.jobs
+      user: state.user
   }
 }
 
@@ -68,10 +66,9 @@ function mapDispatchToProps(dispatch){
 
 const  Home = ({ 
   user, 
-  loading, 
-  jobs, 
+  loading,
   fetchJobs, 
-  deviceType 
+  deviceType
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   
@@ -133,7 +130,7 @@ const  Home = ({
           <CarouselComp carousel_data={state.carousel_data} />
         </WrapperSection>
         <WrapperSection xs={24} row={18}>
-            <OffertJobComp jobs={jobs} deviceType={deviceType}/>
+            <OffertJobComp deviceType={deviceType}/>
         </WrapperSection>
         <WrapperSection xs={24} row={18} style={wrapperStyle} >
           <Row justify='center' align='middle' gutter={[16]} style={{marginTop:24}}>

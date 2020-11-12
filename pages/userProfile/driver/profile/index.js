@@ -8,11 +8,12 @@ import {
   Select,
   Spin,
   message,
-  notification
+  notification,
+  Drawer,
 } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import FormUserDriver from '../../components/FormUserDriver';
+import FormUserDriver from 'components/FormUserDriver';
 import SideNav from '../../components/SideNavAdmin';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
@@ -275,9 +276,9 @@ const DriverProfileView = ({ user, ...props }) => {
     return (
       <MainLayout title='Profile' user={user} loading={state.loading}>
         <Row display='flex' justify='center'>
-          <SideNav /> 
+          <SideNav currentLocation='0' /> 
           <Col span={20}>
-            <WrapperSection styles={stylesWrapper} row={24} mt={0}>
+            <WrapperSection styles={stylesWrapper} row={16} mt={0}>
               <FormUserDriver {...formConfig} />
             </WrapperSection>
           </Col>

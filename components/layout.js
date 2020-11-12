@@ -7,12 +7,13 @@ import Link from 'next/link';
 import SpinnerComp from '../components/loading';
 import {connect} from 'react-redux';
 import { logoutUser } from '@store/reducers/user_reducer';
+import { handlerModalLogin } from '@store/reducers/landing_reducer';
+import ModalLogin from 'components/modal_login';
 import { 
     Layout, 
     Row, 
     Col, 
     Button, 
-    Modal, 
     Avatar, 
     Typography,
     Menu, 
@@ -20,8 +21,6 @@ import {
     Space
 } from 'antd';
 import { 
-    GoogleOutlined, 
-    FacebookOutlined, 
     UserOutlined,
     DownOutlined} 
 from '@ant-design/icons';
@@ -39,7 +38,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return {
-      handleLogout: () => dispatch(logoutUser())
+      handleLogout: () => dispatch(logoutUser()),
+      handleModal:(prop) => dispatch(handlerModalLogin(prop))
     }
   };
 
@@ -131,10 +131,11 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                      : 
                         <Row justify='end' align='middle'>
                             <Button 
+                            shape="round" 
                             icon={<UserOutlined/>}
-                            onClick={()=>setVisible(true)}
+                            onClick={()=> props.handleModal(true)}
                             type="secondary" size='large'>
-                                LOGIN
+                                Login
                             </Button>
                         </Row>   
                     }
@@ -147,35 +148,7 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                 </div>
             </Content>
             <Footer />
-            <Modal
-                visible={visible}
-                footer={null}
-                width={380}
-                onOk={()=>setVisible(false)}
-                onCancel={()=>setVisible(false)}
-                >
-                <div className='modal-login'>
-                    <div className='title'>
-                        <Title level={3}>Welcome!</Title>
-                        <Text>Sign in for MyCDL</Text>
-                    </div>
-                    <Button onClick={()=>{
-                            setLoader(true);
-                            setVisible(false);
-                            router.push('/auth/google');
-                        }} icon={<GoogleOutlined />} block size='large' >
-                      Continue with Google
-                    </Button>
-
-                    <Button onClick={()=>{
-                            setLoader(true);
-                            setVisible(false);
-                            router.push('/auth/facebook');
-                        }} block size='large' style={{background:'#1877f2', color:'#fff'}} icon={<FacebookOutlined />} >
-                        Continue with facebook     
-                    </Button>
-                </div>
-            </Modal>
+            <ModalLogin />
         </Layout>
     </>
     )

@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { connect } from 'react-redux';
+import { fetchJobPositionData } from '@store/reducers/landing_reducer';
+import { withRouter } from 'next/router';
 import {
   List,
   Card,
@@ -9,9 +12,29 @@ import {
 import Link from 'next/link';
 import moment from 'moment';
 
+
 const { Text, Title } = Typography
 
-const JobListComp = ({ jobs, deviceType }) => {
+function mapStateToProps(state){
+  return {
+      jobs: state.landing.jobs, 
+  }
+}
+
+
+function mapDispatchToProps(dispatch){
+  return {
+    fetchJobs: (query) => dispatch(fetchJobPositionData(query))
+  }
+}
+
+
+const JobListComp = ({ jobs, deviceType, fetchJobs }) => {
+
+  useEffect(() => {
+    fetchJobs({});
+  }, [])
+
   return (
     <>
     <List
@@ -69,11 +92,11 @@ const DescriptionDesktop = ({item}) => {
         <div className='action'>
         <Link
           href={{
-            pathname: '/jobOffert',
+            pathname: '/job-offert',
             query: { id: item._id },
             }}
             >
-            <Button type='primary'> Apply </Button>
+            <Button type='primary'> VIEW MORE </Button>
           </Link>
         </div>
       </div>
@@ -116,4 +139,4 @@ const DescriptionMobile = ({item}) => {
 </Card>)
 }
 
-export default JobListComp;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(JobListComp));

@@ -141,7 +141,7 @@ const FormUserCompany = (props) => {
                 rules={[{ required: true, message: 'Please input your username!' }]}>
                 <Input
                   size='large'
-                  placeholder="Legal Number"
+                  placeholder="Tax id"
                   value={company.legalNumber}
                   onChange={(e) => onChangeCompany(e, 'legalNumber')} />
               </Form.Item>

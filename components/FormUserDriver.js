@@ -19,11 +19,27 @@ const { TextArea } = Input;
 
 const driverUser = (props) => {
   const [form] = Form.useForm();
-  const { driver, onChangeBase, onChangeDriver, handleDatePicker, newDrivers, updateDriver, base, beforeUpload, propsUpload, imageDln} = props;
+
+  const { 
+    driver, 
+    onChangeBase, 
+    onChangeDriver, 
+    handleDatePicker, 
+    handleDataDriver,
+    newDrivers, 
+    updateDriver, 
+    base, 
+    beforeUpload, 
+    propsUpload, 
+    imageDln,
+    buttonApply,
+    isProfile
+  } = props;
+  
   return (
     <div className='profile-driver'>
       <Row justify='center'>
-        <Col className='profile-driver__form' span={14}>
+        <Col className='profile-driver__form' span={24}>
           <Row justify='center'>
             <div className='avatar'>
               <Avatar src={base.photo} size={120} />
@@ -149,7 +165,7 @@ const driverUser = (props) => {
             </Row>
           </Form>
         </Col>
-        <Col className='profile-driver__form-small' span={14}>
+        <Col className='profile-driver__form-small' span={24}>
           <Row gutter={[24]} justify='space-between' >
             <Form.Item label="Years of experience ">
               <InputNumber
@@ -177,19 +193,22 @@ const driverUser = (props) => {
               onChange={(e) => onChangeDriver(e, 'description')} />
           </Form.Item>
           <Row gutter={[24]} justify='end' align='middle'>
-            <Col span={6}>
-              {!base.id ? <Button
-                onClick={newDrivers}
-                type='primary'
-                block
-                size='large'>Save Information</Button>
-                : <Button
-                onClick={updateDriver}
-                type='primary'
-                block
-                size='large'>Update Information</Button>
+            {
+              isProfile ? <Col span={6}>
+                {!base.id ? <Button
+                  onClick={newDrivers}
+                  type='primary'
+                  block
+                  size='large'>Save Information</Button>
+                  : <Button
+                  onClick={updateDriver}
+                  type='primary'
+                  block
+                  size='large'>Update Information</Button>
+                }
+              </Col> : buttonApply
               }
-            </Col>
+
           </Row>
         </Col>
       </Row>
