@@ -77,10 +77,13 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
             document.body.style.overflowY = "auto"
         }
     },[loading]);
-    let bg = !bgActive ? { 
-        background: `url('/static/images/bg-routes.jpg')`,
-        backgroundSize:'contain',
-        } : {}
+    let bg = bgActive ? { 
+            background: `url('/static/images/bg-routes.jpg')`,
+            backgroundSize:'contain',
+        } : {
+            background: `#fff`,
+            backgroundSize:'contain',
+        }
     const menu = (
         <Menu style={{width: '200px', float:'right'}}>
           <Menu.Item>
@@ -118,7 +121,7 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                     </Col>
                     <Col span={10}>
                     {
-                        user.isLogin ?
+                     user.isLogin ?
                         <Dropdown overlay={menu}>
                              <Row justify='end' align='middle'>
                                 <Space size='large'>

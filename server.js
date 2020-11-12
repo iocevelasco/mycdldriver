@@ -40,7 +40,7 @@ if (!dev && cluster.isMaster) {
     .then(() => {
       const server = express();
       server.use(bodyParser.json());
-
+      
       if (!dev) {
         server.use(session({
           secret: 'ClydeIsASquirrel',
