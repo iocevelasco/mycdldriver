@@ -71,7 +71,7 @@ function getJobs(filterCompany){
 async function getCustomList(){
     const titles = await JobsModel.find({}).select("title");
     const citys = await JobsModel.find({}).distinct('city');
-    const companys = await ProfileCompany.find().select("tradename");
+    const companys = await ProfileCompany.find({}).select("tradename");
     
     const listado = {
         title: titles,
