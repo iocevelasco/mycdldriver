@@ -9,6 +9,21 @@ const tagSchema = mongoose.Schema({
     }
 });
 
+const JobsApplysSchema = mongoose.Schema({
+    company: {
+        type: Schema.ObjectId,
+        ref: 'ProfileCompany',
+    },
+    driver: {
+        type: Schema.ObjectId,
+        ref: 'User',
+    },
+    job: {
+        type: Schema.ObjectId,
+        ref: 'CompanyJobs',
+    }
+});
+
 const CompanyJobsSchema = mongoose.Schema({
     title: {
         type: String,
@@ -65,7 +80,9 @@ const CompanyJobsSchema = mongoose.Schema({
 
 const CompanyJobs = mongoose.model('CompanyJobs', CompanyJobsSchema);
 const TagsJobs = mongoose.model('tagsJobs', tagSchema);
+const JobsApplys = mongoose.model('JobsApplys', JobsApplysSchema);
 module.exports = {
     JobsModel: CompanyJobs,
-    TagsModel: TagsJobs
+    TagsModel: TagsJobs,
+    JobsApplysModel: JobsApplys
 };

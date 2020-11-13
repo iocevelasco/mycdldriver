@@ -1,4 +1,4 @@
-const {TagsModel, JobsModel} = require('./model');
+const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
 const fs = require('fs');
 
 function capitalize(text) {
@@ -73,6 +73,25 @@ async function addJob(job){
     const newJob = new JobsModel(job);
     await newJob.save();
     return newJob;
+}
+
+async function applyJob(job){
+    try{
+        const newApply = new JobsApplysModel(job);
+        const resp = await newApply.save();
+        if(resp){
+            return {
+                status: 200,
+                message: 'Ok'
+            };
+        }
+    }catch(e){
+        console.log(e);
+        return {
+            status: 500,
+            message: 'Invalid data recived for apply job'
+        };
+    }
 }
 
 async function updateJob(id, job, company){
@@ -171,5 +190,6 @@ module.exports = {
     list: getJobs,
     add: addJob,
     update: updateJob,
-    delete: deleteJob
+    delete: deleteJob,
+    applyJob
 }

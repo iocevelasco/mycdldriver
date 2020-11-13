@@ -42,7 +42,18 @@ router.post('/', auth(2), function (req, res) {
         response.success(req, res, Job, 201);
     }).catch(e => {
         console.log(e);
-        response.error(req, res, 'informacion invalida', 500);
+        response.error(req, res, 'Unexpected Error', 500);
+    });
+});
+
+router.post('/applyjob', auth(1), function (req, res) {
+    req.body.user = req.user._id;
+    controller.applyJob(req.body)
+    .then((Job) => {
+        response.success(req, res, Job, 200);
+    }).catch(e => {
+        console.log(e);
+        response.error(req, res, 'Unexpected Error', 500);
     });
 });
 

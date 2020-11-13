@@ -73,6 +73,29 @@ function addJob(job, company){
     });
 }
 
+function applyJob(jobApply){
+    return new Promise((resolve, reject) => {
+        if(!jobApply){
+            console.error('[companyJobsController.applyJob] Invalid data');
+            reject({status: 400, message: 'Invalid Job Apply data'});
+            return false;
+        }
+        const result = store.applyJob(jobApply);
+        
+        switch(result.status){
+            case 200:
+                resolve(result);
+                break;
+            case 500:
+                reject(result);
+                break;
+            default:
+                resolve(result);
+                break;
+        }
+    });
+}
+
 function updateJob(id, job, company, logo){
     return new Promise((resolve, reject) => {
         if(!job){
@@ -126,5 +149,6 @@ module.exports = {
     getJob,
     addJob,
     updateJob,
-    deleteJob
+    deleteJob,
+    applyJob
 }

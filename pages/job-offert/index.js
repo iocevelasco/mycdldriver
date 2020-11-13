@@ -54,14 +54,14 @@ const initialState = {
     zipCode: '',
     description: ''
   },
-  title: "Position Name",
-  logo: "https://image.freepik.com/vector-gratis/truck-logo-vector-imagen-archivo_56473-238.jpg",
+  title: '',
+  logo: '',
   postion_id: 0,
-  description: "Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt.",
-  address: "Miami",
-  date: "12/04/23",
-  expire_date: "12/05/23",
-  company_name: "pepito",
+  description: '',
+  address:'',
+  date: '',
+  expire_date: '',
+  company_name: '',
   experience:[
     {key:1-2, value:'1 - 2'},
     {key:2-4, value:'2 - 4'},
@@ -95,6 +95,11 @@ const reducer = (state, action) => {
   }
 }
 
+function setPath(value){
+  if (typeof window !== "undefined") {
+    localStorage.setItem('prevPath', value)  ;
+  }
+}
 
 function mapStateToProps(state) {
   return {
@@ -146,34 +151,8 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
     }
   }
 
-  const onChange = (e, key) => {
-    const newDash = state.dashboard;
-    let value = "";
-    switch (key) {
-      default:
-        value = e.target.value;
-        newDash[key] = value;
-        break;
-    }
-    dispatch({ type: types.ADD_NEW_DATA, payload: newDash })
-  }
-  const formItemLayout = {
-    labelCol: { span: 24 },
-    wrapperCol: { span: 14 },
-  }
-
   const { title, logo, description, address, date } = state
   
-  const formConfig = {
-    base: state.base,
-    driver: state.driver,
-    isProfile:false,
-    buttonApply: <Button 
-    size='large' 
-    shape="round"
-    block
-    type='primary'> Apply </Button>
-  }
   return (
     <>
       <MainLayout title='Welcome' user={user}>
@@ -193,7 +172,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     <Text> Addres </Text>
                     <Text strong> {address} </Text> <Text strong > | </Text>
                     <Text> Date </Text>
-                    <Text strong> {date} </Text>
+                    <Text strong> { moment(date).format('MM DD YYYY')} </Text>
                   </div>
                 </div>
                 <Text className='description'>{description}</Text>
@@ -207,7 +186,10 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     width: '90%',
                     marginLeft: 12,
                   }}
-                  onClick={()=> props.handleModal(true)}>Completa el login y aplica a esta posicion</Button> : 
+                  onClick={()=> {
+                    props.handleModal(true) 
+                    setPath(router.pathname);
+                  }}>Completa el login y aplica a esta posicion</Button> : 
                   <Button 
                   shape="round" 
                   size="large"
@@ -222,21 +204,8 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
               </Col>
               <Col className='job-offert__list' span={10}>
                 <Row justify='center' align='middle'>
-                  <JobListComp small={true} />
+                  <JobListComp type='small' />
                 </Row>
-              <Drawer
-                title='Completa tu postulacion'
-                placement="right"
-                closable={true}
-                width={680}
-                mask={false}
-                onClose={()=> {
-                dispatch({type:types.SHOW_DRAWER})}}
-                visible={state.visible}>
-                  {
-                    !state.showSucces ? <FormUserDriver {...formConfig}/> : <MessageSucces/>
-                  }
-                </Drawer>
               </Col>
             </Row>
           </div>
