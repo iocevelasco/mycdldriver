@@ -4,14 +4,16 @@ import axios from 'axios';
 const types = {
     FETCH_JOBS: 'FETCH_JOBS',
     VISIBLE_MODAL_LOGIN: 'VISIBLE_MODAL_LOGIN',
-    DEVICETYPE:'DEVICETYPE'
+    DEVICETYPE:'DEVICETYPE',
+    IS_LOADING:'IS_LOADING'
 }
 
 const initialState = {
     jobs: [],
     citys_available:[],
     visible_modal_login:false,
-    deviceType: 'desktop'
+    deviceType: 'desktop',
+    isLoading:false
 }
 
 function fetchJobPositionData(qs) {
@@ -49,6 +51,13 @@ const deviceType = (props) => {
     }
 }
 
+const activeLoading = (props) => {
+    return {
+        type: types.IS_LOADING,
+        payload: props
+    }
+}
+
 const landingReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.FETCH_JOBS:
@@ -65,6 +74,10 @@ const landingReducer = (state = initialState, action) => {
             return { 
                 ...state, deviceType:action.payload
              }
+        case types.IS_LOADING:
+            return { 
+                ...state, isLoading:action.payload
+             }
         default:
           return state;
     }
@@ -75,5 +88,6 @@ export {
     landingReducer,
     fetchJobPositionData,
     handlerModalLogin,
-    deviceType
+    deviceType,
+    activeLoading
 };

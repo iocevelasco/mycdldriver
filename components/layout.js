@@ -33,7 +33,8 @@ const { Content, Header } = Layout;
 
 function mapStateToProps(state){
     return {
-        user: state.user
+        user: state.user,
+        isLoading :state.landing.isLoading
     }
 }
 
@@ -46,8 +47,8 @@ function mapDispatchToProps(dispatch){
     }
   };
 
-const MainLayout = ({ children, title, user, loading, router, bgActive, deviceType, ...props }) => {
-    const [loader, setLoader] = useState(loading);
+const MainLayout = ({ children, title, user, isLoading, router, bgActive, deviceType, ...props }) => {
+    const [loader, setLoader] = useState(isLoading);
     const [userProps, setUserProps] = useState({ 
         name:'',
         email:'',
@@ -70,15 +71,15 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, deviceTy
     },[user])
 
     useEffect(()=>{
-        setLoader(loading);
-        if(loading){
+        setLoader(isLoading);
+        if(isLoading){
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
             document.body.style.overflowY = "hidden"
         }else{
             document.body.style.overflowY = "auto"
         }
-    },[loading]);
+    },[isLoading]);
     let bg = bgActive ? { 
             background: `url('/static/images/bg-routes.jpg')`,
             backgroundSize:'contain',

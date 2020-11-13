@@ -203,6 +203,9 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                 }
               </Col>
               <Col className='job-offert__list' span={10}>
+              <Row justify='center' align='middle'>
+                <Title level={3}>Busquedas relacionas</Title>
+              </Row>
                 <Row justify='center' align='middle'>
                   <JobListComp type='small' />
                 </Row>
