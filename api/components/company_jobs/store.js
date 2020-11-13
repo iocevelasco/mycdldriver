@@ -1,5 +1,5 @@
 const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
-const {ProfileCompany} = require('../profile_company/model');
+const ProfileCompany = require('../profile_company/model');
 const fs = require('fs');
 
 function capitalize(text) {
