@@ -1,4 +1,4 @@
-const Model = require('./model');
+const {User, Prelogin} = require('./model');
 const driverModel = require('../profile_driver/model');
 const companyModel = require('../profile_company/model');
 const fs = require('fs');
@@ -10,12 +10,40 @@ async function getUser(filterUser){
             name: filterUser,
         };
     }
-    const list = await Model.find(filter);
+    const list = await User.find(filter);
     return list;
 }
 
+async function setPrelogin(data){
+    let prelogin = new Prelogin(data);
+    const userlogin = await Prelogin.findOneAndUpdate(
+        {ip: prelogin.ip},
+        {
+            ip: prelogin.ip,
+            ruta: prelogin.ruta,
+            abspath: prelogin.abspath
+        },
+        {upsert: true, new: true, rawResult: true}
+    ); 
+    console.log(userlogin);
+    return userlogin;
+}
+
+async function getPrelogin(ip){
+    let filter = {};
+    if(ip !== null){
+        filter = {
+            ip: ip,
+        };
+    }else{
+        return false;
+    }
+    const result = await Prelogin.findOne(filter);
+    return result;
+}
+
 async function deleteUser(id){
-    const foundUser = await Model.findOne({
+    const foundUser = await User.findOne({
         _id: id
     });
     const foundDriver = await driverModel.findOne({
@@ -55,7 +83,7 @@ async function deleteUser(id){
         console.error(err);
     }
         
-    return Model.deleteOne({
+    return User.deleteOne({
         _id: id
     });    
 
@@ -63,7 +91,7 @@ async function deleteUser(id){
 
 async function loginUser(mail, pass){
     try {
-        const user = await Model.findByCredentials(mail, pass);
+        const user = await User.findByCredentials(mail, pass);
         const {_id, name, lastname, photo, email, date} = user;
         const token = await user.generateAuthToken();
         return { _id, name, lastname, photo, email, date, token };
@@ -75,7 +103,7 @@ async function loginUser(mail, pass){
 
 async function loginProviderUser(provider, mail, type){
     try {
-        const user = await Model.findOne({email: mail})
+        const user = await User.findOne({email: mail})
         .select("-__v")
         .populate('driver', "-_id -__v")
         .populate('company', "-_id -__v");
@@ -123,7 +151,7 @@ async function loginProviderUser(provider, mail, type){
 
 async function loginAfterRegUser(mail){
     try {
-        const user = await Model.findOne({email: mail})
+        const user = await User.findOne({email: mail})
         .select("-__v")
         .populate('driver', "-_id -__v")
         .populate('company', "-_id -__v");
@@ -152,7 +180,7 @@ async function loginAfterRegUser(mail){
 }
 
 async function logoutUser(id, tokenUser){
-    const foundUser = await Model.findOne({
+    const foundUser = await User.findOne({
         _id: id
     });
     foundUser.tokens = foundUser.tokens.filter((token) => {
@@ -162,7 +190,7 @@ async function logoutUser(id, tokenUser){
 }
 
 async function logoutAll(id){
-    const foundUser = await Model.findOne({
+    const foundUser = await User.findOne({
         _id: id
     });
     foundUser.tokens.splice(0, foundUser.tokens.length);
@@ -176,5 +204,7 @@ module.exports = {
     logout: logoutUser,
     logoutAll,
     loginProviderUser,
-    loginAfterRegUser
+    loginAfterRegUser,
+    setPrelogin,
+    getPrelogin
 }

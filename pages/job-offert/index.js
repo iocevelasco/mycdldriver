@@ -138,7 +138,8 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
 
   const fetchJobDetails = async (job_id) => {
     try{
-      const { data } = await axios.get(`/api/company/jobs/detail/${job_id}`)
+      const { data } = await axios.get(`/api/company/jobs/detail/${job_id}`);
+      console.log('[Detalle]', data);
       dispatch({ type: types.FETCH_DETAIL, payload:data.data});
     }catch(err){
       console.log(err)
@@ -161,7 +162,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
     }
   }
 
-  const { title, logo, description, address, date } = state
+  const { title, logo, description, address, date, areaCode, phoneNumber, email } = state
   
   return (
     <>
@@ -183,6 +184,12 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     <Text strong> {address} </Text> <Text strong > | </Text>
                     <Text> Date </Text>
                     <Text strong> { moment(date).format('MM DD YYYY')} </Text>
+                  </div>
+                  <div>
+                    <Text> Phone </Text>
+                    <Text strong> {areaCode} - {phoneNumber} </Text> <Text strong > | </Text>
+                    <Text> Email </Text>
+                    <Text strong> {email} </Text>
                   </div>
                 </div>
                 <Text className='description'>{description}</Text>

@@ -5,6 +5,24 @@ const jwt = require('jsonwebtoken');
 const config  = require('../../config');
 const Schema = mongoose.Schema;
 
+const perloginSchema = mongoose.Schema({
+   ip: {
+      type: String,
+      required: true,
+      trim: true
+   },
+   ruta: {
+      type: String,
+      required: true,
+      trim: true
+   },
+   abspath: {
+      type: String,
+      required: true,
+      trim: true
+   }
+});
+
 const userSchema = mongoose.Schema({
    name: {
       type: String,
@@ -120,5 +138,9 @@ const userSchema = mongoose.Schema({
       return user;
    }
  
- const User = mongoose.model('User', userSchema);
- module.exports = User;
+   const User = mongoose.model('User', userSchema);
+   const Prelogin = mongoose.model('Prelogin', perloginSchema);
+   module.exports = {
+      User,
+      Prelogin
+   };

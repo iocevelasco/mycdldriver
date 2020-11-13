@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../components/user/model');
+const {User} = require('../components/user/model');
 const config = require('../config');
 
 module.exports = function auth(typeUserReq = 0){
