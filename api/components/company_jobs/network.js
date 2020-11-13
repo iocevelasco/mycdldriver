@@ -14,6 +14,15 @@ router.get('/', function (req, res) {
     });
 });
 
+router.get('/customlist', function (req, res) {
+    controller.getCustomList()
+    .then((customList) => {
+        response.success(req, res, customList, 200);
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
+});
+
 router.get('/detail/:id', function (req, res) {
     
     controller.getJob({id: req.params.id})

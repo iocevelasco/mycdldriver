@@ -1,4 +1,5 @@
 const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
+const {ProfileCompany} = require('../profile_company/model');
 const fs = require('fs');
 
 function capitalize(text) {
@@ -65,6 +66,20 @@ function getJobs(filterCompany){
         resolve(result);
         resolve(true);
     });
+}
+
+async function getCustomList(){
+    const titles = await JobsModel().select("title");
+    const citys = await JobsModel().find().distinct('city');
+    const companys = await ProfileCompany().select("tradename");
+    
+    const listado = {
+        title: titles,
+        citys: citys,
+        company: companys
+    };
+
+    return listado;
 }
 
 async function addJob(job){
@@ -191,5 +206,6 @@ module.exports = {
     add: addJob,
     update: updateJob,
     delete: deleteJob,
-    applyJob
+    applyJob,
+    getCustomList
 }
