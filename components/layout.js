@@ -8,6 +8,7 @@ import SpinnerComp from '../components/loading';
 import {connect} from 'react-redux';
 import { logoutUser, getCurrentLocation } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
+import { deviceType } from '@store/reducers/landing_reducer';
 import ModalLogin from 'components/modal_login';
 import { 
     Layout, 
@@ -40,13 +41,13 @@ function mapDispatchToProps(dispatch){
     return {
       handleLogout: () => dispatch(logoutUser()),
       handleModal:(prop) => dispatch(handlerModalLogin(prop)),
-      handleLocation:(location) => dispatch(getCurrentLocation(location))
+      handleLocation:(location) => dispatch(getCurrentLocation(location)),
+      handleDeviceType: (props) => dispatch(deviceType(props))
     }
   };
 
-const MainLayout = ({ children, title, user, loading, router, bgActive, ...props }) => {
+const MainLayout = ({ children, title, user, loading, router, bgActive, deviceType, ...props }) => {
     const [loader, setLoader] = useState(loading);
-    
     const [userProps, setUserProps] = useState({ 
         name:'',
         email:'',
@@ -64,7 +65,8 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
             id:_id ,
             photo:photo,
             typeUser: typeUser
-        }) 
+        });
+        props.handleDeviceType(deviceType)
     },[user])
 
     useEffect(()=>{
@@ -161,10 +163,10 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
 }
 
 MainLayout.propTypes = {
-  children: propTypes.array.isRequired,
+  children: propTypes.object,
   title: propTypes.string.isRequired,
   user: propTypes.object,
-  loading: propTypes.bool.isRequired,
+  loading: propTypes.bool,
   router :propTypes.object
 }
 

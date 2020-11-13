@@ -7,8 +7,7 @@ import CarouselComp from '../components/carousel';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import queryString from "query-string";
-import { fetchJobPositionData, deviceType } from '../store/reducers/landing_reducer';
-import moment from "moment";
+import { fetchJobPositionData, deviceType } from '@store/reducers/landing_reducer';
 import axios from 'axios';
 
 //mock
@@ -62,21 +61,17 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query)),
-    handleDeviceType: (props) => dispatch(deviceType(props))
   }
 }
 
 const  Home = ({ 
-  user, 
-  loading,
+  user,
   fetchJobs,
   deviceType,
-  ...props
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    props.handleDeviceType(deviceType)
     fetchJobs(state.query);
     fetchPosition();
   }, [])
@@ -120,9 +115,15 @@ const  Home = ({
     marginBottom:16
   }
 
+  const layoutProps = {
+    title:'Welcome',
+    bgActive:false,
+    deviceType
+  }
+
   return (
     <>
-      <MainLayout title='Welcome' user={user} bgActive={false} loading={loading}>
+      <MainLayout {...layoutProps}>
         <HeaderLandingComp 
           handlerSearch={handlerSearch}
           filter_selected={state.filter_selected}
@@ -142,13 +143,7 @@ const  Home = ({
             </Col>
           </Row>
           <Row justify='center' align='middle' gutter={[16, 16]}>
-            {
-              state.ranking.map((e, ind) => {
-                return (
-                  <RankingComp key={ind} {...e} />
-                )
-              })
-            }
+              <RankingComp rankingDriver={state.ranking}/>
           </Row>
         </WrapperSection>
         <div className='delete-user' style={{display: 'block'}}>

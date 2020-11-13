@@ -63,7 +63,7 @@ const landingReducer = (state = initialState, action) => {
              }
         case types.DEVICETYPE:
             return { 
-                ...state, visible_modal_login:action.payload
+                ...state, deviceType:action.payload
              }
         default:
           return state;
