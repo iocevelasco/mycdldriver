@@ -29,7 +29,6 @@ function mapDispatchToProps(dispatch){
 };
 
 const ModalLogin = ({visible_modal_login, router, ...props}) => {
-  console.log(router);
   return (
       <Modal
       visible={visible_modal_login}
