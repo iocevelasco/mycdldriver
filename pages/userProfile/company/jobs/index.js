@@ -10,6 +10,7 @@ import {
   Radio,
   Upload,
   message,
+  Drawer,
   Tag,
   Card,
   List,
@@ -140,7 +141,7 @@ const CompanyJobView = ({ user }) => {
     title:'Jobs',
     user:{user},
     loading:state.loading,
-    currentLocation:'4',
+    currentLocation:'1',
     bgActive:false
   }
 
@@ -176,9 +177,7 @@ const CompanyJobView = ({ user }) => {
     dispatch({ type: types.JOB_DATA, payload: newJob });
   }
 
-  console.log('state', state.newJob)
   const updateQuery = (formatted_address) => {
-    console.log('formatted_address',formatted_address)
     let newJob = state.newJob;
     newJob['city'] = formatted_address;
     dispatch({ type: types.JOB_DATA, payload: newJob });
