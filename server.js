@@ -37,8 +37,6 @@ if (!dev && cluster.isMaster) {
     .then(() => {
       const server = express();
       server.use(bodyParser.json());
-      
-      
 
       if (!dev) {
         server.use(session({
@@ -146,6 +144,12 @@ if (!dev && cluster.isMaster) {
         req.logout();
         res.redirect('/');
       });
+      server.post('/prevpath', async (req, res) => {
+        req.session.prevpath = req.body.prevpath;
+        req.session.asPath = req.body.asPath;
+        console.log('[ session before ]', req.session.prevpath);
+        res.send(true);
+      });
       server.get('/auth/google', passport.authenticate('google', {
         scope: [
           'https://www.googleapis.com/auth/userinfo.profile',
@@ -157,8 +161,13 @@ if (!dev && cluster.isMaster) {
         failureRedirect: '/error'
       }),
       function(req, res) {
+        console.log('[ session after ]', req.session.prevpath);
         if(req.session.passport.user.typeUser === 1){
-          res.redirect('/userProfile/driver/profile');
+          if(req.session.prevpath && req.session.prevpath == "/job-offert"){
+            res.redirect(req.session.asPath);
+          }else{
+            res.redirect('/userProfile/driver/profile');
+          }
         }else if(req.session.passport.user.typeUser === 2){
           res.redirect('/userProfile/company/profile');
         }else{

@@ -6,7 +6,7 @@ import Footer from './footer';
 import Link from 'next/link';
 import SpinnerComp from '../components/loading';
 import {connect} from 'react-redux';
-import { logoutUser } from '@store/reducers/user_reducer';
+import { logoutUser, getCurrentLocation } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import ModalLogin from 'components/modal_login';
 import { 
@@ -39,12 +39,12 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return {
       handleLogout: () => dispatch(logoutUser()),
-      handleModal:(prop) => dispatch(handlerModalLogin(prop))
+      handleModal:(prop) => dispatch(handlerModalLogin(prop)),
+      handleLocation:(location) => dispatch(getCurrentLocation(location))
     }
   };
 
 const MainLayout = ({ children, title, user, loading, router, bgActive, ...props }) => {
-    const [visible, setVisible] = useState(false);
     const [loader, setLoader] = useState(loading);
     
     const [userProps, setUserProps] = useState({ 
@@ -77,10 +77,13 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
             document.body.style.overflowY = "auto"
         }
     },[loading]);
-    let bg = !bgActive ? { 
-        background: `url('/static/images/bg-routes.jpg')`,
-        backgroundSize:'contain',
-        } : {}
+    let bg = bgActive ? { 
+            background: `url('/static/images/bg-routes.jpg')`,
+            backgroundSize:'contain',
+        } : {
+            background: `#fff`,
+            backgroundSize:'contain',
+        }
     const menu = (
         <Menu style={{width: '200px', float:'right'}}>
           <Menu.Item>
@@ -118,7 +121,7 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                     </Col>
                     <Col span={10}>
                     {
-                        user.isLogin ?
+                     user.isLogin ?
                         <Dropdown overlay={menu}>
                              <Row justify='end' align='middle'>
                                 <Space size='large'>
@@ -133,7 +136,10 @@ const MainLayout = ({ children, title, user, loading, router, bgActive, ...props
                             <Button 
                             shape="round" 
                             icon={<UserOutlined/>}
-                            onClick={()=> props.handleModal(true)}
+                            onClick={()=> {
+                                props.handleModal(true);
+                                props.handleLocation(router.pathname);
+                            }}
                             type="secondary" size='large'>
                                 Login
                             </Button>

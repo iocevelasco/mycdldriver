@@ -4,7 +4,8 @@ const types = {
     UPDATE_USER_DRIVER:'UPDATE_USER_DRIVER',
     LOGIN_SUCCESS:'LOGIN_SUCCESS',
     LOGOUT_SUCCESS:'LOGOUT_SUCCESS',
-    LOGOUT_USER:'LOGOUT_USER'
+    LOGOUT_USER:'LOGOUT_USER',
+    GET_CURRENT_LOCATION:'GET_CURRENT_LOCATION'
 }
 
 const initialState = {
@@ -20,6 +21,14 @@ const initialState = {
     token:null,
     driver: null,
     company:null,
+    currentLocation:''
+}
+// aqui agregas la accion 
+const getCurrentLocation  = (location) =>{
+    return {
+        type: types.GET_CURRENT_LOCATION,
+        payload: location
+    }
 }
 
 const updateUserCompany = (props) => {
@@ -79,6 +88,8 @@ const userReducer  = (state = initialState, action) =>{
             return {...state, ...action.payload}
         case types.DEVICETYPE:
             return {...state, deviceType:action.payload}
+        case types.GET_CURRENT_LOCATION:
+            return {...state, currentLocation:action.payload}
         default:
             return state;
     }
@@ -90,5 +101,6 @@ export {
     updateUserCompany,
     updateUserDrive,
     getInitialPropsUser,
-    logoutUser
+    logoutUser,
+    getCurrentLocation
 } ;

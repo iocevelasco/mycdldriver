@@ -1,4 +1,4 @@
-const {TagsModel, JobsModel} = require('./model');
+const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
 const fs = require('fs');
 
 function capitalize(text) {
@@ -31,6 +31,9 @@ function getJobs(filterCompany){
         if(filterCompany.company){
             filter = filterCompany;
         }
+        if(filterCompany.id){
+            filter = {_id: filterCompany.id};
+        }
         if(filterCompany.input){
             filterOr.push({title: new RegExp(filterCompany.input, 'i')});
             filterOr.push({description: new RegExp(filterCompany.input, 'i')});
@@ -56,6 +59,7 @@ function getJobs(filterCompany){
         console.log('filter', filter);
         result = JobsModel.find(filter)
             .select("-__v")
+            .populate('company')
             .populate('tags');
 
         resolve(result);
@@ -69,6 +73,25 @@ async function addJob(job){
     const newJob = new JobsModel(job);
     await newJob.save();
     return newJob;
+}
+
+async function applyJob(job){
+    try{
+        const newApply = new JobsApplysModel(job);
+        const resp = await newApply.save();
+        if(resp){
+            return {
+                status: 200,
+                message: 'Ok'
+            };
+        }
+    }catch(e){
+        console.log(e);
+        return {
+            status: 500,
+            message: 'Invalid data recived for apply job'
+        };
+    }
 }
 
 async function updateJob(id, job, company){
@@ -167,5 +190,6 @@ module.exports = {
     list: getJobs,
     add: addJob,
     update: updateJob,
-    delete: deleteJob
+    delete: deleteJob,
+    applyJob
 }
