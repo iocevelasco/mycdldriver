@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchJobPositionData } from '@store/reducers/landing_reducer';
 import { withRouter } from 'next/router';
@@ -15,57 +15,103 @@ import moment from 'moment';
 
 const { Text, Title } = Typography
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
-      jobs: state.landing.jobs, 
-      deviceType: state.landing.deviceType
+    jobs: state.landing.jobs,
+    deviceType: state.landing.deviceType
   }
 }
 
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query))
   }
 }
 
 
-const JobListComp = ({ jobs, deviceType, fetchJobs, small}) => {
+const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
   useEffect(() => {
-    fetchJobs({});
+    fetchJobs('');
   }, [])
+
+  const handlerTypeComponent = (type, item) => {
+    let components;
+    switch (type) {
+      case 'small':
+        components = <DescriptionSmall item={item} />
+        break;
+      case 'large':
+        if(deviceType === 'desktop') components =  <DescriptionDesktop item={item} />
+        else  components = <DescriptionMobile item={item} />
+        break;
+    }
+    return components
+  }
 
   return (
     <>
-    <List
-      bordered={false}
-      dataSource={jobs}
-      pagination={{
-        pageSize: 10,
-      }}
-      renderItem={item => (
-        <List.Item>
-          <Link href={{
-            pathname: '/jobs',
-            query:{
-              id: item._id
-            }}}>
-              {
-                deviceType === 'desktop' 
-                ? <DescriptionDesktop item={item} small={small}/> 
-                : <DescriptionMobile item={item}/>
-              }
-            </Link>
-        </List.Item>
-      )}
-     />
+      <List
+        bordered={false}
+        dataSource={jobs}
+        pagination={{
+          pageSize: 10,
+        }}
+        renderItem={item => (
+          <List.Item>
+              {handlerTypeComponent(type, item)}
+          </List.Item>
+        )}
+      />
     </>
   );
 }
 
-const DescriptionDesktop = ({item, small}) => {
+
+const DescriptionSmall = ({ item }) => {
   return (
+    <div className='job-offert-list small'>
+      <Link href={{
+        pathname: '/job-offert',
+        query: {
+          id: item._id
+        }
+      }}>
       <Card
+        hoverable
+        bodyStyle={{
+          padding: 0,
+          height: 100
+        }}
+        style={{ width: '100%', marginTop: 24, }}>
+        <div className='container'>
+          <div className='image'>
+            <Avatar size={80} src={item.logo} />
+          </div>
+          <div className='job-offert__description'>
+            <div>
+              <Title level={5}> {item.title} </Title>
+              <div>
+                <Text> Location </Text>
+                <Text strong> {item.city} </Text> <Text strong > | </Text>
+                <Text> Date </Text>
+                <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
+              </div>
+              <div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Card>
+      </Link>
+    </div>
+  )
+}
+
+
+const DescriptionDesktop = ({ item, small }) => {
+  return (
+    <Card
       bodyStyle={{
         padding: 0
       }}
@@ -83,21 +129,19 @@ const DescriptionDesktop = ({item, small}) => {
               <Text> Date </Text>
               <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
             </div>
-            {
-              !small && <Text> {item.description} </Text>
-            }
+              <Text> {item.description} </Text>
             <div>
             </div>
           </div>
         </div>
         <div className='action'>
-        <Link
-          href={{
-            pathname: '/job-offert',
-            query: { id: item._id },
+          <Link
+            href={{
+              pathname: '/job-offert',
+              query: { id: item._id },
             }}
-            >
-            <Button type='primary'> VIEW MORE </Button>
+          >
+              <Button shape="round"  type="secondary" size='large'> VIEW MORE </Button>
           </Link>
         </div>
       </div>
@@ -105,39 +149,39 @@ const DescriptionDesktop = ({item, small}) => {
   )
 }
 
-const DescriptionMobile = ({item}) => {
- return (<Card
-  bodyStyle={{
-    padding: 0
-  }}
-  style={{ width: '100%', marginTop: 24, }}>
-  <div className='home--job-offert'>
-    <div className='thumbnails'>
-      <Avatar size={120} src={item.logo} />
-    </div>
-    <div className='job-offert__description'>
-      <div>
-        <Title level={3}> {item.title} </Title>
+const DescriptionMobile = ({ item }) => {
+  return (<Card
+    bodyStyle={{
+      padding: 0
+    }}
+    style={{ width: '100%', marginTop: 24, }}>
+    <div className='home--job-offert'>
+      <div className='thumbnails'>
+        <Avatar size={120} src={item.logo} />
+      </div>
+      <div className='job-offert__description'>
         <div>
-          <Text> Addres </Text>
-          <Text strong> {item.city} </Text> <Text strong > | </Text>
-        </div>
-        <div>
+          <Title level={3}> {item.title} </Title>
+          <div>
+            <Text> Addres </Text>
+            <Text strong> {item.city} </Text> <Text strong > | </Text>
+          </div>
+          <div>
+          </div>
         </div>
       </div>
-    </div>
-    <div className='action'>
-    <Link
-      href={{
-        pathname: '/job-offert',
-        query: { id: item._id },
-        }}
+      <div className='action'>
+        <Link
+          href={{
+            pathname: '/job-offert',
+            query: { id: item._id },
+          }}
         >
-        <Button type='primary'> VIEW MORE </Button>
-      </Link>
+          <Button  shape="round"  type='secondary'> VIEW MORE </Button>
+        </Link>
+      </div>
     </div>
-  </div>
-</Card>)
+  </Card>)
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(JobListComp));

@@ -132,7 +132,7 @@ const  Home = ({
           <CarouselComp carousel_data={state.carousel_data} />
         </WrapperSection>
         <WrapperSection xs={24} row={18}>
-            <OffertJobComp/>
+            <OffertJobComp type='large'/>
         </WrapperSection>
         <WrapperSection xs={24} row={18} style={wrapperStyle} >
           <Row justify='center' align='middle' gutter={[16]} style={{marginTop:24}}>
