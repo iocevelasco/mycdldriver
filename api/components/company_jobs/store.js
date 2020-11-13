@@ -72,11 +72,16 @@ async function getCustomList(){
     const titles = await JobsModel.find({}).select("title");
     const citys = await JobsModel.find({}).distinct('city');
     const companys = await ProfileCompany.find({}).select("tradename");
-    
+    let cityArray = citys.map((city)=>{
+        return city.title;
+    });
+    let companyArray = companys.map((company)=>{
+        return company.tradename;
+    });
     const listado = {
         title: titles,
-        citys: citys,
-        company: companys
+        citys: cityArray,
+        company: companyArray
     };
 
     return listado;
