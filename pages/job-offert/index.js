@@ -54,14 +54,14 @@ const initialState = {
     zipCode: '',
     description: ''
   },
-  title: "Position Name",
-  image: "https://image.freepik.com/vector-gratis/truck-logo-vector-imagen-archivo_56473-238.jpg",
+  title: '',
+  logo: '',
   postion_id: 0,
-  description: "Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt.",
-  address: "Miami",
-  date: "12/04/23",
-  expire_date: "12/05/23",
-  company_name: "pepito",
+  description: '',
+  address:'',
+  date: '',
+  expire_date: '',
+  company_name: '',
   experience:[
     {key:1-2, value:'1 - 2'},
     {key:2-4, value:'2 - 4'},
@@ -161,7 +161,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
     }
   }
 
-  const { title, image, description, address, date } = state
+  const { title, logo, description, address, date } = state
   
   return (
     <>
@@ -174,7 +174,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                   style={{
                     backgroundImage: `url('/static/images/truck3.jpg')`
                   }}>
-                  <Avatar size={130} src={image} alt='image' />
+                  <Avatar size={130} src={logo} alt='image' />
                 </div>
                 <div>
                   <Title> {title} </Title>
@@ -182,7 +182,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     <Text> Addres </Text>
                     <Text strong> {address} </Text> <Text strong > | </Text>
                     <Text> Date </Text>
-                    <Text strong> {date} </Text>
+                    <Text strong> { moment(date).format('MM DD YYYY')} </Text>
                   </div>
                 </div>
                 <Text className='description'>{description}</Text>
@@ -212,8 +212,11 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                 }
               </Col>
               <Col className='job-offert__list' span={10}>
+              <Row justify='center' align='middle'>
+                <Title level={3}>Busquedas relacionas</Title>
+              </Row>
                 <Row justify='center' align='middle'>
-                  <JobListComp small={true} />
+                  <JobListComp type='small' />
                 </Row>
               </Col>
             </Row>

@@ -263,7 +263,7 @@ const CompanyProfileView = ({ user, ...props }) => {
   return (
     <MainLayout {...configSection}>
       <Row display='flex' justify='center'>
-       <SideNav currentLocation='1' />
+       <SideNav currentLocation='0' />
         <Col span={20}>
           <WrapperSection row={24} styles={styleWrapper}>
             <FormUserCompany {...formConfig} />

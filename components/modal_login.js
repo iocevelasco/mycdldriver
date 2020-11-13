@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import { withRouter } from 'next/router';
-import { handlerModalLogin } from '@store/reducers/landing_reducer'; 
+import { handlerModalLogin, activeLoading } from '@store/reducers/landing_reducer'; 
 import {
   Typography,
   Modal,
@@ -24,12 +24,12 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return {
-    handleModal: (props) => dispatch(handlerModalLogin(props))
+    handleModal: (props) => dispatch(handlerModalLogin(props)),
+    handleActiveModal: (props) => dispatch(activeLoading(props))
   }
 };
 
 const ModalLogin = ({visible_modal_login, router, ...props}) => {
-  console.log(router);
   return (
       <Modal
       visible={visible_modal_login}
@@ -45,6 +45,7 @@ const ModalLogin = ({visible_modal_login, router, ...props}) => {
           </div>
           <Button onClick={async ()=>{
                   props.handleModal(false);
+                  props.handleActiveModal(true);
                   await axios.post('/prevpath', {prevpath: router.pathname, asPath: router.asPath});
                   router.push('/auth/google');
               }} icon={<GoogleOutlined />} block size='large' >
@@ -52,7 +53,8 @@ const ModalLogin = ({visible_modal_login, router, ...props}) => {
           </Button>
 
           <Button onClick={()=>{
-                  props.handleModal(false)
+                  props.handleModal(false);
+                  props.handleActiveModal(true);
                   router.push('/auth/facebook');
               }} block size='large' style={{background:'#1877f2', color:'#fff'}} icon={<FacebookOutlined />} >
               Continue with facebook     
