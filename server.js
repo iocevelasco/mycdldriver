@@ -172,7 +172,7 @@ if (!dev && cluster.isMaster) {
           ruta: '',
           abspath: ''
         };
-        const respuesta = userController.getPrelogin(ip);
+        const respuesta = await userController.getPrelogin(ip);
         prelogin.ruta = respuesta.ruta;
         prelogin.abspath = respuesta.abspath;
         console.log('[afterLogin]', prelogin);
