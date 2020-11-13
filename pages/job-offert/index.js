@@ -55,7 +55,7 @@ const initialState = {
     description: ''
   },
   title: "Position Name",
-  image: "https://image.freepik.com/vector-gratis/truck-logo-vector-imagen-archivo_56473-238.jpg",
+  logo: "https://image.freepik.com/vector-gratis/truck-logo-vector-imagen-archivo_56473-238.jpg",
   postion_id: 0,
   description: "Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt.",
   address: "Miami",
@@ -162,7 +162,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
     wrapperCol: { span: 14 },
   }
 
-  const { title, image, description, address, date } = state
+  const { title, logo, description, address, date } = state
   
   const formConfig = {
     base: state.base,
@@ -185,7 +185,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                   style={{
                     backgroundImage: `url('/static/images/truck3.jpg')`
                   }}>
-                  <Avatar size={130} src={image} alt='image' />
+                  <Avatar size={130} src={logo} alt='image' />
                 </div>
                 <div>
                   <Title> {title} </Title>
