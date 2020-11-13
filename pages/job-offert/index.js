@@ -95,12 +95,6 @@ const reducer = (state, action) => {
   }
 }
 
-function setPath(value){
-  if (typeof window !== "undefined") {
-    localStorage.setItem('prevPath', value)  ;
-  }
-}
-
 function mapStateToProps(state) {
   return {
     isUserRegistry:state.user.typeUser,
@@ -151,6 +145,22 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
     }
   }
 
+  async function saveApply(){
+    try{
+      const header = {
+        headers: { Authorization: `Bearer ${user.token}` }
+      };
+      const apply = {
+        job: state._id,
+        company: state.company
+      };
+      await axios.post('/api/company/jobs/apply', apply, header);
+      dispatch({type:types.SHOW_DRAWER, payload:true});
+    }catch(e){
+      console.log(e);
+    }
+  }
+
   const { title, image, description, address, date } = state
   
   return (
@@ -187,8 +197,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     marginLeft: 12,
                   }}
                   onClick={()=> {
-                    props.handleModal(true) 
-                    setPath(router.pathname);
+                    props.handleModal(true);
                   }}>Completa el login y aplica a esta posicion</Button> : 
                   <Button 
                   shape="round" 
@@ -199,7 +208,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     width: '90%',
                     marginLeft: 12,
                   }}
-                  onClick={()=> dispatch({type:types.SHOW_DRAWER, payload:true})}>Apply</Button>
+                  onClick={saveApply}>Apply</Button>
                 }
               </Col>
               <Col className='job-offert__list' span={10}>
