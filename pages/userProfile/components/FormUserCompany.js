@@ -25,7 +25,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const FormUserCompany = (props) => {
-  const { company, onChangeBase, onChangeCompany, newCompany, updateCompany, base, beforeUpload, propsUpload, logo} = props;
+  const { company, onChangeBase, onChangeCompany, newCompany, updateCompany, base, beforeUpload, propsUpload, propsPhoto, logo, photo} = props;
   const [form] = Form.useForm();
   return (
     <div className='profile-driver'>
@@ -132,11 +132,23 @@ const FormUserCompany = (props) => {
                   fileList={logo}
                   beforeUpload={beforeUpload}
                 >
-                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  <Button icon={<UploadOutlined />}>Upload Image for Company</Button>
                 </Upload>
               </Form.Item>
             </Col>
             <Col span={12}>
+              <Form.Item>
+                <Upload {...propsPhoto}
+                  fileList={photo}
+                  beforeUpload={beforeUpload}
+                >
+                  <Button icon={<UploadOutlined />}>Upload Photo for Company</Button>
+                </Upload>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[24]} justify='space-between' >
+            <Col span={24}>
               <Form.Item
                 rules={[{ required: true, message: 'Please input your username!' }]}>
                 <Input

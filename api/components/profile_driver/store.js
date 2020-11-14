@@ -1,5 +1,5 @@
 const Model = require('./model');
-const userModel = require('../user/model');
+const {User} = require('../user/model');
 const fs = require('fs');
 
 async function getDriver(filterDriver){
@@ -20,7 +20,7 @@ async function addDriver(user){
     const driver = new Model(user.driver);
     await driver.save();
     user.driver = driver;
-    const myUser = new userModel(user);
+    const myUser = new User(user);
     await myUser.save();
     const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
     const token = await myUser.generateAuthToken();
@@ -30,7 +30,7 @@ async function addDriver(user){
 
 async function updateDriver(id, user){
     let driver = user.driver;
-    const foundUser = await userModel.findOne({
+    const foundUser = await User.findOne({
         _id: id
     });
     const foundDriver = await Model.findOne({

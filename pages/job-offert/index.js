@@ -95,12 +95,6 @@ const reducer = (state, action) => {
   }
 }
 
-function setPath(value){
-  if (typeof window !== "undefined") {
-    localStorage.setItem('prevPath', value)  ;
-  }
-}
-
 function mapStateToProps(state) {
   return {
     isUserRegistry:state.user.typeUser,
@@ -144,14 +138,31 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
 
   const fetchJobDetails = async (job_id) => {
     try{
-      const { data } = await axios.get(`/api/company/jobs/detail/${job_id}`)
+      const { data } = await axios.get(`/api/company/jobs/detail/${job_id}`);
+      console.log('[Detalle]', data);
       dispatch({ type: types.FETCH_DETAIL, payload:data.data});
     }catch(err){
       console.log(err)
     }
   }
 
-  const { title, logo, description, address, date } = state
+  async function saveApply(){
+    try{
+      const header = {
+        headers: { Authorization: `Bearer ${user.token}` }
+      };
+      const apply = {
+        job: state._id,
+        company: state.company
+      };
+      await axios.post('/api/company/jobs/apply', apply, header);
+      dispatch({type:types.SHOW_DRAWER, payload:true});
+    }catch(e){
+      console.log(e);
+    }
+  }
+
+  const { title, logo, description, address, date, areaCode, phoneNumber, email } = state
   
   return (
     <>
@@ -174,6 +185,12 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     <Text> Date </Text>
                     <Text strong> { moment(date).format('MM DD YYYY')} </Text>
                   </div>
+                  <div>
+                    <Text> Phone </Text>
+                    <Text strong> {areaCode} - {phoneNumber} </Text> <Text strong > | </Text>
+                    <Text> Email </Text>
+                    <Text strong> {email} </Text>
+                  </div>
                 </div>
                 <Text className='description'>{description}</Text>
                 {
@@ -187,8 +204,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     marginLeft: 12,
                   }}
                   onClick={()=> {
-                    props.handleModal(true) 
-                    setPath(router.pathname);
+                    props.handleModal(true);
                   }}>Completa el login y aplica a esta posicion</Button> : 
                   <Button 
                   shape="round" 
@@ -199,7 +215,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     width: '90%',
                     marginLeft: 12,
                   }}
-                  onClick={()=> dispatch({type:types.SHOW_DRAWER, payload:true})}>Apply</Button>
+                  onClick={saveApply}>Apply</Button>
                 }
               </Col>
               <Col className='job-offert__list' span={10}>

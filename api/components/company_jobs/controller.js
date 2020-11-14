@@ -23,6 +23,12 @@ function getJob(filter){
     });
 }
 
+function getCustomList(){
+    return new Promise((resolve, reject) => {
+        resolve(store.getCustomList());
+    });
+}
+
 function addJob(job, company){
     return new Promise((resolve, reject) => {
         job.company = company;
@@ -150,5 +156,6 @@ module.exports = {
     addJob,
     updateJob,
     deleteJob,
-    applyJob
+    applyJob,
+    getCustomList
 }

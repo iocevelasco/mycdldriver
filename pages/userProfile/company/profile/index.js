@@ -19,6 +19,7 @@ const initialState = {
   loading:true,
   userLogin:false,
   logo: [],
+  photo: [],
   base: {
     name: '',
     lastname: '',
@@ -43,8 +44,10 @@ const types = {
   CREATE_NEW_USER: 'create_new_user',
   PROPS_BASE: 'props_base',
   PROPS_COMPANY: 'props_company',
+  DATA_COMPANY: 'DATA_COMPANY',
   LOADING: 'LOADING',
   UPLOAD_IMAGE: 'UPLOAD_IMAGE',
+  UPLOAD_PHOTO: 'UPLOAD_PHOTO',
   LOGIN_SUCCCESS: 'LOGIN_SUCCCESS'
 }
 
@@ -60,6 +63,8 @@ const reducer = (state, action) => {
       return { ...state, userLogin: action.payload }
     case types.UPLOAD_IMAGE:
       return { ...state, logo:action.payload }
+    case types.UPLOAD_PHOTO:
+      return { ...state, photo:action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -176,6 +181,44 @@ const CompanyProfileView = ({ user, ...props }) => {
     }
   };
 
+  const propsPhoto = {
+    name: 'logo',
+    action: '/api/files',
+    headers: {
+      authorization: 'authorization-text'
+    },
+    async onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+      
+      if(state.photo.length > 0){
+        try{
+          const file = {
+            foto: state.photo[0].response.data.file
+          };
+          await axios.post(`/api/files/delete`, file);
+        }catch(e){
+          console.log(e);
+        }
+      }
+      dispatch({ type: types.UPLOAD_PHOTO, payload: fileList});
+    }
+  };
+
   const handleDatePicker = (obj, date, key) => {
     let data = state.driver;
     if (date === "") data[key] = moment(new Date()).format('MM DD YYYY')
@@ -188,6 +231,9 @@ const CompanyProfileView = ({ user, ...props }) => {
     base.typeUser = 2;
     if(state.logo.length > 0){
       company.logo = state.logo[0].response.data.file;
+    }
+    if(state.photo.length > 0){
+      base.photo = state.photo[0].response.data.file;
     }
     const fullCompany = { base: base, ...company }
     dispatch({ type: types.LOADING, payload: true });
@@ -220,6 +266,9 @@ const CompanyProfileView = ({ user, ...props }) => {
     if(state.logo.length > 0){
       company.logo = state.logo[0].response.data.file;
     }
+    if(state.photo.length > 0){
+      base.photo = state.photo[0].response.data.file;
+    }
     const fullCompany = { base: base, ...company }
     try {
       dispatch({ type: types.LOADING, payload: true });
@@ -244,13 +293,15 @@ const CompanyProfileView = ({ user, ...props }) => {
     base: state.base,
     company: state.company,
     logo: state.logo,
+    photo: state.photo,
     onChangeBase,
     onChangeCompany,
     handleDatePicker,
     newCompany,
     updateCompany,
     beforeUpload,
-    propsUpload
+    propsUpload,
+    propsPhoto
   }
 
   const styleWrapper = {

@@ -110,6 +110,28 @@ function logoutAll(id){
     });
 }
 
+function setPrelogin(ip, ruta, abspath){
+    const data = {
+        ip: ip,
+        ruta: ruta,
+        abspath: abspath
+    }
+    return new Promise(async (resolve, reject) => {
+        if(!ip){
+            reject('Invalid data');
+            return false;
+        }
+        const result = await store.setPrelogin(data);
+        resolve(result);
+    });
+}
+
+function getPrelogin(ip){
+    return new Promise((resolve, reject) => {
+        resolve(store.getPrelogin(ip));
+    });
+}
+
 module.exports = {
     getUsers,
     deleteUser,
@@ -118,5 +140,7 @@ module.exports = {
     logoutAll,
     addUserDirect,
     loginProviderUser,
-    loginAfterRegUser
+    loginAfterRegUser,
+    setPrelogin,
+    getPrelogin
 }

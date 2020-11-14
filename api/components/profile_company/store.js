@@ -1,5 +1,5 @@
 const Model = require('./model');
-const userModel = require('../user/model');
+const {User} = require('../user/model');
 
 function getCompany(filterCompany){
     return new Promise((resolve, reject) => {
@@ -19,7 +19,7 @@ async function addCompany(user){
     const company = new Model(user.company);
     await company.save();
     user.company = company;
-    const myUser = new userModel(user);
+    const myUser = new User(user);
     await myUser.save();
     const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
     const token = await myUser.generateAuthToken();
@@ -29,7 +29,7 @@ async function addCompany(user){
 
 async function updateCompany(id, user){
     let company = user.company;
-    const foundUser = await userModel.findOne({
+    const foundUser = await User.findOne({
         _id: id
     });
     const foundCompany = await Model.findOne({

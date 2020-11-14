@@ -192,8 +192,7 @@ const driverUser = (props) => {
               onChange={(e) => onChangeDriver(e, 'description')} />
           </Form.Item>
           <Row gutter={[24]} justify='end' align='middle'>
-            {
-              isProfile ? <Col span={6}>
+             <Col span={6}>
                 {!base.id ? <Button
                   onClick={newDrivers}
                   type='primary'
@@ -205,9 +204,7 @@ const driverUser = (props) => {
                   block
                   size='large'>Update Information</Button>
                 }
-              </Col> : buttonApply
-              }
-
+              </Col>
           </Row>
         </Col>
       </Row>

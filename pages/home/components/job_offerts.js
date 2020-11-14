@@ -98,6 +98,10 @@ const DescriptionSmall = ({ item }) => {
                 <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
               </div>
               <div>
+                <Text> Phone </Text>
+                <Text strong> {item.areaCode} - {item.phoneNumber} </Text> <Text strong > | </Text>
+                <Text> Email </Text>
+                <Text strong> {item.email} </Text>
               </div>
             </div>
           </div>
@@ -128,6 +132,12 @@ const DescriptionDesktop = ({ item, small }) => {
               <Text strong> {item.city} </Text> <Text strong > | </Text>
               <Text> Date </Text>
               <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
+            </div>
+            <div>
+              <Text> Phone </Text>
+              <Text strong> {item.areaCode} - {item.phoneNumber} </Text> <Text strong > | </Text>
+              <Text> Email </Text>
+              <Text strong> {item.email} </Text>
             </div>
               <Text> {item.description} </Text>
             <div>

@@ -1,4 +1,5 @@
 const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
+const ProfileCompany = require('../profile_company/model');
 const fs = require('fs');
 
 function capitalize(text) {
@@ -65,6 +66,25 @@ function getJobs(filterCompany){
         resolve(result);
         resolve(true);
     });
+}
+
+async function getCustomList(){
+    const titles = await JobsModel.find({}).select("title");
+    const citys = await JobsModel.find({}).distinct('city');
+    const companys = await ProfileCompany.find({}).select("tradename");
+    let titleArray = titles.map((job)=>{
+        return job.title;
+    });
+    let companyArray = companys.map((company)=>{
+        return company.tradename;
+    });
+    const listado = {
+        title: titleArray,
+        citys: citys,
+        company: companyArray
+    };
+
+    return listado;
 }
 
 async function addJob(job){
@@ -191,5 +211,6 @@ module.exports = {
     add: addJob,
     update: updateJob,
     delete: deleteJob,
-    applyJob
+    applyJob,
+    getCustomList
 }

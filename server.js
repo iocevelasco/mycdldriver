@@ -68,6 +68,7 @@ if (!dev && cluster.isMaster) {
       }
 
       //CONFIGURACION PASSPORT
+      server.set('trust proxy', true);
       passport.serializeUser(function(user, done) {
         done(null, user);
       });
@@ -145,10 +146,15 @@ if (!dev && cluster.isMaster) {
         res.redirect('/');
       });
       server.post('/prevpath', async (req, res) => {
-        req.session.prevpath = req.body.prevpath;
-        req.session.asPath = req.body.asPath;
-        console.log('[ session before ]', req.session.prevpath);
-        res.send(true);
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        
+        userController.setPrelogin(ip, req.body.prevpath, req.body.asPath)
+        .then(() => {
+          res.send(true);
+        })
+        .catch(e => {
+          res.send(false);
+        });
       });
       server.get('/auth/google', passport.authenticate('google', {
         scope: [
@@ -160,14 +166,21 @@ if (!dev && cluster.isMaster) {
       server.get('/auth/google/callback', passport.authenticate('google', {
         failureRedirect: '/error'
       }),
-      function(req, res) {
-        console.log('[ session after ]', req.session.prevpath);
+      async function(req, res) {
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        let prelogin = {
+          ruta: '',
+          abspath: ''
+        };
+        const respuesta = await userController.getPrelogin(ip);
+        prelogin.ruta = respuesta.ruta;
+        prelogin.abspath = respuesta.abspath;
+        console.log('[afterLogin]', prelogin);
+        if(prelogin.ruta == "/job-offert"){
+          res.redirect(prelogin.abspath);
+        }
         if(req.session.passport.user.typeUser === 1){
-          if(req.session.prevpath && req.session.prevpath == "/job-offert"){
-            res.redirect(req.session.asPath);
-          }else{
             res.redirect('/userProfile/driver/profile');
-          }
         }else if(req.session.passport.user.typeUser === 2){
           res.redirect('/userProfile/company/profile');
         }else{
