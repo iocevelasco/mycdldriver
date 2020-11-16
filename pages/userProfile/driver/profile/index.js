@@ -6,6 +6,7 @@ import {
   Typography,
   Input,
   Select,
+  Button,
   message,
   notification,
 } from 'antd';
@@ -43,6 +44,7 @@ function mapStateToProps(state){
       typeUser: user.typeUser
     },
     driver: user.driver,
+    isUserRegistry:state.user.typeUser,
   }
 }
 
@@ -185,6 +187,16 @@ const DriverProfileView = (props) => {
     imageDln: state.imageDln,
     newDrivers: newDrivers,
     updateDriver: updateDriver,
+    action: !props.isUserRegistry ? <Button
+    onClick={newDrivers}
+    type='primary'
+    block
+    size='large'>Save Information</Button>
+    : <Button
+    onClick={updateDriver}
+    type='primary'
+    block
+    size='large'>Update Information</Button>,
     beforeUpload,
     propsUpload
   }
@@ -195,6 +207,7 @@ const DriverProfileView = (props) => {
     paddingBottom: 24,
     backgroundSize:'contain',
   }
+
   
     return (
       <MainLayout title='Profile' loading={state.loading}>

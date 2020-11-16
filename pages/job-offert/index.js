@@ -7,13 +7,9 @@ import {
   Input,
   Select,
   Avatar,
-  Form,
   Button,
-  Switch,
-  InputNumber,
   Drawer
 } from 'antd';
-import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import FormUserDriver from 'components/FormUserDriver';
 import { MessageSucces } from 'components/helpers';
 import { WrapperSection } from 'components/helpers';
@@ -116,7 +112,6 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
     }
   }
 
-  console.log('tstae', state);
   
   return (
     <>
