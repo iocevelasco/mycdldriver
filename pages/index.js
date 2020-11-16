@@ -7,7 +7,7 @@ import CarouselComp from '../components/carousel';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import queryString from "query-string";
-import { fetchJobPositionData, deviceType } from '@store/reducers/landing_reducer';
+import { fetchJobPositionData, fetchCommonData } from '@store/reducers/landing_reducer';
 import axios from 'axios';
 
 //mock
@@ -24,7 +24,6 @@ const initialState = {
   sponsors: [],
   search_name: '',
   carousel_data: [],
-  jobs: [],
   query:'',
   ranking: [],
   filter_selected:{}
@@ -54,13 +53,14 @@ const reducer = (state, action) => {
 
 function mapStateToProps(state){
   return {
-      user: state.user
+      user: state.user,
   }
 }
 
 function mapDispatchToProps(dispatch){
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query)),
+    fetCommons: () => dispatch(fetchCommonData())
   }
 }
 
@@ -68,17 +68,19 @@ const  Home = ({
   user,
   fetchJobs,
   deviceType,
+  fetCommons,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetchJobs(state.query);
     fetchPosition();
+    fetCommons();
   }, [])
 
   const handlerSearch = (e, key) => {
     let value = "";
-    if(key == 'input') value = e.target.value;
+    if(key == 'input') value = e;
     else if(key == 'city') value = e;
     
     let filters = state.filter_selected;
@@ -94,7 +96,6 @@ const  Home = ({
     });
   }
 
-
   const DeleteUser = async () => {
     const header = {
       headers: { Authorization: `Bearer ${user.token}` }
@@ -104,7 +105,6 @@ const  Home = ({
       console.log('err', err)
     })
   }
-
 
   const fetchPosition = async () => {
     dispatch({ type: types.ranking, payload: mock_ranking.ranking });

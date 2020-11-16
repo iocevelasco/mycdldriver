@@ -6,19 +6,21 @@ import {
   Typography,
   Input,
   Select,
-  Spin,
   message,
   notification,
-  Drawer,
 } from 'antd';
 import axios from 'axios';
-import moment from 'moment';
 import FormUserDriver from 'components/FormUserDriver';
 import SideNav from '../../components/SideNavAdmin';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { WrapperSection } from 'components/helpers';
-import { updateUserDrive } from '../../../../store/reducers/user_reducer';
+import { 
+  updateUserDrive, 
+  onChangeDriver, 
+  onChangeBase, 
+  handleDatePicker
+} from '@store/reducers/user_reducer';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -28,32 +30,19 @@ const { TextArea } = Input;
 const initialState = {
   loading:false,
   imageDln: [],
-  base: {
-    name: '',
-    lastname: '',
-    typeUser: '1',
-    photo: '',
-    email: '',
-    google_id: '',
-    facebook_id: ''
-  },
-  driver: {
-    dln: '',
-    expDateDln: moment(new Date).format('DD MM'),
-    birthDate: moment(new Date).format('DD MM'),
-    areaCode: '',
-    phoneNumber: '',
-    experience: '',
-    sex: '',
-    address: '',
-    zipCode: '',
-    description: ''
-  },
 }
 
 function mapStateToProps(state){
+  const { user } = state;
   return {
-      user: state.user, 
+    base:{
+      name: user.name,
+      lastname: user.lastname,
+      photo: user.photo,
+      email: user.email,
+      typeUser: user.typeUser
+    },
+    driver: user.driver,
   }
 }
 
@@ -64,25 +53,12 @@ function mapDispatchToProps(dispatch){
 };
 
 const types = {
-  PROPS_FULL: 'PROPS_FULL',
-  PROPS_BASE: 'PROPS_BASE',
-  DATA_DRIVER: 'DATA_DRIVER',
   LOADING: 'LOADING',
   LOGIN_SUCCCESS: 'LOGIN_SUCCCESS'
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case types.PROPS_FULL:
-      return {
-        ...state,
-        base: action.payload.base,
-        driver: action.payload.company
-      }
-    case types.PROPS_BASE:
-      return { ...state, base: action.payload }
-    case types.DATA_DRIVER:
-      return { ...state, driver: action.payload }
     case types.LOADING:
       return { ...state, loading: action.payload }
     case types.UPLOAD_IMAGE:
@@ -92,50 +68,8 @@ const reducer = (state, action) => {
   }
 }
 
-const DriverProfileView = ({ user, ...props }) => {
+const DriverProfileView = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  useEffect(() => {
-    //Esto carga las props iniciales
-    let base = state.base;
-    base.name = user.name || '';
-    base.lastname = user.lastname || '';
-    base.google_id = user.google_id || '';
-    base.facebook_id = user.facebook_id || '';
-    base.photo = user.photo || '';
-    base.email = user.email || '';
-    base.id = user._id || '';
-    if (user.typeUser) {
-      let driver = user.driver;
-
-      dispatch({ type: types.DATA_DRIVER, payload: driver })
-    }
-
-
-    dispatch({ type: types.PROPS_BASE, payload: base })
-  }, [user, state.typeUser]);
-
-  const onChangeBase = (e, key) => {
-    let base = state.base;
-    let value = "";
-
-    value = e.target.value;
-    base[key] = value;
-
-    dispatch({ type: types.PROPS_BASE, payload: base });
-  }
-
-  const onChangeDriver = (e, key) => {
-    let driver = state.driver;
-    let value = "";
-
-    if (key == 'experience') {
-      value = e;
-    } else {
-      value = e.target.value;
-    }
-    driver[key] = value;
-    dispatch({ type: types.DATA_DRIVER, payload: driver });
-  }
 
   function beforeUpload(file) {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -187,15 +121,9 @@ const DriverProfileView = ({ user, ...props }) => {
     }
   };
 
-  const handleDatePicker = (obj, date, key) => {
-    let data = state.driver;
-    if (date === "") data[key] = moment(new Date()).format('MM DD YYYY')
-    else data[key] = date;
-    dispatch({ type: types.DATA_DRIVER, payload: data });
-  }
 
   const newDrivers = async () => {
-    const { base, driver } = state;
+    const { base, driver } = props;
     if(state.imageDln.length > 0){
       driver.imageDln = state.imageDln[0].response.data.file;
     }
@@ -233,8 +161,8 @@ const DriverProfileView = ({ user, ...props }) => {
     const fullDriver = { base: base, ...state.driver };
     try { 
       dispatch({ type: types.LOADING, payload: true });
-      await axios.patch('/api/driver/' + user._id, fullDriver, header);
-      //dispatch({ type: types.LOADING, payload: false });
+      const { data } = await axios.patch('/api/driver/' + user._id, fullDriver, header);
+      props.handleNewDriverProps(data.data);
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
@@ -254,12 +182,7 @@ const DriverProfileView = ({ user, ...props }) => {
   };
 
   const formConfig = {
-    base: state.base,
-    driver: state.driver,
     imageDln: state.imageDln,
-    onChangeBase: onChangeBase,
-    onChangeDriver: onChangeDriver,
-    handleDatePicker: handleDatePicker,
     newDrivers: newDrivers,
     updateDriver: updateDriver,
     beforeUpload,
@@ -274,7 +197,7 @@ const DriverProfileView = ({ user, ...props }) => {
   }
   
     return (
-      <MainLayout title='Profile' user={user} loading={state.loading}>
+      <MainLayout title='Profile' loading={state.loading}>
         <Row display='flex' justify='center'>
           <SideNav currentLocation='0' /> 
           <Col span={20}>

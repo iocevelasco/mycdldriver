@@ -14,16 +14,40 @@ import {
   DatePicker,
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { onChangeDriver, onChangeBase, handleDatePicker } from '@store/reducers/user_reducer';
 import moment from 'moment';
+import { connect } from 'react-redux';
+
 const { TextArea } = Input;
 
-const driverUser = (props) => {
+function mapStateToProps(state) {
+  const { user } = state;
+  return {
+    base:{
+      name: user.name,
+      lastname: user.lastname,
+      photo: user.photo,
+      email: user.email,
+    },
+    driver: user.driver,
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    handleBaseProps:(e,key) => dispatch(onChangeBase(e,key)),
+    handleDriverProps:(e,key) => dispatch(onChangeDriver(e,key)),
+    handleDatePicker:(obj, date, key) => dispatch(handleDatePicker(obj, date, key))
+  }
+}
+
+const DriverUser = (props) => {
   const [form] = Form.useForm();
 
   const { 
     driver, 
-    onChangeBase, 
-    onChangeDriver, 
+    handleBaseProps, 
+    handleDriverProps, 
     handleDatePicker,
     newDrivers, 
     updateDriver, 
@@ -31,10 +55,11 @@ const driverUser = (props) => {
     beforeUpload, 
     propsUpload, 
     imageDln,
+    action,
     buttonApply,
     isProfile
   } = props;
-  
+
   return (
     <div className='profile-driver'>
       <Row justify='center'>
@@ -55,7 +80,7 @@ const driverUser = (props) => {
                     size='large'
                     placeholder="Name"
                     value={base.name}
-                    onChange={(e) => onChangeBase(e, 'name')} />
+                    onChange={(e) => handleBaseProps(e, 'name')} />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -64,7 +89,7 @@ const driverUser = (props) => {
                     size='large'
                     placeholder="Last Name"
                     value={base.lastname}
-                    onChange={(e) => onChangeBase(e, 'lastname')} />
+                    onChange={(e) => handleBaseProps(e, 'lastname')} />
                 </Form.Item>
               </Col>
             </Row>
@@ -73,17 +98,16 @@ const driverUser = (props) => {
                 size='large'
                 placeholder="Mail"
                 value={base.email}
-                onChange={(e) => onChangeBase(e, 'email')} />
+                onChange={(e) => handleBaseProps(e, 'email')} />
             </Form.Item>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
                 <Form.Item label='Birth Date'>
                   <DatePicker
                     size='large'
+                    selected={moment(driver.birthDate)}
                     style={{ width: '100%' }}
                     placeholder="Birth Date"
-                    value={moment(driver.birthDate)}
-                    defaultValue={moment(new Date()).format('MM DD YYYY')}
                     onChange={(obj, key) => handleDatePicker(obj, key, 'birthDate')} />
                 </Form.Item>
               </Col>
@@ -91,7 +115,7 @@ const driverUser = (props) => {
                 <Form.Item>
                   <Radio.Group
                     value={driver.sex}
-                    onChange={(e) => onChangeDriver(e, 'sex')}>
+                    onChange={(e) => handleDriverProps(e, 'sex')}>
                     <Radio value={0}>F</Radio>
                     <Radio value={1}>M</Radio>
                     <Radio value={2}>Other</Radio>
@@ -107,15 +131,14 @@ const driverUser = (props) => {
                     size='large'
                     placeholder="DLN"
                     value={driver.dln}
-                    onChange={(e) => onChangeDriver(e, 'dln')} />
+                    onChange={(e) => handleDriverProps(e, 'dln')} />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label='Experation Date'>
                   <DatePicker
                     size='large'
-                    defaultValue={moment(new Date()).format('MM DD YYYY')}
-                    value={moment(driver.expDateDln)}
+                    selected={moment(driver.expDateDln)}
                     placeholder="Experation Date"
                     style={{ width: '100%' }}
                     onChange={(obj, key) => handleDatePicker(obj, key, 'expDateDln')} />
@@ -129,7 +152,7 @@ const driverUser = (props) => {
                     size='large'
                     placeholder="Area Code"
                     value={driver.areaCode}
-                    onChange={(e) => onChangeDriver(e, 'areaCode')} />
+                    onChange={(e) => handleDriverProps(e, 'areaCode')} />
                 </Form.Item>
               </Col>
               <Col span={18}>
@@ -138,7 +161,7 @@ const driverUser = (props) => {
                     size='large'
                     placeholder="Phone Number"
                     value={driver.phoneNumber}
-                    onChange={(e) => onChangeDriver(e, 'phoneNumber')} />
+                    onChange={(e) => handleDriverProps(e, 'phoneNumber')} />
                 </Form.Item>
               </Col>
             </Row>
@@ -149,7 +172,7 @@ const driverUser = (props) => {
                     size='large'
                     placeholder="Zip Code"
                     value={driver.zipCode}
-                    onChange={(e) => onChangeDriver(e, 'zipCode')} />
+                    onChange={(e) => handleDriverProps(e, 'zipCode')} />
                 </Form.Item>
               </Col>
               <Col span={18}>
@@ -158,7 +181,7 @@ const driverUser = (props) => {
                     size='large'
                     placeholder="Address"
                     value={driver.address}
-                    onChange={(e) => onChangeDriver(e, 'address')} />
+                    onChange={(e) => handleDriverProps(e, 'address')} />
                 </Form.Item>
               </Col>
             </Row>
@@ -172,7 +195,7 @@ const driverUser = (props) => {
                 min={0}
                 max={100}
                 defaultValue={0}
-                onChange={(e) => onChangeDriver(e, 'experience')} />
+                onChange={(e) => handleDriverProps(e, 'experience')} />
             </Form.Item>
             <Form.Item>
               <Upload {...propsUpload}
@@ -189,21 +212,11 @@ const driverUser = (props) => {
               size='large'
               placeholder="Telling us about your background"
               value={driver.description}
-              onChange={(e) => onChangeDriver(e, 'description')} />
+              onChange={(e) => handleDriverProps(e, 'description')} />
           </Form.Item>
-          <Row gutter={[24]} justify='end' align='middle'>
-             <Col span={6}>
-                {!base.id ? <Button
-                  onClick={newDrivers}
-                  type='primary'
-                  block
-                  size='large'>Save Information</Button>
-                  : <Button
-                  onClick={updateDriver}
-                  type='primary'
-                  block
-                  size='large'>Update Information</Button>
-                }
+          <Row gutter={[24]} justify='center' align='middle'>
+             <Col span={12}>
+                  {action}
               </Col>
           </Row>
         </Col>
@@ -212,4 +225,4 @@ const driverUser = (props) => {
   )
 }
 
-export default driverUser;
+export default connect(mapStateToProps,mapDispatchToProps)(DriverUser); 
