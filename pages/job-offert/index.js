@@ -155,7 +155,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                   }}
                   onClick={()=> {
                     props.handleModal(true);
-                  }}>Completa el login y aplica a esta posicion</Button> : 
+                  }}>Complete the login and apply to this position</Button> : 
                   <Button 
                   shape="round" 
                   size="large"
@@ -170,7 +170,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
               </Col>
               <Col className='job-offert__list' span={10}>
               <Row justify='center' align='middle'>
-                <Title level={3}>Busquedas relacionas</Title>
+                <Title level={3}>Related searches</Title>
               </Row>
                 <Row justify='center' align='middle'>
                   <JobListComp type='small' />
@@ -197,7 +197,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                 }}
                 onClick={saveApply}
                 > 
-                  Enviar solicitud
+                  Send request
               </Button>}  />
           </Drawer>
         </WrapperSection>

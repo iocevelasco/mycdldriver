@@ -118,11 +118,13 @@ const DriverProfileView = (props) => {
     if(state.imageDln.length > 0){
       driver.imageDln = state.imageDln[0].response.data.file;
     }
+    base.typeUser = 1;
     const fullDriver = { base: base, ...driver };
 
     try {
       dispatch({ type: types.LOADING, payload: true });
       const { data } = await axios.post('/api/driver', fullDriver);
+      console.log('[ data afterRegister ]', data.data);
       props.handleNewDriverProps(data.data);
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({

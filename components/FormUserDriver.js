@@ -49,8 +49,6 @@ const DriverUser = (props) => {
     handleBaseProps, 
     handleDriverProps, 
     handleDatePicker,
-    newDrivers, 
-    updateDriver, 
     base, 
     beforeUpload, 
     propsUpload, 
