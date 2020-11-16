@@ -1,11 +1,8 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import MainLayout from 'components/layout';
 import {
   Row,
   Col,
-  Typography,
-  Input,
-  Select,
   Button,
   message,
   notification,
@@ -18,15 +15,7 @@ import { connect } from 'react-redux';
 import { WrapperSection } from 'components/helpers';
 import { 
   updateUserDrive, 
-  onChangeDriver, 
-  onChangeBase, 
-  handleDatePicker
 } from '@store/reducers/user_reducer';
-
-const { Title, Text } = Typography;
-const { Option } = Select;
-
-const { TextArea } = Input;
 
 const initialState = {
   loading:false,
@@ -129,11 +118,13 @@ const DriverProfileView = (props) => {
     if(state.imageDln.length > 0){
       driver.imageDln = state.imageDln[0].response.data.file;
     }
+    base.typeUser = 1;
     const fullDriver = { base: base, ...driver };
 
     try {
       dispatch({ type: types.LOADING, payload: true });
       const { data } = await axios.post('/api/driver', fullDriver);
+      console.log('[ data afterRegister ]', data.data);
       props.handleNewDriverProps(data.data);
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({

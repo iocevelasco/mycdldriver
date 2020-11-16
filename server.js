@@ -175,7 +175,6 @@ if (!dev && cluster.isMaster) {
         const respuesta = await userController.getPrelogin(ip);
         prelogin.ruta = respuesta.ruta;
         prelogin.abspath = respuesta.abspath;
-        console.log('[afterLogin]', prelogin);
         if(prelogin.ruta == "/job-offert"){
           res.redirect(prelogin.abspath);
         }
@@ -192,7 +191,18 @@ if (!dev && cluster.isMaster) {
       server.get('/auth/facebook/callback', passport.authenticate('facebook', { 
         failureRedirect: '/error' }
       ),
-      function(req, res) {
+      async function(req, res) {
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        let prelogin = {
+          ruta: '',
+          abspath: ''
+        };
+        const respuesta = await userController.getPrelogin(ip);
+        prelogin.ruta = respuesta.ruta;
+        prelogin.abspath = respuesta.abspath;
+        if(prelogin.ruta == "/job-offert"){
+          res.redirect(prelogin.abspath);
+        }
         if(req.session.passport.user.typeUser === 1){
           res.redirect('/userProfile/driver/profile');
         }else if(req.session.passport.user.typeUser === 2){
