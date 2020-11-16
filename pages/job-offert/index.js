@@ -11,7 +11,7 @@ import {
   Drawer
 } from 'antd';
 import FormUserDriver from 'components/FormUserDriver';
-import { MessageSucces } from 'components/helpers';
+import { MessageSuccess } from 'components/helpers';
 import { WrapperSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
@@ -26,9 +26,10 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const initialState = {
-  showSucces:false,
+  showSuccess:false,
   title: '',
   logo: '',
+  can_apply: true,
   postion_id: 0,
   description: '',
   address:'',
@@ -42,6 +43,8 @@ const initialState = {
 
 const types = {
   FETCH_DETAIL: 'FETCH_DETAIL',
+  SHOW_SUCCESS:'SHOW_SUCCESS',
+  PROPS_APPLY:'PROPS_APPLY',
   SHOW_DRAWER:'SHOW_DRAWER',
   PROPS_BASE: 'PROPS_BASE',
   PROPS_DRIVER: 'PROPS_DRIVER'
@@ -55,6 +58,10 @@ const reducer = (state, action) => {
       return { ...state, ...action.payload }
     case types.SHOW_DRAWER:
      return { ...state, visible:action.payload }
+    case types.SHOW_SUCCESS:
+     return { ...state, showSuccess:action.payload }
+    case types.PROPS_APPLY:
+     return { ...state, can_apply:action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -78,7 +85,9 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-  if(props.isLogin) dispatch({ type: types.SHOW_DRAWER, payload:true})
+    if(props.isLogin && user.typeUser === 0){
+      dispatch({ type: types.SHOW_DRAWER, payload:true})
+    } 
   },[props.isLogin])
 
 
@@ -106,7 +115,8 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
         company: state.company
       };
       await axios.post('/api/company/jobs/apply', apply, header);
-      dispatch({type:types.SHOW_DRAWER, payload:true});
+      dispatch({type:types.SHOW_SUCCESS, payload:true});
+      dispatch({type:types.PROPS_APPLY, payload:false});
     }catch(e){
       console.log(e);
     }
@@ -156,16 +166,29 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                   onClick={()=> {
                     props.handleModal(true);
                   }}>Complete the login and apply to this position</Button> : 
-                  <Button 
-                  shape="round" 
-                  size="large"
-                  type='primary'
-                  style={{
-                    marginTop: 16,
-                    width: '90%',
-                    marginLeft: 12,
-                  }}
-                  onClick={saveApply}>Apply</Button>
+                    state.can_apply ?
+                      <Button 
+                      shape="round" 
+                      size="large"
+                      type='primary'
+                      style={{
+                        marginTop: 16,
+                        width: '90%',
+                        marginLeft: 12,
+                      }}
+                      onClick={saveApply}>Apply</Button>:
+                      <Button 
+                      shape="round" 
+                      size="large"
+                      type="primary"
+                      style={{
+                        marginTop: 16,
+                        width: '90%',
+                        marginLeft: 12,
+                      }}
+                      disabled>
+                        You already applied for this job
+                      </Button>
                 }
               </Col>
               <Col className='job-offert__list' span={10}>
@@ -178,6 +201,21 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
               </Col>
             </Row>
           </div>
+          <Drawer
+            title='Success apply' 
+            placement="right"
+            closable={true}
+            width={680}
+            visible={state.showSuccess}
+            onClose={()=> {
+              dispatch({type:types.SHOW_SUCCESS, payload:false});  
+            }}>
+              <MessageSuccess
+                title="You applied successfully"
+                subTitle = "Thank you for applying to this vacancy, the company will contact you as soon as possible."
+              ></MessageSuccess>
+            </Drawer>
+          
           <Drawer
             title='Complete your profile' 
             placement="right"

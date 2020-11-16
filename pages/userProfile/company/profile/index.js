@@ -272,7 +272,8 @@ const CompanyProfileView = ({ user, ...props }) => {
     const fullCompany = { base: base, ...company }
     try {
       dispatch({ type: types.LOADING, payload: true });
-      await axios.patch('/api/company/' + user._id, fullCompany, header);
+      const { data } = await axios.patch('/api/company/' + user._id, fullCompany, header);
+      props.handlreNewUserProps(data.data);
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
