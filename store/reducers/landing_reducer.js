@@ -5,12 +5,15 @@ const types = {
     FETCH_JOBS: 'FETCH_JOBS',
     VISIBLE_MODAL_LOGIN: 'VISIBLE_MODAL_LOGIN',
     DEVICETYPE:'DEVICETYPE',
-    IS_LOADING:'IS_LOADING'
+    IS_LOADING:'IS_LOADING',
+    COMMON_DATA: 'COMMON_DATA',
 }
 
 const initialState = {
     jobs: [],
-    citys_available:[],
+    citys:[],
+    jobs_name:[],
+    companies:[],
     visible_modal_login:false,
     deviceType: 'desktop',
     isLoading:false
@@ -22,13 +25,33 @@ function fetchJobPositionData(qs) {
             .then(({ data }) => {
             
             let jobs = data.data;
-            let citys = _.uniqBy(jobs, 'city').map(e =>  e.city);
-                
                 dispatch(({
                     type: types.FETCH_JOBS,
                     payload: {
                         jobs : jobs,
-                        citys_available : citys,
+                    }
+                }));
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+}
+
+function fetchCommonData() {
+    return (dispatch) => {
+        return axios.get(`/api/company/jobs/customlist`)
+            .then(({ data }) => {
+            let jobs_name = data.data.title.map(e=> {
+                return {value:e}
+            }) || [];                
+            let citys = data.data.citys || [];                
+            let companies = data.data.company || [];                
+                dispatch(({
+                    type: types.COMMON_DATA,
+                    payload: {
+                        jobs_name,
+                        citys,
+                        companies
                     }
                 }));
             }).catch((error) => {
@@ -78,6 +101,10 @@ const landingReducer = (state = initialState, action) => {
             return { 
                 ...state, isLoading:action.payload
              }
+        case types.COMMON_DATA:
+            return { 
+                ...state, ...action.payload
+             }
         default:
           return state;
     }
@@ -89,5 +116,6 @@ export {
     fetchJobPositionData,
     handlerModalLogin,
     deviceType,
-    activeLoading
+    activeLoading,
+    fetchCommonData
 };

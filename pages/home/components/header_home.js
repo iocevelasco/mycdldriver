@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Typography, Input, Space, Select, Button } from 'antd';
+import { Row, Col, Typography, Input, Select, Button, AutoComplete } from 'antd';
 import { fetchJobPositionData } from '@store/reducers/landing_reducer';
 import { connect } from 'react-redux';
 
@@ -9,7 +9,8 @@ const { Search } = Input;
 
 function mapStateToProps(state) {
   return {
-    citys_available: state.landing.citys_available
+    citys:state.landing.citys || [],
+    jobs_name:state.landing.jobs_name || []
   }
 }
 
@@ -19,7 +20,7 @@ function mapDispatchToProps(dispatch){
   }
 }
 
-const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available, query, fetchJobs }) => {
+const HeaderLandingComp = ({ handlerSearch, filter_selected, jobs_name, citys, query, fetchJobs }) => {
   return (
     <>
       <div className="home-header"
@@ -34,15 +35,12 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available, qu
                     </Title>
               <Row gutter={[16]}> 
                 <Col xs={24} lg={12} md={12}>
-                  <Input
-                    placeholder="Search your new job"
-                    size='large'
-                    onChange={e => handlerSearch(e, 'input')}
-                    onKeyPress={event => {
-                      if (event.key === 'Enter') {
-                        fetchJobs(query)
-                      }
-                    }} />
+                <AutoComplete
+                  options={jobs_name}
+                  size='large'
+                  style={{ width: '100%' }}
+                  placeholder="Search your new job"
+                 />
                 </Col>
                 <Col xs={24} lg={8} md={8}>
                   <Select
@@ -52,7 +50,7 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, citys_available, qu
                     placeholder="Search by city"
                     onChange={e => handlerSearch(e, 'city')}>
                     {
-                      citys_available.map((e, i) => (
+                      citys.map((e, i) => (
                         <Option key={i} value={e}>{e}</Option>
                       ))
                     }

@@ -16,13 +16,15 @@ import {
   DatePicker,
   message
 } from 'antd';
-import axios from 'axios';
-import moment from 'moment';
+import { connect } from 'react-redux';
 import { CloseOutlined, CheckOutlined, UploadOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 const { TextArea } = Input;
+
+
+
 
 const FormUserCompany = (props) => {
   const { company, onChangeBase, onChangeCompany, newCompany, updateCompany, base, beforeUpload, propsUpload, propsPhoto, logo, photo} = props;

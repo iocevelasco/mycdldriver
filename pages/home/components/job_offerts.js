@@ -97,12 +97,6 @@ const DescriptionSmall = ({ item }) => {
                 <Text> Date </Text>
                 <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
               </div>
-              <div>
-                <Text> Phone </Text>
-                <Text strong> {item.areaCode} - {item.phoneNumber} </Text> <Text strong > | </Text>
-                <Text> Email </Text>
-                <Text strong> {item.email} </Text>
-              </div>
             </div>
           </div>
         </div>
