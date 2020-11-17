@@ -29,7 +29,7 @@ const initialState = {
   showSuccess:false,
   title: '',
   logo: '',
-  can_apply: true,
+  can_apply: false,
   postion_id: 0,
   description: '',
   address:'',
@@ -98,7 +98,13 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
 
   const fetchJobDetails = async (job_id) => {
     try{
-      const { data } = await axios.get(`/api/company/jobs/detail/${job_id}`);
+      let applyJob = {
+        id: job_id
+      };
+      if(props.isLogin && user.typeUser === 1){
+        applyJob.driver = user._id;
+      }
+      const { data } = await axios.post(`/api/company/jobs/detail`, applyJob);
       dispatch({ type: types.FETCH_DETAIL, payload:data.data});
     }catch(err){
       console.log(err)
