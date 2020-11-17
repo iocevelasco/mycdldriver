@@ -10,10 +10,12 @@ import {
   InputNumber,
   Radio,
   DatePicker,
+  notification,
   message
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { onChangeDriver, onChangeBase, handleDatePicker } from '@store/reducers/user_reducer';
+import { SpinnerComp } from 'components/helpers';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -30,6 +32,7 @@ function mapStateToProps(state) {
       photo: user.photo,
       email: user.email,
     },
+    _id:user._id,
     token: user.token,
     driver: user.driver,
     isUserRegistry: state.user.typeUser,
@@ -47,7 +50,8 @@ function mapDispatchToProps(dispatch) {
 const DriverUser = (props) => {
   const { router } = props
   const [form] = Form.useForm();
-  const [imageDln, setImage] = useState([])
+  const [imageDln, setImage] = useState([]);
+  const [loading, setLoader] = useState(false);
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
@@ -68,20 +72,18 @@ const DriverUser = (props) => {
 
   const newDrivers = async () => {
     const { base, driver } = props;
-    if (state.imageDln.length > 0) {
-      driver.imageDln = state.imageDln[0].response.data.file;
+    setLoader(true);
+    if (imageDln.length > 0) {
+      driver.imageDln = imageDln[0].response.data.file;
     }
     base.typeUser = 1;
     const fullDriver = { base: base, ...driver };
-      dispatch({ type: types.LOADING, payload: true });
-      const { data } = await axios.post('/api/driver', fullDriver)
+      await axios.post('/api/driver', fullDriver)
       .then((response)=>{
-        console.log('[ user registry succes ]', data.data);
+        console.log('[ user registry succes ]', response.data);
         if(props.isJobs){
           saveApply();
         }
-        saveApply
-        dispatch({ type: types.LOADING, payload: false });
         props.handleNewDriverProps(response.data);
         notification['success']({
           message: 'Success',
@@ -90,7 +92,7 @@ const DriverUser = (props) => {
         });
       })
       .catch((err)=>{
-        dispatch({ type: types.LOADING, payload: false });
+        setLoader(true);
         notification['error']({
           message: 'error',
           description:
@@ -100,24 +102,22 @@ const DriverUser = (props) => {
     }
 
   const updateDriver = async () => {
-    const { base } = props;
+    const { base, driver, _id } = props;
     if (imageDln.length > 0) {
-      state.driver.imageDln = state.imageDln[0].response.data.file;
+      driver.imageDln = imageDln[0].response.data.file;
     }
-    const fullDriver = { base: base, ...props.driver };
+    const fullDriver = { base: base, ...driver };
     try {
-      dispatch({ type: types.LOADING, payload: true });
-      const { data } = await axios.patch('/api/driver/' + user._id, fullDriver, header);
-      props.handleNewDriverProps(data.data);
-      dispatch({ type: types.LOADING, payload: false });
+      setLoader(true);
+      const { data } = await axios.patch('/api/driver/' + _id, fullDriver, header);
+      setLoader(false);
       notification['success']({
         message: 'Success',
         description:
           "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
       });
     } catch (err) {
-      dispatch({ type: types.LOADING, payload: false });
-      console.log('loader false 2', state.loading);
+      setLoader(false);
       notification['error']({
         message: 'error',
         description:
@@ -232,6 +232,7 @@ const DriverUser = (props) => {
                   <DatePicker
                     size='large'
                     selected={moment(driver.birthDate)}
+                    defaultValue={moment(driver.birthDate)}
                     style={{ width: '100%' }}
                     placeholder="Birth Date"
                     onChange={(obj, key) => handleDatePicker(obj, key, 'birthDate')} />
@@ -265,6 +266,7 @@ const DriverUser = (props) => {
                   <DatePicker
                     size='large'
                     selected={moment(driver.expDateDln)}
+                    defaultValue={moment(driver.expDateDln)}
                     placeholder="Experation Date"
                     style={{ width: '100%' }}
                     onChange={(obj, key) => handleDatePicker(obj, key, 'expDateDln')} />
@@ -320,7 +322,7 @@ const DriverUser = (props) => {
                 size="large"
                 min={0}
                 max={100}
-                defaultValue={0}
+                defaultValue={driver.experience}
                 onChange={(e) => handleDriverProps(e, 'experience')} />
             </Form.Item>
             <Form.Item>
@@ -345,20 +347,23 @@ const DriverUser = (props) => {
               {
                 props.isUserRegistry ?
                   <Button
-                    onClick={newDrivers}
-                    type='primary'
-                    block
-                    size='large'>Save Information</Button> :
-                  <Button
                     onClick={updateDriver}
                     type='primary'
+                    shape="round" 
                     block
-                    size='large'>Update Information</Button>
+                    size='large'>Update Information</Button>:
+                    <Button
+                    onClick={newDrivers}
+                    type='primary'
+                    shape="round" 
+                    block
+                    size='large'>Save Information</Button> 
               }
             </Col>
           </Row>
         </Col>
       </Row>
+      <SpinnerComp active={loading} />
     </div>
   )
 }

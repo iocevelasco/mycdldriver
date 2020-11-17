@@ -5,9 +5,12 @@ import {
   Image, 
   Typography, 
   Result,
-  Button
+  Button,
+  Spin
 } from 'antd';
-const { Title, Text } = Typography
+import { LoadingOutlined } from '@ant-design/icons';
+const { Title, Text } = Typography;
+const antIcon = <LoadingOutlined style={{ fontSize: 60, color:'#FF2A39' }} spin />;
 
 const WrapperSection = ({ children, xs, row, styles }) => {
   return (
@@ -72,8 +75,37 @@ const MessageSuccess = ({title, subTitle, extra}) => {
   )
 }
 
+const SpinnerComp = ({active}) => {
+  const styles = {
+    wrapper: { 
+      position:'absolute',
+      left:0,
+      right:0,
+      top:0,
+      bottom:0,
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      alignContent:'center',
+      background:'#ffffffa3',
+      zIndex:10,
+    }
+  }
+
+  if(active){
+    return (
+      <div style={styles.wrapper}>
+         <Spin indicator={antIcon} />
+      </div>
+    )
+  }else{
+    return "";
+  }
+}
+
 export {
   WrapperSection,
   BuildSection,
-  MessageSuccess
+  MessageSuccess,
+  SpinnerComp
 };

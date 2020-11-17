@@ -14,6 +14,7 @@ const types = {
 }
 
 const initialState = {
+    _id:'',
     name: '',
     lastname: '',
     typeUser: 0,
@@ -95,6 +96,7 @@ function updateUserDrive(props){
 
 const logoutUser = () => {
     const state = {
+        _id:'',
         name: '',
         lastname: '',
         typeUser: 0,

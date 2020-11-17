@@ -211,7 +211,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
             title='Success apply' 
             placement="right"
             closable={true}
-            width={680}
+            width={720}
             visible={state.showSuccess}
             onClose={()=> {
               dispatch({type:types.SHOW_SUCCESS, payload:false});  
@@ -219,7 +219,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
               <MessageSuccess
                 title="You applied successfully"
                 subTitle = "Thank you for applying to this vacancy, the company will contact you as soon as possible."
-              ></MessageSuccess>
+              />
             </Drawer>
           
           <Drawer
@@ -231,7 +231,8 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
               dispatch({type:types.SHOW_DRAWER, payload:false});  
             }}
             visible={state.visible}>
-              <FormUserDriver  action={
+              <FormUserDriver  
+              action={
                 <Button 
                 shape="round" 
                 size="large"

@@ -16,7 +16,6 @@ const DriverProfileView = (props) => {
     backgroundSize:'contain',
   }
 
-  
     return (
       <MainLayout title='Profile'>
         <Row display='flex' justify='center'>
