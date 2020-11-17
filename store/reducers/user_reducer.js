@@ -47,7 +47,6 @@ const getCurrentLocation = (location) => {
     }
 }
 
-
 function onChangeDriver(e, key) {
     return (dispatch, getState) => {
         let driver = getState().user.driver;
