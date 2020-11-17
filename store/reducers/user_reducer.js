@@ -14,6 +14,7 @@ const types = {
 }
 
 const initialState = {
+    _id:'',
     name: '',
     lastname: '',
     typeUser: 0,
@@ -46,7 +47,6 @@ const getCurrentLocation = (location) => {
         payload: location
     }
 }
-
 
 function onChangeDriver(e, key) {
     return (dispatch, getState) => {
@@ -96,6 +96,7 @@ function updateUserDrive(props){
 
 const logoutUser = () => {
     const state = {
+        _id:'',
         name: '',
         lastname: '',
         typeUser: 0,

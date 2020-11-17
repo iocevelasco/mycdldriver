@@ -1,26 +1,56 @@
 const store = require('./store');
 const config = require('../../config');
 
-function getJob(filter){
-    return new Promise((resolve, reject) => {
-        let filterQuery = {}; 
-        if(filter.id){
-            filterQuery.id = filter.id;
+async function getJob(filter){
+    let filterQuery = {}; 
+    let resultDetail = {};
+    if(filter.id){
+        filterQuery.id = filter.id;
+    }
+    if(filter.company){
+        filterQuery.company = filter.company;
+    }
+    if(filter.input){
+        filterQuery.input = filter.input;
+    }
+    if(filter.city){
+        filterQuery.city = filter.city;
+    }
+    if(filter.date){
+        filterQuery.date = filter.date;
+    }
+
+    let result = await store.list(filterQuery);
+
+    if(filter.id){
+        resultDetail = {
+            _id: result[0]._id,
+            title: result[0].title,
+            description: result[0].description,
+            areaCode: result[0].areaCode,
+            logo: result[0].logo,
+            phoneNumber: result[0].phoneNumber,
+            email: result[0].email,
+            city: result[0].city,
+            time: result[0].time,
+            company: result[0].company,
+            date: result[0].date,
+            can_apply: true,
+        };
+        result = resultDetail;
+    }
+
+    if(filter.driver && filter.id){
+        filterJob = {
+            driver: filter.driver,
+            job: filter.id
+        };
+        const driverapply = await store.getApplyJobs(filterJob);
+        if(driverapply){
+            result.can_apply = false;
         }
-        if(filter.company){
-            filterQuery.company = filter.company;
-        }
-        if(filter.input){
-            filterQuery.input = filter.input;
-        }
-        if(filter.city){
-            filterQuery.city = filter.city;
-        }
-        if(filter.date){
-            filterQuery.date = filter.date;
-        }
-        resolve(store.list(filterQuery));
-    });
+    }
+    return (result);
 }
 
 function getCustomList(){

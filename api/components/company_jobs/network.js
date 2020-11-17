@@ -23,11 +23,16 @@ router.get('/customlist', function (req, res) {
     });
 });
 
-router.get('/detail/:id', function (req, res) {
-    
-    controller.getJob({id: req.params.id})
+router.post('/detail', function (req, res) {
+    let apply = {
+        id: req.body.id
+    };
+    if(req.body.driver){
+        apply.driver = req.body.driver;
+    }
+    controller.getJob(apply)
     .then((jobList) => {
-        response.success(req, res, jobList[0], 200);
+        response.success(req, res, jobList, 200);
     }).catch(e => {
         response.error(req, res, 'Unexpected Error', 500, e);
     });

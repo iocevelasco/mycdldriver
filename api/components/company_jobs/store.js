@@ -57,14 +57,23 @@ function getJobs(filterCompany){
                 city: new RegExp(filterCompany.city, 'i')
             };
         }
-        console.log('filter', filter);
         result = JobsModel.find(filter)
             .select("-__v")
             .populate('company')
             .populate('tags');
 
         resolve(result);
-        resolve(true);
+    });
+}
+
+function getApplyJobs(filterQuery){
+    return new Promise((resolve, reject) => {
+        let filter = {};
+        if(filterQuery.driver){
+            filter = filterQuery;
+        }
+        result = JobsApplysModel.findOne(filter);
+        resolve(result);
     });
 }
 
@@ -212,5 +221,6 @@ module.exports = {
     update: updateJob,
     delete: deleteJob,
     applyJob,
-    getCustomList
+    getCustomList,
+    getApplyJobs
 }
