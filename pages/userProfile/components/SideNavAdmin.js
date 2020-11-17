@@ -74,6 +74,11 @@ const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
       path: '/userProfile/driver/profile',
       section_name: 'Profile',
       icon: <UserOutlined />
+    },
+    {
+      path: '/userProfile/driver/my-jobs',
+      section_name: 'My Jobs',
+      icon: <DashboardOutlined />
     }
   ]
   // const driverOption = [

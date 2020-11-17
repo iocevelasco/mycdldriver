@@ -23,6 +23,21 @@ router.get('/customlist', function (req, res) {
     });
 });
 
+router.post('/myjobs', auth(), function (req, res) {
+    let query = {};
+    if(req.user.typeUser == 1){
+        query = {driver: req.user._id};
+    }else{
+        query = {company: req.user.company};
+    }
+    controller.getJobsApply(query)
+    .then((customList) => {
+        response.success(req, res, customList, 200);
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
+});
+
 router.post('/detail', function (req, res) {
     let apply = {
         id: req.body.id

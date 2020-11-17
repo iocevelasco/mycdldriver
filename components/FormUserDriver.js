@@ -14,7 +14,7 @@ import {
   message
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { onChangeDriver, onChangeBase, handleDatePicker } from '@store/reducers/user_reducer';
+import { onChangeDriver, onChangeBase, handleDatePicker, updateUserDrive } from '@store/reducers/user_reducer';
 import { SpinnerComp } from 'components/helpers';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -43,7 +43,8 @@ function mapDispatchToProps(dispatch) {
   return {
     handleBaseProps: (e, key) => dispatch(onChangeBase(e, key)),
     handleDriverProps: (e, key) => dispatch(onChangeDriver(e, key)),
-    handleDatePicker: (obj, date, key) => dispatch(handleDatePicker(obj, date, key))
+    handleDatePicker: (obj, date, key) => dispatch(handleDatePicker(obj, date, key)),
+    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps))
   }
 }
 
@@ -59,7 +60,7 @@ const DriverUser = (props) => {
     job: router.query.id,
     company: props.company
   };
-
+  console.log('[ PROPS ]', props);
 
   const saveApply = async () =>{
       await axios.post('/api/company/jobs/apply', apply, header)
@@ -81,10 +82,10 @@ const DriverUser = (props) => {
       await axios.post('/api/driver', fullDriver)
       .then((response)=>{
         console.log('[ user registry succes ]', response.data);
+        props.handleNewDriverProps(response.data);
         if(props.isJobs){
           saveApply();
         }
-        props.handleNewDriverProps(response.data);
         notification['success']({
           message: 'Success',
           description:
@@ -92,6 +93,7 @@ const DriverUser = (props) => {
         });
       })
       .catch((err)=>{
+        console.log('[ user registry error ]', err);
         setLoader(true);
         notification['error']({
           message: 'error',

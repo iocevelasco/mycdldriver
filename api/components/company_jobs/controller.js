@@ -53,6 +53,12 @@ async function getJob(filter){
     return (result);
 }
 
+function getJobsApply(filter){
+    return new Promise((resolve, reject) => {
+        resolve(store.getApplyJobs(filter));
+    });
+}
+
 function getCustomList(){
     return new Promise((resolve, reject) => {
         resolve(store.getCustomList());
@@ -187,5 +193,6 @@ module.exports = {
     updateJob,
     deleteJob,
     applyJob,
-    getCustomList
+    getCustomList,
+    getJobsApply
 }
