@@ -69,10 +69,13 @@ function getJobs(filterCompany){
 function getApplyJobs(filterQuery){
     return new Promise((resolve, reject) => {
         let filter = {};
-        if(filterQuery.driver){
+        if(filterQuery){
             filter = filterQuery;
         }
-        result = JobsApplysModel.findOne(filter);
+        result = JobsApplysModel.find(filter)
+        .populate('company')
+        .populate('driver')
+        .populate('job');
         resolve(result);
     });
 }
