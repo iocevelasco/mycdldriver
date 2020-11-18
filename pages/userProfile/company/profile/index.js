@@ -110,7 +110,7 @@ const CompanyProfileView = (props) => {
   }
 
   const propsUpload = {
-    name: 'logo',
+    name: 'photo',
     action: '/api/files',
     headers: {
       authorization: 'authorization-text'

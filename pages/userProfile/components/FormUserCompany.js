@@ -1,37 +1,23 @@
-import React, { useEffect } from 'react';
-import MainLayout from '../../../components/layout';
+import React from 'react';
 import {
   Row,
   Col,
-  Typography,
   Input,
-  Select,
   Avatar,
   Form,
   Button,
   Upload,
-  Switch,
-  InputNumber,
-  Radio,
-  DatePicker,
-  message
 } from 'antd';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
-import { CloseOutlined, CheckOutlined, UploadOutlined } from '@ant-design/icons';
-const { Title, Text } = Typography;
+import { UploadOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
-const { Option } = Select;
-
-const { TextArea } = Input;
-
-
 
 function mapStateToProps(state) {
   const { user } = state;
   return {
     user: user,
-    photo: user.photo || '',
+    photoProfile: user.photo || '',
     _id: user._id || null,
     token: user.token || null,
     company: user.company || {},
@@ -47,7 +33,15 @@ function mapDispatchToProps(dispatch) {
 
 const FormUserCompany = (props) => {
   const [form] = Form.useForm();
-  const { loading, onChangeCompany, fields, newCompany, updateCompany, base, beforeUpload, propsUpload, propsPhoto, logo, photo } = props;
+  const {
+    loading,
+    onChangeCompany,
+    fields,
+    newCompany,
+    updateCompany,
+    beforeUpload,
+    propsUpload,
+    propsPhoto } = props;
 
   const onChangeProps = (changedFields, allFields) => {
     onChangeCompany(allFields);
@@ -59,7 +53,7 @@ const FormUserCompany = (props) => {
         <Col className='profile-driver__form' span={14}>
           <Row justify='center'>
             <div className='avatar'>
-              <Avatar src={props.photo} size={120} />
+              <Avatar src={props.photoProfile} size={120} />
             </div>
           </Row>
           <Form
@@ -181,11 +175,11 @@ const FormUserCompany = (props) => {
               </Form.Item>
             </Col>
           </Row>
-          {/* <Row gutter={[24]} justify='space-between' >
+          <Row gutter={[24]} justify='space-between' >
             <Col span={12}>
               <Form.Item>
                 <Upload {...propsUpload}
-                  fileList={logo}
+                  fileList={props.logo}
                   beforeUpload={beforeUpload}
                 >
                   <Button icon={<UploadOutlined />}>Upload Image for Company</Button>
@@ -195,14 +189,14 @@ const FormUserCompany = (props) => {
             <Col span={12}>
               <Form.Item>
                 <Upload {...propsPhoto}
-                  fileList={photo}
+                  fileList={props.photo}
                   beforeUpload={beforeUpload}
                 >
                   <Button icon={<UploadOutlined />}>Upload Photo for Company</Button>
                 </Upload>
               </Form.Item>
             </Col>
-          </Row> */}
+          </Row>
           <Row gutter={[24]} justify='space-between' >
             <Col span={24}>
               <Form.Item
