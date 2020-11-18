@@ -31,6 +31,8 @@ function mapStateToProps(state) {
   return {
     user: user,
     photo: user.photo || '',
+    facebook_id: user.facebook_id || '',
+    google_id: user.google_id || '',
     _id: user._id || null,
     token: user.token || null,
     driver: user.driver || {},
@@ -96,7 +98,13 @@ const DriverUser = (props) => {
     if (imageDln.length > 0) {
       driver.imageDln = imageDln[0].response.data.file;
     }
+    base.photo = props.photo;
     base.typeUser = 1;
+    if(props.facebook_id)
+      base.facebook_id = props.facebook_id;
+    if(props.google_id)
+      base.google_id = props.google_id;
+    
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
       .then((response) => {
@@ -207,7 +215,10 @@ const DriverUser = (props) => {
       if (
         e.name[0] == 'name' ||
         e.name[0] == 'email' ||
-        e.name[0] == 'lastname'
+        e.name[0] == 'lastname' ||
+        e.name[0] == 'photo' ||
+        e.name[0] == 'facebook_id' ||
+        e.name[0] == 'google_id'
       ) {
         base[e.name[0]] = e.value
       } else if (

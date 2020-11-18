@@ -224,6 +224,8 @@ const CompanyProfileView = (props) => {
     }
     if (state.photo.length > 0) {
       base.photo = state.photo[0].response.data.file;
+    }else{
+      base.photo = props.photo;
     }
     const fullCompany = { base: base, ...company }
     dispatch({ type: types.LOADING, payload: true });
