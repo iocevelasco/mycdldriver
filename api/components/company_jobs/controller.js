@@ -46,7 +46,7 @@ async function getJob(filter){
             job: filter.id
         };
         const driverapply = await store.getApplyJobs(filterJob);
-        if(driverapply){
+        if(driverapply.length > 0){
             result.can_apply = false;
         }
     }
