@@ -239,7 +239,6 @@ const DriverUser = (props) => {
                 <Form.Item
                   name="name"
                   label="Name"
-                  size='large'
                   rules={[
                     {
                       required: true,
