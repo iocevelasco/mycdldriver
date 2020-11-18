@@ -9,12 +9,12 @@ const { Search } = Input;
 
 function mapStateToProps(state) {
   return {
-    citys:state.landing.citys || [],
-    jobs_name:state.landing.jobs_name || []
+    citys: state.landing.citys || [],
+    jobs_name: state.landing.jobs_name || []
   }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query))
   }
@@ -33,19 +33,19 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, jobs_name, citys, q
               <Title> TEAMWORK & LOYALTY <br />
                       DRIVING OUR SUCCESS
                     </Title>
-              <Row gutter={[16]}> 
+              <Row gutter={[16]}>
                 <Col xs={24} lg={12} md={12}>
-                <AutoComplete
-                  options={jobs_name}
-                  size='large'
-                  style={{ width: '100%' }}
-                  placeholder="Search your new job"
-                 />
+                  <AutoComplete
+                    options={jobs_name}
+                    size='large'
+                    style={{ width: '100%' }}
+                    placeholder="Search your new job"
+                    onChange={e => handlerSearch(e, 'input')} />
                 </Col>
                 <Col xs={24} lg={8} md={8}>
                   <Select
                     size="large"
-                    style={{width: '100%'}}
+                    style={{ width: '100%' }}
                     value={filter_selected.city}
                     placeholder="Search by city"
                     onChange={e => handlerSearch(e, 'city')}>
@@ -57,15 +57,15 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, jobs_name, citys, q
                   </Select>
                 </Col>
                 <Col xs={24} lg={4} md={4}>
-                  <Button 
-                    onClick={()=>fetchJobs(query)}
+                  <Button
+                    onClick={() => fetchJobs(query)}
                     onKeyPress={event => {
                       if (event.key === 'Enter') {
                         fetchJobs(query)
                       }
                     }}
-                    size="large" 
-                    style={{width: '100%'}}
+                    size="large"
+                    style={{ width: '100%' }}
                     type="primary">Search </Button>
                 </Col>
               </Row>
