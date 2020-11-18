@@ -10,11 +10,12 @@ const types = {
     GET_CURRENT_LOCATION: 'GET_CURRENT_LOCATION',
     HANDLE_INPUTS_BASE: 'HANDLE_INPUTS_BASE',
     HANDLE_INPUTS_DRIVER: 'HANDLE_INPUTS_DRIVER',
-    HANDLER_PICKERS:'HANDLER_PICKERS'
+    HANDLER_PICKERS: 'HANDLER_PICKERS',
+    HANDLE_INPUTS: 'HANDLE_INPUTS'
 }
 
 const initialState = {
-    _id:'',
+    _id: '',
     name: '',
     lastname: '',
     typeUser: 0,
@@ -24,7 +25,13 @@ const initialState = {
     google_id: '',
     facebook_id: '',
     date: '',
+    fields: [],
     token: null,
+    base: {
+        name: '',
+        lastname: '',
+        email: ''
+    },
     driver: {
         dln: '',
         expDateDln: moment(),
@@ -41,42 +48,27 @@ const initialState = {
     currentLocation: ''
 }
 
-const getCurrentLocation = (location) => {
+function getCurrentLocation(location) {
     return {
         type: types.GET_CURRENT_LOCATION,
         payload: location
     }
 }
 
-function onChangeDriver(e, key) {
-    return (dispatch, getState) => {
-        let driver = getState().user.driver;
-        let value = "";
-        if (key == 'experience') {
-            value = e;
-        } else {
-            value = e.target.value;
-        }
-        driver[key] = value;
-        dispatch({ type: types.HANDLE_INPUTS_DRIVER, payload: driver });
+
+function onChangeProps(base, driver) {
+    return (dispatch) => {
+        dispatch({
+            type: types.HANDLE_INPUTS,
+            payload: {
+                driver: driver,
+                base: base
+            }
+        });
     }
 }
 
-function onChangeBase(e, key) {
-    return (dispatch, getState) => {
-        let user = getState().user;
-        user[key] = e.target.value;
-        dispatch({ type: types.HANDLE_INPUTS_BASE, payload: user });
-    }
-}
 
-function handleDatePicker(obj, date, key) {
-    return (dispatch, getState) => {
-        let data = getState().user.driver;
-        data[key] = date;
-        dispatch({ type: types.HANDLER_PICKERS, payload: data });
-    }
-}
 
 function updateUserCompany(props) {
     let { user, company } = props;
@@ -86,7 +78,7 @@ function updateUserCompany(props) {
     }
 }
 
-function updateUserDrive(props){
+function updateUserDrive(props) {
     let { user, driver } = props;
     return {
         type: types.UPDATE_USER_DRIVER,
@@ -96,7 +88,7 @@ function updateUserDrive(props){
 
 const logoutUser = () => {
     const state = {
-        _id:'',
+        _id: '',
         name: '',
         lastname: '',
         typeUser: 0,
@@ -127,7 +119,15 @@ const getInitialPropsUser = (props) => {
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.LOGIN_SUCCESS:
-            return { ...state, ...action.payload }
+            let fields = state.fields;
+            for (let key in action.payload) {
+                let inputs = {
+                    name: [key],
+                    value: action.payload[key]
+                }
+                fields.push(inputs)
+            }
+            return { ...state, fields: fields, ...action.payload }
         case types.UPDATE_USER_DRIVER:
             return { ...state, ...action.payload }
         case types.UPDATE_USER_COMPANY:
@@ -138,11 +138,7 @@ const userReducer = (state = initialState, action) => {
             return { ...state, deviceType: action.payload }
         case types.GET_CURRENT_LOCATION:
             return { ...state, currentLocation: action.payload }
-        case types.HANDLE_INPUTS_BASE:
-            return { ...state, ...action.payload }
-        case types.HANDLE_INPUTS_DRIVER:
-            return { ...state, ...action.payload }
-        case types.HANDLER_PICKERS:
+        case types.HANDLE_INPUTS:
             return { ...state, ...action.payload }
         default:
             return state;
@@ -157,7 +153,5 @@ export {
     getInitialPropsUser,
     logoutUser,
     getCurrentLocation,
-    onChangeDriver,
-    onChangeBase,
-    handleDatePicker
+    onChangeProps
 };

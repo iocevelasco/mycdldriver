@@ -24,9 +24,9 @@ const initialState = {
   sponsors: [],
   search_name: '',
   carousel_data: [],
-  query:'',
+  query: '',
   ranking: [],
-  filter_selected:{}
+  filter_selected: {}
 }
 
 const types = {
@@ -42,29 +42,30 @@ const reducer = (state, action) => {
     case types.ranking:
       return { ...state, ranking: action.payload }
     case types.FILTER_SELECTED:
-      return { ...state, 
+      return {
+        ...state,
         filter_selected: action.payload.filters,
-        query:action.payload.query
+        query: action.payload.query
       }
     default:
       throw new Error('Unexpected action');
   }
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
-      user: state.user,
+    user: state.user,
   }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query)),
     fetCommons: () => dispatch(fetchCommonData())
   }
 }
 
-const  Home = ({ 
+const Home = ({
   user,
   fetchJobs,
   deviceType,
@@ -80,19 +81,19 @@ const  Home = ({
 
   const handlerSearch = (e, key) => {
     let value = "";
-    if(key == 'input') value = e;
-    else if(key == 'city') value = e;
-    
+    if (key == 'input') value = e;
+    else if (key == 'city') value = e;
+
     let filters = state.filter_selected;
 
     filters[key] = value;
     const stringify = queryString.stringify(filters);
-    dispatch({ 
-      type: types.FILTER_SELECTED, 
-      payload:{ 
-        query:stringify,
-        filters:filters
-      }  
+    dispatch({
+      type: types.FILTER_SELECTED,
+      payload: {
+        query: stringify,
+        filters: filters
+      }
     });
   }
 
@@ -101,9 +102,9 @@ const  Home = ({
       headers: { Authorization: `Bearer ${user.token}` }
     };
     await axios.delete('/api/user/' + user._id, header)
-    .catch((err) => {
-      console.log('err', err)
-    })
+      .catch((err) => {
+        console.log('err', err)
+      })
   }
 
   const fetchPosition = async () => {
@@ -111,44 +112,44 @@ const  Home = ({
   }
 
   const wrapperStyle = {
-    marginTop:16,
-    marginBottom:16
+    marginTop: 16,
+    marginBottom: 16
   }
 
   const layoutProps = {
-    title:'Welcome',
-    bgActive:false,
+    title: 'Welcome',
+    bgActive: false,
     deviceType
   }
 
   return (
     <>
       <MainLayout {...layoutProps}>
-        <HeaderLandingComp 
+        <HeaderLandingComp
           handlerSearch={handlerSearch}
           filter_selected={state.filter_selected}
           query={state.query}
-         />
+        />
         <WrapperSection xs={24} row={20} style={wrapperStyle}  >
           <CarouselComp carousel_data={state.carousel_data} />
         </WrapperSection>
         <WrapperSection xs={24} row={18}>
-            <OffertJobComp type='large'/>
+          <OffertJobComp type='large' />
         </WrapperSection>
         <WrapperSection xs={24} row={18} style={wrapperStyle} >
-          <Row justify='center' align='middle' gutter={[16]} style={{marginTop:24}}>
+          <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
             <Col span={14}>
-              <Title style={{textAlign: 'center'}}>Our Drivers</Title>
-              <Text style={{textAlign: 'center', display:'flex'}}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
+              <Title style={{ textAlign: 'center' }}>Our Drivers</Title>
+              <Text style={{ textAlign: 'center', display: 'flex' }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
             </Col>
           </Row>
           <Row justify='center' align='middle' gutter={[16, 16]}>
-              <RankingComp rankingDriver={state.ranking}/>
+            <RankingComp rankingDriver={state.ranking} />
           </Row>
         </WrapperSection>
-        <div className='delete-user' style={{display: 'block'}}>
+        <div className='delete-user' style={{ display: 'block' }}>
           <Tooltip title=" Borrar usuario">
-            <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined/>}/>
+            <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined />} />
           </Tooltip>
         </div>
       </MainLayout>
@@ -156,4 +157,4 @@ const  Home = ({
   )
 }
 
-export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Home)); 
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home)); 

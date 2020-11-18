@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Row,
   Col,
@@ -14,7 +14,10 @@ import {
   message
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { onChangeDriver, onChangeBase, handleDatePicker, updateUserDrive } from '@store/reducers/user_reducer';
+import {
+  updateUserDrive,
+  onChangeProps
+} from '@store/reducers/user_reducer';
 import { SpinnerComp } from 'components/helpers';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -27,32 +30,42 @@ function mapStateToProps(state) {
   const { user } = state;
   return {
     base: {
-      name: user.name,
-      lastname: user.lastname,
-      photo: user.photo,
-      email: user.email,
+      name: user.base.name,
+      lastname: user.base.lastname,
+      email: user.base.email,
     },
-    _id:user._id,
+    fields: user.fields,
+    photo: state.user.photo,
+    _id: user._id,
     token: user.token,
     driver: user.driver,
     isUserRegistry: state.user.typeUser,
+    fields: state.user.fields
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleBaseProps: (e, key) => dispatch(onChangeBase(e, key)),
-    handleDriverProps: (e, key) => dispatch(onChangeDriver(e, key)),
-    handleDatePicker: (obj, date, key) => dispatch(handleDatePicker(obj, date, key)),
-    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps))
+    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
+    onChangeProps: (base, driver) => dispatch(onChangeProps(base, driver))
   }
 }
 
 const DriverUser = (props) => {
-  const { router } = props
+  const { router } = props;
   const [form] = Form.useForm();
   const [imageDln, setImage] = useState([]);
   const [loading, setLoader] = useState(false);
+  const [fields, setFields] = useState([]);
+  const [base, setBase] = useState({});
+  const [driver, setDriver] = useState({});
+
+  useEffect(() => {
+    setFields(props.fields)
+  }, [props.fields]);
+
+  console.log('fiels', fields);
+
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
@@ -60,51 +73,50 @@ const DriverUser = (props) => {
     job: router.query.id,
     company: props.company
   };
-  console.log('[ PROPS ]', props);
 
-  const saveApply = async () =>{
-      await axios.post('/api/company/jobs/apply', apply, header)
-      .then((response)=>{
-        dispatch({type:types.SHOW_SUCCESS, payload:true});
-        dispatch({type:types.PROPS_APPLY, payload:false});
+  const saveApply = async () => {
+    await axios.post('/api/company/jobs/apply', apply, header)
+      .then((response) => {
+        dispatch({ type: types.SHOW_SUCCESS, payload: true });
+        dispatch({ type: types.PROPS_APPLY, payload: false });
       });
   }
 
-
   const newDrivers = async () => {
-    const { base, driver } = props;
+    props.onChangeProps(base, driver);
     setLoader(true);
     if (imageDln.length > 0) {
       driver.imageDln = imageDln[0].response.data.file;
     }
     base.typeUser = 1;
     const fullDriver = { base: base, ...driver };
-      await axios.post('/api/driver', fullDriver)
-      .then((response)=>{
+    await axios.post('/api/driver', fullDriver)
+      .then((response) => {
         console.log('[ user registry succes ]', response.data);
         props.handleNewDriverProps(response.data);
-        if(props.isJobs){
+        if (props.isJobs) {
           saveApply();
         }
+        setLoader(false);
         notification['success']({
           message: 'Success',
           description:
             "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
         });
       })
-      .catch((err)=>{
+      .catch((err) => {
         console.log('[ user registry error ]', err);
-        setLoader(true);
+        setLoader(false);
         notification['error']({
           message: 'error',
           description:
             "Sorry! We couldn't create this user, please try again. "
         });
       })
-    }
+  }
 
   const updateDriver = async () => {
-    const { base, driver, _id } = props;
+    const { _id } = props;
     if (imageDln.length > 0) {
       driver.imageDln = imageDln[0].response.data.file;
     }
@@ -179,14 +191,29 @@ const DriverUser = (props) => {
     }
   };
 
-  const {
-    driver,
-    handleBaseProps,
-    handleDriverProps,
-    handleDatePicker,
-    base,
-    action,
-  } = props;
+  const onChangeProps = (changedFields, allFields) => {
+    let base = {}
+    let driver = {}
+    allFields.forEach((e) => {
+      if (
+        e.name[0] == 'name' ||
+        e.name[0] == 'email' ||
+        e.name[0] == 'lastname'
+      ) {
+        base[e.name[0]] = e.value
+      } else if (
+        e.name[0] == 'birthDate' || e.name[0] == 'expDateDln'
+      ) {
+        driver[e.name[0]] = moment(e.value).format('MM-DD-YYYY')
+      }
+      else {
+        driver[e.name[0]] = e.value
+      }
+    });
+    setFields(allFields);
+    setDriver(driver);
+    setBase(base);
+  }
 
   return (
     <div className='profile-driver'>
@@ -194,57 +221,83 @@ const DriverUser = (props) => {
         <Col className='profile-driver__form' span={24}>
           <Row justify='center'>
             <div className='avatar'>
-              <Avatar src={base.photo} size={120} />
+              <Avatar src={props.photo} size={120} />
             </div>
           </Row>
           <Form
+            fields={fields}
             form={form}
-            name="user-driver"
-            layout='horizontal'>
+            name="global_state"
+            layout='vertical'
+            onFieldsChange={onChangeProps}>
+
             <Row gutter={[24]} justify='space-between' >
               <Col span={12}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Name"
-                    value={base.name}
-                    onChange={(e) => handleBaseProps(e, 'name')} />
+                <Form.Item
+                  name="name"
+                  label="Name"
+                  size='large'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Name is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Last Name"
-                    value={base.lastname}
-                    onChange={(e) => handleBaseProps(e, 'lastname')} />
+                <Form.Item
+                  name="lastname"
+                  label="Last Name"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Last name is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item>
-              <Input
-                size='large'
-                placeholder="Mail"
-                value={base.email}
-                onChange={(e) => handleBaseProps(e, 'email')} />
+
+            <Form.Item
+              name="email"
+              label="Email"
+              rules={[
+                {
+                  required: true,
+                  message: 'Email is required!',
+                },
+              ]}>
+              <Input />
             </Form.Item>
+
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
-                <Form.Item label='Birth Date'>
-                  <DatePicker
-                    size='large'
-                    selected={moment(driver.birthDate)}
-                    defaultValue={moment(driver.birthDate)}
-                    style={{ width: '100%' }}
-                    placeholder="Birth Date"
-                    onChange={(obj, key) => handleDatePicker(obj, key, 'birthDate')} />
+                <Form.Item
+                  label='Birth date'
+                  name="birthDate"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Birth date is required!',
+                    },
+                  ]}>
+                  <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item>
-                  <Radio.Group
-                    value={driver.sex}
-                    onChange={(e) => handleDriverProps(e, 'sex')}>
+                <Form.Item
+                  label='Sex'
+                  name="sex"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Sex is required!',
+                    },
+                  ]}>
+                  <Radio.Group>
                     <Radio value={0}>F</Radio>
                     <Radio value={1}>M</Radio>
                     <Radio value={2}>Other</Radio>
@@ -252,98 +305,129 @@ const DriverUser = (props) => {
                 </Form.Item>
               </Col>
             </Row>
+
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
-                <Form.Item>
-                  <Input
-                    disabled={driver.is_cdl}
-                    size='large'
-                    placeholder="DLN"
-                    value={driver.dln}
-                    onChange={(e) => handleDriverProps(e, 'dln')} />
+                <Form.Item
+                  label='Dln'
+                  name="dln"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'dln is required!',
+                    },
+                  ]}>
+                  <InputNumber
+                    min={0}
+                    max={900000000000000}
+                    style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label='Experation Date'>
-                  <DatePicker
-                    size='large'
-                    selected={moment(driver.expDateDln)}
-                    defaultValue={moment(driver.expDateDln)}
-                    placeholder="Experation Date"
-                    style={{ width: '100%' }}
-                    onChange={(obj, key) => handleDatePicker(obj, key, 'expDateDln')} />
+                <Form.Item
+                  label='Dln expiration'
+                  name="expDateDln"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Dln expiration date is required!',
+                    },
+                  ]}>
+                  <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
             </Row>
+
             <Row gutter={[24]} justify='space-between' >
               <Col span={6}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Area Code"
-                    value={driver.areaCode}
-                    onChange={(e) => handleDriverProps(e, 'areaCode')} />
+                <Form.Item
+                  label='Area code'
+                  name="areaCode"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Area code expiration date is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={18}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Phone Number"
-                    value={driver.phoneNumber}
-                    onChange={(e) => handleDriverProps(e, 'phoneNumber')} />
+                <Form.Item
+                  label='Phone Number'
+                  name="phoneNumber"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Phone number date is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
               </Col>
             </Row>
+
             <Row gutter={[24]} justify='space-between' >
               <Col span={6}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Zip Code"
-                    value={driver.zipCode}
-                    onChange={(e) => handleDriverProps(e, 'zipCode')} />
+                <Form.Item
+                  name='zipCode'
+                  label="Zip Code"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Zip code is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={18}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Address"
-                    value={driver.address}
-                    onChange={(e) => handleDriverProps(e, 'address')} />
+                <Form.Item
+                  name='address'
+                  label="Addres"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Address is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
               </Col>
             </Row>
+
+            <Col className='profile-driver__form-small' span={24}>
+              <Row gutter={[24]} justify='space-between' >
+                <Form.Item
+                  label="Years of experience"
+                  rules={[
+                    {
+                      required: false,
+                    },
+                  ]}>
+                  <InputNumber
+                    min={0}
+                    max={100} />
+                </Form.Item>
+                <Form.Item>
+                  <Upload {...propsUpload}
+                    fileList={imageDln}
+                    beforeUpload={beforeUpload}
+                  >
+                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  </Upload>
+                </Form.Item>
+              </Row>
+              <Form.Item
+                label='Description'
+                name='description'>
+                <TextArea
+                  rows={4}
+                  placeholder="Telling us about your background"
+                />
+              </Form.Item>
+            </Col>
           </Form>
-        </Col>
-        <Col className='profile-driver__form-small' span={24}>
-          <Row gutter={[24]} justify='space-between' >
-            <Form.Item label="Years of experience ">
-              <InputNumber
-                size="large"
-                min={0}
-                max={100}
-                defaultValue={driver.experience}
-                onChange={(e) => handleDriverProps(e, 'experience')} />
-            </Form.Item>
-            <Form.Item>
-              <Upload {...propsUpload}
-                fileList={imageDln}
-                beforeUpload={beforeUpload}
-              >
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
-              </Upload>
-            </Form.Item>
-          </Row>
-          <Form.Item>
-            <TextArea
-              rows={4}
-              size='large'
-              placeholder="Telling us about your background"
-              value={driver.description}
-              onChange={(e) => handleDriverProps(e, 'description')} />
-          </Form.Item>
           <Row gutter={[24]} justify='center' align='middle'>
             <Col span={12}>
               {
@@ -351,16 +435,17 @@ const DriverUser = (props) => {
                   <Button
                     onClick={updateDriver}
                     type='primary'
-                    shape="round" 
+                    shape="round"
                     block
-                    size='large'>Update Information</Button>:
-                    <Button
+                    size='large'>Update Information</Button> :
+                  <Button
                     onClick={newDrivers}
                     type='primary'
-                    shape="round" 
+                    shape="round"
                     block
-                    size='large'>Save Information</Button> 
+                    size='large'>Complete profile</Button>
               }
+
             </Col>
           </Row>
         </Col>
