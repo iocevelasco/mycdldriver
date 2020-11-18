@@ -59,9 +59,19 @@ const DriverUser = (props) => {
         name: [key],
         value: props.user[key]
       }
-      fields.push(inputs)
+      fields.push(inputs);
     }
-    setFields(fields)
+
+    for (let key in props.user.driver) {
+      if(key != 'date' && key != "birthDate" && key != "expDateDln"){
+        let inputs = {
+          name: [key],
+          value: props.user.driver[key]
+        }
+        fields.push(inputs);
+      }
+    }
+    setFields(fields);
   }, []);
 
   const header = {
@@ -115,6 +125,7 @@ const DriverUser = (props) => {
 
   const updateDriver = async () => {
     const { _id } = props;
+    const { driver, base } = beforeToCreateProfile();
     if (imageDln.length > 0) {
       driver.imageDln = imageDln[0].response.data.file;
     }
@@ -401,6 +412,7 @@ const DriverUser = (props) => {
             <Col className='profile-driver__form-small' span={24}>
               <Row gutter={[24]} justify='space-between' >
                 <Form.Item
+                  name='experience'
                   label="Years of experience"
                   rules={[
                     {

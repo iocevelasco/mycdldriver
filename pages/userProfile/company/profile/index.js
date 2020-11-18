@@ -90,6 +90,16 @@ const CompanyProfileView = (props) => {
       }
       fields.push(inputs)
     }
+
+    for (let key in props.user.company) {
+      if(key != 'date'){
+        let inputs = {
+          name: [key],
+          value: props.user.company[key]
+        }
+        fields.push(inputs);
+      }
+    }
     dispatch({ type: types.DATA_COMPANY, payload: fields });
   }, []);
 
@@ -195,10 +205,6 @@ const CompanyProfileView = (props) => {
         e.name[0] == 'lastname'
       ) {
         base[e.name[0]] = e.value
-      } else if (
-        e.name[0] == 'birthDate' || e.name[0] == 'expDateDln'
-      ) {
-        company[e.name[0]] = moment(e.value).format('MM-DD-YYYY')
       }
       else {
         company[e.name[0]] = e.value
@@ -250,10 +256,10 @@ const CompanyProfileView = (props) => {
     if (state.photo.length > 0) {
       base.photo = state.photo[0].response.data.file;
     }
-    const fullCompany = { base: base, ...company }
+    const fullCompany = { base: base, ...company };
     try {
       dispatch({ type: types.LOADING, payload: true });
-      const { data } = await axios.patch('/api/company/' + user._id, fullCompany, header);
+      const { data } = await axios.patch('/api/company/' + props._id, fullCompany, header);
       props.handlreNewUserProps(data.data);
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({

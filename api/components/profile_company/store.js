@@ -42,6 +42,9 @@ async function updateCompany(id, user){
     if(user.lastname){
         foundUser.lastname = user.lastname;
     }
+    if(company.tradename){
+        foundCompany.tradename = company.tradename;
+    }
     if(user.photo){
         try {
             fs.unlinkSync("." + foundUser.photo);
@@ -49,10 +52,6 @@ async function updateCompany(id, user){
             console.error(err);
         }
         foundUser.photo = user.photo;
-    }
-
-    if(company.tradename){
-        foundCompany.dln = company.dln;
     }
     if(company.logo){
         try {
@@ -64,9 +63,6 @@ async function updateCompany(id, user){
     }
     if(company.legalNumber){
         foundCompany.legalNumber = company.legalNumber;
-    }
-    if(company.logo){
-        foundCompany.logo = company.logo;
     }
     if(company.areaCode){
         foundCompany.areaCode = company.areaCode;
