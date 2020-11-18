@@ -172,17 +172,28 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                   onClick={()=> {
                     props.handleModal(true);
                   }}>Complete the login and apply to this position</Button> : 
-                    state.can_apply ?
-                      <Button 
-                      shape="round" 
-                      size="large"
-                      type='primary'
-                      style={{
-                        marginTop: 16,
-                        width: '90%',
-                        marginLeft: 12,
-                      }}
-                      onClick={saveApply}>Apply</Button>:
+                    state.can_apply ? 
+                      isUserRegistry == 2 ?
+                        <Button 
+                        shape="round" 
+                        size="large"
+                        type='primary'
+                        style={{
+                          marginTop: 16,
+                          width: '90%',
+                          marginLeft: 12,
+                        }}
+                        disabled>Available only for drivers</Button>:
+                          <Button 
+                          shape="round" 
+                          size="large"
+                          type='primary'
+                          style={{
+                            marginTop: 16,
+                            width: '90%',
+                            marginLeft: 12,
+                          }}
+                          onClick={saveApply}>Apply</Button>:
                       <Button 
                       shape="round" 
                       size="large"
