@@ -25,13 +25,7 @@ const initialState = {
     google_id: '',
     facebook_id: '',
     date: '',
-    fields: [],
     token: null,
-    base: {
-        name: '',
-        lastname: '',
-        email: ''
-    },
     driver: {
         dln: '',
         expDateDln: moment(),
@@ -54,21 +48,6 @@ function getCurrentLocation(location) {
         payload: location
     }
 }
-
-
-function onChangeProps(base, driver) {
-    return (dispatch) => {
-        dispatch({
-            type: types.HANDLE_INPUTS,
-            payload: {
-                driver: driver,
-                base: base
-            }
-        });
-    }
-}
-
-
 
 function updateUserCompany(props) {
     let { user, company } = props;
@@ -119,15 +98,7 @@ const getInitialPropsUser = (props) => {
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.LOGIN_SUCCESS:
-            let fields = state.fields;
-            for (let key in action.payload) {
-                let inputs = {
-                    name: [key],
-                    value: action.payload[key]
-                }
-                fields.push(inputs)
-            }
-            return { ...state, fields: fields, ...action.payload }
+            return { ...state, ...action.payload }
         case types.UPDATE_USER_DRIVER:
             return { ...state, ...action.payload }
         case types.UPDATE_USER_COMPANY:
@@ -138,8 +109,6 @@ const userReducer = (state = initialState, action) => {
             return { ...state, deviceType: action.payload }
         case types.GET_CURRENT_LOCATION:
             return { ...state, currentLocation: action.payload }
-        case types.HANDLE_INPUTS:
-            return { ...state, ...action.payload }
         default:
             return state;
     }
@@ -153,5 +122,4 @@ export {
     getInitialPropsUser,
     logoutUser,
     getCurrentLocation,
-    onChangeProps
 };
