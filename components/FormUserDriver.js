@@ -29,25 +29,20 @@ const { TextArea } = Input;
 function mapStateToProps(state) {
   const { user } = state;
   return {
-    base: {
-      name: user.base.name,
-      lastname: user.base.lastname,
-      email: user.base.email,
-    },
-    fields: user.fields,
-    photo: state.user.photo,
-    _id: user._id,
-    token: user.token,
-    driver: user.driver,
-    isUserRegistry: state.user.typeUser,
-    fields: state.user.fields
+    user: user,
+    photo: user.photo || '',
+    facebook_id: user.facebook_id || '',
+    google_id: user.google_id || '',
+    _id: user._id || null,
+    token: user.token || null,
+    driver: user.driver || {},
+    isUserRegistry: state.user.typeUser || null,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
-    onChangeProps: (base, driver) => dispatch(onChangeProps(base, driver))
   }
 }
 
@@ -57,14 +52,29 @@ const DriverUser = (props) => {
   const [imageDln, setImage] = useState([]);
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
-  const [base, setBase] = useState({});
-  const [driver, setDriver] = useState({});
 
   useEffect(() => {
-    setFields(props.fields)
-  }, [props.fields]);
+    let fields = [];
 
-  console.log('fiels', fields);
+    for (let key in props.user) {
+      let inputs = {
+        name: [key],
+        value: props.user[key]
+      }
+      fields.push(inputs);
+    }
+
+    for (let key in props.user.driver) {
+      if(key != 'date' && key != "birthDate" && key != "expDateDln"){
+        let inputs = {
+          name: [key],
+          value: props.user.driver[key]
+        }
+        fields.push(inputs);
+      }
+    }
+    setFields(fields);
+  }, []);
 
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
@@ -83,12 +93,18 @@ const DriverUser = (props) => {
   }
 
   const newDrivers = async () => {
-    props.onChangeProps(base, driver);
+    const { driver, base } = beforeToCreateProfile();
     setLoader(true);
     if (imageDln.length > 0) {
       driver.imageDln = imageDln[0].response.data.file;
     }
+    base.photo = props.photo;
     base.typeUser = 1;
+    if(props.facebook_id)
+      base.facebook_id = props.facebook_id;
+    if(props.google_id)
+      base.google_id = props.google_id;
+    
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
       .then((response) => {
@@ -117,6 +133,7 @@ const DriverUser = (props) => {
 
   const updateDriver = async () => {
     const { _id } = props;
+    const { driver, base } = beforeToCreateProfile();
     if (imageDln.length > 0) {
       driver.imageDln = imageDln[0].response.data.file;
     }
@@ -191,14 +208,17 @@ const DriverUser = (props) => {
     }
   };
 
-  const onChangeProps = (changedFields, allFields) => {
+  const beforeToCreateProfile = () => {
     let base = {}
     let driver = {}
-    allFields.forEach((e) => {
+    fields.forEach((e) => {
       if (
         e.name[0] == 'name' ||
         e.name[0] == 'email' ||
-        e.name[0] == 'lastname'
+        e.name[0] == 'lastname' ||
+        e.name[0] == 'photo' ||
+        e.name[0] == 'facebook_id' ||
+        e.name[0] == 'google_id'
       ) {
         base[e.name[0]] = e.value
       } else if (
@@ -210,9 +230,14 @@ const DriverUser = (props) => {
         driver[e.name[0]] = e.value
       }
     });
+    return {
+      driver,
+      base
+    }
+  }
+
+  const onChangeProps = (changedFields, allFields) => {
     setFields(allFields);
-    setDriver(driver);
-    setBase(base);
   }
 
   return (
@@ -236,7 +261,6 @@ const DriverUser = (props) => {
                 <Form.Item
                   name="name"
                   label="Name"
-                  size='large'
                   rules={[
                     {
                       required: true,
@@ -399,6 +423,7 @@ const DriverUser = (props) => {
             <Col className='profile-driver__form-small' span={24}>
               <Row gutter={[24]} justify='space-between' >
                 <Form.Item
+                  name='experience'
                   label="Years of experience"
                   rules={[
                     {

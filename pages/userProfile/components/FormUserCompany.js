@@ -1,197 +1,237 @@
 import React from 'react';
-import MainLayout from '../../../components/layout';
 import {
   Row,
   Col,
-  Typography,
   Input,
-  Select,
   Avatar,
   Form,
   Button,
   Upload,
-  Switch,
-  InputNumber,
-  Radio,
-  DatePicker,
-  message
 } from 'antd';
+import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
-import { CloseOutlined, CheckOutlined, UploadOutlined } from '@ant-design/icons';
-const { Title, Text } = Typography;
-const { Option } = Select;
+import { UploadOutlined } from '@ant-design/icons';
+import { SpinnerComp } from 'components/helpers';
 
-const { TextArea } = Input;
+function mapStateToProps(state) {
+  const { user } = state;
+  return {
+    user: user,
+    photoProfile: user.photo || '',
+    _id: user._id || null,
+    token: user.token || null,
+    company: user.company || {},
+    isUserRegistry: state.user.typeUser || null,
+  }
+}
 
-
-
+function mapDispatchToProps(dispatch) {
+  return {
+    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
+  }
+}
 
 const FormUserCompany = (props) => {
-  const { company, onChangeBase, onChangeCompany, newCompany, updateCompany, base, beforeUpload, propsUpload, propsPhoto, logo, photo} = props;
   const [form] = Form.useForm();
+  const {
+    loading,
+    onChangeCompany,
+    fields,
+    newCompany,
+    updateCompany,
+    beforeUpload,
+    propsUpload,
+    propsPhoto } = props;
+
+  const onChangeProps = (changedFields, allFields) => {
+    onChangeCompany(allFields);
+  }
+
   return (
     <div className='profile-driver'>
-      <Row justify='center'>
-        <Col className='profile-driver__form' span={14}>
-          <Row justify='center'>
-            <div className='avatar'>
-              <Avatar src={base.photo} size={120} />
-            </div>
-          </Row>
-          <Form
-            form={form}
-            name="user-driver"
-            initialValues={{ remember: true }}
-            layout='horizontal'>
+      <Form
+          fields={fields}
+          form={form}
+          name="global_state"
+          layout='vertical'
+          onFieldsChange={onChangeProps}>
+        <Row justify='center'>
+          <Col className='profile-driver__form' span={14}>
+            <Row justify='center'>
+              <div className='avatar'>
+                <Avatar src={props.photoProfile} size={120} />
+              </div>
+            </Row>
+              <Row gutter={[24]} justify='space-between' >
+                <Col span={12}>
+                  <Form.Item
+                    name="name"
+                    label="Name"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Name is required!',
+                      },
+                    ]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="lastname"
+                    label="Last Name"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Last name is required!',
+                      },
+                    ]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Email is required!',
+                  },
+                ]}>
+                <Input />
+              </Form.Item>
+              <Row gutter={[24]} justify='space-between' >
+                <Col span={6}>
+                  <Form.Item
+                    label='Area code'
+                    name="areaCode"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Area code expiration date is required!',
+                      },
+                    ]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col span={18}>
+                  <Form.Item
+                    label='Phone Number'
+                    name="phoneNumber"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Phone number date is required!',
+                      },
+                    ]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={[24]} justify='space-between' >
+                <Col span={6}>
+                  <Form.Item
+                    name='zipCode'
+                    label="Zip Code"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Zip code is required!',
+                      },
+                    ]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col span={18}>
+                  <Form.Item
+                    name='address'
+                    label="Addres"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Address is required!',
+                      },
+                    ]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
+          </Col>
+          <Col className='profile-driver__form-small' span={14}>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={12}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Name"
-                    value={base.name}
-                    onChange={(e) => onChangeBase(e, 'name')} />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
+              <Col span={24}>
                 <Form.Item
-                  rules={[{ required: true, message: 'Please input your username!' }]}>
-                  <Input
-                    size='large'
-                    placeholder="Last Name"
-                    value={base.lastname}
-                    onChange={(e) => onChangeBase(e, 'lastname')} />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Form.Item
-              rules={[{ required: true, message: 'Please input your username!' }]}>
-              <Input
-                size='large'
-                placeholder="Mail"
-                value={base.email}
-                onChange={(e) => onChangeBase(e, 'email')} />
-            </Form.Item>
-            <Row gutter={[24]} justify='space-between' >
-              <Col span={6}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Area Code"
-                    value={company.areaCode}
-                    onChange={(e) => onChangeCompany(e, 'areaCode')} />
-                </Form.Item>
-              </Col>
-              <Col span={18}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Phone Number"
-                    value={company.phoneNumber}
-                    onChange={(e) => onChangeCompany(e, 'phoneNumber')} />
+                  name='tradename'
+                  label="Trade Name"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Trade Name is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={6}>
+              <Col span={12}>
                 <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Zip Code"
-                    value={company.zipCode}
-                    onChange={(e) => onChangeCompany(e, 'zipCode')} />
+                  <Upload {...propsUpload}
+                    fileList={props.logo}
+                    beforeUpload={beforeUpload}
+                  >
+                    <Button icon={<UploadOutlined />}>Upload Image for Company</Button>
+                  </Upload>
                 </Form.Item>
               </Col>
-              <Col span={18}>
+              <Col span={12}>
                 <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Address"
-                    value={company.address}
-                    onChange={(e) => onChangeCompany(e, 'address')} />
+                  <Upload {...propsPhoto}
+                    fileList={props.photo}
+                    beforeUpload={beforeUpload}
+                  >
+                    <Button icon={<UploadOutlined />}>Upload Photo for Company</Button>
+                  </Upload>
                 </Form.Item>
               </Col>
             </Row>
-          </Form>
-        </Col>
-        <Col className='profile-driver__form-small' span={14}>
-          <Row gutter={[24]} justify='space-between' >
-            <Col span={24}>
-              <Form.Item
-                rules={[{ required: true, message: 'Please input your username!' }]}>
-                <Input
-                  size='large'
-                  placeholder="Trade Name"
-                  value={company.tradename}
-                  onChange={(e) => onChangeCompany(e, 'tradename')} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24]} justify='space-between' >
-            <Col span={12}>
-              <Form.Item>
-                <Upload {...propsUpload}
-                  fileList={logo}
-                  beforeUpload={beforeUpload}
-                >
-                  <Button icon={<UploadOutlined />}>Upload Image for Company</Button>
-                </Upload>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item>
-                <Upload {...propsPhoto}
-                  fileList={photo}
-                  beforeUpload={beforeUpload}
-                >
-                  <Button icon={<UploadOutlined />}>Upload Photo for Company</Button>
-                </Upload>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24]} justify='space-between' >
-            <Col span={24}>
-              <Form.Item
-                rules={[{ required: true, message: 'Please input your username!' }]}>
-                <Input
-                  size='large'
-                  placeholder="Tax id"
-                  value={company.legalNumber}
-                  onChange={(e) => onChangeCompany(e, 'legalNumber')} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24]} justify='space-between' >
-            <Col span={24}>
-              <Form.Item>
-                <TextArea
-                  rows={4}
-                  size='large'
-                  placeholder="Description"
-                  value={company.description}
-                  onChange={(e) => onChangeCompany(e, 'description')} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[24]} justify='end' align='middle'>
-            <Col span={6}>
-              {!base.id ? <Button
-                onClick={newCompany}
-                type='primary'
-                block
-                size='large'>Save Information</Button>
-                : <Button
-                onClick={updateCompany}
-                type='primary'
-                block
-                size='large'>Update Information</Button>
-              }
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+            <Row gutter={[24]} justify='space-between' >
+              <Col span={24}>
+                <Form.Item
+                  name='legalNumber'
+                  label="Tax id"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'tax id is required!',
+                    },
+                  ]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={[24]} justify='end' align='middle'>
+              <Col span={8}>
+                {!props.isUserRegistry ? <Button
+                  onClick={newCompany}
+                  type='primary'
+                  block
+                  size='large'>Save Information</Button>
+                  : <Button
+                    onClick={updateCompany}
+                    type='primary'
+                    block
+                    size='large'>Update Information</Button>
+                }
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
+      <SpinnerComp active={loading} />
     </div>
   )
 }
 
-export default FormUserCompany;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FormUserCompany)); 
