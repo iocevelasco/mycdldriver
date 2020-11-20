@@ -31,6 +31,7 @@ const initialState = {
   loading: true,
   loadingJobsList:true,
   editing: false,
+  fields: [],
   newJob: {
     title: '',
     description: '',
@@ -81,7 +82,8 @@ const types = {
   LOADING_GET_JOBS:'LOADING_GET_JOBS',
   NEW_PHOTO: 'NEW_PHOTO',
   EDIT_PHOTO: 'EDIT_PHOTO',
-  EDITING: 'EDITING'
+  EDITING: 'EDITING',
+  NEW_FIELDS: 'NEW_FIELDS'
 }
 
 const reducer = (state, action) => {
@@ -122,6 +124,8 @@ const reducer = (state, action) => {
       return { ...state, editPhoto:action.payload }
     case types.EDITING:
       return { ...state, editing:!state.editing }
+    case types.NEW_FIELDS:
+      return { ...state, fields: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -134,12 +138,14 @@ function mapStateToProps(state){
   }
 }
 
-const CompanyJobView = ({ user }) => {
+const CompanyJobView = (props) => {
+  console.log('[ props ]', props);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const {user} = props;
   
   const configSection = {
     title:'Jobs',
-    user:{user},
+    user: props.user,
     loading:state.loading,
     currentLocation:'1',
     bgActive:false
@@ -151,6 +157,7 @@ const CompanyJobView = ({ user }) => {
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
+
   
   useEffect(()=>{
     fetchJobPositionData();
@@ -187,12 +194,18 @@ const CompanyJobView = ({ user }) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!');
+      dispatch({ type: types.NEW_PHOTO, payload: ['']});
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
       message.error('Image must smaller than 2MB!');
+      dispatch({ type: types.NEW_PHOTO, payload: ['']});
     }
     return isJpgOrPng && isLt2M;
+  }
+
+  const onChangeNewJob = (changedFields, allFields) => {
+    dispatch({ type: types.NEW_FIELDS, payload: allFields });
   }
 
   const propsUpload = {
@@ -423,7 +436,7 @@ const CompanyJobView = ({ user }) => {
   const wrapperList = {
     marginBottom:24,
   }
-
+  console.log('[ FIELDS ]', state.fields);
   return (
     <>
       <MainLayout {...configSection}>
@@ -438,26 +451,54 @@ const CompanyJobView = ({ user }) => {
               </div>
               <Divider/>
               <Form
-                form={form}
+                form={form} 
+                onFinish = {newCompanyJob}
                 name="user-driver"
                 initialValues={{ remember: true }}
-                layout='horizontal'>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Title/ Position name"
-                    value={state.newJob.title}
-                    onChange={(e) => onChangeJob(e, 'title')} />
+                layout='horizontal'
+                onFieldsChange={onChangeNewJob}>
+                <Form.Item
+                  name="title"
+                  label="Title/ Position name"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Name is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
-                <Form.Item>
-                  <TextArea
-                    rows={4}
-                    size='large'
-                    placeholder="Job Description"
-                    value={state.newJob.description}
-                    onChange={(e) => onChangeJob(e, 'description')} />
+                <Form.Item
+                  name="description"
+                  label="Job Description"
+                  rows={4}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Description is required!',
+                    },
+                  ]}>
+                  <TextArea />
                 </Form.Item>
-                <Form.Item>
+                <Form.Item
+                  name="photo"
+                  valuePropName="fileList"
+                  getValueFromEvent={(e) => {
+                    console.log('Upload event:', e);
+                  
+                    if (Array.isArray(e)) {
+                      return e;
+                    }
+                  
+                    return e && e.fileList;
+                  }}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Photo is required!',
+                    },
+                  ]}
+                >
                   <Upload {...propsUpload}
                     fileList={state.newPhoto}
                     beforeUpload={beforeUpload}
@@ -467,38 +508,55 @@ const CompanyJobView = ({ user }) => {
                 </Form.Item>
                 <Row gutter={[24]} justify='space-between' >
                   <Col span={6}>
-                    <Form.Item>
-                      <Input
-                        size='large'
-                        placeholder="Area Code"
-                        value={state.newJob.areaCode}
-                        onChange={(e) => onChangeJob(e, 'areaCode')} />
+                    <Form.Item
+                      name="areaCode"
+                      label="Area Code"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Area code is required!',
+                        },
+                      ]}>
+                      <Input />
                     </Form.Item>
                   </Col>
                   <Col span={18}>
-                    <Form.Item>
-                      <Input
-                        size='large'
-                        placeholder="Phone Number"
-                        value={state.newJob.phoneNumber}
-                        onChange={(e) => onChangeJob(e, 'phoneNumber')} />
+                    <Form.Item
+                      name="phoneNumber"
+                      label="Phone Number"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Phone Number is required!',
+                        },
+                      ]}>
+                      <Input />
                     </Form.Item>
                   </Col>
                 </Row>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Email"
-                    value={state.newJob.email}
-                    onChange={(e) => onChangeJob(e, 'email')} />
+                <Form.Item
+                  name="email"
+                  label="Email"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Email is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
                 <SearchLocation updateQuery={updateQuery}/>
-                <Form.Item>
-                  <Radio.Group
-                    value={state.newJob.time}
-                    onChange={(e) => onChangeJob(e, 'time')}>
+                <Form.Item
+                  name="time"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Time is required!',
+                    },
+                  ]}>
+                  <Radio.Group>
                     <Radio value={0}>Part-time</Radio>
-                    <Radio value={1}>Full-time</Radio>
+                    <Radio value={1} >Full-time</Radio>
                     <Radio value={2}>Eventual</Radio>
                   </Radio.Group>
                 </Form.Item>
@@ -537,7 +595,7 @@ const CompanyJobView = ({ user }) => {
                 </Form.Item>
                   <Col span={6}>
                     <Button
-                      onClick={newCompanyJob}
+                      htmlType="submit"
                       type='primary'
                       block
                       size='large'>Create Job position</Button>

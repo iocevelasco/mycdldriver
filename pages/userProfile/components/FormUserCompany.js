@@ -49,12 +49,13 @@ const FormUserCompany = (props) => {
 
   return (
     <div className='profile-driver'>
-      <Form
-          fields={fields}
-          form={form}
-          name="global_state"
-          layout='vertical'
-          onFieldsChange={onChangeProps}>
+        <Form
+        fields={fields}
+        form={form}
+        onFinish={!props.isUserRegistry ? newCompany : updateCompany}
+        name="global_state"
+        layout='vertical'
+        onFieldsChange={onChangeProps}>
         <Row justify='center'>
           <Col className='profile-driver__form' span={14}>
             <Row justify='center'>
@@ -213,17 +214,11 @@ const FormUserCompany = (props) => {
             </Row>
             <Row gutter={[24]} justify='end' align='middle'>
               <Col span={8}>
-                {!props.isUserRegistry ? <Button
-                  onClick={newCompany}
+                <Button
+                  htmlType="submit"
                   type='primary'
                   block
-                  size='large'>Save Information</Button>
-                  : <Button
-                    onClick={updateCompany}
-                    type='primary'
-                    block
-                    size='large'>Update Information</Button>
-                }
+                  size='large'>{!props.isUserRegistry ? 'Save Information': 'Update Information'}</Button>
               </Col>
             </Row>
           </Col>
