@@ -25,6 +25,7 @@ import WrapperSection from '../../components/wrapperSection';
 import SideNav from '../../components/SideNavAdmin';
 import SearchLocation from '../../components/SearchLocationInput';
 import { PlusOutlined, DeleteOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
+import { extendWith } from 'lodash';
 
 const { Text, Title } = Typography
 const initialState = {
@@ -139,14 +140,13 @@ function mapStateToProps(state) {
 }
 
 const CompanyJobView = (props) => {
-  console.log('[ props ]', props);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { user } = props;
 
   const configSection = {
     title: 'Jobs',
     user: props.user,
-    loading: state.loading,
+    isLoading: state.loading,
     currentLocation: '1',
     bgActive: false
   }
@@ -374,19 +374,49 @@ const CompanyJobView = (props) => {
     }
   }
 
-  const newCompanyJob = async () => {
-    const { newJob, tags } = state;
-    let tagsJob = tags.map((tag) => {
-      return { name: tag }
+  const beforeToCreateJob = () => {
+    let newJob = {};
+    let tagsJob = {};
+    const tags = state.tags;
+    const city = state.newJob.city;
+
+    state.fields.forEach((e) => {
+        newJob[e.name[0]] = e.value
     });
+
+    if(tags){
+      tagsJob = tags.map((tag) => {
+        return { name: tag }
+      });
+    }
+
+    if(city){
+      newJob.city = city;
+    }else{
+      notification['error']({
+        message: 'error',
+        description:
+          "Sorry! The city field is required. "
+      });
+      return false;
+    }
+    
     newJob.tags = tagsJob;
+    return newJob;
+  }
+
+  const newCompanyJob = async () => {
+    const newJob = beforeToCreateJob();
+    if(!newJob) return;
     if (state.newPhoto.length > 0) {
       newJob.logo = state.newPhoto[0].response.data.file;
     }
+    console.log('[ NEWJOB ]', newJob);
     dispatch({ type: types.LOADING, payload: true });
     try {
       await axios.post('/api/company/jobs', newJob, header);
       fetchJobPositionData();
+      dispatch({ type: types.NEW_FIELDS, payload: {} });
       notification['success']({
         message: 'Success',
         description:
@@ -440,7 +470,6 @@ const CompanyJobView = (props) => {
   const wrapperList = {
     marginBottom: 24,
   }
-  console.log('[ FIELDS ]', state.fields);
   return (
     <>
       <MainLayout {...configSection}>
