@@ -381,18 +381,18 @@ const CompanyJobView = (props) => {
     const city = state.newJob.city;
 
     state.fields.forEach((e) => {
-        newJob[e.name[0]] = e.value
+      newJob[e.name[0]] = e.value
     });
 
-    if(tags){
+    if (tags) {
       tagsJob = tags.map((tag) => {
         return { name: tag }
       });
     }
 
-    if(city){
+    if (city) {
       newJob.city = city;
-    }else{
+    } else {
       notification['error']({
         message: 'error',
         description:
@@ -400,14 +400,14 @@ const CompanyJobView = (props) => {
       });
       return false;
     }
-    
+
     newJob.tags = tagsJob;
     return newJob;
   }
 
   const newCompanyJob = async () => {
     const newJob = beforeToCreateJob();
-    if(!newJob) return;
+    if (!newJob) return;
     if (state.newPhoto.length > 0) {
       newJob.logo = state.newPhoto[0].response.data.file;
     }
@@ -438,7 +438,6 @@ const CompanyJobView = (props) => {
       return { name: tag }
     });
     editJob.tags = tagsJob;
-    console.log('tamaño del arreglo', state.editPhoto.length);
     if (state.editPhoto.length > 0) {
       editJob.logo = state.editPhoto[0].response.data.file;
     }
