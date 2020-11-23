@@ -455,22 +455,13 @@ const DriverUser = (props) => {
           </Form>
           <Row gutter={[24]} justify='center' align='middle'>
             <Col span={12}>
-              {
-                props.isUserRegistry ?
-                  <Button
-                    onClick={updateDriver}
-                    type='primary'
-                    shape="round"
-                    block
-                    size='large'>Update Information</Button> :
-                  <Button
-                    onClick={newDrivers}
-                    type='primary'
-                    shape="round"
-                    block
-                    size='large'>Complete profile</Button>
-              }
-
+              <Button
+                style={{ marginTop: 24 }}
+                onClick={props.isUserRegistry ? updateDriver : newDrivers}
+                type='primary'
+                shape="round"
+                block
+                size='large'>{props.isUserRegistry ? 'Update Information' : 'Complete profile'} </Button>
             </Col>
           </Row>
         </Col>
