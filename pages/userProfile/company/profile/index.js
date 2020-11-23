@@ -117,13 +117,14 @@ const CompanyProfileView = (props) => {
     name: 'photo',
     action: '/api/files',
     headers: {
-      authorization: 'authorization-text'
+      Authorization: `Bearer ${props.token}`
     },
     async onChange(info) {
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
       if (info.file.status === 'done') {
+
         message.success(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} file upload failed.`);
@@ -155,7 +156,7 @@ const CompanyProfileView = (props) => {
     name: 'logo',
     action: '/api/files',
     headers: {
-      authorization: 'authorization-text'
+      authorization: `Bearer ${props.token}`
     },
     async onChange(info) {
       if (info.file.status !== 'uploading') {
