@@ -435,15 +435,6 @@ const CompanyJobView = (props) => {
   };
 
   const updateCompanyJob = async () => {
-    /*const { editJob, tagsEdit } = state;
-    let tagsJob = tagsEdit.map((tag) => {
-      return { name: tag }
-    });
-    editJob.tags = tagsJob;
-    console.log('tamaño del arreglo', state.editPhoto.length);
-    if (state.editPhoto.length > 0) {
-      editJob.logo = state.editPhoto[0].response.data.file;
-    }*/
     const editJob = beforeToCreateJob(state.fieldsEdit, state.tagsEdit);
     dispatch({ type: types.SHOW_DRAWER });
     dispatch({ type: types.LOADING, payload: true });
