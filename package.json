@@ -6,7 +6,9 @@
     "dev-api": "nodemon server.js -p $PORT",
     "dev": "node server.js -p $PORT",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js -p $PORT"
+    "start": "NODE_ENV=production node server.js -p $PORT",
+    "lint": "npm run lint:js",
+    "lint:js": "eslint './**/*.js'"
   },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
@@ -49,6 +51,7 @@
     "validator": "^13.1.17"
   },
   "devDependencies": {
+    "eslint": "^7.13.0",
     "next-compose": "0.0.2"
   },
   "main": "server.js",
