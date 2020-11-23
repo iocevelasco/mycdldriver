@@ -33,6 +33,7 @@ const initialState = {
   loadingJobsList: true,
   editing: false,
   fields: [],
+  fieldsEdit: [],
   newJob: {
     title: '',
     description: '',
@@ -84,7 +85,8 @@ const types = {
   NEW_PHOTO: 'NEW_PHOTO',
   EDIT_PHOTO: 'EDIT_PHOTO',
   EDITING: 'EDITING',
-  NEW_FIELDS: 'NEW_FIELDS'
+  NEW_FIELDS: 'NEW_FIELDS',
+  EDIT_FIELDS: 'EDIT_FIELDS'
 }
 
 const reducer = (state, action) => {
@@ -127,6 +129,8 @@ const reducer = (state, action) => {
       return { ...state, editing: !state.editing }
     case types.NEW_FIELDS:
       return { ...state, fields: action.payload }
+    case types.EDIT_FIELDS:
+      return { ...state, fieldsEdit: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -176,14 +180,6 @@ const CompanyJobView = (props) => {
     }
   }
 
-  const onChangeJob = (e, key) => {
-    let newJob = state.newJob;
-    let value = "";
-    value = e.target.value;
-    newJob[key] = value;
-    dispatch({ type: types.JOB_DATA, payload: newJob });
-  }
-
   const updateQuery = (formatted_address) => {
     let newJob = state.newJob;
     newJob['city'] = formatted_address;
@@ -206,6 +202,10 @@ const CompanyJobView = (props) => {
 
   const onChangeNewJob = (changedFields, allFields) => {
     dispatch({ type: types.NEW_FIELDS, payload: allFields });
+  }
+
+  const onChangeEditJob = (changedFields, allFields) => {
+    dispatch({ type: types.EDIT_FIELDS, payload: allFields });
   }
 
   const propsUpload = {
@@ -259,14 +259,6 @@ const CompanyJobView = (props) => {
 
     }
   };
-
-  const onChangeEditJob = (e, key) => {
-    let editJob = state.editJob;
-    let value = "";
-    value = e.target.value;
-    editJob[key] = value;
-    dispatch({ type: types.JOB_EDIT_DATA, payload: editJob });
-  }
 
   const handleClose = (removedTag, key) => {
     switch (key) {
@@ -367,6 +359,7 @@ const CompanyJobView = (props) => {
       const tagsEdit = job.tags.map((tag) => tag.name);
       dispatch({ type: types.EDIT_JOB, payload: job });
       dispatch({ type: types.SET_CURRENT_TAGS, payload: tagsEdit });
+      beforeEditJob(job);
       dispatch({ type: types.SHOW_DRAWER });
       dispatch({ type: types.EDITING });
     } catch (e) {
@@ -374,13 +367,23 @@ const CompanyJobView = (props) => {
     }
   }
 
-  const beforeToCreateJob = () => {
+  const beforeEditJob = (job) => {
+    let fields = [];
+    for (let key in job) {
+      let inputs = {
+        name: [key],
+        value: job[key]
+      }
+      fields.push(inputs);
+    }
+    dispatch({ type: types.EDIT_FIELDS, payload: fields });
+  }
+
+  const beforeToCreateJob = (fields, tags, city) => {
     let newJob = {};
     let tagsJob = {};
-    const tags = state.tags;
-    const city = state.newJob.city;
 
-    state.fields.forEach((e) => {
+    fields.forEach((e) => {
         newJob[e.name[0]] = e.value
     });
 
@@ -392,7 +395,7 @@ const CompanyJobView = (props) => {
 
     if(city){
       newJob.city = city;
-    }else{
+    }else if(!newJob.city){
       notification['error']({
         message: 'error',
         description:
@@ -406,12 +409,11 @@ const CompanyJobView = (props) => {
   }
 
   const newCompanyJob = async () => {
-    const newJob = beforeToCreateJob();
+    const newJob = beforeToCreateJob(state.fields, state.tags, state.newJob.city);
     if(!newJob) return;
     if (state.newPhoto.length > 0) {
       newJob.logo = state.newPhoto[0].response.data.file;
     }
-    console.log('[ NEWJOB ]', newJob);
     dispatch({ type: types.LOADING, payload: true });
     try {
       await axios.post('/api/company/jobs', newJob, header);
@@ -433,7 +435,7 @@ const CompanyJobView = (props) => {
   };
 
   const updateCompanyJob = async () => {
-    const { editJob, tagsEdit } = state;
+    /*const { editJob, tagsEdit } = state;
     let tagsJob = tagsEdit.map((tag) => {
       return { name: tag }
     });
@@ -441,11 +443,12 @@ const CompanyJobView = (props) => {
     console.log('tamaño del arreglo', state.editPhoto.length);
     if (state.editPhoto.length > 0) {
       editJob.logo = state.editPhoto[0].response.data.file;
-    }
+    }*/
+    const editJob = beforeToCreateJob(state.fieldsEdit, state.tagsEdit);
     dispatch({ type: types.SHOW_DRAWER });
     dispatch({ type: types.LOADING, payload: true });
     try {
-      await axios.patch('/api/company/jobs/' + editJob._id, editJob, header);
+      await axios.patch('/api/company/jobs/' + state.editJob._id, editJob, header);
       fetchJobPositionData();
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({
@@ -701,65 +704,92 @@ const CompanyJobView = (props) => {
           visible={state.visible}>
           <Form
             form={form}
+            fields={state.fieldsEdit}
+            onFinish={updateCompanyJob}
             name="user-driver"
             initialValues={{ remember: true }}
-            layout='horizontal'>
-            <Form.Item>
-              <Input
-                size='large'
-                placeholder="Name"
-                value={state.editJob.title}
-                onChange={(e) => onChangeEditJob(e, 'title')} />
+            layout='vertical'
+            onFieldsChange={onChangeEditJob}>
+            <Form.Item
+              name="title"
+              label="Title/ Position name"
+              rules={[
+                {
+                  required: true,
+                  message: 'Name is required!',
+                },
+              ]}>
+              <Input />
             </Form.Item>
-            <Form.Item>
-              <TextArea
-                rows={4}
-                size='large'
-                placeholder="Description"
-                value={state.editJob.description}
-                onChange={(e) => onChangeEditJob(e, 'description')} />
+            <Form.Item
+              name="description"
+              label="Job Description"
+              rows={4}
+              rules={[
+                {
+                  required: true,
+                  message: 'Description is required!',
+                },
+              ]}>
+              <TextArea />
             </Form.Item>
-            <Form.Item>
+            {/*<Form.Item>
               <Upload {...propsUpload}
                 fileList={state.editPhoto}
                 beforeUpload={beforeUpload}
               >
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
-            </Form.Item>
+            </Form.Item>*/}
             <Row gutter={[24]} justify='space-between' >
               <Col span={6}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Area Code"
-                    value={state.editJob.areaCode}
-                    onChange={(e) => onChangeEditJob(e, 'areaCode')} />
+                <Form.Item
+                  name="areaCode"
+                  label="Area Code"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Area code is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={18}>
-                <Form.Item>
-                  <Input
-                    size='large'
-                    placeholder="Phone Number"
-                    value={state.editJob.phoneNumber}
-                    onChange={(e) => onChangeEditJob(e, 'phoneNumber')} />
+                <Form.Item
+                  name="phoneNumber"
+                  label="Phone Number"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Phone Number is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item>
-              <Input
-                size='large'
-                placeholder="Email"
-                value={state.editJob.email}
-                onChange={(e) => onChangeEditJob(e, 'email')} />
+            <Form.Item
+              name="email"
+              label="Email"
+              rules={[
+                {
+                  required: true,
+                  message: 'Email is required!',
+                },
+              ]}>
+              <Input />
             </Form.Item>
-            <Form.Item>
-              <Input
-                size='large'
-                placeholder="City"
-                value={state.editJob.city}
-                onChange={(e) => onChangeEditJob(e, 'city')} />
+            <Form.Item
+              name="city"
+              label="City"
+              rules={[
+                {
+                  required: true,
+                  message: 'City is required!',
+                },
+              ]}>
+              <Input />
             </Form.Item>
             <Form.Item>
               <Radio.Group
@@ -804,7 +834,7 @@ const CompanyJobView = (props) => {
             </Form.Item>
             <Col span={6}>
               <Button
-                onClick={updateCompanyJob}
+                htmlType="submit"
                 type='primary'
                 block
                 size='large'>Save Information</Button>
