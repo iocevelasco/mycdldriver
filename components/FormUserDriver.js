@@ -65,7 +65,7 @@ const DriverUser = (props) => {
     }
 
     for (let key in props.user.driver) {
-      if(key != 'date' && key != "birthDate" && key != "expDateDln"){
+      if (key != 'date' && key != "birthDate" && key != "expDateDln") {
         let inputs = {
           name: [key],
           value: props.user.driver[key]
@@ -100,11 +100,11 @@ const DriverUser = (props) => {
     }
     base.photo = props.photo;
     base.typeUser = 1;
-    if(props.facebook_id)
+    if (props.facebook_id)
       base.facebook_id = props.facebook_id;
-    if(props.google_id)
+    if (props.google_id)
       base.google_id = props.google_id;
-    
+
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
       .then((response) => {
