@@ -96,7 +96,7 @@ const CandidateView = ({ user, ...props }) => {
     <MainLayout {...configSection}>
       <Row>
         <SideNav
-          currentLocation='1' />
+          currentLocation='2' />
         <Col span={20}>
           <WrapperSection row={18} styles={stylesWrapper}>
             <Card>
