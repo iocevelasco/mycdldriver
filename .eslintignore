@@ -1,0 +1,20 @@
+# Logs
+*.log
+
+# Dependency directory
+node_modules
+
+# Trash
+.DS_Store
+.idea
+.vscode
+.next
+
+# Dynamically processed files
+reports
+coverage
+build
+i18n
+lib
+
+

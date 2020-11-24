@@ -89,6 +89,23 @@ async function deleteUser(id){
 
 }
 
+async function updatePhoto(id, photo){
+    const foundUser = await User.findOne({
+        _id: id
+    });
+    if(photo){
+        try {
+            fs.unlinkSync("." + foundUser.photo);
+        } catch(err) {
+            console.error(err);
+        }
+        foundUser.photo = photo;
+    }
+    
+    await foundUser.save();
+    return true;
+}
+
 async function loginUser(mail, pass){
     try {
         const user = await User.findByCredentials(mail, pass);
@@ -206,5 +223,6 @@ module.exports = {
     loginProviderUser,
     loginAfterRegUser,
     setPrelogin,
-    getPrelogin
+    getPrelogin,
+    updatePhoto
 }

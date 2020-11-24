@@ -3,33 +3,37 @@ import MainLayout from 'components/layout';
 import {
   Row,
   Col,
-  List, 
-  Avatar
+  List,
+  Avatar,
+  Card,
+  Typography
 } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection, BuildSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import axios from 'axios';
+const { Title, Text } = Typography;
 
 const initialState = {
-  loading:true,
+  loading: true,
   jobs: [],
 }
 const types = {
-    FETCH_DATA: 'FETCH_DATA',
+  FETCH_DATA: 'FETCH_DATA',
 }
 
-function mapStateToProps(state){
-    return {
-        user: state.user,
-    }
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  }
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
-  case types.FETCH_DATA:
-    return { ...state, jobs: action.payload }
+    case types.FETCH_DATA:
+      return { ...state, jobs: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -40,11 +44,11 @@ const JobsDriverView = ({ user, ...props }) => {
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
-  
+
   const configSection = {
-    title:'Our Drivers',
-    user:{user},
-    loading:state.loading,
+    title: 'Our Drivers',
+    user: { user },
+    loading: state.loading,
   }
 
   useEffect(() => {
@@ -52,42 +56,63 @@ const JobsDriverView = ({ user, ...props }) => {
   }, [user]);
 
   const fetchJobs = async () => {
-    try{
-        console.log('[user]', header);
-        const { data } = await axios.post(`/api/company/jobs/myjobs`, {}, header);
-        console.log('[data]', data.data);
-        dispatch({ type: types.FETCH_DATA, payload:data.data});
-    }catch(err){
+    try {
+      const { data } = await axios.post(`/api/company/jobs/myjobs`, {}, header);
+      dispatch({ type: types.FETCH_DATA, payload: data.data });
+    } catch (err) {
       console.log(err)
     }
   }
-  console.log('[ LISTA ]', state.jobs);
+
+  const stylesWrapper = {
+    background: `url('/static/images/bg-routes.jpg')`,
+    paddingTop: 24,
+    paddingBottom: 24,
+    minHeight: '90vh',
+    backgroundSize: 'contain',
+  }
+
   return (
     <MainLayout {...configSection}>
       <Row>
-        <SideNav 
-         currentLocation='2' /> 
+        <SideNav
+          currentLocation='1' />
         <Col span={20}>
-          <WrapperSection row={24} mt={0}>
-          <List
-            itemLayout="horizontal"
-            dataSource={state.jobs}
-            pagination={{
-            onChange: page => {
-                console.log(page);
-            },
-            pageSize: 4,
-            }}
-            renderItem={item => (
-            <List.Item>
-                <List.Item.Meta
-                avatar={<Avatar src={item.job.logo} />}
-                title={<a href="https://ant.design">{item.job.title}</a>}
-                description={item.job.description}
-                />
-            </List.Item>
-            )}
-        />
+          <WrapperSection row={18} styles={stylesWrapper}>
+            <Card>
+              <List
+                header={<Title level={4}>Applyed Jobs</Title>}
+                itemLayout="horizontal"
+                dataSource={state.jobs}
+                renderItem={item => {
+                  return <List.Item>
+                    <div className='driver-my--job'>
+                      <Avatar size={80} src={item.job.logo} />
+                      <div className='description'>
+                        <div>
+                          <Title level={3}> {item.job.title} </Title>
+                          <div>
+                            <Text> Addres </Text>
+                            <Text strong> {item.job.city} </Text> <Text strong > | </Text>
+                            <Text> Date </Text>
+                            <Text strong> {moment(item.job.date).format('YYYY-MM-DD')} </Text>
+                          </div>
+                          <div>
+                            <Text> Phone </Text>
+                            <Text strong> {item.job.areaCode} - {item.job.phoneNumber} </Text> <Text strong > | </Text>
+                            <Text> Email </Text>
+                            <Text strong> {item.job.email} </Text>
+                          </div>
+                          <Text> {item.job.description} </Text>
+                          <div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </List.Item>
+                }}
+              />
+            </Card>
           </WrapperSection>
         </Col>
       </Row>

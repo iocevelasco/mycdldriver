@@ -8,6 +8,7 @@ import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import queryString from "query-string";
 import { fetchJobPositionData, fetchCommonData } from '@store/reducers/landing_reducer';
+import { logoutUser } from '@store/reducers/user_reducer';
 import axios from 'axios';
 
 //mock
@@ -61,7 +62,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query)),
-    fetCommons: () => dispatch(fetchCommonData())
+    fetCommons: () => dispatch(fetchCommonData()),
+    handleLogout: () => dispatch(logoutUser()),
   }
 }
 
@@ -70,6 +72,7 @@ const Home = ({
   fetchJobs,
   deviceType,
   fetCommons,
+  ...props
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -102,6 +105,7 @@ const Home = ({
       headers: { Authorization: `Bearer ${user.token}` }
     };
     await axios.delete('/api/user/' + user._id, header)
+      .then((response) => props.handleLogout())
       .catch((err) => {
         console.log('err', err)
       })
