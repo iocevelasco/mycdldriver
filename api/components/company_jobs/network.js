@@ -38,6 +38,16 @@ router.post('/myjobs', auth(), function (req, res) {
     });
 });
 
+router.post('/applys', auth(2), function (req, res) {
+    let query = {company: req.user.company};
+    controller.getCompanyJobsApply(query)
+    .then((list) => {
+        response.success(req, res, list, 200);
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
+});
+
 router.post('/detail', function (req, res) {
     let apply = {
         id: req.body.id

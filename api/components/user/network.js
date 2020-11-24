@@ -58,7 +58,7 @@ router.get('/', function (req, res) {
     const filterUsers = req.query.user || null;
     controller.getUsers(filterUsers)
     .then((userList) => {
-        mailer('takashi.onimaru@gmail.com', 'Prueba desde NodeJs', 'Mensaje de prueba de que se envio desde NODE JS')
+        //mailer('takashi.onimaru@gmail.com', 'Prueba desde NodeJs', 'Mensaje de prueba de que se envio desde NODE JS')
         response.success(req, res, userList, 200);
     }).catch(e => {
         response.error(req, res, 'Unexpected Error', 500, e);
