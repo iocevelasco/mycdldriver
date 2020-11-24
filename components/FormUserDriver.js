@@ -293,10 +293,10 @@ const DriverUser = (props) => {
             <div className='avatar'>
               <Avatar src={props.photo} size={120} />
               <Upload {...propsPhoto}
-                  fileList={photo}
-                  showUploadList={false}
-                  beforeUpload={beforeUpload}
-                >
+                fileList={photo}
+                showUploadList={false}
+                beforeUpload={beforeUpload}
+              >
                 <Button
                   type='primary'
                   size='small'
@@ -308,6 +308,7 @@ const DriverUser = (props) => {
           <Form
             fields={fields}
             form={form}
+            onFinish={props.isUserRegistry ? updateDriver : newDrivers}
             name="global_state"
             layout='vertical'
             onFieldsChange={onChangeProps}>
@@ -508,18 +509,18 @@ const DriverUser = (props) => {
                 />
               </Form.Item>
             </Col>
+            <Row gutter={[24]} justify='center' align='middle'>
+              <Col span={12}>
+                <Button
+                  style={{ marginTop: 24 }}
+                  type='primary'
+                  shape="round"
+                  htmlType="submit"
+                  block
+                  size='large'>{props.isUserRegistry ? 'Update Information' : 'Complete profile'} </Button>
+              </Col>
+            </Row>
           </Form>
-          <Row gutter={[24]} justify='center' align='middle'>
-            <Col span={12}>
-              <Button
-                style={{ marginTop: 24 }}
-                onClick={props.isUserRegistry ? updateDriver : newDrivers}
-                type='primary'
-                shape="round"
-                block
-                size='large'>{props.isUserRegistry ? 'Update Information' : 'Complete profile'} </Button>
-            </Col>
-          </Row>
         </Col>
       </Row>
       <SpinnerComp active={loading} />
