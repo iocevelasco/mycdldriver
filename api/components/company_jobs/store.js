@@ -160,11 +160,27 @@ async function getApplyCompanyJobs(query){
             const filterDriver = {
                 _id: apply.driver
             };
+            let status = "";
+            switch(apply.status){
+                case 0:
+                    status = "Pending";
+                    break;
+                case 1: 
+                    status = "Approved";
+                    break;
+                case 2:
+                    status = "Rejected";
+                    break;
+                default:
+                    status = "Pending";
+                    break;
+
+            }
             let users = await User.findOne(filterDriver)
             .populate('driver');
             if(users){
                 const { name, lastname, photo, email, driver } = users;
-                return { name, lastname, photo, email, driver };
+                return { name, lastname, photo, email, status, driver };
             }
         }));
         driversApply = driversApply.filter(Boolean);
