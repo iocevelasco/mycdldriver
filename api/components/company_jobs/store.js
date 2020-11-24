@@ -170,6 +170,7 @@ async function getApplyCompanyJobs(query){
         driversApply = driversApply.filter(Boolean);
         if(driversApply.length > 0){
             item.appys = driversApply;
+            item.numusers = driversApply.length;
             return item;
         }
     }));
