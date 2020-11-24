@@ -53,10 +53,24 @@ async function getJob(filter){
     return (result);
 }
 
-function getJobsApply(filter){
-    return new Promise((resolve, reject) => {
-        resolve(store.getApplyJobs(filter));
-    });
+async function getJobsApply(filter){
+    const result = await store.getApplyJobs(filter);
+    switch(result.status){
+        case 0: 
+            result.status = "Pending";
+            break;
+        case 1: 
+            result.status = "Approved";
+            break;
+        case 1: 
+            result.status = "Rejected";
+            break;
+        default: 
+            result.status = "Pending";
+            break;
+    }
+    console.log("[ RESULT ]", result);
+    return result;
 }
 
 function getCompanyJobsApply(filter){
