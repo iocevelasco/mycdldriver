@@ -156,6 +156,7 @@ const CandidateView = ({ user, ...props }) => {
           <WrapperSection row={22} styles={stylesWrapper}>
             <Card>
               <Table
+                rowKey='id'
                 loading={loading}
                 columns={columns}
                 expandable={{
