@@ -14,8 +14,6 @@ router.post('/', storage.single('logo'), function (req, res) {
         const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
         try{
             const token = req.header('Authorization').replace('Bearer ', '');
-            console.log('[ TOKEN ]', token);
-            console.log('[ JWT_KEY ]', config.JWT_KEY);
             const data = jwt.verify(token, config.JWT_KEY);
             if(data._id){
                 controller.setPhoto(data._id, fileUrl)

@@ -13,7 +13,7 @@ import {
   notification,
   message
 } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, RetweetOutlined } from '@ant-design/icons';
 import {
   updateUserDrive,
   onChangeProps
@@ -50,6 +50,7 @@ const DriverUser = (props) => {
   const { router } = props;
   const [form] = Form.useForm();
   const [imageDln, setImage] = useState([]);
+  const [photo, setPhoto] = useState([]);
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
 
@@ -170,6 +171,44 @@ const DriverUser = (props) => {
     return isJpgOrPng && isLt2M;
   }
 
+  const propsPhoto = {
+    name: 'logo',
+    action: '/api/files',
+    headers: {
+      authorization: `Bearer ${props.token}`
+    },
+    async onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+
+      if (photo > 0) {
+        try {
+          const file = {
+            foto: photo[0].response.data.file
+          };
+          await axios.post(`/api/files/delete`, file);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      setPhoto(fileList);
+    }
+  };
+
   const propsUpload = {
     name: 'logo',
     action: '/api/files',
@@ -247,6 +286,17 @@ const DriverUser = (props) => {
           <Row justify='center'>
             <div className='avatar'>
               <Avatar src={props.photo} size={120} />
+              <Upload {...propsPhoto}
+                  fileList={photo}
+                  showUploadList={false}
+                  beforeUpload={beforeUpload}
+                >
+                <Button
+                  type='primary'
+                  size='small'
+                  shape="circle"
+                  icon={<RetweetOutlined />} />
+              </Upload>
             </div>
           </Row>
           <Form
