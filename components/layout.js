@@ -124,6 +124,11 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
                         </Link>
                     </Col>
                     <Col span={10}>
+                        <Link href="/">
+                            Home
+                        </Link>
+                    </Col>
+                    <Col span={10}>
                         {
                             user.isLogin ?
                                 <Dropdown overlay={menu}>
