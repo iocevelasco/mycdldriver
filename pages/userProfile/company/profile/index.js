@@ -228,7 +228,7 @@ const CompanyProfileView = (props) => {
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
       });
     } catch (err) {
       dispatch({ type: types.LOADING, payload: false });
@@ -259,7 +259,7 @@ const CompanyProfileView = (props) => {
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
       });
     } catch (err) {
       console.log(err);
