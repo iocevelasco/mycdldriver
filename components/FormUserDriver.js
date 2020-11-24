@@ -122,7 +122,7 @@ const DriverUser = (props) => {
         notification['success']({
           message: 'Success',
           description:
-            "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+            "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
         });
       })
       .catch((err) => {
@@ -155,7 +155,7 @@ const DriverUser = (props) => {
           notification['success']({
             message: 'Success',
             description:
-              "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+              "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
           });
         })
     } catch (err) {
@@ -509,7 +509,7 @@ const DriverUser = (props) => {
                 name='description'>
                 <TextArea
                   rows={4}
-                  placeholder="Telling us about your background"
+                  placeholder="Tell us something about your background"
                 />
               </Form.Item>
             </Col>
