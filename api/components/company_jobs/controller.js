@@ -59,6 +59,12 @@ function getJobsApply(filter){
     });
 }
 
+function getCompanyJobsApply(filter){
+    return new Promise((resolve, reject) => {
+        resolve(store.getApplyCompanyJobs(filter));
+    });
+}
+
 function getCustomList(){
     return new Promise((resolve, reject) => {
         resolve(store.getCustomList());
@@ -106,10 +112,7 @@ function addJob(job, company){
                 reject('No time data');
                 return false; 
         }
-        /*if(logo){
-            const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
-            job.logo = fileUrl;
-        }*/
+        
         const JobResolve = store.add(job); 
         resolve(JobResolve);
     });
@@ -194,5 +197,6 @@ module.exports = {
     deleteJob,
     applyJob,
     getCustomList,
-    getJobsApply
+    getJobsApply,
+    getCompanyJobsApply
 }
