@@ -153,19 +153,20 @@ async function getApplyCompanyJobs(query){
             tags: job.tags
         };
         const filterApply = {
-            job: job._id
+            job: job._id,
+            status: 0
         };
         let applys = await JobsApplysModel.find(filterApply);
         let driversApply = await Promise.all(applys.map( async (apply) =>{
             const filterDriver = {
-                _id: apply.driver,
-                status: 0
+                _id: apply.driver
             };
+            const id = apply._id;
             let users = await User.findOne(filterDriver)
             .populate('driver');
             if(users){
                 const { name, lastname, photo, email, driver } = users;
-                return { name, lastname, photo, email, driver };
+                return { id, name, lastname, photo, email, driver };
             }
         }));
         driversApply = driversApply.filter(Boolean);
