@@ -15,8 +15,7 @@ import {
 } from 'antd';
 import { UploadOutlined, RetweetOutlined } from '@ant-design/icons';
 import {
-  updateUserDrive,
-  onChangeProps
+  updateUserDrive
 } from '@store/reducers/user_reducer';
 import { SpinnerComp } from 'components/helpers';
 import moment from 'moment';
@@ -115,8 +114,7 @@ const DriverUser = (props) => {
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
       .then((response) => {
-        console.log('[ user registry succes ]', response.data);
-        props.handleNewDriverProps(response.data);
+        props.handleNewDriverProps(response.data.data);
         if (props.isJobs) {
           saveApply();
         }
@@ -147,13 +145,19 @@ const DriverUser = (props) => {
     const fullDriver = { base: base, ...driver };
     try {
       setLoader(true);
-      const { data } = await axios.patch('/api/driver/' + _id, fullDriver, header);
-      setLoader(false);
-      notification['success']({
-        message: 'Success',
-        description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
-      });
+      await axios.patch('/api/driver/' + _id, fullDriver, header)
+        .then((response) => {
+          props.handleNewDriverProps(response.data.data);
+          if (props.isJobs) {
+            saveApply();
+          }
+          setLoader(false);
+          notification['success']({
+            message: 'Success',
+            description:
+              "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          });
+        })
     } catch (err) {
       setLoader(false);
       notification['error']({

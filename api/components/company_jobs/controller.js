@@ -71,6 +71,40 @@ function getCustomList(){
     });
 }
 
+function setStatus(id, status){
+    return new Promise((resolve, reject) => {
+        const result = store.setStatus(id, status);
+        switch(result.status){
+            case 200:
+                resolve(result);
+                break;
+            case 500:
+                reject(result);
+                break;
+            default:
+                resolve(result);
+                break;
+        }
+    });
+}
+
+function setRating(id, ranking){
+    return new Promise((resolve, reject) => {
+        const result = store.setRanking(id, ranking);
+        switch(result.status){
+            case 200:
+                resolve(result);
+                break;
+            case 500:
+                reject(result);
+                break;
+            default:
+                resolve(result);
+                break;
+        }
+    });
+}
+
 function addJob(job, company){
     return new Promise((resolve, reject) => {
         job.company = company;
@@ -198,5 +232,7 @@ module.exports = {
     applyJob,
     getCustomList,
     getJobsApply,
-    getCompanyJobsApply
+    getCompanyJobsApply,
+    setStatus,
+    setRating
 }
