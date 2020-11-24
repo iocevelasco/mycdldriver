@@ -24,8 +24,8 @@ import axios from 'axios';
 import WrapperSection from '../../components/wrapperSection';
 import SideNav from '../../components/SideNavAdmin';
 import SearchLocation from '../../components/SearchLocationInput';
-import { PlusOutlined, DeleteOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
-import { extendWith } from 'lodash';
+import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 const { Text, Title } = Typography
 const initialState = {
@@ -384,18 +384,18 @@ const CompanyJobView = (props) => {
     let tagsJob = {};
 
     fields.forEach((e) => {
-        newJob[e.name[0]] = e.value
+      newJob[e.name[0]] = e.value
     });
 
-    if(tags){
+    if (tags) {
       tagsJob = tags.map((tag) => {
         return { name: tag }
       });
     }
 
-    if(city){
+    if (city) {
       newJob.city = city;
-    }else if(!newJob.city){
+    } else if (!newJob.city) {
       notification['error']({
         message: 'error',
         description:
@@ -403,14 +403,14 @@ const CompanyJobView = (props) => {
       });
       return false;
     }
-    
+
     newJob.tags = tagsJob;
     return newJob;
   }
 
   const newCompanyJob = async () => {
     const newJob = beforeToCreateJob(state.fields, state.tags, state.newJob.city);
-    if(!newJob) return;
+    if (!newJob) return;
     if (state.newPhoto.length > 0) {
       newJob.logo = state.newPhoto[0].response.data.file;
     }
@@ -533,8 +533,8 @@ const CompanyJobView = (props) => {
                     <Button icon={<UploadOutlined />}>Click to Upload</Button>
                   </Upload>
                 </Form.Item> */}
-                <Row gutter={[12]} justify='space-between' >
-                  <Col span={6}>
+                <Row gutter={[4, 16]} justify='space-between' >
+                  <Col span={4}>
                     <Form.Item
                       name="areaCode"
                       label="Area Code"
@@ -560,7 +560,7 @@ const CompanyJobView = (props) => {
                       <Input />
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
+                  <Col span={10}>
                     <Form.Item
                       name="email"
                       label="Email"
@@ -625,6 +625,7 @@ const CompanyJobView = (props) => {
                 <Col span={6}>
                   <Button
                     htmlType="submit"
+                    shape="round"
                     type='primary'
                     block
                     size='large'>Create Job position</Button>
@@ -654,8 +655,13 @@ const CompanyJobView = (props) => {
                     <List.Item
                       key={ind}
                       actions={[
-                        <Button onClick={() => deleteJob(item._id)} icon={<DeleteOutlined />}>Delete</Button>,
-                        <Button onClick={() => editJob(item)} icon={<EditOutlined />}>Edit</Button>,
+                        <Button style={{ borderRadius: 50 }} onClick={() => deleteJob(item._id)} icon={<DeleteOutlined />}>Delete</Button>,
+                        <Button style={{ borderRadius: 50 }} onClick={() => editJob(item)} icon={<EditOutlined />}>Edit</Button>,
+                        <Link href={{
+                          pathname: '/userProfile/company/candidate',
+                          query: { id: item._id },
+                        }}
+                        > View candidate </Link>
                       ]}>
                       <List.Item.Meta
                         avatar={<Avatar size={80} shape='square' src={item.logo} />}

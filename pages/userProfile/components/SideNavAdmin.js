@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, Col,   Button, } from 'antd';
+import { Menu, Col, Button, } from 'antd';
 import { connect } from 'react-redux';
 import {
   HomeOutlined,
   UserOutlined,
   TeamOutlined,
   ToolOutlined,
-  DashboardOutlined, 
-  LeftOutlined
+  DashboardOutlined,
+  LeftOutlined,
+  CarOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
 
 // CONNECT WITH REDUX
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
     user: state.user,
     isUseSucces: state.user.typeUser
@@ -22,7 +23,7 @@ function mapStateToProps(state){
 const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
   const [menuOptions, setOptions] = useState([]);
   const { typeUser } = user;
-  
+
   useEffect(() => {
     if (typeUser == 1) setOptions(driverOption);
     else if (typeUser == 2) setOptions(companyOption);
@@ -37,6 +38,11 @@ const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
     {
       path: '/userProfile/company/jobs',
       section_name: 'Jobs',
+      icon: <CarOutlined />
+    },
+    {
+      path: '/userProfile/company/candidate',
+      section_name: 'Candidate',
       icon: <TeamOutlined />
     },
   ]
@@ -98,30 +104,30 @@ const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
   //     icon: <DashboardOutlined />
   //   },
   // ]
-    return (
-      <Col span={4}
-        style={{ background: '#001529' }}>
-        <Menu
-          style={{ width: '100%' }}
-          defaultSelectedKeys={[currentLocation]}
-          mode='vertical'
-          theme='dark'>
-          {
-            menuOptions.map((e, i) => {
-              return (
-                <Menu.Item key={i} icon={e.icon}>
-                  <Link href={e.path}>
-                    {e.section_name}
-                  </Link>
-                </Menu.Item>)
-            })
-          }
-        </Menu>
+  return (
+    <Col span={4}
+      style={{ background: '#001529' }}>
+      <Menu
+        style={{ width: '100%' }}
+        defaultSelectedKeys={[currentLocation]}
+        mode='vertical'
+        theme='dark'>
         {
+          menuOptions.map((e, i) => {
+            return (
+              <Menu.Item key={i} icon={e.icon}>
+                <Link href={e.path}>
+                  {e.section_name}
+                </Link>
+              </Menu.Item>)
+          })
+        }
+      </Menu>
+      {
         !isUseSucces ? <Link href="/userProfile">
-          <Button 
-            shape="round" 
-            size="large" 
+          <Button
+            shape="round"
+            size="large"
             icon={<LeftOutlined />}
             type='primary'
             style={{
@@ -129,11 +135,11 @@ const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
               width: '90%',
               marginLeft: 12,
             }}
-            > Go Back </Button>
+          > Go Back </Button>
         </Link> : null
-        }
-      </Col>
-    )
+      }
+    </Col>
+  )
 }
 
 export default connect(mapStateToProps)(SideNavAdmin);
