@@ -82,6 +82,56 @@ function getApplyJobs(filterQuery){
     });
 }
 
+async function setStatus(id, status){
+    const filter = {
+        _id: id
+    };
+    try{
+        if(!id){
+            throw new Error();
+        }
+        const apply = await JobsApplysModel.findOne(filter);
+        console.log(apply);
+        apply.status = status;
+        await apply.save();
+        return {
+            status: 200,
+            message: 'Ok'
+        };
+    }catch(e){
+        console.log(e);
+        return {
+            status: 500,
+            message: 'Invalid data recived for apply job'
+        };
+    }
+    
+}
+
+async function setRanking(id, ranking){
+    const filter = {
+        _id: id
+    };
+    try{
+        const apply = await JobsApplysModel.findOne(filter);
+        if(!id){
+            throw new Error();
+        }
+        apply.ranking = ranking;
+        await apply.save();
+        return {
+            status: 200,
+            message: 'Ok'
+        };
+    }catch(e){
+        console.log(e);
+        return {
+            status: 500,
+            message: 'Invalid data recived for apply job'
+        };
+    }
+}
+
 async function getApplyCompanyJobs(query){
     let result = []; 
     var id = mongoose.Types.ObjectId(query.company);
@@ -273,5 +323,7 @@ module.exports = {
     applyJob,
     getCustomList,
     getApplyJobs,
-    getApplyCompanyJobs
+    getApplyCompanyJobs,
+    setStatus,
+    setRanking
 }
