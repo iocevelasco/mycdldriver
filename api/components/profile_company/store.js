@@ -82,7 +82,9 @@ async function updateCompany(id, user){
     
     await foundUser.save();
     await foundCompany.save();
-    return true;
+    const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = foundUser;
+    user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date };
+    return {user, foundCompany};
 }
 
 module.exports = {
