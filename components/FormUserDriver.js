@@ -65,7 +65,13 @@ const DriverUser = (props) => {
     }
 
     for (let key in props.user.driver) {
-      if (key != 'date' && key != "birthDate" && key != "expDateDln") {
+      if (key == "birthDate" || key == "expDateDln") {
+        let inputs = {
+          name: [key],
+          value: moment(props.user.driver[key])
+        }
+        fields.push(inputs);
+      } else {
         let inputs = {
           name: [key],
           value: props.user.driver[key]
