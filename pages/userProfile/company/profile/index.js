@@ -120,11 +120,7 @@ const CompanyProfileView = (props) => {
       Authorization: `Bearer ${props.token}`
     },
     async onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
       if (info.file.status === 'done') {
-
         message.success(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} file upload failed.`);
@@ -232,7 +228,7 @@ const CompanyProfileView = (props) => {
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
       });
     } catch (err) {
       dispatch({ type: types.LOADING, payload: false });
@@ -263,7 +259,7 @@ const CompanyProfileView = (props) => {
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
       });
     } catch (err) {
       console.log(err);

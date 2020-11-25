@@ -9,6 +9,7 @@ import {
   Typography,
   Drawer,
   Button,
+  Table,
   Divider
 } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
@@ -19,10 +20,6 @@ import moment from 'moment';
 import axios from 'axios';
 const { Title, Text } = Typography;
 
-const initialState = {
-  loading: true,
-  jobs: [],
-}
 const types = {
   FETCH_DATA: 'FETCH_DATA',
 }
@@ -36,7 +33,24 @@ function mapStateToProps(state) {
 const CandidateView = ({ user, ...props }) => {
   const [candidates, setCandidates] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [driverDetail, setDetail] = useState({});
+  const [loading, setLoadin] = useState(true);
+  const [detail, setDetail] = useState({
+    email: '',
+    lastname: '',
+    name: '',
+    photo: '',
+    driver: {
+      address: '',
+      birthDate: '',
+      description: '',
+      dln: '',
+      expDateDln: '',
+      experience: null,
+      phoneNumber: null,
+      sex: 0,
+      zipCode: ''
+    }
+  });
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
@@ -51,30 +65,40 @@ const CandidateView = ({ user, ...props }) => {
   }, [user]);
 
   const fetchCandidates = async () => {
-    let mock = [
-      { name: 'name', photo: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', _id: 1234 },
-      { name: 'name', photo: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', _id: 1234 },
-      { name: 'name', photo: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', _id: 1234 },
-      { name: 'name', photo: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', _id: 1234 },
-      { name: 'name', photo: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', _id: 1234 },
-      { name: 'name', photo: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', _id: 1234 },
-      { name: 'name', photo: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', _id: 1234 },
-    ]
-    try {
-      const { data } = await axios.post(`/api/company/jobs/myjobs`, {}, header);
-      setCandidates(mock);
-    } catch (err) {
-      console.log(err)
-    }
+    await axios.post(`/api/company/jobs/applys`, {}, header)
+      .then((response) => {
+        setCandidates(response.data.data);
+        setLoadin(false);
+      })
+      .catch((err) => {
+        setLoadin(false);
+        console.log(err)
+      })
   }
 
-  const handleDrawer = async () => {
+  const handleDrawer = async (driver) => {
     if (!visible) {
       setVisible(true);
-      const { data } = await axios.get(`/api/company/jobs/myjobs`, {}, header);
+      setDetail(driver);
     } else {
       setVisible(false);
-      setDetail({})
+      setDetail({
+        email: '',
+        lastname: '',
+        name: '',
+        photo: '',
+        driver: {
+          address: '',
+          birthDate: '',
+          description: '',
+          dln: '',
+          expDateDln: '',
+          experience: null,
+          phoneNumber: null,
+          sex: 0,
+          zipCode: ''
+        }
+      })
     }
   }
 
@@ -92,38 +116,80 @@ const CandidateView = ({ user, ...props }) => {
     backgroundSize: 'contain',
   }
 
+  const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+      width: '60%'
+    },
+    {
+      title: 'City',
+      dataIndex: 'city',
+      key: 'city',
+    },
+    {
+      title: 'Time',
+      dataIndex: 'time',
+      key: 'time',
+    },
+  ];
+
+  const resolSexType = (props) => {
+    let sexType
+    if (props == 0) {
+      sexType = 'Man'
+    } else if (props == 1) {
+      sexType = 'Woman'
+    } else {
+      sexType = 'Other'
+    }
+    return sexType
+  }
+
   return (
     <MainLayout {...configSection}>
       <Row>
         <SideNav
           currentLocation='2' />
         <Col span={20}>
-          <WrapperSection row={18} styles={stylesWrapper}>
+          <WrapperSection row={22} styles={stylesWrapper}>
             <Card>
-              <List
-                header={<Title level={4}>Applyed Jobs</Title>}
-                itemLayout="horizontal"
-                bordered
-                dataSource={candidates}
-                renderItem={item => (
-                  <List.Item
-                    key={item._d}
-                    actions={[
-                      <a onClick={() => handleDrawer(item._id)}>
-                        View Profile
-                      </a>,
-                    ]}
-                  >
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" />
-                      }
-                      title={<a href="https://ant.design/index-cn">{item.name}</a>}
-                      description="Progresser XTech"
+              <Table
+                rowKey='id'
+                loading={loading}
+                columns={columns}
+                expandable={{
+                  expandedRowRender: record => {
+                    return <List
+                      header={<Title level={4}>Applyed Jobs</Title>}
+                      itemLayout="horizontal"
+                      bordered
+                      dataSource={record.appys}
+                      renderItem={item => (
+                        <List.Item
+                          key={item._d}
+                          actions={[
+                            <a onClick={() => handleDrawer(item)}>
+                              View Profile
+                          </a>,
+                          ]}
+                        >
+                          <List.Item.Meta
+                            avatar={
+                              <Avatar src={item.photo} />
+                            }
+                            title={<p>{`${item.name} ${item.lastname}`} </p>}
+                            description={item.email}
+                          />
+                        </List.Item>
+                      )}
                     />
-                  </List.Item>
-                )}
+                  }
+                }}
+                dataSource={candidates}
               />
+
             </Card>
             <Drawer
               width={640}
@@ -134,7 +200,7 @@ const CandidateView = ({ user, ...props }) => {
             >
               <Row align='middle'>
                 <Col span={4}>
-                  <Avatar size={80} />
+                  <Avatar size={80} src={detail.photo} />
                 </Col>
                 <Col span={12}>
                   <p className="site-description-item-profile-p" style={{ marginBottom: 24 }}>
@@ -146,38 +212,28 @@ const CandidateView = ({ user, ...props }) => {
               <p className="site-description-item-profile-p">Personal</p>
               <Row>
                 <Col span={12}>
-                  <DescriptionItem title="Full Name" content="Lily" />
+                  <DescriptionItem title="Full Name" content={`${detail.name} ${detail.lastname}`} />
                 </Col>
                 <Col span={12}>
-                  <DescriptionItem title="Account" content="AntDesign@example.com" />
+                  <DescriptionItem title="Birthday" content={`${moment(detail.driver.birthDate).format('YYYY-MM-DD')}`} />
                 </Col>
               </Row>
               <Row>
                 <Col span={12}>
-                  <DescriptionItem title="City" content="HangZhou" />
+                  <DescriptionItem title="Address" content={resolSexType(detail.driver.sex)} />
                 </Col>
                 <Col span={12}>
-                  <DescriptionItem title="Country" content="China🇨🇳" />
-                </Col>
-              </Row>
-              <Row>
-                <Col span={12}>
-                  <DescriptionItem title="Birthday" content="February 2,1900" />
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
-                  <DescriptionItem title="Description" content="lorem ipsum" />
+                  <DescriptionItem title="Experience" content={detail.driver.experience || 0} />
                 </Col>
               </Row>
               <Divider />
               <p className="site-description-item-profile-p">Contacts</p>
               <Row>
                 <Col span={12}>
-                  <DescriptionItem title="Email" content="AntDesign@example.com" />
+                  <DescriptionItem title="Email" content={`${detail.email}`} />
                 </Col>
                 <Col span={12}>
-                  <DescriptionItem title="Phone Number" content="+86 181 0000 0000" />
+                  <DescriptionItem title="Phone Number" content={`${detail.driver.phoneNumber}`} />
                 </Col>
               </Row>
               <Row justify='center' gutter={[16]} align='middle'>
