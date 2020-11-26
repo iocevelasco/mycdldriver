@@ -176,14 +176,6 @@ const CompanyJobView = (props) => {
     }
   }
 
-  const onChangeJob = (e, key) => {
-    let newJob = state.newJob;
-    let value = "";
-    value = e.target.value;
-    newJob[key] = value;
-    dispatch({ type: types.JOB_DATA, payload: newJob });
-  }
-
   const updateQuery = (formatted_address) => {
     let newJob = state.newJob;
     newJob['city'] = formatted_address;
