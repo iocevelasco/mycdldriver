@@ -7,6 +7,12 @@ function getUsers(filterUsers){
     });
 }
 
+function setPhoto(id, photo){
+    return new Promise((resolve, reject) => {
+        resolve(store.updatePhoto(id, photo));
+    });
+}
+
 function addUserDirect(user){
     return new Promise((resolve, reject) => {
         if(!user){
@@ -142,5 +148,6 @@ module.exports = {
     loginProviderUser,
     loginAfterRegUser,
     setPrelogin,
-    getPrelogin
+    getPrelogin,
+    setPhoto
 }

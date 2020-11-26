@@ -13,10 +13,9 @@ import {
   notification,
   message
 } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, RetweetOutlined } from '@ant-design/icons';
 import {
-  updateUserDrive,
-  onChangeProps
+  updateUserDrive
 } from '@store/reducers/user_reducer';
 import { SpinnerComp } from 'components/helpers';
 import moment from 'moment';
@@ -50,6 +49,7 @@ const DriverUser = (props) => {
   const { router } = props;
   const [form] = Form.useForm();
   const [imageDln, setImage] = useState([]);
+  const [photo, setPhoto] = useState([]);
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
 
@@ -65,7 +65,13 @@ const DriverUser = (props) => {
     }
 
     for (let key in props.user.driver) {
-      if(key != 'date' && key != "birthDate" && key != "expDateDln"){
+      if (key == "birthDate" || key == "expDateDln") {
+        let inputs = {
+          name: [key],
+          value: moment(props.user.driver[key])
+        }
+        fields.push(inputs);
+      } else {
         let inputs = {
           name: [key],
           value: props.user.driver[key]
@@ -100,16 +106,15 @@ const DriverUser = (props) => {
     }
     base.photo = props.photo;
     base.typeUser = 1;
-    if(props.facebook_id)
+    if (props.facebook_id)
       base.facebook_id = props.facebook_id;
-    if(props.google_id)
+    if (props.google_id)
       base.google_id = props.google_id;
-    
+
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
       .then((response) => {
-        console.log('[ user registry succes ]', response.data);
-        props.handleNewDriverProps(response.data);
+        props.handleNewDriverProps(response.data.data);
         if (props.isJobs) {
           saveApply();
         }
@@ -117,7 +122,7 @@ const DriverUser = (props) => {
         notification['success']({
           message: 'Success',
           description:
-            "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+            "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
         });
       })
       .catch((err) => {
@@ -140,13 +145,19 @@ const DriverUser = (props) => {
     const fullDriver = { base: base, ...driver };
     try {
       setLoader(true);
-      const { data } = await axios.patch('/api/driver/' + _id, fullDriver, header);
-      setLoader(false);
-      notification['success']({
-        message: 'Success',
-        description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
-      });
+      await axios.patch('/api/driver/' + _id, fullDriver, header)
+        .then((response) => {
+          props.handleNewDriverProps(response.data.data);
+          if (props.isJobs) {
+            saveApply();
+          }
+          setLoader(false);
+          notification['success']({
+            message: 'Success',
+            description:
+              "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
+          });
+        })
     } catch (err) {
       setLoader(false);
       notification['error']({
@@ -169,6 +180,44 @@ const DriverUser = (props) => {
     }
     return isJpgOrPng && isLt2M;
   }
+
+  const propsPhoto = {
+    name: 'logo',
+    action: '/api/files',
+    headers: {
+      authorization: `Bearer ${props.token}`
+    },
+    async onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+
+      if (photo > 0) {
+        try {
+          const file = {
+            foto: photo[0].response.data.file
+          };
+          await axios.post(`/api/files/delete`, file);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      setPhoto(fileList);
+    }
+  };
 
   const propsUpload = {
     name: 'logo',
@@ -247,11 +296,23 @@ const DriverUser = (props) => {
           <Row justify='center'>
             <div className='avatar'>
               <Avatar src={props.photo} size={120} />
+              <Upload {...propsPhoto}
+                fileList={photo}
+                showUploadList={false}
+                beforeUpload={beforeUpload}
+              >
+                <Button
+                  type='primary'
+                  size='small'
+                  shape="circle"
+                  icon={<RetweetOutlined />} />
+              </Upload>
             </div>
           </Row>
           <Form
             fields={fields}
             form={form}
+            onFinish={props.isUserRegistry ? updateDriver : newDrivers}
             name="global_state"
             layout='vertical'
             onFieldsChange={onChangeProps}>
@@ -408,7 +469,7 @@ const DriverUser = (props) => {
               <Col span={18}>
                 <Form.Item
                   name='address'
-                  label="Addres"
+                  label="Address"
                   rules={[
                     {
                       required: true,
@@ -448,31 +509,22 @@ const DriverUser = (props) => {
                 name='description'>
                 <TextArea
                   rows={4}
-                  placeholder="Telling us about your background"
+                  placeholder="Tell us something about your background"
                 />
               </Form.Item>
             </Col>
+            <Row gutter={[24]} justify='center' align='middle'>
+              <Col span={12}>
+                <Button
+                  style={{ marginTop: 24 }}
+                  type='primary'
+                  shape="round"
+                  htmlType="submit"
+                  block
+                  size='large'>{props.isUserRegistry ? 'Update Information' : 'Complete profile'} </Button>
+              </Col>
+            </Row>
           </Form>
-          <Row gutter={[24]} justify='center' align='middle'>
-            <Col span={12}>
-              {
-                props.isUserRegistry ?
-                  <Button
-                    onClick={updateDriver}
-                    type='primary'
-                    shape="round"
-                    block
-                    size='large'>Update Information</Button> :
-                  <Button
-                    onClick={newDrivers}
-                    type='primary'
-                    shape="round"
-                    block
-                    size='large'>Complete profile</Button>
-              }
-
-            </Col>
-          </Row>
         </Col>
       </Row>
       <SpinnerComp active={loading} />

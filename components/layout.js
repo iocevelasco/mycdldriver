@@ -1,112 +1,113 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { withRouter } from 'next/router';
 import Head from 'next/head'
 import Footer from './footer';
 import Link from 'next/link';
 import SpinnerComp from '../components/loading';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { logoutUser, getCurrentLocation } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import { deviceType } from '@store/reducers/landing_reducer';
 import ModalLogin from 'components/modal_login';
-import { 
-    Layout, 
-    Row, 
-    Col, 
-    Button, 
-    Avatar, 
+import {
+    Layout,
+    Row,
+    Col,
+    Button,
+    Avatar,
     Typography,
-    Menu, 
+    Menu,
     Dropdown,
     Space
 } from 'antd';
-import { 
+import {
     UserOutlined,
-    DownOutlined} 
-from '@ant-design/icons';
+    DownOutlined
+}
+    from '@ant-design/icons';
 
 import '../styles/index.less';
 
 const { Text, Title } = Typography;
 const { Content, Header } = Layout;
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
         user: state.user,
-        isLoading :state.landing.isLoading
+        isLoading: state.landing.isLoading
     }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
     return {
-      handleLogout: () => dispatch(logoutUser()),
-      handleModal:(prop) => dispatch(handlerModalLogin(prop)),
-      handleLocation:(location) => dispatch(getCurrentLocation(location)),
-      handleDeviceType: (props) => dispatch(deviceType(props))
+        handleLogout: () => dispatch(logoutUser()),
+        handleModal: (prop) => dispatch(handlerModalLogin(prop)),
+        handleLocation: (location) => dispatch(getCurrentLocation(location)),
+        handleDeviceType: (props) => dispatch(deviceType(props))
     }
-  };
+};
 
 const MainLayout = ({ children, title, user, isLoading, router, bgActive, deviceType, ...props }) => {
     const [loader, setLoader] = useState(isLoading);
-    const [userProps, setUserProps] = useState({ 
-        name:'',
-        email:'',
-        id:'',
-        photo:'',
+    const [userProps, setUserProps] = useState({
+        name: '',
+        email: '',
+        id: '',
+        photo: '',
         typeUser: ''
     });
 
-    useEffect(()=>{
-        if(!user) return
-        const { name, lastname, email, photo, _id, typeUser} = user;
-        setUserProps({ 
-            name:name + " " + lastname,
-            email:email,
-            id:_id ,
-            photo:photo,
+    useEffect(() => {
+        if (!user) return
+        const { name, lastname, email, photo, _id, typeUser } = user;
+        setUserProps({
+            name: name + " " + lastname,
+            email: email,
+            id: _id,
+            photo: photo,
             typeUser: typeUser
         });
         props.handleDeviceType(deviceType)
-    },[user])
+    }, [user])
 
-    useEffect(()=>{
+    useEffect(() => {
         setLoader(isLoading);
-        if(isLoading){
+        if (isLoading) {
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
             document.body.style.overflowY = "hidden"
-        }else{
+        } else {
             document.body.style.overflowY = "auto"
         }
-    },[isLoading]);
-    let bg = bgActive ? { 
-            background: `url('/static/images/bg-routes.jpg')`,
-            backgroundSize:'contain',
-        } : {
+    }, [isLoading]);
+    let bg = bgActive ? {
+        background: `url('/static/images/bg-routes.jpg')`,
+        backgroundSize: 'contain',
+    } : {
             background: `#fff`,
-            backgroundSize:'contain',
+            backgroundSize: 'contain',
         }
     const menu = (
-        <Menu style={{width: '200px', float:'right'}}>
-          <Menu.Item>
-            <Link href={userProps.typeUser === 1 ? '/userProfile/driver' : '/userProfile/company'}>
-                <Button type='link'>
-                    Profile
+        <Menu style={{ width: '200px', float: 'right' }}>
+            <Menu.Item>
+                <Link href={userProps.typeUser === 1 ? '/userProfile/driver/profile' : '/userProfile/company/profile'}>
+                    <Button type='link'>
+                        Profile
                 </Button>
-            </Link>
-          </Menu.Item>
-          <Menu.Item >
-            <Button type='link' onClick={()=>{
-                setLoader(true);
-                props.handleLogout();
-                router.push('/logout')
+                </Link>
+            </Menu.Item>
+            <Menu.Item >
+                <Button type='link' onClick={() => {
+                    setLoader(true);
+                    props.handleLogout();
+                    router.push('/logout')
                 }} >
-                Logout
+                    Logout
             </Button>
-          </Menu.Item>
+            </Menu.Item>
         </Menu>
-      );
+    );
 
     return (<>
         <Head>
@@ -115,39 +116,44 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
         </Head>
         <Layout>
             <Header className='header-component'>
-                {loader ? <SpinnerComp/> : null}
+                {loader ? <SpinnerComp /> : null}
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
-                           <img src='/static/images/logo.svg' />
+                            <img src='/static/images/logo.svg' />
                         </Link>
                     </Col>
                     <Col span={10}>
-                    {
-                     user.isLogin ?
-                        <Dropdown overlay={menu}>
-                             <Row justify='end' align='middle'>
-                                <Space size='large'>
-                                <DownOutlined /> 
-                                <Text strong>{userProps.name}</Text> 
-                                <Avatar src={userProps.photo} />
-                             </Space>
-                            </Row>
-                       </Dropdown>
-                     : 
-                        <Row justify='end' align='middle'>
-                            <Button 
-                            shape="round" 
-                            icon={<UserOutlined/>}
-                            onClick={()=> {
-                                props.handleModal(true);
-                                props.handleLocation(router.pathname);
-                            }}
-                            type="secondary" size='large'>
-                                Login
+                        <Link href="/">
+                            Home
+                        </Link>
+                    </Col>
+                    <Col span={10}>
+                        {
+                            user.isLogin ?
+                                <Dropdown overlay={menu}>
+                                    <Row justify='end' align='middle'>
+                                        <Space size='large'>
+                                            <DownOutlined />
+                                            <Text strong>{userProps.name}</Text>
+                                            <Avatar src={userProps.photo} />
+                                        </Space>
+                                    </Row>
+                                </Dropdown>
+                                :
+                                <Row justify='end' align='middle'>
+                                    <Button
+                                        shape="round"
+                                        icon={<UserOutlined />}
+                                        onClick={() => {
+                                            props.handleModal(true);
+                                            props.handleLocation(router.pathname);
+                                        }}
+                                        type="secondary" size='large'>
+                                        Login
                             </Button>
-                        </Row>   
-                    }
+                                </Row>
+                        }
                     </Col>
                 </Row>
             </Header>
@@ -164,11 +170,11 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
 }
 
 MainLayout.propTypes = {
-  children: propTypes.object,
-  title: propTypes.string.isRequired,
-  user: propTypes.object,
-  loading: propTypes.bool,
-  router :propTypes.object
+    children: propTypes.object,
+    title: propTypes.string.isRequired,
+    user: propTypes.object,
+    loading: propTypes.bool,
+    router: propTypes.object
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainLayout));

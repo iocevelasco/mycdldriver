@@ -58,6 +58,7 @@ function updateUserCompany(props) {
 }
 
 function updateUserDrive(props) {
+    console.log(props);
     let { user, driver } = props;
     return {
         type: types.UPDATE_USER_DRIVER,

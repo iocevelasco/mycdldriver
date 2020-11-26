@@ -93,7 +93,9 @@ async function updateDriver(id, user){
     
     await foundUser.save();
     await foundDriver.save();
-    return true;
+    const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = foundUser;
+    user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date };
+    return {user, foundDriver};
 }
 
 async function deleteDriver(id){

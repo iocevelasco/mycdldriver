@@ -21,7 +21,16 @@ const JobsApplysSchema = mongoose.Schema({
     job: {
         type: Schema.ObjectId,
         ref: 'CompanyJobs',
-    }
+    },
+    status: {
+        type: Number,
+        default: 0
+    },
+    ranking: {
+        type: Number,
+        default: 0
+    },
+
 });
 
 const CompanyJobsSchema = mongoose.Schema({

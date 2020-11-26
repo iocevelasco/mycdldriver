@@ -53,15 +53,69 @@ async function getJob(filter){
     return (result);
 }
 
-function getJobsApply(filter){
+async function getJobsApply(filter){
+    const result = await store.getApplyJobs(filter);
+    switch(result.status){
+        case 0: 
+            result.status = "Pending";
+            break;
+        case 1: 
+            result.status = "Approved";
+            break;
+        case 1: 
+            result.status = "Rejected";
+            break;
+        default: 
+            result.status = "Pending";
+            break;
+    }
+    console.log("[ RESULT ]", result);
+    return result;
+}
+
+function getCompanyJobsApply(filter){
     return new Promise((resolve, reject) => {
-        resolve(store.getApplyJobs(filter));
+        resolve(store.getApplyCompanyJobs(filter));
     });
 }
 
 function getCustomList(){
     return new Promise((resolve, reject) => {
         resolve(store.getCustomList());
+    });
+}
+
+function setStatus(id, status){
+    return new Promise((resolve, reject) => {
+        const result = store.setStatus(id, status);
+        switch(result.status){
+            case 200:
+                resolve(result);
+                break;
+            case 500:
+                reject(result);
+                break;
+            default:
+                resolve(result);
+                break;
+        }
+    });
+}
+
+function setRating(id, ranking){
+    return new Promise((resolve, reject) => {
+        const result = store.setRanking(id, ranking);
+        switch(result.status){
+            case 200:
+                resolve(result);
+                break;
+            case 500:
+                reject(result);
+                break;
+            default:
+                resolve(result);
+                break;
+        }
     });
 }
 
@@ -106,10 +160,7 @@ function addJob(job, company){
                 reject('No time data');
                 return false; 
         }
-        /*if(logo){
-            const fileUrl = logo ? config.publicRoute + config.filesRoute + '/' + logo.filename : '';
-            job.logo = fileUrl;
-        }*/
+        
         const JobResolve = store.add(job); 
         resolve(JobResolve);
     });
@@ -194,5 +245,8 @@ module.exports = {
     deleteJob,
     applyJob,
     getCustomList,
-    getJobsApply
+    getJobsApply,
+    getCompanyJobsApply,
+    setStatus,
+    setRating
 }

@@ -1,5 +1,7 @@
 const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
+const { User } = require('../user/model');
 const ProfileCompany = require('../profile_company/model');
+const mongoose = require('mongoose');
 const fs = require('fs');
 
 function capitalize(text) {
@@ -78,6 +80,104 @@ function getApplyJobs(filterQuery){
         .populate('job');
         resolve(result);
     });
+}
+
+async function setStatus(id, status){
+    const filter = {
+        _id: id
+    };
+    try{
+        if(!id){
+            throw new Error();
+        }
+        const apply = await JobsApplysModel.findOne(filter);
+        console.log(apply);
+        apply.status = status;
+        await apply.save();
+        return {
+            status: 200,
+            message: 'Ok'
+        };
+    }catch(e){
+        console.log(e);
+        return {
+            status: 500,
+            message: 'Invalid data recived for apply job'
+        };
+    }
+    
+}
+
+async function setRanking(id, ranking){
+    const filter = {
+        _id: id
+    };
+    try{
+        const apply = await JobsApplysModel.findOne(filter);
+        if(!id){
+            throw new Error();
+        }
+        apply.ranking = ranking;
+        await apply.save();
+        return {
+            status: 200,
+            message: 'Ok'
+        };
+    }catch(e){
+        console.log(e);
+        return {
+            status: 500,
+            message: 'Invalid data recived for apply job'
+        };
+    }
+}
+
+async function getApplyCompanyJobs(query){
+    let result = []; 
+    var id = mongoose.Types.ObjectId(query.company);
+    if(id){
+        filter = {company: id};
+    }
+    const jobs = await JobsModel.find(filter);
+    result = await Promise.all(jobs.map( async (job) => {
+        let item = {
+            id: job._id,
+            title: job.title,
+            description: job.description,
+            areaCode: job.areaCode,
+            logo: job.logo,
+            phoneNumber: job.phoneNumber,
+            email: job.email,
+            city: job.city,
+            time: job.time,
+            tags: job.tags
+        };
+        const filterApply = {
+            job: job._id,
+            status: 0
+        };
+        let applys = await JobsApplysModel.find(filterApply);
+        let driversApply = await Promise.all(applys.map( async (apply) =>{
+            const filterDriver = {
+                _id: apply.driver
+            };
+            const id = apply._id;
+            let users = await User.findOne(filterDriver)
+            .populate('driver');
+            if(users){
+                const { name, lastname, photo, email, driver } = users;
+                return { id, name, lastname, photo, email, driver };
+            }
+        }));
+        driversApply = driversApply.filter(Boolean);
+        if(driversApply.length > 0){
+            item.appys = driversApply;
+            item.totaluser = driversApply.length;
+            return item;
+        }
+    }));
+    result = result.filter(Boolean);
+    return result;
 }
 
 async function getCustomList(){
@@ -225,5 +325,8 @@ module.exports = {
     delete: deleteJob,
     applyJob,
     getCustomList,
-    getApplyJobs
+    getApplyJobs,
+    getApplyCompanyJobs,
+    setStatus,
+    setRanking
 }

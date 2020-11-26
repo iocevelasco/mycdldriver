@@ -13,10 +13,6 @@ const profileCompanySchema = mongoose.Schema({
         unique: true,
         required: true
     },
-    logo: {
-        type: String,
-        trim: true
-    },
     areaCode: {
         type: Number
     },

@@ -21,6 +21,7 @@ const initialState = {
   fields: [],
   logo: [],
   photo: [],
+  imageProfile: null,
 }
 
 const types = {
@@ -30,7 +31,8 @@ const types = {
   LOADING: 'LOADING',
   UPLOAD_IMAGE: 'UPLOAD_IMAGE',
   UPLOAD_PHOTO: 'UPLOAD_PHOTO',
-  LOGIN_SUCCCESS: 'LOGIN_SUCCCESS'
+  LOGIN_SUCCCESS: 'LOGIN_SUCCCESS',
+  UPLOAD_IMAGE_PROFILE: 'UPLOAD_IMAGE_PROFILE'
 }
 
 const reducer = (state, action) => {
@@ -45,6 +47,10 @@ const reducer = (state, action) => {
       return { ...state, logo: action.payload }
     case types.UPLOAD_PHOTO:
       return { ...state, photo: action.payload }
+    case types.UPLOAD_PHOTO:
+      return { ...state, photo: action.payload }
+    case types.UPLOAD_IMAGE_PROFILE:
+      return { ...state, imageProfile: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -92,7 +98,7 @@ const CompanyProfileView = (props) => {
     }
 
     for (let key in props.user.company) {
-      if(key != 'date'){
+      if (key != 'date') {
         let inputs = {
           name: [key],
           value: props.user.company[key]
@@ -107,28 +113,13 @@ const CompanyProfileView = (props) => {
     dispatch({ type: types.DATA_COMPANY, payload: allFields });
   }
 
-  function beforeUpload(file) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-  }
-
   const propsUpload = {
     name: 'photo',
     action: '/api/files',
     headers: {
-      authorization: 'authorization-text'
+      Authorization: `Bearer ${props.token}`
     },
     async onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
       if (info.file.status === 'done') {
         message.success(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === 'error') {
@@ -161,7 +152,7 @@ const CompanyProfileView = (props) => {
     name: 'logo',
     action: '/api/files',
     headers: {
-      authorization: 'authorization-text'
+      authorization: `Bearer ${props.token}`
     },
     async onChange(info) {
       if (info.file.status !== 'uploading') {
@@ -191,6 +182,7 @@ const CompanyProfileView = (props) => {
           console.log(e);
         }
       }
+      dispatch({ type: types.UPLOAD_IMAGE_PROFILE, payload: fileList[0].response });
       dispatch({ type: types.UPLOAD_PHOTO, payload: fileList });
     }
   };
@@ -224,7 +216,7 @@ const CompanyProfileView = (props) => {
     }
     if (state.photo.length > 0) {
       base.photo = state.photo[0].response.data.file;
-    }else{
+    } else {
       base.photo = props.photo;
     }
     const fullCompany = { base: base, ...company }
@@ -236,7 +228,7 @@ const CompanyProfileView = (props) => {
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
       });
     } catch (err) {
       dispatch({ type: types.LOADING, payload: false });
@@ -262,12 +254,18 @@ const CompanyProfileView = (props) => {
     try {
       dispatch({ type: types.LOADING, payload: true });
       const { data } = await axios.patch('/api/company/' + props._id, fullCompany, header);
-      props.handlreNewUserProps(data.data);
+
+      let update = {
+        user: data.data.user,
+        company: data.data.foundCompany
+      };
+
+      props.handlreNewUserProps(update);
       dispatch({ type: types.LOADING, payload: false });
       notification['success']({
         message: 'Success',
         description:
-          "it's done!. You can now start browsing our page. IF you need to edit you profile you can do it here!"
+          "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
       });
     } catch (err) {
       console.log(err);
@@ -284,10 +282,10 @@ const CompanyProfileView = (props) => {
     logo: state.logo,
     photo: state.photo,
     fields: state.fields,
+    imageProfile: state.imageProfile,
     onChangeCompany,
     newCompany,
     updateCompany,
-    beforeUpload,
     propsUpload,
     propsPhoto
   }
