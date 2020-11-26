@@ -81,7 +81,7 @@ const JobsDriverView = ({ user, ...props }) => {
           <WrapperSection row={18} styles={stylesWrapper}>
             <Card>
               <List
-                header={<Title level={4}>Applyed Jobs</Title>}
+                header={<Title level={4}>Applied jobs</Title>}
                 itemLayout="horizontal"
                 dataSource={state.jobs}
                 renderItem={item => {
@@ -92,7 +92,7 @@ const JobsDriverView = ({ user, ...props }) => {
                         <div>
                           <Title level={3}> {item.job.title} </Title>
                           <div>
-                            <Text> Addres </Text>
+                            <Text> Address </Text>
                             <Text strong> {item.job.city} </Text> <Text strong > | </Text>
                             <Text> Date </Text>
                             <Text strong> {moment(item.job.date).format('YYYY-MM-DD')} </Text>

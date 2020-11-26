@@ -121,7 +121,7 @@ const CandidateView = ({ user, ...props }) => {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
-      width: '60%'
+      width: '40%'
     },
     {
       title: 'City',
@@ -129,13 +129,23 @@ const CandidateView = ({ user, ...props }) => {
       key: 'city',
     },
     {
+      title: 'Total Candidate',
+      dataIndex: 'totaluser',
+      align: 'center',
+      key: 'totaluser',
+    },
+    {
       title: 'Time',
       dataIndex: 'time',
+      align: 'center',
       key: 'time',
+      render: function (prepend) {
+        return resoltTime(prepend)
+      }
     },
   ];
 
-  const resolSexType = (props) => {
+  const resoltSexType = (props) => {
     let sexType
     if (props == 0) {
       sexType = 'Man'
@@ -144,7 +154,19 @@ const CandidateView = ({ user, ...props }) => {
     } else {
       sexType = 'Other'
     }
-    return sexType
+    return sexType;
+  }
+
+  const resoltTime = (props) => {
+    let time
+    if (props == 0) {
+      time = 'Part-time'
+    } else if (props == 1) {
+      time = 'Full-time'
+    } else {
+      time = 'Eventual'
+    }
+    return time;
   }
 
   return (
@@ -162,7 +184,7 @@ const CandidateView = ({ user, ...props }) => {
                 expandable={{
                   expandedRowRender: record => {
                     return <List
-                      header={<Title level={4}>Applyed Jobs</Title>}
+                      header={<Title level={4}>Applied jobs</Title>}
                       itemLayout="horizontal"
                       bordered
                       dataSource={record.appys}
@@ -220,7 +242,15 @@ const CandidateView = ({ user, ...props }) => {
               </Row>
               <Row>
                 <Col span={12}>
-                  <DescriptionItem title="Address" content={resolSexType(detail.driver.sex)} />
+                  <DescriptionItem title="Address" content={detail.driver.address} />
+                </Col>
+                <Col span={12}>
+                  <DescriptionItem title="Exp Dln" content={moment(detail.driver.expDateDln).format('YYYY-MM-DD')} />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <DescriptionItem title="Sex" content={resoltSexType(detail.driver.sex)} />
                 </Col>
                 <Col span={12}>
                   <DescriptionItem title="Experience" content={detail.driver.experience || 0} />

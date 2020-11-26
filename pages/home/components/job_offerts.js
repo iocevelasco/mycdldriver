@@ -42,8 +42,8 @@ const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
         components = <DescriptionSmall item={item} />
         break;
       case 'large':
-        if(deviceType === 'desktop') components =  <DescriptionDesktop item={item} />
-        else  components = <DescriptionMobile item={item} />
+        if (deviceType === 'desktop') components = <DescriptionDesktop item={item} />
+        else components = <DescriptionMobile item={item} />
         break;
     }
     return components
@@ -59,7 +59,7 @@ const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
         }}
         renderItem={item => (
           <List.Item>
-              {handlerTypeComponent(type, item)}
+            {handlerTypeComponent(type, item)}
           </List.Item>
         )}
       />
@@ -77,30 +77,30 @@ const DescriptionSmall = ({ item }) => {
           id: item._id
         }
       }}>
-      <Card
-        hoverable
-        bodyStyle={{
-          padding: 0,
-          height: 100
-        }}
-        style={{ width: '100%', marginTop: 24, }}>
-        <div className='container'>
-          <div className='image'>
-            <Avatar size={80} src={item.logo} />
-          </div>
-          <div className='job-offert__description'>
-            <div>
-              <Title level={5}> {item.title} </Title>
+        <Card
+          hoverable
+          bodyStyle={{
+            padding: 0,
+            height: 100
+          }}
+          style={{ width: '100%', marginTop: 24, }}>
+          <div className='container'>
+            <div className='image'>
+              <Avatar size={80} src={item.logo} />
+            </div>
+            <div className='job-offert__description'>
               <div>
-                <Text> Location </Text>
-                <Text strong> {item.city} </Text> <Text strong > | </Text>
-                <Text> Date </Text>
-                <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
+                <Title level={5}> {item.title} </Title>
+                <div>
+                  <Text> Location </Text>
+                  <Text strong> {item.city} </Text> <Text strong > | </Text>
+                  <Text> Date </Text>
+                  <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Card>
+        </Card>
       </Link>
     </div>
   )
@@ -122,7 +122,7 @@ const DescriptionDesktop = ({ item, small }) => {
           <div>
             <Title level={3}> {item.title} </Title>
             <div>
-              <Text> Addres </Text>
+              <Text> Address </Text>
               <Text strong> {item.city} </Text> <Text strong > | </Text>
               <Text> Date </Text>
               <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
@@ -133,7 +133,7 @@ const DescriptionDesktop = ({ item, small }) => {
               <Text> Email </Text>
               <Text strong> {item.email} </Text>
             </div>
-              <Text> {item.description} </Text>
+            <Text> {item.description} </Text>
             <div>
             </div>
           </div>
@@ -145,7 +145,7 @@ const DescriptionDesktop = ({ item, small }) => {
               query: { id: item._id },
             }}
           >
-              <Button shape="round"  type="secondary" size='large'> VIEW MORE </Button>
+            <Button shape="round" type="secondary" size='large'> VIEW MORE </Button>
           </Link>
         </div>
       </div>
@@ -167,7 +167,7 @@ const DescriptionMobile = ({ item }) => {
         <div>
           <Title level={3}> {item.title} </Title>
           <div>
-            <Text> Addres </Text>
+            <Text> Address </Text>
             <Text strong> {item.city} </Text> <Text strong > | </Text>
           </div>
           <div>
@@ -181,7 +181,7 @@ const DescriptionMobile = ({ item }) => {
             query: { id: item._id },
           }}
         >
-          <Button  shape="round"  type='secondary'> VIEW MORE </Button>
+          <Button shape="round" type='secondary'> VIEW MORE </Button>
         </Link>
       </div>
     </div>
