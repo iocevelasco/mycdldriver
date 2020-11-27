@@ -108,7 +108,7 @@ async function setStatus(id, status){
     
 }
 
-async function setRanking(id, ranking){
+async function setRanking(id, ranking, comment){
     const filter = {
         _id: id
     };
@@ -117,7 +117,13 @@ async function setRanking(id, ranking){
         if(!id){
             throw new Error();
         }
-        apply.ranking = ranking;
+        if(ranking){
+            apply.ranking = ranking;
+        }
+        if(comment){
+            apply.comment = comment;
+        }
+        
         await apply.save();
         return {
             status: 200,
@@ -214,7 +220,24 @@ async function getStaffCompanyJobs(query){
             };
             const jobsDriver = await JobsApplysModel.find(filterJob).populate('job');
             resDriver.jobs = await Promise.all(jobsDriver.map( async (resp) => {
-                return resp.job;
+                let response = {
+                    _id: resp.job._id,
+                    tags: resp.job.tags,
+                    title: resp.job.title,
+                    description: resp.job.description,
+                    areaCode: resp.job.areaCode,
+                    phoneNumber: resp.job.phoneNumber,
+                    logo: resp.job.logo,
+                    email: resp.job.email,
+                    city: resp.job.city,
+                    time: resp.job.time,
+                    apply: {
+                        _id: resp._id,
+                        ranking: resp.ranking,
+                        comment: resp.comment
+                    },
+                };
+                return response;
             }));
         }
         return resDriver;

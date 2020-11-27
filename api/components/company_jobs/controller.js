@@ -107,9 +107,9 @@ function setStatus(id, status){
     });
 }
 
-function setRating(id, ranking){
+function setRating(id, ranking, commnet){
     return new Promise((resolve, reject) => {
-        const result = store.setRanking(id, ranking);
+        const result = store.setRanking(id, ranking, commnet);
         switch(result.status){
             case 200:
                 resolve(result);

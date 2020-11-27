@@ -7,7 +7,11 @@ import {
   Avatar,
   Card,
   Table,
-  Typography
+  Typography,
+  Modal,
+  Button,
+  Rate,
+  Input
 } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
@@ -16,6 +20,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import axios from 'axios';
 const { Title, Text } = Typography;
+const { TextArea } = Input;
 
 const initialState = {
   loading:true,
@@ -46,6 +51,25 @@ const reducer = (state, action) => {
 const TeamCompanyView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoadin] = useState(true);
+  const [loadingModal, setLoadinModal] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [rateJob, setRateJob] = useState({
+    _id: "",
+    tags: [],
+    title: "",
+    description: "",
+    areaCode: 0,
+    phoneNumber: 0,
+    logo: "",
+    email: "",
+    city: "",
+    time: 0,
+    apply: {
+      _id: "",
+      ranking: 0,
+      comment: ""
+    }
+  });
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
@@ -55,6 +79,25 @@ const TeamCompanyView = ({ user, ...props }) => {
     user:{user},
     loading:state.loading,
   }
+
+  const showRate = (job) => {
+    console.log(job);
+    setRateJob(job);
+    setVisible(true);
+  };
+
+  const handleOk = () => {
+    setLoadinModal(true);
+    changeRanking();
+    setTimeout(() => {
+      setLoadinModal(false);
+      setVisible(false);
+    }, 3000);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
 
   useEffect(() => {
     dispatch({ type: types.TEAM_DATA });
@@ -73,6 +116,24 @@ const TeamCompanyView = ({ user, ...props }) => {
     } catch (err) {
       console.log(err)
     }
+  }
+
+  const changeRanking = async () => {
+    const data = {
+      id: rateJob.apply._id,
+      ranking: rateJob.apply.ranking,
+      commnet: rateJob.apply.comment
+    };
+    await axios.patch(`/api/company/jobs/change_rank`, data, header)
+      .then((response) => {
+        setLoadinModal(false);
+        setVisible(false);
+        fetchJobs();
+      })
+      .catch((err) => {
+        setLoadin(false);
+        console.log(err)
+      })
   }
 
   const columns = [
@@ -127,7 +188,13 @@ const TeamCompanyView = ({ user, ...props }) => {
                       bordered
                       dataSource={record.jobs}
                       renderItem={item => (
-                        <List.Item>
+                        <List.Item
+                        key={item._d}
+                        actions={[
+                          <a onClick={() => showRate(item)}>
+                            Rate
+                        </a>,
+                        ]}>
                           <List.Item.Meta
                             avatar={
                               <Avatar src={item.logo} />
@@ -146,6 +213,39 @@ const TeamCompanyView = ({ user, ...props }) => {
           </WrapperSection>
         </Col>
       </Row>
+      <Modal
+        visible={visible}
+        title={rateJob.title}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Return
+          </Button>,
+          <Button key="submit" type="primary" loading={loadingModal} onClick={handleOk}>
+            Send
+          </Button>,
+        ]}
+      >
+        <Rate 
+          allowHalf 
+          allowClear={false}
+          value={rateJob.apply.ranking}
+          onChange={(val)=>{
+            rateJob.apply.ranking = val;
+            setRateJob(rateJob);
+          }}  />
+        <p>
+          <TextArea
+            rows={4}
+            value={rateJob.apply.comment}
+            placeholder="Describe your experience working with this driver"
+            onChange={(val)=>{
+              rateJob.apply.comment = val.target.value;
+              setRateJob(rateJob);
+            }}
+          /></p>
+      </Modal>
     </MainLayout>
   )
 };

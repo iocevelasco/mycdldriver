@@ -134,7 +134,7 @@ router.patch('/change_rank', auth(2), function (req, res) {
         response.error(req, res, "Invalid rank rank", 500);
         return;
     }
-    controller.setRating(data.id, data.ranking)
+    controller.setRating(data.id, data.ranking, data.commnet)
     .then((Job) => {
         switch (Job.status){
             case 200:

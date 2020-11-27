@@ -30,6 +30,10 @@ const JobsApplysSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
+    comment: {
+        type: String,
+        trim: true
+    },
 
 });
 JobsApplysSchema.index({company: 1, driver: 1, job: 1}, {unique: true});
