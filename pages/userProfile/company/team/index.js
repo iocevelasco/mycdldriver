@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import MainLayout from 'components/layout';
 import {
   Row,
@@ -6,6 +6,7 @@ import {
   List,
   Avatar,
   Card,
+  Table,
   Typography
 } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
@@ -44,6 +45,7 @@ const reducer = (state, action) => {
 
 const TeamCompanyView = ({ user, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [loading, setLoadin] = useState(true);
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
@@ -64,12 +66,38 @@ const TeamCompanyView = ({ user, ...props }) => {
 
   const fetchJobs = async () => {
     try {console.log(header);
+      setLoadin(true);
       const { data } = await axios.get(`/api/company/jobs/staff`, header);
       dispatch({ type: types.FETCH_DATA, payload: data.data });
+      setLoadin(false);
     } catch (err) {
       console.log(err)
     }
   }
+
+  const columns = [
+    {
+      title: 'Photo',
+      dataIndex: 'photo',
+      key: 'photo',
+      render:  url => <Avatar size={80} src={url} />
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: 'Lastname',
+      dataIndex: 'lastname',
+      key: 'lastname',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+  ];
 
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
@@ -87,39 +115,32 @@ const TeamCompanyView = ({ user, ...props }) => {
         <Col span={20}>
           <WrapperSection row={18} styles={stylesWrapper}>
             <Card>
-              <List
-                header={<Title level={4}>Our Staff</Title>}
-                itemLayout="horizontal"
+            <Table
+                rowKey='id'
+                loading={loading}
+                columns={columns}
+                expandable={{
+                  expandedRowRender: record => {
+                    return <List
+                      header={<Title level={4}>Positions</Title>}
+                      itemLayout="horizontal"
+                      bordered
+                      dataSource={record.jobs}
+                      renderItem={item => (
+                        <List.Item>
+                          <List.Item.Meta
+                            avatar={
+                              <Avatar src={item.logo} />
+                            }
+                            title={<p>{`${item.title}`} </p>}
+                            description={item.description}
+                          />
+                        </List.Item>
+                      )}
+                    />
+                  }
+                }}
                 dataSource={state.jobs}
-                pagination={{
-                  pageSize: 4,
-                }}
-                renderItem={item => {
-                  return <List.Item>
-                    <div className='driver-my--job'>{console.log(item)}
-                      <Avatar size={80} src={item.photo ? item.photo : ''} />
-                      <div className='description'>
-                        <div>
-                          <Title level={3}> {item.name} {item.lastname} </Title>
-                          <div>
-                            <Text> Address </Text>
-                            <Text strong> {item.driver.address} </Text> <Text strong > | </Text>
-                            <Text> Date </Text>
-                            <Text strong> {moment(item.driver.date).format('YYYY-MM-DD')} </Text>
-                          </div>
-                          <div>
-                            <Text> Phone </Text>
-                            <Text strong> {item.driver.areaCode} - {item.driver.phoneNumber} </Text> <Text strong > | </Text>
-                            <Text> Email </Text>
-                            <Text strong> {item.email} </Text>
-                          </div>
-                          <div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </List.Item>
-                }}
               />
             </Card>
           </WrapperSection>
