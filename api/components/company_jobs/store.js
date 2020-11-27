@@ -1,6 +1,7 @@
 const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
 const { User } = require('../user/model');
 const ProfileCompany = require('../profile_company/model');
+const ProfileDriver = require('../profile_driver/model');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -91,7 +92,6 @@ async function setStatus(id, status){
             throw new Error();
         }
         const apply = await JobsApplysModel.findOne(filter);
-        console.log(apply);
         apply.status = status;
         await apply.save();
         return {
@@ -178,6 +178,48 @@ async function getApplyCompanyJobs(query){
     }));
     result = result.filter(Boolean);
     return result;
+}
+
+async function getStaffCompanyJobs(query){
+    let result = []; 
+    var id = mongoose.Types.ObjectId(query.company);
+    if(id){
+        filter = {
+            company: id,
+            status: 0
+        };
+    }
+    const drivers = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
+    
+    result = await Promise.all(drivers.map( async (response) => {
+        const userDriver = await User.findOne({_id:response})
+        .select('name lastname photo date email')
+        .populate('driver');
+        let resDriver = null;
+
+        if(userDriver){
+            resDriver = {
+                id: userDriver._id,
+                name: userDriver.name,
+                lastname: userDriver.lastname,
+                photo: userDriver.photo,
+                email: userDriver.email,
+                date: userDriver.date,
+                driver: userDriver.driver
+            };
+            const filterJob = {
+                driver: response,
+                company: id,
+                status: 0
+            };
+            const jobsDriver = await JobsApplysModel.find(filterJob).populate('job');
+            resDriver.jobs = await Promise.all(jobsDriver.map( async (resp) => {
+                return resp.job;
+            }));
+        }
+        return resDriver;
+    }));
+    return result.filter(Boolean);
 }
 
 async function getCustomList(){
@@ -328,5 +370,6 @@ module.exports = {
     getApplyJobs,
     getApplyCompanyJobs,
     setStatus,
-    setRanking
+    setRanking,
+    getStaffCompanyJobs
 }

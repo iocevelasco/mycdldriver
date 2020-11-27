@@ -69,13 +69,18 @@ async function getJobsApply(filter){
             result.status = "Pending";
             break;
     }
-    console.log("[ RESULT ]", result);
     return result;
 }
 
 function getCompanyJobsApply(filter){
     return new Promise((resolve, reject) => {
         resolve(store.getApplyCompanyJobs(filter));
+    });
+}
+
+function getCompanyStaffApply(filter){
+    return new Promise((resolve, reject) => {
+        resolve(store.getStaffCompanyJobs(filter));
     });
 }
 
@@ -248,5 +253,6 @@ module.exports = {
     getJobsApply,
     getCompanyJobsApply,
     setStatus,
-    setRating
+    setRating,
+    getCompanyStaffApply
 }
