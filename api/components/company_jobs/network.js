@@ -48,6 +48,16 @@ router.post('/applys', auth(2), function (req, res) {
     });
 });
 
+router.get('/staff', auth(2), function (req, res) {
+    let query = {company: req.user.company};
+    controller.getCompanyStaffApply(query)
+    .then((list) => {
+        response.success(req, res, list, 200);
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
+});
+
 router.post('/detail', function (req, res) {
     let apply = {
         id: req.body.id
@@ -124,7 +134,7 @@ router.patch('/change_rank', auth(2), function (req, res) {
         response.error(req, res, "Invalid rank rank", 500);
         return;
     }
-    controller.setRating(data.id, data.ranking)
+    controller.setRating(data.id, data.ranking, data.commnet)
     .then((Job) => {
         switch (Job.status){
             case 200:

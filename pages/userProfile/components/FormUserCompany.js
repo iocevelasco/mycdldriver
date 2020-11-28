@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
-import { UploadOutlined, RetweetOutlined } from '@ant-design/icons';
+import { RetweetOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 
 function mapStateToProps(state) {
@@ -22,12 +22,6 @@ function mapStateToProps(state) {
     token: user.token || null,
     company: user.company || {},
     isUserRegistry: state.user.typeUser || null,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
   }
 }
 
@@ -187,7 +181,7 @@ const FormUserCompany = (props) => {
               <Col span={18}>
                 <Form.Item
                   name='address'
-                  label="Addres"
+                  label="Address"
                   rules={[
                     {
                       required: true,
@@ -219,6 +213,5 @@ const FormUserCompany = (props) => {
 
 export default withRouter(
   connect(
-    mapStateToProps,
-    mapDispatchToProps)
+    mapStateToProps)
     (FormUserCompany)); 

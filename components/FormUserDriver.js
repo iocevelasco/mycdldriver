@@ -469,7 +469,7 @@ const DriverUser = (props) => {
               <Col span={18}>
                 <Form.Item
                   name='address'
-                  label="Addres"
+                  label="Address"
                   rules={[
                     {
                       required: true,
