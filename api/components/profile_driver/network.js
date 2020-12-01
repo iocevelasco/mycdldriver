@@ -181,7 +181,20 @@ router.get('/', function (req, res) {
 router.post('/', function (req, res) {
     controller.addDriver(req.body, req.user)
     .then((fullDriver) => {
-        response.success(req, res, fullDriver, 201);
+      switch (fullDriver.status){
+        case 200:
+            response.success(req, res, fullDriver, 201);
+            break;
+        case 400:
+            response.error(req, res, fullDriver.message, 400, fullDriver.detail);
+            break;
+        case 500:
+            response.error(req, res, fullDriver.message, 500, fullDriver.detail);
+            break;
+        default:
+            response.success(req, res, fullDriver, 200);
+            break;
+    }
     }).catch(e => {
         response.error(req, res, 'informacion invalida', 400, e);
     });

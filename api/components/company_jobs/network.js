@@ -110,7 +110,6 @@ router.patch('/change_status', auth(2), function (req, res) {
     const data = req.body;
     controller.setStatus(data.id, data.status)
     .then((Job) => {
-        console.log(Job);
         switch (Job.status){
             case 200:
                 response.success(req, res, Job.message, 200);

@@ -146,7 +146,20 @@ router.post('/', function (req, res) {
 
     controller.addCompany(req.body, req.user)
     .then((fullCompany) => {
-        response.success(req, res, fullCompany, 201);
+        switch (fullCompany.status){
+            case 200:
+                response.success(req, res, fullCompany, 201);
+                break;
+            case 400:
+                response.error(req, res, fullCompany.message, 400, fullCompany.detail);
+                break;
+            case 500:
+                response.error(req, res, fullCompany.message, 500, fullCompany.detail);
+                break;
+            default:
+                response.success(req, res, fullCompany, 200);
+                break;
+        }
     }).catch(e => {
         response.error(req, res, 'informacion invalida', 400, e);
     });

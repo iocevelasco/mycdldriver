@@ -41,7 +41,20 @@ function addDriver(driver){
         };
 
         const driverResolve = store.add(user); 
-        resolve(driverResolve);
+        switch(driverResolve.status){
+            case 200:
+                resolve(driverResolve);
+                break;
+            case 500:
+                reject(driverResolve);
+                break;
+            case 400:
+                reject(driverResolve);
+                break;
+            default:
+                resolve(driverResolve);
+                break;
+        }
     });
     
 }

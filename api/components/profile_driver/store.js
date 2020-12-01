@@ -18,14 +18,35 @@ async function getDriver(filterDriver){
 
 async function addDriver(user){
     const driver = new Model(user.driver);
-    await driver.save();
-    user.driver = driver;
-    const myUser = new User(user);
-    await myUser.save();
-    const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
-    const token = await myUser.generateAuthToken();
-    user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date, token };
-    return {user, driver};
+    
+    try{
+        await driver.save();
+        user.driver = driver;
+        const myUser = new User(user);
+        try{
+            await myUser.save();
+            const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
+            const token = await myUser.generateAuthToken();
+            user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date, token };
+            return {status: 200, user, driver};
+        }catch(e){
+            await Model.deleteOne({
+                _id: driver._id
+            });
+            return {
+                status: 400,
+                message: 'User registration error',
+                detail: e
+            }
+        }
+    }catch(e){
+        return {
+            status: 400,
+            message: 'Driver registration error',
+            detail: e
+        }
+    }
+    
 }
 
 async function updateDriver(id, user){

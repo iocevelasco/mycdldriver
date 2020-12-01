@@ -38,7 +38,20 @@ function addCompany(company){
         };
 
         const companyResolve = store.add(user); 
-        resolve(companyResolve);
+        switch(companyResolve.status){
+            case 200:
+                resolve(companyResolve);
+                break;
+            case 500:
+                reject(companyResolve);
+                break;
+            case 400:
+                reject(companyResolve);
+                break;
+            default:
+                resolve(companyResolve);
+                break;
+        }
     });
     
 }
