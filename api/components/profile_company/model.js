@@ -17,7 +17,7 @@ const profileCompanySchema = mongoose.Schema({
         type: Number
     },
     phoneNumber: {
-        type: Number
+        type: String
     },
     address: {
         type: String,
