@@ -45,6 +45,11 @@ const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
       section_name: 'Candidate',
       icon: <TeamOutlined />
     },
+    {
+      path: '/userProfile/company/team',
+      section_name: 'Our Team',
+      icon: <TeamOutlined />
+    },
   ]
 
   // const companyOption = [

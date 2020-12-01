@@ -69,13 +69,18 @@ async function getJobsApply(filter) {
             result.status = "Pending";
             break;
     }
-    console.log("[ RESULT ]", result);
     return result;
 }
 
 function getCompanyJobsApply(filter) {
     return new Promise((resolve, reject) => {
         resolve(store.getApplyCompanyJobs(filter));
+    });
+}
+
+function getCompanyStaffApply(filter) {
+    return new Promise((resolve, reject) => {
+        resolve(store.getStaffCompanyJobs(filter));
     });
 }
 
@@ -102,9 +107,9 @@ function setStatus(id, status) {
     });
 }
 
-function setRating(id, ranking) {
+function setRating(id, ranking, commnet) {
     return new Promise((resolve, reject) => {
-        const result = store.setRanking(id, ranking);
+        const result = store.setRanking(id, ranking, commnet);
         switch (result.status) {
             case 200:
                 resolve(result);
@@ -252,5 +257,6 @@ module.exports = {
     getJobsApply,
     getCompanyJobsApply,
     setStatus,
-    setRating
+    setRating,
+    getCompanyStaffApply
 }

@@ -76,6 +76,23 @@ const CandidateView = ({ user, ...props }) => {
       })
   }
 
+  const changeStatus = async (id, status) => {
+    const data = {
+      id: id,
+      status: status
+    };
+    setLoadin(true);
+    setVisible(false);
+    await axios.patch(`/api/company/jobs/change_status`, data, header)
+      .then((response) => {
+        fetchCandidates();
+      })
+      .catch((err) => {
+        setLoadin(false);
+        console.log(err)
+      })
+  }
+
   const handleDrawer = async (driver) => {
     if (!visible) {
       setVisible(true);
@@ -268,10 +285,18 @@ const CandidateView = ({ user, ...props }) => {
               </Row>
               <Row justify='center' gutter={[16]} align='middle'>
                 <Col span={8}>
-                  <Button shape="round" block={true} type='secondary'> Reject </Button>
+                  <Button 
+                    shape="round" 
+                    block={true} 
+                    type='secondary'
+                    onClick={() => changeStatus(detail.id, 2)}> Reject </Button>
                 </Col>
                 <Col span={8}>
-                  <Button shape="round" block={true} type='primary'> Accept </Button>
+                  <Button 
+                    shape="round" 
+                    block={true} 
+                    type='primary'
+                    onClick={() => changeStatus(detail.id, 1)} > Accept </Button>
                 </Col>
               </Row>
             </Drawer>
