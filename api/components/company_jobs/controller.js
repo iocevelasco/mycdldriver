@@ -1,28 +1,28 @@
 const store = require('./store');
 const config = require('../../config');
 
-async function getJob(filter){
-    let filterQuery = {}; 
+async function getJob(filter) {
+    let filterQuery = {};
     let resultDetail = {};
-    if(filter.id){
+    if (filter.id) {
         filterQuery.id = filter.id;
     }
-    if(filter.company){
+    if (filter.company) {
         filterQuery.company = filter.company;
     }
-    if(filter.input){
+    if (filter.input) {
         filterQuery.input = filter.input;
     }
-    if(filter.city){
+    if (filter.city) {
         filterQuery.city = filter.city;
     }
-    if(filter.date){
+    if (filter.date) {
         filterQuery.date = filter.date;
     }
 
     let result = await store.list(filterQuery);
 
-    if(filter.id){
+    if (filter.id) {
         resultDetail = {
             _id: result[0]._id,
             title: result[0].title,
@@ -40,32 +40,32 @@ async function getJob(filter){
         result = resultDetail;
     }
 
-    if(filter.driver && filter.id){
+    if (filter.driver && filter.id) {
         filterJob = {
             driver: filter.driver,
             job: filter.id
         };
         const driverapply = await store.getApplyJobs(filterJob);
-        if(driverapply.length > 0){
+        if (driverapply.length > 0) {
             result.can_apply = false;
         }
     }
     return (result);
 }
 
-async function getJobsApply(filter){
+async function getJobsApply(filter) {
     const result = await store.getApplyJobs(filter);
-    switch(result.status){
-        case 0: 
+    switch (result.status) {
+        case 0:
             result.status = "Pending";
             break;
-        case 1: 
+        case 1:
             result.status = "Approved";
             break;
-        case 1: 
+        case 1:
             result.status = "Rejected";
             break;
-        default: 
+        default:
             result.status = "Pending";
             break;
     }
@@ -73,22 +73,22 @@ async function getJobsApply(filter){
     return result;
 }
 
-function getCompanyJobsApply(filter){
+function getCompanyJobsApply(filter) {
     return new Promise((resolve, reject) => {
         resolve(store.getApplyCompanyJobs(filter));
     });
 }
 
-function getCustomList(){
+function getCustomList() {
     return new Promise((resolve, reject) => {
         resolve(store.getCustomList());
     });
 }
 
-function setStatus(id, status){
+function setStatus(id, status) {
     return new Promise((resolve, reject) => {
         const result = store.setStatus(id, status);
-        switch(result.status){
+        switch (result.status) {
             case 200:
                 resolve(result);
                 break;
@@ -102,10 +102,10 @@ function setStatus(id, status){
     });
 }
 
-function setRating(id, ranking){
+function setRating(id, ranking) {
     return new Promise((resolve, reject) => {
         const result = store.setRanking(id, ranking);
-        switch(result.status){
+        switch (result.status) {
             case 200:
                 resolve(result);
                 break;
@@ -119,10 +119,10 @@ function setRating(id, ranking){
     });
 }
 
-function addJob(job, company){
+function addJob(job, company) {
     return new Promise((resolve, reject) => {
         job.company = company;
-        switch(job){
+        switch (job) {
             case !job:
                 console.error('[companyJobsController.addJob] No job data');
                 reject('No job data');
@@ -142,40 +142,44 @@ function addJob(job, company){
             case !job.city:
                 console.error('[companyJobsController.addJob] No city data');
                 reject('No city data');
-                return false; 
+                return false;
             case !job.areaCode:
                 console.error('[companyJobsController.addJob] No areaCode data');
                 reject('No areaCode data');
-                return false; 
+                return false;
             case !job.phoneNumber:
                 console.error('[companyJobsController.addJob] No phoneNumber data');
                 reject('No phoneNumber data');
-                return false; 
+                return false;
             case !job.email:
                 console.error('[companyJobsController.addJob] No email data');
                 reject('No email data');
-                return false; 
+                return false;
             case !job.time:
                 console.error('[companyJobsController.addJob] No time data');
                 reject('No time data');
-                return false; 
+                return false;
+            case !job.image:
+                console.error('[companyJobsController.addJob] No time data');
+                reject('No time data');
+                return false;
         }
-        
-        const JobResolve = store.add(job); 
+
+        const JobResolve = store.add(job);
         resolve(JobResolve);
     });
 }
 
-function applyJob(jobApply){
+function applyJob(jobApply) {
     return new Promise((resolve, reject) => {
-        if(!jobApply){
+        if (!jobApply) {
             console.error('[companyJobsController.applyJob] Invalid data');
-            reject({status: 400, message: 'Invalid Job Apply data'});
+            reject({ status: 400, message: 'Invalid Job Apply data' });
             return false;
         }
         const result = store.applyJob(jobApply);
-        
-        switch(result.status){
+
+        switch (result.status) {
             case 200:
                 resolve(result);
                 break;
@@ -189,15 +193,15 @@ function applyJob(jobApply){
     });
 }
 
-function updateJob(id, job, company, logo){
+function updateJob(id, job, company, logo) {
     return new Promise((resolve, reject) => {
-        if(!job){
+        if (!job) {
             console.error('[companyJobsController.updateJob] No company data');
-            reject({status: 400, message: 'No company data'});
+            reject({ status: 400, message: 'No company data' });
             return false;
         }
         const result = store.update(id, job, company);
-        switch(result.status){
+        switch (result.status) {
             case 200:
                 resolve(result);
                 break;
@@ -211,15 +215,15 @@ function updateJob(id, job, company, logo){
     });
 }
 
-function deleteJob(id, company){
+function deleteJob(id, company) {
     return new Promise(async (resolve, reject) => {
-        if(!id){
+        if (!id) {
             reject('Invalid data');
             return false;
         }
         store.delete(id, company)
             .then((data) => {
-                switch(data.status){
+                switch (data.status) {
                     case 404:
                         reject(data);
                         break;
@@ -230,10 +234,10 @@ function deleteJob(id, company){
                         resolve(data);
                         break;
                 }
-                
+
             })
             .catch(e => {
-                reject(e); 
+                reject(e);
             });
     });
 }
