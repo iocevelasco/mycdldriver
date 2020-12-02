@@ -17,14 +17,35 @@ function getCompany(filterCompany){
 
 async function addCompany(user){
     const company = new Model(user.company);
-    await company.save();
-    user.company = company;
-    const myUser = new User(user);
-    await myUser.save();
-    const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
-    const token = await myUser.generateAuthToken();
-    user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date, token };
-    return {user, company};
+    try{
+        await company.save();
+        user.company = company;
+        const myUser = new User(user);
+        try{
+            await myUser.save();
+            const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
+            const token = await myUser.generateAuthToken();
+            user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date, token };
+            return {status: 200, user, company};
+        }catch(e){
+            await Model.deleteOne({
+                _id: company._id
+            });
+            return {
+                status: 400,
+                message: 'User registration error',
+                detail: e
+            }
+        }
+        
+    }catch(e){
+        return {
+            status: 400,
+            message: 'Company registration error',
+            detail: e
+        }
+    }
+    
 }
 
 async function updateCompany(id, user){

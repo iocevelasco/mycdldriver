@@ -22,7 +22,7 @@ const profileDriverSchema = mongoose.Schema({
         type: Number
     },
     phoneNumber: {
-        type: Number
+        type: String
     },
     sex: {
         type: Number,

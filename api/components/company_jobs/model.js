@@ -66,25 +66,29 @@ const CompanyJobsSchema = mongoose.Schema({
         type: Schema.ObjectId,
         ref: 'ProfileCompany',
     },
+    image: {
+        type: String,
+        trim: true
+    },
     areaCode: {
         type: Number
     },
     phoneNumber: {
-        type: Number
+        type: String
     },
     email: {
-       type: String,
-       required: true,
-       lowercase: true,
-       validate: value => {
-          if (!validator.isEmail(value)) {
-             throw new Error({error: 'Invalid Email address'})
-          }
-       }
+        type: String,
+        required: true,
+        lowercase: true,
+        validate: value => {
+            if (!validator.isEmail(value)) {
+                throw new Error({ error: 'Invalid Email address' })
+            }
+        }
     },
     logo: {
-       type: String,
-       trim: true
+        type: String,
+        trim: true
     },
     date: {
         type: Date,
