@@ -134,7 +134,7 @@ async function deleteDriver(id){
         
     return Model.deleteOne({
         _id: id
-    });    
+    });
 
 }
 
