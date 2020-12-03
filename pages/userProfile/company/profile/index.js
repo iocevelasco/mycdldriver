@@ -190,6 +190,7 @@ const CompanyProfileView = (props) => {
   const beforeToCreateProfile = () => {
     let base = {}
     let company = {}
+    console.log('fields', state.fields);
     state.fields.forEach((e) => {
       if (
         e.name[0] == 'name' ||
@@ -243,6 +244,7 @@ const CompanyProfileView = (props) => {
 
   const updateCompany = async () => {
     const { base, company } = beforeToCreateProfile();
+    console.log('com', company)
     base.typeUser = 2;
     if (state.logo.length > 0) {
       company.logo = state.logo[0].response.data.file;

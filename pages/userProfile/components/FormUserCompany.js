@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import {
   Row,
   Col,
@@ -7,12 +8,16 @@ import {
   Form,
   Button,
   Upload,
+  AutoComplete,
+  Typography
 } from 'antd';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { RetweetOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
+import axios from 'axios';
 
+const { Title } = Typography;
 function mapStateToProps(state) {
   const { user } = state;
   return {
@@ -27,6 +32,17 @@ function mapStateToProps(state) {
 
 const FormUserCompany = (props) => {
   const [form] = Form.useForm();
+  const [stateOptions, setOptions] = useState({
+    options: [],
+    all: []
+  });
+
+  const [citiesOptions, setCities] = useState({
+    options: [],
+    all: [],
+    disabled: true
+  });
+
   const {
     loading,
     onChangeCompany,
@@ -38,8 +54,69 @@ const FormUserCompany = (props) => {
     imageProfile } = props;
 
   const onChangeProps = (changedFields, allFields) => {
+    if (changedFields.length) {
+      if (changedFields[0].name[0] === "states") {
+        let value = changedFields[0].value;
+        let options = [...stateOptions.all];
+        let currentState = options.filter((e) => e.stateName === value)[0];
+        if (currentState) fetchCities(currentState._id)
+      };
+    };
     onChangeCompany(allFields);
   }
+
+  const fetchState = async () => {
+    await axios.get('/api/address/state')
+      .then((response) => {
+        let options = response.data.data
+          .sort((a, b) => {
+            if (a.stateName < b.stateName) { return -1; }
+            if (a.stateName > b.stateName) { return 1; }
+            return 0;
+          })
+          .map((e) => { return { value: e.stateName } })
+        let all = response.data.data
+        setOptions({
+          options,
+          all
+        });
+      })
+      .catch((err) => {
+        setState([]);
+        console.log(err)
+      })
+  }
+
+  const fetchCities = async (stateId) => {
+    setCities({
+      ...citiesOptions,
+      disabled: true
+    })
+    await axios.get(`/api/address/cities/${stateId}`)
+      .then((response) => {
+        let options = response.data.data
+          .sort((a, b) => {
+            if (a.cityName < b.cityName) { return -1; }
+            if (a.cityName > b.cityName) { return 1; }
+            return 0;
+          })
+          .map((e) => { return { value: e.cityName } })
+        let all = response.data.data
+        setCities({
+          options,
+          all,
+          disabled: false
+        })
+      })
+      .catch((err) => {
+        setCities([]);
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    fetchState();
+  }, [])
 
   return (
     <div className='profile-driver'>
@@ -49,10 +126,10 @@ const FormUserCompany = (props) => {
         onFinish={!props.isUserRegistry ? newCompany : updateCompany}
         name="global_state"
         layout='vertical'
-        onFieldsChange={onChangeProps}>
+        onFieldsChange={onChangeProps} >
 
         <Row justify='center'>
-          <Col className='profile-driver__form' span={14}>
+          <Col className='profile-driver__form' span={20}>
             <Row justify='center'>
               <div className='avatar'>
                 <Avatar src={imageProfile ? imageProfile.data.file : props.photoProfile} size={120} />
@@ -164,8 +241,55 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
+            <Title level={5}> Address </Title>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={6}>
+              <Col span={8}>
+                <Form.Item
+                  name='states'
+                  label="State"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'State is required!',
+                    },
+                  ]}>
+                  <AutoComplete
+                    options={stateOptions.options}
+                    placeholder="Search state"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  name='city'
+                  label="City"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'City is required!',
+                    },
+                  ]}>
+                  <AutoComplete
+                    disabled={citiesOptions.disabled}
+                    options={citiesOptions.options}
+                    placeholder="Search city"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item
+                  name='streat'
+                  label="Streat"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Streat is required!',
+                    },
+                  ]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={4}>
                 <Form.Item
                   name='zipCode'
                   label="Zip Code"
@@ -178,29 +302,16 @@ const FormUserCompany = (props) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={18}>
-                <Form.Item
-                  name='address'
-                  label="Address"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Address is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
             </Row>
-          </Col>
-          <Col className='profile-driver__form-small' span={14}>
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={8}>
                 <Button
                   htmlType="submit"
                   type='primary'
+                  style={{ marginTop: 40 }}
+                  shape="round"
                   block
-                  size='large'>{!props.isUserRegistry ? 'Save Information' : 'Update Information'}</Button>
+                  size='large'>{!props.isUserRegistry ? 'Create Profile' : 'Save changes'}</Button>
               </Col>
             </Row>
           </Col>
