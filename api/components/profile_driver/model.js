@@ -47,6 +47,18 @@ const profileDriverSchema = mongoose.Schema({
     address: {
         type: String,
         trim: true
+    },
+    address2: {
+        type: String,
+        trim: true
+    },
+    state: {
+        type: Schema.ObjectId,
+        ref: 'States',
+    },
+    city: {
+        type: Schema.ObjectId,
+        ref: 'Cities',
     }
 });
 

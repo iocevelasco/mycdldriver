@@ -25,7 +25,10 @@ function addDriver(driver){
             sex: driver.sex,
             experience: driver.experience,
             address: driver.address,
+            address2: driver.address2,
             zipCode: driver.zipCode,
+            city: driver.city,
+            state: driver.state,
             description: driver.description
         };
 
@@ -80,7 +83,10 @@ function updateDriver(id, driver){
             sex: driver.sex,
             experience: driver.experience,
             address: driver.address,
+            address2: driver.address2,
             zipCode: driver.zipCode,
+            city: driver.city,
+            state: driver.state,
             description: driver.description
         };
 

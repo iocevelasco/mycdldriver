@@ -21,7 +21,10 @@ function addCompany(company){
             areaCode: company.areaCode,
             phoneNumber: company.phoneNumber,
             address: company.address,
+            address2: company.address2,
             description: company.description,
+            city: company.city,
+            state: company.state,
             zipCode: company.zipCode,
             logo: company.logo
         };
@@ -73,7 +76,10 @@ function updateCompany(id, company){
             areaCode: company.areaCode,
             phoneNumber: company.phoneNumber,
             address: company.address,
+            address2: company.address2,
             description: company.description,
+            city: company.city,
+            state: company.state,
             zipCode: company.zipCode,
             logo: company.logo
         };

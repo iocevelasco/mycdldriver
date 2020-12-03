@@ -9,7 +9,9 @@ function getCompany(filterCompany){
                 legalNumber: filterCompany,
             };
         }
-        result = Model.find(filter);
+        result = Model.find(filter)
+        .populate('state')
+        .populate('city');
 
         resolve(result);
     });
@@ -94,11 +96,20 @@ async function updateCompany(id, user){
     if(company.address){
         foundCompany.address = company.address;
     }
+    if(company.address2){
+        foundCompany.address2 = company.address2;
+    }
     if(company.description){
         foundCompany.description = company.description;
     }
     if(company.zipCode){
         foundCompany.zipCode = company.zipCode;
+    }
+    if(company.city){
+        foundCompany.city = company.city;
+    }
+    if(company.state){
+        foundCompany.state = company.state;
     }
     
     await foundUser.save();

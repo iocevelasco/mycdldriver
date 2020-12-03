@@ -192,7 +192,7 @@ async function getStaffCompanyJobs(query){
     if(id){
         filter = {
             company: id,
-            status: 0
+            status: 1
         };
     }
     const drivers = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
@@ -216,7 +216,7 @@ async function getStaffCompanyJobs(query){
             const filterJob = {
                 driver: response,
                 company: id,
-                status: 0
+                status: 1
             };
             const jobsDriver = await JobsApplysModel.find(filterJob).populate('job');
             resDriver.jobs = await Promise.all(jobsDriver.map( async (resp) => {
