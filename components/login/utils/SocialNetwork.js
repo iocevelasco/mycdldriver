@@ -1,11 +1,7 @@
 import { connect } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { withRouter } from 'next/router';
 import { handlerModalLogin, activeLoading } from '@store/reducers/landing_reducer';
-import {
-  Typography,
-  Button,
-} from 'antd';
+import { Button } from 'antd';
 import axios from 'axios';
 
 

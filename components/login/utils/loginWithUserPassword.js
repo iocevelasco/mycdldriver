@@ -1,20 +1,9 @@
-import { connect } from 'react-redux';
 import { useState } from 'react';
-import { withRouter } from 'next/router';
-import { handlerModalLogin, activeLoading } from '@store/reducers/landing_reducer';
-import {
-  Button,
-  Input,
-  Space,
-  Form,
-} from 'antd';
+
+import { Button, Input, Space, Form } from 'antd';
 import axios from 'axios';
 
-import {
-  EyeTwoTone,
-  EyeInvisibleOutlined
-}
-  from '@ant-design/icons';
+import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const UserPassword = (props) => {
   const [form] = Form.useForm();

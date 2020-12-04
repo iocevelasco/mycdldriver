@@ -120,12 +120,16 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
-                            <img src='/static/images/logo.svg' />
+                            <a >
+                                <img src='/static/images/logo.svg' />
+                            </a>
                         </Link>
                     </Col>
                     <Col span={10}>
                         <Link href="/">
-                            Home
+                            <a >
+                                Home
+                            </a>
                         </Link>
                     </Col>
                     <Col span={10}>

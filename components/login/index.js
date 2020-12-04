@@ -31,15 +31,10 @@ const ModalLogin = ({ visible_modal_login, router, ...props }) => {
   const [form] = Form.useForm();
   const [fields, setFields] = useState([]);
   const [newUser, setNewUser] = useState(false);
-  console.log('newUser', newUser);
+  console.log('newUser', newUser)
   const style = {
     height: '100vh',
     top: 16,
-  }
-
-  const makeLogin = (values) => {
-    console.log('values', values);
-
   }
 
   return (

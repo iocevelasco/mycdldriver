@@ -1,7 +1,4 @@
-import { connect } from 'react-redux';
 import { useState } from 'react';
-import { withRouter } from 'next/router';
-import { handlerModalLogin, activeLoading } from '@store/reducers/landing_reducer';
 import {
   Button,
   Input,
@@ -11,12 +8,7 @@ import {
 } from 'antd';
 import axios from 'axios';
 const { Title } = Typography;
-import {
-  EyeTwoTone,
-  EyeInvisibleOutlined,
-  LeftOutlined
-}
-  from '@ant-design/icons';
+import { EyeTwoTone, EyeInvisibleOutlined, LeftOutlined } from '@ant-design/icons';
 
 
 const NewUserForm = (props) => {
