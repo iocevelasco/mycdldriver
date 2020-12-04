@@ -32,6 +32,7 @@ function mapStateToProps(state) {
 
 const FormUserCompany = (props) => {
   const [form] = Form.useForm();
+
   const [stateOptions, setOptions] = useState({
     options: [],
     all: []
@@ -42,7 +43,7 @@ const FormUserCompany = (props) => {
     all: [],
     disabled: true
   });
-
+  console.log('citiesOptions', citiesOptions);
   const {
     loading,
     onChangeCompany,
@@ -55,7 +56,7 @@ const FormUserCompany = (props) => {
 
   const onChangeProps = (changedFields, allFields) => {
     if (changedFields.length) {
-      if (changedFields[0].name[0] === "states") {
+      if (changedFields[0].name[0] === "state") {
         let value = changedFields[0].value;
         let options = [...stateOptions.all];
         let currentState = options.filter((e) => e.stateName === value)[0];
@@ -114,9 +115,30 @@ const FormUserCompany = (props) => {
       })
   }
 
+  const handleSearchState = (value) => {
+    let options = stateOptions.options.filter(e => {
+      return e.value.trim().toUpperCase().indexOf(value.trim().toUpperCase()) > -1;
+    });
+    setOptions({
+      ...stateOptions,
+      options,
+    });
+  }
+
+  const handleSearchCity = (value) => {
+    let options = citiesOptions.options.filter(e => {
+      return e.value.trim().toUpperCase().indexOf(value.trim().toUpperCase()) > -1;
+    });
+    setCities({
+      ...citiesOptions,
+      options,
+    });
+  };
+
   useEffect(() => {
     fetchState();
-  }, [])
+  }, []);
+
 
   return (
     <div className='profile-driver'>
@@ -241,12 +263,39 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Title level={5}> Address </Title>
+            <Row gutter={[24]} justify='space-between' >
+              <Col span={12}>
+                <Form.Item
+                  name='address'
+                  label="Address line 1"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'State is required!',
+                    },
+                  ]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name='address2'
+                  label="Address line 2"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Address line 2 is required!',
+                    },
+                  ]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
             <Row gutter={[24]} justify='space-between' >
               <Col span={8}>
                 <Form.Item
-                  name='states'
-                  label="State"
+                  name='state'
+                  label="State / Province / Reagion"
                   rules={[
                     {
                       required: true,
@@ -254,12 +303,13 @@ const FormUserCompany = (props) => {
                     },
                   ]}>
                   <AutoComplete
+                    onSearch={handleSearchState}
                     options={stateOptions.options}
                     placeholder="Search state"
                   />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={10}>
                 <Form.Item
                   name='city'
                   label="City"
@@ -270,29 +320,17 @@ const FormUserCompany = (props) => {
                     },
                   ]}>
                   <AutoComplete
+                    onSearch={handleSearchCity}
                     disabled={citiesOptions.disabled}
                     options={citiesOptions.options}
                     placeholder="Search city"
                   />
                 </Form.Item>
               </Col>
-              <Col span={4}>
-                <Form.Item
-                  name='streat'
-                  label="Streat"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Streat is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={4}>
+              <Col span={6}>
                 <Form.Item
                   name='zipCode'
-                  label="Zip Code"
+                  label="Zip / Postal Code"
                   rules={[
                     {
                       required: true,
