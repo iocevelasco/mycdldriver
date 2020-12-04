@@ -371,7 +371,7 @@ async function updateJob(id, job, company){
     }
     if(job.logo){
         try {
-            fs.unlinkSync("." + foundJob.photo);
+            fs.unlinkSync("." + foundJob.logo);
         } catch(err) {
             console.error(err);
         }
