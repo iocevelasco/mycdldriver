@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { logoutUser, getCurrentLocation } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import { deviceType } from '@store/reducers/landing_reducer';
-import ModalLogin from 'components/modal_login';
+import ModalLogin from 'components/login';
 import {
     Layout,
     Row,
