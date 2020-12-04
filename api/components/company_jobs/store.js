@@ -63,7 +63,7 @@ async function getJobs(filterCompany){
         .select("-__v")
         .populate('tags');
 
-    const result = await Promise.all(jobs.map( async (job) => {
+    let result = await Promise.all(jobs.map( async (job) => {
         let resp = {
             _id: job._id,
             tags: job.tags,
@@ -83,7 +83,6 @@ async function getJobs(filterCompany){
             typeUser: 2
         }).select('-tokens')
         .populate('company');
-        console.log('[ USER ]', findComp);
         try{
             resp.company = {
                 _id: findComp.company._id,
@@ -101,9 +100,11 @@ async function getJobs(filterCompany){
             };
             return resp;
         }catch(e){
-            console.log(e);
+            //console.log(e);
         }
     }));
+    result = result.filter(Boolean);
+    console.log('[ JOBLIST ]', result);
     return result;
 }
 
