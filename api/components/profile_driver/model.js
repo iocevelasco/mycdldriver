@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const profileDriverSchema = mongoose.Schema({
     dln: {
@@ -32,7 +33,7 @@ const profileDriverSchema = mongoose.Schema({
         type: Number,
         trim: true
     },
-    experience : {
+    experience: {
         type: Number,
         trim: true
     },

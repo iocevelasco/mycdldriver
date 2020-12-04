@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import propTypes from 'prop-types';
+import propTypes, { arrayOf, node } from 'prop-types';
 import { withRouter } from 'next/router';
 import Head from 'next/head'
 import Footer from './footer';
@@ -170,7 +170,7 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
 }
 
 MainLayout.propTypes = {
-    children: propTypes.object,
+    children: propTypes.oneOfType([arrayOf(node), node]).isRequired,
     title: propTypes.string.isRequired,
     user: propTypes.object,
     loading: propTypes.bool,

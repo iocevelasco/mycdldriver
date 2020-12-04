@@ -33,17 +33,22 @@ function mapStateToProps(state) {
 const FormUserCompany = (props) => {
   const [form] = Form.useForm();
 
+  const [address, setAddress] = useState({
+    stateId: '',
+    cityId: ''
+  })
+
   const [stateOptions, setOptions] = useState({
     options: [],
     all: []
   });
 
-  const [citiesOptions, setCities] = useState({
+  const [cityOptions, setCities] = useState({
     options: [],
     all: [],
     disabled: true
   });
-  console.log('citiesOptions', citiesOptions);
+
   const {
     loading,
     onChangeCompany,
@@ -55,14 +60,6 @@ const FormUserCompany = (props) => {
     imageProfile } = props;
 
   const onChangeProps = (changedFields, allFields) => {
-    if (changedFields.length) {
-      if (changedFields[0].name[0] === "state") {
-        let value = changedFields[0].value;
-        let options = [...stateOptions.all];
-        let currentState = options.filter((e) => e.stateName === value)[0];
-        if (currentState) fetchCities(currentState._id)
-      };
-    };
     onChangeCompany(allFields);
   }
 
@@ -75,7 +72,7 @@ const FormUserCompany = (props) => {
             if (a.stateName > b.stateName) { return 1; }
             return 0;
           })
-          .map((e) => { return { value: e.stateName } })
+          .map((e) => { return { value: e.stateName, id: e._id } })
         let all = response.data.data
         setOptions({
           options,
@@ -88,57 +85,20 @@ const FormUserCompany = (props) => {
       })
   }
 
-  const fetchCities = async (stateId) => {
-    setCities({
-      ...citiesOptions,
-      disabled: true
-    })
-    await axios.get(`/api/address/cities/${stateId}`)
-      .then((response) => {
-        let options = response.data.data
-          .sort((a, b) => {
-            if (a.cityName < b.cityName) { return -1; }
-            if (a.cityName > b.cityName) { return 1; }
-            return 0;
-          })
-          .map((e) => { return { value: e.cityName } })
-        let all = response.data.data
-        setCities({
-          options,
-          all,
-          disabled: false
-        })
-      })
-      .catch((err) => {
-        setCities([]);
-        console.log(err)
-      })
-  }
 
   const handleSearchState = (value) => {
-    let options = stateOptions.options.filter(e => {
-      return e.value.trim().toUpperCase().indexOf(value.trim().toUpperCase()) > -1;
-    });
+    let options = stateOptions.all.filter(e => {
+      return e.stateName.trim().toUpperCase().indexOf(value.trim().toUpperCase()) > -1;
+    }).map((e) => { return { value: e.stateName, id: e._id } });
     setOptions({
       ...stateOptions,
       options,
     });
   }
 
-  const handleSearchCity = (value) => {
-    let options = citiesOptions.options.filter(e => {
-      return e.value.trim().toUpperCase().indexOf(value.trim().toUpperCase()) > -1;
-    });
-    setCities({
-      ...citiesOptions,
-      options,
-    });
-  };
-
   useEffect(() => {
     fetchState();
   }, []);
-
 
   return (
     <div className='profile-driver'>
@@ -292,23 +252,6 @@ const FormUserCompany = (props) => {
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={8}>
-                <Form.Item
-                  name='state'
-                  label="State / Province / Reagion"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'State is required!',
-                    },
-                  ]}>
-                  <AutoComplete
-                    onSearch={handleSearchState}
-                    options={stateOptions.options}
-                    placeholder="Search state"
-                  />
-                </Form.Item>
-              </Col>
               <Col span={10}>
                 <Form.Item
                   name='city'
@@ -319,11 +262,23 @@ const FormUserCompany = (props) => {
                       message: 'City is required!',
                     },
                   ]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  name='state'
+                  label="State / Province / Region"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'State is required!',
+                    },
+                  ]}>
                   <AutoComplete
-                    onSearch={handleSearchCity}
-                    disabled={citiesOptions.disabled}
-                    options={citiesOptions.options}
-                    placeholder="Search city"
+                    onSearch={handleSearchState}
+                    options={stateOptions.options}
+                    placeholder="Search state"
                   />
                 </Form.Item>
               </Col>
