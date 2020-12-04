@@ -8,15 +8,15 @@ import {
   Form,
   Button,
   Upload,
-  AutoComplete,
-  Typography
+  Typography,
+  Select
 } from 'antd';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { RetweetOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 import axios from 'axios';
-
+const { Option } = Select;
 const { Title } = Typography;
 function mapStateToProps(state) {
   const { user } = state;
@@ -60,6 +60,10 @@ const FormUserCompany = (props) => {
     imageProfile } = props;
 
   const onChangeProps = (changedFields, allFields) => {
+    if (changedFields.length) {
+      let state = changedFields[0].name[0] === "state" ? changedFields[0] : false
+      if (state) fetchCities(state.value)
+    };
     onChangeCompany(allFields);
   }
 
@@ -85,16 +89,33 @@ const FormUserCompany = (props) => {
       })
   }
 
-
-  const handleSearchState = (value) => {
-    let options = stateOptions.all.filter(e => {
-      return e.stateName.trim().toUpperCase().indexOf(value.trim().toUpperCase()) > -1;
-    }).map((e) => { return { value: e.stateName, id: e._id } });
-    setOptions({
-      ...stateOptions,
-      options,
-    });
+  const fetchCities = async (stateId) => {
+    setCities({
+      ...cityOptions,
+      disabled: true
+    })
+    await axios.get(`/api/address/cities/${stateId}`)
+      .then((response) => {
+        let options = response.data.data
+          .sort((a, b) => {
+            if (a.cityName < b.cityName) { return -1; }
+            if (a.cityName > b.cityName) { return 1; }
+            return 0;
+          })
+          .map((e) => { return { value: e.cityName, id: e._id } })
+        let all = response.data.data
+        setCities({
+          options,
+          all,
+          disabled: false
+        })
+      })
+      .catch((err) => {
+        setCities([]);
+        console.log(err)
+      })
   }
+
 
   useEffect(() => {
     fetchState();
@@ -252,34 +273,34 @@ const FormUserCompany = (props) => {
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={10}>
-                <Form.Item
-                  name='city'
-                  label="City"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'City is required!',
-                    },
-                  ]}>
-                  <Input />
+              <Col span={8}>
+                <Form.Item label="State / Province / Reagion">
+                  <Form.Item
+                    name={'state'}
+                    noStyle
+                    rules={[{ required: true, message: 'Province is required' }]}
+                  >
+                    <Select placeholder="Select province">
+                      {
+                        stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
+                      }
+                    </Select>
+                  </Form.Item>
                 </Form.Item>
               </Col>
-              <Col span={8}>
-                <Form.Item
-                  name='state'
-                  label="State / Province / Region"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'State is required!',
-                    },
-                  ]}>
-                  <AutoComplete
-                    onSearch={handleSearchState}
-                    options={stateOptions.options}
-                    placeholder="Search state"
-                  />
+              <Col span={10}>
+                <Form.Item label="State / Province / Reagion">
+                  <Form.Item
+                    name={'state'}
+                    noStyle
+                    rules={[{ required: true, message: 'Province is required' }]}
+                  >
+                    <Select disabled={cityOptions.disabled} placeholder="Select province">
+                      {
+                        cityOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
+                      }
+                    </Select>
+                  </Form.Item>
                 </Form.Item>
               </Col>
               <Col span={6}>

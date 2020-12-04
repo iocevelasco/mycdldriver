@@ -22,7 +22,6 @@ const initialState = {
   logo: [],
   photo: [],
   imageProfile: null,
-  address: {},
 }
 
 const types = {
@@ -33,8 +32,7 @@ const types = {
   UPLOAD_IMAGE: 'UPLOAD_IMAGE',
   UPLOAD_PHOTO: 'UPLOAD_PHOTO',
   LOGIN_SUCCCESS: 'LOGIN_SUCCCESS',
-  UPLOAD_IMAGE_PROFILE: 'UPLOAD_IMAGE_PROFILE',
-  SETTING_DRESS: 'SETTING_DRESS',
+  UPLOAD_IMAGE_PROFILE: 'UPLOAD_IMAGE_PROFILE'
 }
 
 const reducer = (state, action) => {
@@ -53,8 +51,6 @@ const reducer = (state, action) => {
       return { ...state, photo: action.payload }
     case types.UPLOAD_IMAGE_PROFILE:
       return { ...state, imageProfile: action.payload }
-    case types.SETTING_ADDRESS:
-      return { ...state, address: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -117,6 +113,41 @@ const CompanyProfileView = (props) => {
     dispatch({ type: types.DATA_COMPANY, payload: allFields });
   }
 
+  const propsUpload = {
+    name: 'photo',
+    action: '/api/files',
+    headers: {
+      Authorization: `Bearer ${props.token}`
+    },
+    async onChange(info) {
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+
+      if (state.logo.length > 0) {
+        try {
+          const file = {
+            foto: state.logo[0].response.data.file
+          };
+          await axios.post(`/api/files/delete`, file);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      dispatch({ type: types.UPLOAD_IMAGE, payload: fileList });
+    }
+  };
+
   const propsPhoto = {
     name: 'logo',
     action: '/api/files',
@@ -157,8 +188,9 @@ const CompanyProfileView = (props) => {
   };
 
   const beforeToCreateProfile = () => {
-    let base = {};
-    let company = {};
+    let base = {}
+    let company = {}
+    console.log('fields', state.fields);
     state.fields.forEach((e) => {
       if (
         e.name[0] == 'name' ||
@@ -212,7 +244,6 @@ const CompanyProfileView = (props) => {
 
   const updateCompany = async () => {
     const { base, company } = beforeToCreateProfile();
-    console.log('company', company, state.address);
     base.typeUser = 2;
     if (state.logo.length > 0) {
       company.logo = state.logo[0].response.data.file;
@@ -248,19 +279,15 @@ const CompanyProfileView = (props) => {
     }
   };
 
-  const settingAddress = (payload) => {
-    dispatch({ type: types.SETTING_ADDRESS, payload });
-  }
-
   const formConfig = {
     logo: state.logo,
     photo: state.photo,
     fields: state.fields,
     imageProfile: state.imageProfile,
     onChangeCompany,
-    settingAddress,
     newCompany,
     updateCompany,
+    propsUpload,
     propsPhoto
   }
 
@@ -285,8 +312,6 @@ const CompanyProfileView = (props) => {
   )
 };
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(CompanyProfileView)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProfileView));
 
 
