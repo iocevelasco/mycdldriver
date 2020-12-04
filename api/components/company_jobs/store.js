@@ -28,45 +28,83 @@ async function saveTags(tags){
     return array;
 }
 
-function getJobs(filterCompany){
-    return new Promise((resolve, reject) => {
-        let filter = {};
-        let filterOr = [];
-        if(filterCompany.company){
-            filter = filterCompany;
-        }
-        if(filterCompany.id){
-            filter = {_id: filterCompany.id};
-        }
-        if(filterCompany.input){
-            filterOr.push({title: new RegExp(filterCompany.input, 'i')});
-            filterOr.push({description: new RegExp(filterCompany.input, 'i')});
-        }
-        if(filterCompany.city){
-            filterOr.push({city: new RegExp(filterCompany.city, 'i')});
-        }
-        if(filterCompany.date){
-            filterOr.push({date: filterCompany.date});
-        }
-        if(filterOr.length > 1){
-            filter = {$or: filterOr};
-        }else if(filterOr.length == 1 && filterCompany.input){
-            filter = {
-                title: new RegExp(filterCompany.input, 'i'),
-                description: new RegExp(filterCompany.input, 'i')
-            };
-        }else if(filterOr.length == 1 && filterCompany.city){
-            filter = {
-                city: new RegExp(filterCompany.city, 'i')
-            };
-        }
-        result = JobsModel.find(filter)
-            .select("-__v")
-            .populate('company')
-            .populate('tags');
+async function getJobs(filterCompany){
+    let filter = {};
+    let filterOr = [];
+    if(filterCompany.company){
+        filter = filterCompany;
+    }
+    if(filterCompany.id){
+        filter = {_id: filterCompany.id};
+    }
+    if(filterCompany.input){
+        filterOr.push({title: new RegExp(filterCompany.input, 'i')});
+        filterOr.push({description: new RegExp(filterCompany.input, 'i')});
+    }
+    if(filterCompany.city){
+        filterOr.push({city: new RegExp(filterCompany.city, 'i')});
+    }
+    if(filterCompany.date){
+        filterOr.push({date: filterCompany.date});
+    }
+    if(filterOr.length > 1){
+        filter = {$or: filterOr};
+    }else if(filterOr.length == 1 && filterCompany.input){
+        filter = {
+            title: new RegExp(filterCompany.input, 'i'),
+            description: new RegExp(filterCompany.input, 'i')
+        };
+    }else if(filterOr.length == 1 && filterCompany.city){
+        filter = {
+            city: new RegExp(filterCompany.city, 'i')
+        };
+    }
+    jobs = await JobsModel.find(filter)
+        .select("-__v")
+        .populate('tags');
 
-        resolve(result);
-    });
+    const result = await Promise.all(jobs.map( async (job) => {
+        let resp = {
+            _id: job._id,
+            tags: job.tags,
+            title: job.title,
+            time: job.time,
+            logo: job.logo,
+            image: job.image,
+            email: job.email,
+            description: job.description,
+            date: job.date,
+            city: job.city,
+            areaCode: job.areaCode,
+            phoneNumber: job.phoneNumber,
+        };
+        const findComp = await User.findOne({
+            company: job.company,
+            typeUser: 2
+        }).select('-tokens')
+        .populate('company');
+        console.log('[ USER ]', findComp);
+        try{
+            resp.company = {
+                _id: findComp.company._id,
+                tradename: findComp.company.tradename,
+                legalNumber: findComp.company.legalNumber,
+                areaCode: findComp.company.areaCode,
+                phoneNumber: findComp.company.phoneNumber,
+                address: findComp.company.address,
+                address2: findComp.company.address2,
+                description: findComp.company.description,
+                name: findComp.name,
+                lastname: findComp.lastname,
+                photo: findComp.photo,
+                email: findComp.email
+            };
+            return resp;
+        }catch(e){
+            console.log(e);
+        }
+    }));
+    return result;
 }
 
 function getApplyJobs(filterQuery){
