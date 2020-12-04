@@ -33,7 +33,7 @@ const profileDriverSchema = mongoose.Schema({
         type: Number,
         trim: true
     },
-    experience : {
+    experience: {
         type: Number,
         trim: true
     },
