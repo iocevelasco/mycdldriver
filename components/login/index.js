@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import SocialNetworkButtons from './utils/SocialNetwork';
 import UserPassword from './utils/loginWithUserPassword';
-
+import NewUserForm from './utils/NewUser';
 const { Text, Title } = Typography;
 
 function mapStateToProps(state) {
@@ -30,8 +30,8 @@ function mapDispatchToProps(dispatch) {
 const ModalLogin = ({ visible_modal_login, router, ...props }) => {
   const [form] = Form.useForm();
   const [fields, setFields] = useState([]);
-  const [path, setPath] = useState();
-
+  const [newUser, setNewUser] = useState(false);
+  console.log('newUser', newUser);
   const style = {
     height: '100vh',
     top: 16,
@@ -54,19 +54,21 @@ const ModalLogin = ({ visible_modal_login, router, ...props }) => {
       <div className='login'>
         <div className='login--title'>
           <img src='/static/images/logo.svg' />
-          <Title level={3}>Welcome!</Title>
         </div>
-        <div className='button-container'>
-          <UserPassword />
-          <div className='login--divider'>
-            <span> </span><p> or </p><span> </span>
-          </div>
-          <SocialNetworkButtons />
-          <div class="login--registry-box">
-            <p> Are you driver or company and you don't have acount?</p>
-            <Button type='link'>Create acount</Button>
-          </div>
-        </div>
+        {
+          !newUser ? <>
+            <Title level={3}>Welcome!</Title>
+            <UserPassword />
+            <div className='login--divider'>
+              <span> </span><p> or </p><span> </span>
+            </div>
+            <SocialNetworkButtons />
+            <div class="login--registry-box">
+              <p> Are you driver or company and you don't have account?</p>
+              <Button type='link' onClick={() => setNewUser(true)}>Create Account</Button>
+            </div>
+          </> : <NewUserForm setNewUser={setNewUser} />
+        }
       </div>
     </Modal>
   )

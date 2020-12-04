@@ -16,10 +16,6 @@ import {
 }
   from '@ant-design/icons';
 
-function mapStateToProps(state) { }
-
-function mapDispatchToProps(dispatch) { };
-
 const UserPassword = (props) => {
   const [form] = Form.useForm();
   const [fields, setFields] = useState([]);
@@ -72,4 +68,4 @@ const UserPassword = (props) => {
   )
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserPassword));
+export default UserPassword;
