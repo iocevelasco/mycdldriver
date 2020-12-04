@@ -104,7 +104,6 @@ async function getJobs(filterCompany){
         }
     }));
     result = result.filter(Boolean);
-    console.log('[ JOBLIST ]', result);
     return result;
 }
 
