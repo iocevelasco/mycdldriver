@@ -28,45 +28,83 @@ async function saveTags(tags){
     return array;
 }
 
-function getJobs(filterCompany){
-    return new Promise((resolve, reject) => {
-        let filter = {};
-        let filterOr = [];
-        if(filterCompany.company){
-            filter = filterCompany;
-        }
-        if(filterCompany.id){
-            filter = {_id: filterCompany.id};
-        }
-        if(filterCompany.input){
-            filterOr.push({title: new RegExp(filterCompany.input, 'i')});
-            filterOr.push({description: new RegExp(filterCompany.input, 'i')});
-        }
-        if(filterCompany.city){
-            filterOr.push({city: new RegExp(filterCompany.city, 'i')});
-        }
-        if(filterCompany.date){
-            filterOr.push({date: filterCompany.date});
-        }
-        if(filterOr.length > 1){
-            filter = {$or: filterOr};
-        }else if(filterOr.length == 1 && filterCompany.input){
-            filter = {
-                title: new RegExp(filterCompany.input, 'i'),
-                description: new RegExp(filterCompany.input, 'i')
-            };
-        }else if(filterOr.length == 1 && filterCompany.city){
-            filter = {
-                city: new RegExp(filterCompany.city, 'i')
-            };
-        }
-        result = JobsModel.find(filter)
-            .select("-__v")
-            .populate('company')
-            .populate('tags');
+async function getJobs(filterCompany){
+    let filter = {};
+    let filterOr = [];
+    if(filterCompany.company){
+        filter = filterCompany;
+    }
+    if(filterCompany.id){
+        filter = {_id: filterCompany.id};
+    }
+    if(filterCompany.input){
+        filterOr.push({title: new RegExp(filterCompany.input, 'i')});
+        filterOr.push({description: new RegExp(filterCompany.input, 'i')});
+    }
+    if(filterCompany.city){
+        filterOr.push({city: new RegExp(filterCompany.city, 'i')});
+    }
+    if(filterCompany.date){
+        filterOr.push({date: filterCompany.date});
+    }
+    if(filterOr.length > 1){
+        filter = {$or: filterOr};
+    }else if(filterOr.length == 1 && filterCompany.input){
+        filter = {
+            title: new RegExp(filterCompany.input, 'i'),
+            description: new RegExp(filterCompany.input, 'i')
+        };
+    }else if(filterOr.length == 1 && filterCompany.city){
+        filter = {
+            city: new RegExp(filterCompany.city, 'i')
+        };
+    }
+    jobs = await JobsModel.find(filter)
+        .select("-__v")
+        .populate('tags');
 
-        resolve(result);
-    });
+    let result = await Promise.all(jobs.map( async (job) => {
+        let resp = {
+            _id: job._id,
+            tags: job.tags,
+            title: job.title,
+            time: job.time,
+            logo: job.logo,
+            image: job.image,
+            email: job.email,
+            description: job.description,
+            date: job.date,
+            city: job.city,
+            areaCode: job.areaCode,
+            phoneNumber: job.phoneNumber,
+        };
+        const findComp = await User.findOne({
+            company: job.company,
+            typeUser: 2
+        }).select('-tokens')
+        .populate('company');
+        try{
+            resp.company = {
+                _id: findComp.company._id,
+                tradename: findComp.company.tradename,
+                legalNumber: findComp.company.legalNumber,
+                areaCode: findComp.company.areaCode,
+                phoneNumber: findComp.company.phoneNumber,
+                address: findComp.company.address,
+                address2: findComp.company.address2,
+                description: findComp.company.description,
+                name: findComp.name,
+                lastname: findComp.lastname,
+                photo: findComp.photo,
+                email: findComp.email
+            };
+            return resp;
+        }catch(e){
+            //console.log(e);
+        }
+    }));
+    result = result.filter(Boolean);
+    return result;
 }
 
 function getApplyJobs(filterQuery){
@@ -192,7 +230,7 @@ async function getStaffCompanyJobs(query){
     if(id){
         filter = {
             company: id,
-            status: 0
+            status: 1
         };
     }
     const drivers = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
@@ -216,7 +254,7 @@ async function getStaffCompanyJobs(query){
             const filterJob = {
                 driver: response,
                 company: id,
-                status: 0
+                status: 1
             };
             const jobsDriver = await JobsApplysModel.find(filterJob).populate('job');
             resDriver.jobs = await Promise.all(jobsDriver.map( async (resp) => {
@@ -333,7 +371,7 @@ async function updateJob(id, job, company){
     }
     if(job.logo){
         try {
-            fs.unlinkSync("." + foundJob.photo);
+            fs.unlinkSync("." + foundJob.logo);
         } catch(err) {
             console.error(err);
         }

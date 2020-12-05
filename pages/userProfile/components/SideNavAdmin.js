@@ -122,7 +122,9 @@ const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
             return (
               <Menu.Item key={i} icon={e.icon}>
                 <Link href={e.path}>
-                  {e.section_name}
+                  <a>
+                    {e.section_name}
+                  </a>
                 </Link>
               </Menu.Item>)
           })

@@ -198,7 +198,7 @@ function applyJob(jobApply) {
     });
 }
 
-function updateJob(id, job, company, logo) {
+function updateJob(id, job, company) {
     return new Promise((resolve, reject) => {
         if (!job) {
             console.error('[companyJobsController.updateJob] No company data');

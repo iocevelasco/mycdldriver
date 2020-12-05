@@ -23,6 +23,10 @@ const profileCompanySchema = mongoose.Schema({
         type: String,
         trim: true
     },
+    address2: {
+        type: String,
+        trim: true
+    },
     description: {
         type: String,
         trim: true
@@ -30,6 +34,14 @@ const profileCompanySchema = mongoose.Schema({
     zipCode: {
         type: String,
         trim: true
+    },
+    state: {
+        type: Schema.ObjectId,
+        ref: 'States',
+    },
+    city: {
+        type: Schema.ObjectId,
+        ref: 'Cities',
     }
 });
 

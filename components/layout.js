@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import propTypes from 'prop-types';
+import propTypes, { arrayOf, node } from 'prop-types';
 import { withRouter } from 'next/router';
 import Head from 'next/head'
 import Footer from './footer';
@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { logoutUser, getCurrentLocation } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import { deviceType } from '@store/reducers/landing_reducer';
-import ModalLogin from 'components/modal_login';
+import ModalLogin from 'components/login';
 import {
     Layout,
     Row,
@@ -120,12 +120,16 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
-                            <img src='/static/images/logo.svg' />
+                            <a >
+                                <img src='/static/images/logo.svg' />
+                            </a>
                         </Link>
                     </Col>
                     <Col span={10}>
                         <Link href="/">
-                            Home
+                            <a >
+                                Home
+                            </a>
                         </Link>
                     </Col>
                     <Col span={10}>
@@ -170,7 +174,7 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
 }
 
 MainLayout.propTypes = {
-    children: propTypes.object,
+    children: propTypes.oneOfType([arrayOf(node), node]).isRequired,
     title: propTypes.string.isRequired,
     user: propTypes.object,
     loading: propTypes.bool,

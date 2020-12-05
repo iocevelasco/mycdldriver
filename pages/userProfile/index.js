@@ -14,16 +14,16 @@ import { connect } from 'react-redux';
 
 const { Title, Text } = Typography;
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
-      user: state.user
+    user: state.user
   }
 }
 
-const UserProfile = ({ user, ...props }) => { 
+const UserProfile = ({ user, ...props }) => {
 
   useEffect(() => {
-    switch(user.typeUser){
+    switch (user.typeUser) {
       case 1:
         props.router.push('/userProfile/driver');
         break;
@@ -34,12 +34,12 @@ const UserProfile = ({ user, ...props }) => {
         break;
     }
   }, [user.typeUser]);
-  
+
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
-    paddingTop: 24, 
+    paddingTop: 24,
     paddingBottom: 24,
-    backgroundSize:'contain',
+    backgroundSize: 'contain',
   }
 
   return (
@@ -52,19 +52,23 @@ const UserProfile = ({ user, ...props }) => {
           </div>
           <div className="card-container">
             <Link href="/userProfile/driver/profile">
-              <Card
-                hoverable={true}>
-                <img src='/static/images/driver.svg' />
-                <Text > Drivers </Text>
-              </Card>
+              <a>
+                <Card
+                  hoverable={true}>
+                  <img src='/static/images/driver.svg' />
+                  <Text > Drivers </Text>
+                </Card>
+              </a>
             </Link>
             <Link href="/userProfile/company/profile">
-              <Card
-                hoverable={true}>
-                <img src='/static/images/truck.svg' />
-                <Text > Company </Text>
-              </Card>
-              </Link>
+              <a>
+                <Card
+                  hoverable={true}>
+                  <img src='/static/images/truck.svg' />
+                  <Text > Company </Text>
+                </Card>
+              </a>
+            </Link>
           </div>
         </div>
       </WrapperSection>

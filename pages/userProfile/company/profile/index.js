@@ -190,6 +190,7 @@ const CompanyProfileView = (props) => {
   const beforeToCreateProfile = () => {
     let base = {}
     let company = {}
+    console.log('fields', state.fields);
     state.fields.forEach((e) => {
       if (
         e.name[0] == 'name' ||
@@ -251,6 +252,7 @@ const CompanyProfileView = (props) => {
       base.photo = state.photo[0].response.data.file;
     }
     const fullCompany = { base: base, ...company };
+    console.log('[ FULLUSER ]', fullCompany);
     try {
       dispatch({ type: types.LOADING, payload: true });
       const { data } = await axios.patch('/api/company/' + props._id, fullCompany, header);

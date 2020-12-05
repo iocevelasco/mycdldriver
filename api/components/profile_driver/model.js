@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const profileDriverSchema = mongoose.Schema({
     dln: {
@@ -32,7 +33,7 @@ const profileDriverSchema = mongoose.Schema({
         type: Number,
         trim: true
     },
-    experience : {
+    experience: {
         type: Number,
         trim: true
     },
@@ -47,6 +48,18 @@ const profileDriverSchema = mongoose.Schema({
     address: {
         type: String,
         trim: true
+    },
+    address2: {
+        type: String,
+        trim: true
+    },
+    state: {
+        type: Schema.ObjectId,
+        ref: 'States',
+    },
+    city: {
+        type: Schema.ObjectId,
+        ref: 'Cities',
     }
 });
 

@@ -1,16 +1,17 @@
 import React from 'react';
-import { 
-  Row, 
-  Col, 
-  Image, 
-  Typography, 
+import { useEffect } from 'react';
+import {
+  Row,
+  Col,
+  Image,
+  Typography,
   Result,
   Button,
   Spin
 } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
-const antIcon = <LoadingOutlined style={{ fontSize: 60, color:'#FF2A39' }} spin />;
+const antIcon = <LoadingOutlined style={{ fontSize: 60, color: '#FF2A39' }} spin />;
 
 const WrapperSection = ({ children, xs, row, styles }) => {
   return (
@@ -58,47 +59,56 @@ const BuildSection = () => {
   )
 }
 
-const MessageSuccess = ({title, subTitle, extra}) => {
-  const styles= {
+const MessageSuccess = ({ title, subTitle, extra }) => {
+  const styles = {
     height: 300
   }
 
   return (
-    <div styles={styles}> 
-    <Result
-      status="success"
-      title={title}
-      subTitle={subTitle}
-      extra={extra}
+    <div styles={styles}>
+      <Result
+        status="success"
+        title={title}
+        subTitle={subTitle}
+        extra={extra}
       />
     </div>
   )
 }
 
-const SpinnerComp = ({active}) => {
+const SpinnerComp = ({ active }) => {
   const styles = {
-    wrapper: { 
-      position:'absolute',
-      left:0,
-      right:0,
-      top:0,
-      bottom:0,
-      display:'flex',
-      justifyContent:'center',
-      alignItems:'center',
-      alignContent:'center',
-      background:'#ffffffa3',
-      zIndex:10,
+    wrapper: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      alignContent: 'center',
+      background: '#ffffffa3',
+      zIndex: 10,
     }
   }
+  useEffect(() => {
+    if (active) {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      document.body.style.overflowY = "hidden"
+    } else {
+      document.body.style.overflowY = "auto"
+    }
+  }, [active]);
 
-  if(active){
+  if (active) {
     return (
       <div style={styles.wrapper}>
-         <Spin indicator={antIcon} />
+        <Spin indicator={antIcon} />
       </div>
     )
-  }else{
+  } else {
     return "";
   }
 }

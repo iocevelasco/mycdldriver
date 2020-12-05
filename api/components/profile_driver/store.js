@@ -10,7 +10,9 @@ async function getDriver(filterDriver){
                 dln: filterDriver,
             };
         }
-        driverResult = Model.find(filter);
+        driverResult = Model.find(filter)
+        .populate('state')
+        .populate('city');
 
         resolve(driverResult);
     });
@@ -110,6 +112,15 @@ async function updateDriver(id, user){
     }
     if(driver.address){
         foundDriver.address = driver.address;
+    }
+    if(driver.address2){
+        foundDriver.address = driver.address2;
+    }
+    if(driver.city){
+        foundDriver.city = driver.city;
+    }
+    if(driver.state){
+        foundDriver.state = driver.state;
     }
     
     await foundUser.save();
