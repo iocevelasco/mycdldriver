@@ -86,7 +86,7 @@ const landingReducer = (state = initialState, action) => {
         case types.FETCH_JOBS:
             return {
                 ...state,
-                //jobs: action.payload.jobs,
+                jobs: action.payload.jobs,
                 citys_available: action.payload.citys_available
             }
         case types.VISIBLE_MODAL_LOGIN:
