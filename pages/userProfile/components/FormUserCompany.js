@@ -91,7 +91,7 @@ const FormUserCompany = (props) => {
 
   const fetchCities = async (stateId) => {
     setCities({
-      ...cityOptions,
+      options: [],
       disabled: true
     })
     await axios.get(`/api/address/cities/${stateId}`)
@@ -116,9 +116,11 @@ const FormUserCompany = (props) => {
       })
   }
 
-
   useEffect(() => {
     fetchState();
+  }, []);
+  useEffect(() => {
+    //fetchCities(cityInit);
   }, []);
 
   return (
@@ -289,13 +291,19 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
               <Col span={10}>
-                <Form.Item label="State / Province / Reagion">
+                <Form.Item label="City">
                   <Form.Item
-                    name={'state'}
+                    name={'city'}
                     noStyle
-                    rules={[{ required: true, message: 'Province is required' }]}
+                    rules={[{ required: true, message: 'City is required' }]}
                   >
-                    <Select disabled={cityOptions.disabled} placeholder="Select province">
+                    <Select 
+                      disabled={cityOptions.disabled} 
+                      placeholder="Select city"
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }>
                       {
                         cityOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
                       }

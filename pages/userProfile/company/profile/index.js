@@ -252,6 +252,7 @@ const CompanyProfileView = (props) => {
       base.photo = state.photo[0].response.data.file;
     }
     const fullCompany = { base: base, ...company };
+    console.log('[ FULLUSER ]', fullCompany);
     try {
       dispatch({ type: types.LOADING, payload: true });
       const { data } = await axios.patch('/api/company/' + props._id, fullCompany, header);
