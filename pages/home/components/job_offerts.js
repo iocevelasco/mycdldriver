@@ -7,7 +7,8 @@ import {
   Card,
   Avatar,
   Typography,
-  Button
+  Button,
+  Image
 } from 'antd';
 import Link from 'next/link';
 import moment from 'moment';
@@ -86,6 +87,7 @@ const DescriptionSmall = ({ item }) => {
           style={{ width: '100%', marginTop: 24, }}>
           <div className='container'>
             <div className='image'>
+              <Avatar size={80} src={item.company.photo} />
               <Avatar size={80} src={item.logo} />
             </div>
             <div className='job-offert__description'>
@@ -110,45 +112,43 @@ const DescriptionSmall = ({ item }) => {
 const DescriptionDesktop = ({ item, small }) => {
   return (
     <Card
+      hoverable
       bodyStyle={{
         padding: 0
       }}
       style={{ width: '100%', marginTop: 24, }}>
-      <div className='home--job-offert'>
-        <div className='thumbnails'>
-          <Avatar size={120} src={item.logo} />
-        </div>
-        <div className='job-offert__description'>
-          <div>
-            <Title level={3}> {item.title} </Title>
+      <Link
+        href={{
+          pathname: '/job-offert',
+          query: { id: item._id },
+        }}
+      >
+        <div className='home--job-offert'>
+          <div className="logo">
+            <Avatar size={140} src={item.logo} />
+          </div>
+          <div className='job-offert__description'>
             <div>
-              <Text> Address </Text>
-              <Text strong> {item.city} </Text> <Text strong > | </Text>
-              <Text> Date </Text>
-              <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
-            </div>
-            <div>
-              <Text> Phone </Text>
-              <Text strong> {item.areaCode} - {item.phoneNumber} </Text> <Text strong > | </Text>
-              <Text> Email </Text>
-              <Text strong> {item.email} </Text>
-            </div>
-            <Text> {item.description} </Text>
-            <div>
+              <Title level={3}> {item.title} </Title>
+              <div>
+                <Text> Address </Text>
+                <Text strong> {item.city} </Text> <Text strong > | </Text>
+                <Text> Date </Text>
+                <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
+              </div>
+              <div>
+                <Text> Phone </Text>
+                <Text strong> {item.areaCode} - {item.phoneNumber} </Text> <Text strong > | </Text>
+                <Text> Email </Text>
+                <Text strong> {item.email} </Text>
+              </div>
+              <Text> {item.description} </Text>
             </div>
           </div>
+          <div className="thumbnails" style={{ backgroundImage: "url(" + item.logo + ")" }}>
+          </div>
         </div>
-        <div className='action'>
-          <Link
-            href={{
-              pathname: '/job-offert',
-              query: { id: item._id },
-            }}
-          >
-            <Button shape="round" type="secondary" size='large'> VIEW MORE </Button>
-          </Link>
-        </div>
-      </div>
+      </Link>
     </Card>
   )
 }
@@ -161,7 +161,8 @@ const DescriptionMobile = ({ item }) => {
     style={{ width: '100%', marginTop: 24, }}>
     <div className='home--job-offert'>
       <div className='thumbnails'>
-        <Avatar size={120} src={item.logo} />
+        <Avatar size={80} src={item.company.photo} />
+        <Avatar size={80} src={item.logo} />
       </div>
       <div className='job-offert__description'>
         <div>
