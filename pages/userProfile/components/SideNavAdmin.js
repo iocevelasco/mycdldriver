@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, Col, Button, } from 'antd';
 import { connect } from 'react-redux';
+import propTypes from 'prop-types';
 import {
   HomeOutlined,
   UserOutlined,
@@ -16,11 +17,11 @@ import Link from 'next/link';
 function mapStateToProps(state) {
   return {
     user: state.user,
-    isUseSucces: state.user.typeUser
+    isUserSuccess: state.user.typeUser
   }
 }
 
-const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
+const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
   const [menuOptions, setOptions] = useState([]);
   const { typeUser } = user;
 
@@ -131,7 +132,7 @@ const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
         }
       </Menu>
       {
-        !isUseSucces ? <Link href="/userProfile">
+        !isUserSuccess ? <Link href="/userProfile">
           <Button
             shape="round"
             size="large"
@@ -147,6 +148,12 @@ const SideNavAdmin = ({ user, currentLocation, isUseSucces }) => {
       }
     </Col>
   )
+}
+
+SideNavAdmin.propTypes = {
+  user: propTypes.object.isRequired,
+  currentLocation: propTypes.string.isRequired,
+  isUserSuccess: propTypes.number.isRequired
 }
 
 export default connect(mapStateToProps)(SideNavAdmin);

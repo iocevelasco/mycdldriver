@@ -4,7 +4,8 @@ import {
   Input,
   Space,
   Form,
-  Typography
+  Typography,
+  Radio
 } from 'antd';
 import axios from 'axios';
 const { Title } = Typography;
@@ -75,6 +76,20 @@ const NewUserForm = (props) => {
               ]}
               name='name'>
               <Input size='large' placeholder='Last name' />
+            </Form.Item>
+            <Form.Item
+              label='Are you driver or Company?'
+              rules={[
+                {
+                  required: true,
+                  message: 'Last name is required!',
+                },
+              ]}
+              name='userType'>
+              <Radio.Group>
+                <Radio value={1}>Driver</Radio>
+                <Radio value={2}>Company</Radio>
+              </Radio.Group>
             </Form.Item>
             <Button
               type='primary'

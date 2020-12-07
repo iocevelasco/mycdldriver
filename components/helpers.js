@@ -6,11 +6,11 @@ import {
   Image,
   Typography,
   Result,
-  Button,
   Spin
 } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-const { Title, Text } = Typography;
+import propTypes from 'prop-types';
+const { Title } = Typography;
 const antIcon = <LoadingOutlined style={{ fontSize: 60, color: '#FF2A39' }} spin />;
 
 const WrapperSection = ({ children, xs, row, styles }) => {
@@ -112,6 +112,11 @@ const SpinnerComp = ({ active }) => {
     return "";
   }
 }
+
+SpinnerComp.propTypes = {
+  active: propTypes.bool.isRequired
+}
+
 
 export {
   WrapperSection,
