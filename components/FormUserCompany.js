@@ -297,8 +297,8 @@ const FormUserCompany = (props) => {
                     noStyle
                     rules={[{ required: true, message: 'City is required' }]}
                   >
-                    <Select 
-                      disabled={cityOptions.disabled} 
+                    <Select
+                      disabled={cityOptions.disabled}
                       placeholder="Select city"
                       showSearch
                       filterOption={(input, option) =>
@@ -326,7 +326,7 @@ const FormUserCompany = (props) => {
               </Col>
             </Row>
             <Row gutter={[24]} justify='center' align='middle'>
-              <Col span={8}>
+              <Col span={12}>
                 <Button
                   htmlType="submit"
                   type='primary'

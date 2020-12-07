@@ -6,7 +6,6 @@ import {
   Typography,
   Modal,
   Button,
-  Form,
 } from 'antd';
 import SocialNetworkButtons from './utils/SocialNetwork';
 import UserPassword from './utils/loginWithUserPassword';
@@ -28,10 +27,13 @@ function mapDispatchToProps(dispatch) {
 };
 
 const ModalLogin = ({ visible_modal_login, router, ...props }) => {
-  const [form] = Form.useForm();
-  const [fields, setFields] = useState([]);
   const [newUser, setNewUser] = useState(false);
-  console.log('newUser', newUser)
+
+  const handleModal = () => {
+    props.handleModal(false);
+    setNewUser(false);
+  }
+
   const style = {
     height: '100vh',
     top: 16,
@@ -43,17 +45,17 @@ const ModalLogin = ({ visible_modal_login, router, ...props }) => {
       visible={visible_modal_login}
       footer={null}
       width={420}
-      onOk={() => props.handleModal(false)}
-      onCancel={() => props.handleModal(false)}
-    >
+      onCancel={handleModal}>
       <div className='login'>
         <div className='login--title'>
           <img src='/static/images/logo.svg' />
         </div>
         {
           !newUser ? <>
-            <Title level={3}>Welcome!</Title>
-            <UserPassword />
+            <div className='login--title'>
+              <Title level={3}>Welcome!</Title>
+            </div>
+            <UserPassword setNewUser={setNewUser} />
             <div className='login--divider'>
               <span> </span><p> or </p><span> </span>
             </div>

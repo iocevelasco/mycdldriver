@@ -4,7 +4,7 @@ import { withRouter } from 'next/router';
 import Head from 'next/head'
 import Footer from './footer';
 import Link from 'next/link';
-import SpinnerComp from '../components/loading';
+import { SpinnerComp } from 'components/helpers';
 import { connect } from 'react-redux';
 import { logoutUser, getCurrentLocation } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
@@ -29,7 +29,7 @@ import {
 
 import '../styles/index.less';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 const { Content, Header } = Layout;
 
 function mapStateToProps(state) {
@@ -41,7 +41,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        handleLogout: () => dispatch(logoutUser()),
+        logoutUser: () => dispatch(logoutUser()),
         handleModal: (prop) => dispatch(handlerModalLogin(prop)),
         handleLocation: (location) => dispatch(getCurrentLocation(location)),
         handleDeviceType: (props) => dispatch(deviceType(props))
@@ -49,7 +49,6 @@ function mapDispatchToProps(dispatch) {
 };
 
 const MainLayout = ({ children, title, user, isLoading, router, bgActive, deviceType, ...props }) => {
-    const [loader, setLoader] = useState(isLoading);
     const [userProps, setUserProps] = useState({
         name: '',
         email: '',
@@ -71,16 +70,6 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
         props.handleDeviceType(deviceType)
     }, [user])
 
-    useEffect(() => {
-        setLoader(isLoading);
-        if (isLoading) {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-            document.body.style.overflowY = "hidden"
-        } else {
-            document.body.style.overflowY = "auto"
-        }
-    }, [isLoading]);
     let bg = bgActive ? {
         background: `url('/static/images/bg-routes.jpg')`,
         backgroundSize: 'contain',
@@ -99,8 +88,7 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
             </Menu.Item>
             <Menu.Item >
                 <Button type='link' onClick={() => {
-                    setLoader(true);
-                    props.handleLogout();
+                    props.logoutUser();
                     router.push('/logout')
                 }} >
                     Logout
@@ -116,7 +104,7 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
         </Head>
         <Layout>
             <Header className='header-component'>
-                {loader ? <SpinnerComp /> : null}
+                <SpinnerComp active={isLoading} />
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">

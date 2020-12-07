@@ -23,7 +23,7 @@ const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 const initialState = {
-  loading:true,
+  loading: true,
   jobs: [],
 }
 const types = {
@@ -39,10 +39,10 @@ function mapStateToProps(state) {
 
 const reducer = (state, action) => {
   switch (action.type) {
-  case types.TEAM_DATA:
-    return { ...state, loading: false }
-  case types.FETCH_DATA:
-    return { ...state, jobs: action.payload }
+    case types.TEAM_DATA:
+      return { ...state, loading: false }
+    case types.FETCH_DATA:
+      return { ...state, jobs: action.payload }
     default:
       throw new Error('Unexpected action');
   }
@@ -73,11 +73,11 @@ const TeamCompanyView = ({ user, ...props }) => {
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
-  
+
   const configSection = {
-    title:'Our Drivers',
-    user:{user},
-    loading:state.loading,
+    title: 'Our Drivers',
+    user: { user },
+    loading: state.loading,
   }
 
   const showRate = (job) => {
@@ -108,7 +108,7 @@ const TeamCompanyView = ({ user, ...props }) => {
   }, [user]);
 
   const fetchJobs = async () => {
-    try {console.log(header);
+    try {
       setLoadin(true);
       const { data } = await axios.get(`/api/company/jobs/staff`, header);
       dispatch({ type: types.FETCH_DATA, payload: data.data });
@@ -141,7 +141,7 @@ const TeamCompanyView = ({ user, ...props }) => {
       title: 'Photo',
       dataIndex: 'photo',
       key: 'photo',
-      render:  url => <Avatar size={80} src={url} />
+      render: url => <Avatar size={80} src={url} />
     },
     {
       title: 'Name',
@@ -171,12 +171,12 @@ const TeamCompanyView = ({ user, ...props }) => {
   return (
     <MainLayout {...configSection}>
       <Row>
-        <SideNav 
-         currentLocation='3' /> 
+        <SideNav
+          currentLocation='3' />
         <Col span={20}>
           <WrapperSection row={18} styles={stylesWrapper}>
             <Card>
-            <Table
+              <Table
                 rowKey='id'
                 loading={loading}
                 columns={columns}
@@ -189,12 +189,12 @@ const TeamCompanyView = ({ user, ...props }) => {
                       dataSource={record.jobs}
                       renderItem={item => (
                         <List.Item
-                        key={item._d}
-                        actions={[
-                          <a onClick={() => showRate(item)}>
-                            Rate
+                          key={item._d}
+                          actions={[
+                            <a onClick={() => showRate(item)}>
+                              Rate
                         </a>,
-                        ]}>
+                          ]}>
                           <List.Item.Meta
                             avatar={
                               <Avatar src={item.logo} />
@@ -227,20 +227,20 @@ const TeamCompanyView = ({ user, ...props }) => {
           </Button>,
         ]}
       >
-        <Rate 
-          allowHalf 
+        <Rate
+          allowHalf
           allowClear={false}
           value={rateJob.apply.ranking}
-          onChange={(val)=>{
+          onChange={(val) => {
             rateJob.apply.ranking = val;
             setRateJob(rateJob);
-          }}  />
+          }} />
         <p>
           <TextArea
             rows={4}
             value={rateJob.apply.comment}
             placeholder="Describe your experience working with this driver"
-            onChange={(val)=>{
+            onChange={(val) => {
               rateJob.apply.comment = val.target.value;
               setRateJob(rateJob);
             }}

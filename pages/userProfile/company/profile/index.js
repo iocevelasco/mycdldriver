@@ -1,14 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
 import MainLayout from 'components/layout';
-import {
-  Row,
-  Col,
-  notification,
-  message,
-} from 'antd';
+import { Row, Col, notification, message } from 'antd';
 import axios from 'axios';
-import moment from 'moment';
-import FormUserCompany from '../../components/FormUserCompany';
+import FormUserCompany from 'components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
@@ -16,7 +10,7 @@ import { updateUserCompany } from '@store/reducers/user_reducer';
 import { WrapperSection } from 'components/helpers';
 
 const initialState = {
-  loading: true,
+  loading: false,
   userLogin: false,
   fields: [],
   logo: [],
@@ -190,7 +184,6 @@ const CompanyProfileView = (props) => {
   const beforeToCreateProfile = () => {
     let base = {}
     let company = {}
-    console.log('fields', state.fields);
     state.fields.forEach((e) => {
       if (
         e.name[0] == 'name' ||
@@ -252,7 +245,6 @@ const CompanyProfileView = (props) => {
       base.photo = state.photo[0].response.data.file;
     }
     const fullCompany = { base: base, ...company };
-    console.log('[ FULLUSER ]', fullCompany);
     try {
       dispatch({ type: types.LOADING, payload: true });
       const { data } = await axios.patch('/api/company/' + props._id, fullCompany, header);
@@ -289,7 +281,8 @@ const CompanyProfileView = (props) => {
     newCompany,
     updateCompany,
     propsUpload,
-    propsPhoto
+    propsPhoto,
+    loading: state.loading
   }
 
   const styleWrapper = {

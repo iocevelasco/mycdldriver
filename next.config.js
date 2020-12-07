@@ -16,8 +16,9 @@ module.exports = withLess({
   },
   webpack: (config, { isServer }) => {
     config.resolve.alias['components'] = path.resolve('./components');
+    config.resolve.alias['@hooks'] = path.resolve('./pages/hooks');
     config.resolve.alias['@store'] = path.resolve('./store');
-    
+
     if (isServer) {
       const antStyles = /antd\/.*?\/style.*?/
       const origExternals = [...config.externals]
