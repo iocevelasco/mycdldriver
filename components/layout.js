@@ -41,7 +41,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        handleLogout: () => dispatch(logoutUser()),
+        logoutUser: () => dispatch(logoutUser()),
         handleModal: (prop) => dispatch(handlerModalLogin(prop)),
         handleLocation: (location) => dispatch(getCurrentLocation(location)),
         handleDeviceType: (props) => dispatch(deviceType(props))
@@ -88,8 +88,7 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
             </Menu.Item>
             <Menu.Item >
                 <Button type='link' onClick={() => {
-                    setLoader(true);
-                    props.handleLogout();
+                    props.logoutUser();
                     router.push('/logout')
                 }} >
                     Logout

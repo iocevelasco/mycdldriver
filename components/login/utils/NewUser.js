@@ -74,7 +74,7 @@ const NewUserForm = (props) => {
                   message: 'Last name is required!',
                 },
               ]}
-              name='name'>
+              name='last-name'>
               <Input size='large' placeholder='Last name' />
             </Form.Item>
             <Form.Item
