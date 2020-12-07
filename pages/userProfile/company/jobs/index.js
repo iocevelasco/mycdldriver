@@ -4,7 +4,7 @@ import { Row, Col, Typography, message, Drawer, notification, Divider } from 'an
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import axios from 'axios';
-import WrapperSection from 'components/wrapperSection';
+import { WrapperSection } from 'components/helpers';
 import useJobsByCompany from '@hooks/useJobsByCompany';
 import SideNav from '../../components/SideNavAdmin';
 import JobsList from './ListJobs';

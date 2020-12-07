@@ -11,8 +11,7 @@ import {
   Drawer
 } from 'antd';
 import FormUserDriver from 'components/FormUserDriver';
-import { MessageSuccess } from 'components/helpers';
-import { WrapperSection } from 'components/helpers';
+import { WrapperSection, MessageSuccess } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import { connect } from 'react-redux';
