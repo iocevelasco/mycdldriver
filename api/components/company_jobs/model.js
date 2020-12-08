@@ -50,9 +50,12 @@ const CompanyJobsSchema = mongoose.Schema({
         required: true
     },
     city: {
-        type: String,
-        trim: true,
-        required: true
+        type: Schema.ObjectId,
+        ref: 'cities'
+    },
+    state: {
+        type: Schema.ObjectId,
+        ref: 'states'
     },
     time: {
         type: Number,
@@ -65,6 +68,7 @@ const CompanyJobsSchema = mongoose.Schema({
     company: {
         type: Schema.ObjectId,
         ref: 'ProfileCompany',
+        required: true
     },
     image: {
         type: String,

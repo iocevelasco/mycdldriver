@@ -61,6 +61,8 @@ async function getJobs(filterCompany){
     }
     jobs = await JobsModel.find(filter)
         .select("-__v")
+        .populate('city')
+        .populate('state')
         .populate('tags');
 
     let result = await Promise.all(jobs.map( async (job) => {
@@ -75,6 +77,7 @@ async function getJobs(filterCompany){
             description: job.description,
             date: job.date,
             city: job.city,
+            state: job.state,
             areaCode: job.areaCode,
             phoneNumber: job.phoneNumber,
         };
@@ -285,7 +288,7 @@ async function getStaffCompanyJobs(query){
 
 async function getCustomList(){
     const titles = await JobsModel.find({}).select("title");
-    const citys = await JobsModel.find({}).distinct('city');
+    //const citys = await JobsModel.find({}).distinct('city');
     const companys = await ProfileCompany.find({}).select("tradename");
     let titleArray = titles.map((job)=>{
         return job.title;
@@ -295,7 +298,7 @@ async function getCustomList(){
     });
     const listado = {
         title: titleArray,
-        citys: citys,
+        citys: [],
         company: companyArray
     };
 
@@ -303,8 +306,8 @@ async function getCustomList(){
 }
 
 async function addJob(job){
-    const listTags = await saveTags(job.tags);
-    job.tags = listTags;
+    /*const listTags = await saveTags(job.tags);
+    job.tags = listTags;*/
     const newJob = new JobsModel(job);
     await newJob.save();
     return newJob;
@@ -357,6 +360,9 @@ async function updateJob(id, job, company){
     if(job.city){
         foundJob.city = job.city;
     }
+    if(job.state){
+        foundJob.city = job.city;
+    }
     if(job.time){
         foundJob.time = job.time;
     }
@@ -377,12 +383,12 @@ async function updateJob(id, job, company){
         }
         foundJob.logo = job.logo;
     }
-    if(job.tags.length > 0){
+    /*if(job.tags.length > 0){
         const listTags = await saveTags(job.tags);
         if(listTags){
             foundJob.tags = listTags;
         }
-    }
+    }*/
     
     await foundJob.save();
     return {

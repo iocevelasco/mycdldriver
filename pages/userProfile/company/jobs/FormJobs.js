@@ -21,7 +21,7 @@ function beforeUpload(file) {
 }
 
 const FormJobs = (props) => {
-  const handlerInput = props.formType === 'create' ? props.onFinisCreateJobs : props.onFinisEditJobs;
+  const handlerInput = props.formType === 'create' ? props.onFinisCreateJobs : props.ediJob;
   const TextButton = props.formType === 'create' ? 'Create Job' : 'Save Changes';
   const [form] = Form.useForm();
   const [stateOptions, isFetchingState] = useListState();
@@ -30,7 +30,19 @@ const FormJobs = (props) => {
     options: [],
     all: [],
   });
-
+  let fields = [];
+  if(props.fields){
+    fields = props.fields.map((field)=>{
+      if(field['name'] == "city" || field['name'] == "state"){
+        if(typeof field['value'] === 'object'){
+          let id = field['value']._id;
+          field['value'] = id;
+        }
+      }
+      return field;
+    });
+  }
+  
   const fetchCities = async (stateId) => {
     await axios
       .get(`/api/address/cities/${stateId}`)
@@ -57,7 +69,8 @@ const FormJobs = (props) => {
         })
         console.log(err)
       })
-  }
+  };
+
 
   const onChangeProps = (changedFields) => {
     if (changedFields.length) {
@@ -71,11 +84,14 @@ const FormJobs = (props) => {
       <Form
         form={form}
         onFinish={handlerInput}
-        fields={props.fields}
-        name="new-job"
+        fields={fields}
+        name= {props.formType === 'create'?"new-job":"edit-job"}
         initialValues={{ remember: true }}
         onFieldsChange={onChangeProps}
         layout='vertical'>
+        <Form.Item name="_id" noStyle>
+          <Input type="hidden" />
+        </Form.Item>
         <Form.Item
           name="title"
           label="Title/ Position name"
@@ -110,7 +126,7 @@ const FormJobs = (props) => {
           }}
           rules={[
             {
-              required: true,
+              required: props.formType === 'create'?true:false,
               message: 'Photo is required!',
             },
           ]}
@@ -186,9 +202,10 @@ const FormJobs = (props) => {
                   noStyle
                   rules={[{ required: true, message: 'Province is required' }]}
                 >
-                  <Select placeholder="Select province">
+                  <Select 
+                    placeholder="Select province">
                     {
-                      stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
+                      stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id} val>{e.value}</Option>))
                     }
                   </Select>
                 </Form.Item>

@@ -54,14 +54,14 @@ const ListJobs = (props) => {
                 <div className='list-job-container'>
                   <div className='text'>
                     <Text> Company Name  | <Text strong> {item.company.tradename}  </Text> </Text>
-                    <Text> Address  | <Text strong> {item.city}  </Text> </Text>
+                    <Text> Address  | <Text strong> {item.city.cityName}  </Text> </Text>
                     <Text> {item.areaCode}-{item.phoneNumber} | {item.email}</Text>
                     <Text> Description | <Text strong> {item.description}  </Text> </Text>
                     <div>
                       {
-                        item.tags || [].map((e, i) => {
+                        /*item.tags || [].map((e, i) => {
                           return <Tag> {e.name} </Tag>
-                        })
+                        })*/
                       }
                     </div>
                   </div>

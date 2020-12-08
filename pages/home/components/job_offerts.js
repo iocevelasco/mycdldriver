@@ -95,7 +95,7 @@ const DescriptionSmall = ({ item }) => {
                 <Title level={5}> {item.title} </Title>
                 <div>
                   <Text> Location </Text>
-                  <Text strong> {item.city} </Text> <Text strong > | </Text>
+                  <Text strong> {item.city.cityName} </Text> <Text strong > | </Text>
                   <Text> Date </Text>
                   <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
                 </div>
@@ -125,14 +125,14 @@ const DescriptionDesktop = ({ item, small }) => {
       >
         <div className='home--job-offert'>
           <div className="logo">
-            <Avatar size={140} src={item.logo} />
+            <Avatar size={140} src={item.company.photo} />
           </div>
           <div className='job-offert__description'>
             <div>
               <Title level={3}> {item.title} </Title>
               <div>
                 <Text> Address </Text>
-                <Text strong> {item.city} </Text> <Text strong > | </Text>
+                <Text strong> {item.city.cityName} </Text> <Text strong > | </Text>
                 <Text> Date </Text>
                 <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
               </div>
@@ -169,7 +169,7 @@ const DescriptionMobile = ({ item }) => {
           <Title level={3}> {item.title} </Title>
           <div>
             <Text> Address </Text>
-            <Text strong> {item.city} </Text> <Text strong > | </Text>
+            <Text strong> {item.city.cityName} </Text> <Text strong > | </Text>
           </div>
           <div>
           </div>
