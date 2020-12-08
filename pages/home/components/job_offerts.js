@@ -146,6 +146,7 @@ const DescriptionDesktop = ({ item, small }) => {
             </div>
           </div>
           <div className="thumbnails" style={{ backgroundImage: "url(" + item.logo + ")" }}>
+            <span></span>
           </div>
         </div>
       </Link>

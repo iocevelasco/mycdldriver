@@ -293,22 +293,6 @@ const DriverUser = (props) => {
     <div className='profile-driver'>
       <Row justify='center'>
         <Col className='profile-driver__form' span={24}>
-          <Row justify='center'>
-            <div className='avatar'>
-              <Avatar src={props.photo} size={120} />
-              <Upload {...propsPhoto}
-                fileList={photo}
-                showUploadList={false}
-                beforeUpload={beforeUpload}
-              >
-                <Button
-                  type='primary'
-                  size='small'
-                  shape="circle"
-                  icon={<RetweetOutlined />} />
-              </Upload>
-            </div>
-          </Row>
           <Form
             fields={fields}
             form={form}
@@ -316,97 +300,6 @@ const DriverUser = (props) => {
             name="global_state"
             layout='vertical'
             onFieldsChange={onChangeProps}>
-
-            <Row gutter={[24]} justify='space-between' >
-              <Col span={12}>
-                <Form.Item
-                  name="name"
-                  label="Name"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Name is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="lastname"
-                  label="Last Name"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Last name is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={[24]} justify='space-between' align='middle'>
-              <Col span={12}>
-                <Form.Item
-                  name="email"
-                  label="Email"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Email is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label='Change password'
-                  rules={[
-                    {
-                      required: false,
-                    },
-                  ]}
-                  name='password'>
-                  <Input.Password
-                    placeholder="password"
-                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={[24]} justify='space-between' align='middle'>
-              <Col span={12}>
-                <Form.Item
-                  label='Birth date'
-                  name="birthDate"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Birth date is required!',
-                    },
-                  ]}>
-                  <DatePicker style={{ width: '100%' }} />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label='Sex'
-                  name="sex"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Sex is required!',
-                    },
-                  ]}>
-                  <Radio.Group>
-                    <Radio value={0}>F</Radio>
-                    <Radio value={1}>M</Radio>
-                    <Radio value={2}>Other</Radio>
-                  </Radio.Group>
-                </Form.Item>
-              </Col>
-            </Row>
 
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
@@ -440,63 +333,38 @@ const DriverUser = (props) => {
               </Col>
             </Row>
 
-            <Row gutter={[24]} justify='space-between' >
-              <Col span={6}>
+            <Col className='profile-driver__form-small' span={24}>
+              <Row gutter={[24]} justify='space-between' >
                 <Form.Item
-                  label='Area code'
-                  name="areaCode"
+                  name='experience'
+                  label="Years of experience"
                   rules={[
                     {
-                      required: true,
-                      message: 'Area code expiration date is required!',
+                      required: false,
                     },
                   ]}>
-                  <Input />
+                  <InputNumber
+                    min={0}
+                    max={100} />
                 </Form.Item>
-              </Col>
-              <Col span={18}>
-                <Form.Item
-                  label='Phone Number'
-                  name="phoneNumber"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Phone number date is required!',
-                    },
-                  ]}>
-                  <Input />
+                <Form.Item>
+                  <Upload {...propsUpload}
+                    fileList={imageDln}
+                    beforeUpload={beforeUpload}
+                  >
+                    <Button icon={<UploadOutlined />}>Add your DLN picture</Button>
+                  </Upload>
                 </Form.Item>
-              </Col>
-            </Row>
-
-            <Row gutter={[24]} justify='space-between' >
-              <Col span={6}>
-                <Form.Item
-                  name='zipCode'
-                  label="Zip Code"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Zip code is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={18}>
-                <Form.Item
-                  name='address'
-                  label="Address"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Address is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
+              </Row>
+              <Form.Item
+                label='Description'
+                name='description'>
+                <TextArea
+                  rows={4}
+                  placeholder="Tell us something about your background"
+                />
+              </Form.Item>
+            </Col>
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button

@@ -15,6 +15,7 @@ import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { RetweetOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
+import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 const { Option } = Select;
 const { Title } = Typography;
@@ -207,17 +208,36 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[
-                {
-                  required: true,
-                  message: 'Email is required!',
-                },
-              ]}>
-              <Input />
-            </Form.Item>
+            <Row gutter={[24]} justify='space-between' >
+              <Col span={12}>
+                <Form.Item
+                  label='Change password'
+                  rules={[
+                    {
+                      required: false,
+                    },
+                  ]}
+                  name='password'>
+                  <Input.Password
+                    placeholder="password"
+                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="email"
+                  label="Email"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Email is required!',
+                    },
+                  ]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
             <Row gutter={[24]} justify='space-between' >
               <Col span={6}>
                 <Form.Item
