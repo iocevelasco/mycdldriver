@@ -2,7 +2,7 @@ const express = require('express');
 const next = require('next');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-const router_front = require("./network/routes"); 
+const router_front = require("./network/routes");
 const router_api = require("./api/network/routes");
 const config = require('./api/config');
 const db = require('./api/db');
@@ -14,6 +14,9 @@ const MemcachedStore = require('connect-memjs')(session);
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const axios = require('axios');
+const LocalStrategy = require('passport-local').Strategy;
+
+
 
 const dev = config.dev;
 db(config.dbUrl);
@@ -43,13 +46,13 @@ if (!dev && cluster.isMaster) {
           secret: 'ClydeIsASquirrel',
           resave: 'false',
           saveUninitialized: 'false',
-           store: new MemcachedStore({
-             servers: config.memcached,
-             prefix: '_session_'
-           })
+          store: new MemcachedStore({
+            servers: config.memcached,
+            prefix: '_session_'
+          })
         }));
         // Enforce SSL & HSTS in production
-        server.use(function(req, res, next) {
+        server.use(function (req, res, next) {
           var proto = req.headers["x-forwarded-proto"];
           if (proto === "https") {
             res.set({
@@ -59,7 +62,7 @@ if (!dev && cluster.isMaster) {
           }
           res.redirect("https://" + req.headers.host + req.url);
         });
-      }else {
+      } else {
         server.use(session({
           secret: 'ClydeIsASquirrel',
           resave: 'false',
@@ -69,92 +72,109 @@ if (!dev && cluster.isMaster) {
 
       //CONFIGURACION PASSPORT
       server.set('trust proxy', true);
-      passport.serializeUser(function(user, done) {
+      passport.serializeUser(function (user, done) {
         done(null, user);
       });
-      passport.deserializeUser(function(obj, done) {
+      passport.deserializeUser(function (obj, done) {
         done(null, obj);
       });
       server.use(passport.initialize());
       server.use(passport.session());
-        
+
+      passport.use(new LocalStrategy(
+        function (email, password, done) {
+          console.log(email, password);
+          const user = { email, password }
+          userController.loginUser(user);
+        }
+      ));
+
       passport.use(new GoogleStrategy({
-          clientID: config.oauth.google.clientID,
-          clientSecret: config.oauth.google.clientSecret,
-          callbackURL: config.oauth.google.callbackURL
-        },
-        function(accessToken, refreshToken, profile, done) {
-          process.nextTick(function() {
+        clientID: config.oauth.google.clientID,
+        clientSecret: config.oauth.google.clientSecret,
+        callbackURL: config.oauth.google.callbackURL
+      },
+        function (accessToken, refreshToken, profile, done) {
+          process.nextTick(function () {
             userController.loginProviderUser(profile.id, profile.emails[0].value, 1)
-            .then((fullUser) => {
-              fullUser.isLogin = true;
-              return done(null, fullUser);
-            })
-            .catch(e => {
-              newUser = {
-                "name": profile.name.givenName,
-                "lastname": profile.name.familyName,
-                "google_id": profile.id,
-                "photo": profile.photos[0].value,
-                "email": profile.emails[0].value,
-                "typeUser": 0,
-                "isLogin":true
-              };
-              return done(null, newUser);
-            });
+              .then((fullUser) => {
+                fullUser.isLogin = true;
+                return done(null, fullUser);
+              })
+              .catch(e => {
+                newUser = {
+                  "name": profile.name.givenName,
+                  "lastname": profile.name.familyName,
+                  "google_id": profile.id,
+                  "photo": profile.photos[0].value,
+                  "email": profile.emails[0].value,
+                  "typeUser": 0,
+                  "isLogin": true
+                };
+                return done(null, newUser);
+              });
           });
         }
       ));
       passport.use(new FacebookStrategy({
-        clientID			: config.oauth.facebook.clientID,
-        clientSecret	: config.oauth.facebook.clientSecret,
-        callbackURL	  : config.oauth.facebook.callbackURL,
-        profileFields : ['id', 'displayName', 'emails', 'photos']
-      }, function(accessToken, refreshToken, profile, done) {
+        clientID: config.oauth.facebook.clientID,
+        clientSecret: config.oauth.facebook.clientSecret,
+        callbackURL: config.oauth.facebook.callbackURL,
+        profileFields: ['id', 'displayName', 'emails', 'photos']
+      }, function (accessToken, refreshToken, profile, done) {
         userController.loginProviderUser(profile.id, profile.emails[0].value, 2)
-        .then((fullUser) => {
-          fullUser.isLogin = true;
-          return done(null, fullUser);
-        })
-        .catch(e => {
-          newUser = {
-            "name": profile.name.givenName,
-            "lastname": profile.name.familyName,
-            "facebook_id": profile.id,
-            "photo": profile.photos[0].value,
-            "email": profile.emails[0].value,
-            "typeUser": 0,
-            "isLogin":true
-          };
-          return done(null, newUser);
-        });
+          .then((fullUser) => {
+            fullUser.isLogin = true;
+            return done(null, fullUser);
+          })
+          .catch(e => {
+            newUser = {
+              "name": profile.name.givenName,
+              "lastname": profile.name.familyName,
+              "facebook_id": profile.id,
+              "photo": profile.photos[0].value,
+              "email": profile.emails[0].value,
+              "typeUser": 0,
+              "isLogin": true
+            };
+            return done(null, newUser);
+          });
       }));
       //CONFIGURACION PASSPORT
 
       //AUTENTICACION
+
+      server.post('/auth/login', passport.authenticate('local',
+        {
+          successRedirect: '/',
+          failureRedirect: '/login',
+          failureFlash: true
+        })
+      );
+
       server.get('/logout', async (req, res) => {
-        try{
+        try {
           const header = {
             headers: { Authorization: `Bearer ${req.session.passport.user.token}` }
           };
           await axios.post(config.host + ':' + config.port + '/api/user/logoutall', {}, header);
-        }catch(e){
+        } catch (e) {
           console.log('[ logout ]', e);
         }
-        
+
         req.logout();
         res.redirect('/');
       });
       server.post('/prevpath', async (req, res) => {
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        
+
         userController.setPrelogin(ip, req.body.prevpath, req.body.asPath)
-        .then(() => {
-          res.send(true);
-        })
-        .catch(e => {
-          res.send(false);
-        });
+          .then(() => {
+            res.send(true);
+          })
+          .catch(e => {
+            res.send(false);
+          });
       });
       server.get('/auth/google', passport.authenticate('google', {
         scope: [
@@ -162,55 +182,56 @@ if (!dev && cluster.isMaster) {
           'https://www.googleapis.com/auth/userinfo.email'
         ]
       }),
-      function(req, res) {});
+        function (req, res) { });
       server.get('/auth/google/callback', passport.authenticate('google', {
         failureRedirect: '/error'
       }),
-      async function(req, res) {
-        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        let prelogin = {
-          ruta: '',
-          abspath: ''
-        };
-        const respuesta = await userController.getPrelogin(ip);
-        prelogin.ruta = respuesta.ruta;
-        prelogin.abspath = respuesta.abspath;
-        if(prelogin.ruta == "/job-offert"){
-          res.redirect(prelogin.abspath);
-        }
-        if(req.session.passport.user.typeUser === 1){
+        async function (req, res) {
+          const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+          let prelogin = {
+            ruta: '',
+            abspath: ''
+          };
+          const respuesta = await userController.getPrelogin(ip);
+          prelogin.ruta = respuesta.ruta;
+          prelogin.abspath = respuesta.abspath;
+          if (prelogin.ruta == "/job-offert") {
+            res.redirect(prelogin.abspath);
+          }
+          if (req.session.passport.user.typeUser === 1) {
             res.redirect('/userProfile/driver/profile');
-        }else if(req.session.passport.user.typeUser === 2){
-          res.redirect('/userProfile/company/profile');
-        }else{
-          res.redirect('/userProfile');
-        }
-      });
+          } else if (req.session.passport.user.typeUser === 2) {
+            res.redirect('/userProfile/company/profile');
+          } else {
+            res.redirect('/userProfile');
+          }
+        });
 
-      server.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
-      server.get('/auth/facebook/callback', passport.authenticate('facebook', { 
-        failureRedirect: '/error' }
+      server.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+      server.get('/auth/facebook/callback', passport.authenticate('facebook', {
+        failureRedirect: '/error'
+      }
       ),
-      async function(req, res) {
-        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        let prelogin = {
-          ruta: '',
-          abspath: ''
-        };
-        const respuesta = await userController.getPrelogin(ip);
-        prelogin.ruta = respuesta.ruta;
-        prelogin.abspath = respuesta.abspath;
-        if(prelogin.ruta == "/job-offert"){
-          res.redirect(prelogin.abspath);
-        }
-        if(req.session.passport.user.typeUser === 1){
-          res.redirect('/userProfile/driver/profile');
-        }else if(req.session.passport.user.typeUser === 2){
-          res.redirect('/userProfile/company/profile');
-        }else{
-          res.redirect('/userProfile');
-        }
-      });
+        async function (req, res) {
+          const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+          let prelogin = {
+            ruta: '',
+            abspath: ''
+          };
+          const respuesta = await userController.getPrelogin(ip);
+          prelogin.ruta = respuesta.ruta;
+          prelogin.abspath = respuesta.abspath;
+          if (prelogin.ruta == "/job-offert") {
+            res.redirect(prelogin.abspath);
+          }
+          if (req.session.passport.user.typeUser === 1) {
+            res.redirect('/userProfile/driver/profile');
+          } else if (req.session.passport.user.typeUser === 2) {
+            res.redirect('/userProfile/company/profile');
+          } else {
+            res.redirect('/userProfile');
+          }
+        });
 
       const restrictAccess = (req, res, next) => {
         if (!req.isAuthenticated()) return res.redirect("/");

@@ -10,7 +10,8 @@ const UserPassword = (props) => {
   const [fields, setFields] = useState([]);
 
   const makeLogin = async (values) => {
-    await axios.post('/api/login', values)
+    console.log('values', values);
+    await axios.post('/auth/login', values)
       .then((response) => { console.log('response', response) })
       .catch((err) => { console.log('err', err) })
   }
