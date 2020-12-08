@@ -130,6 +130,7 @@ const CompanyJobView = (props) => {
       newJob.logo = state.newPhoto[0].response.data.file;
     }
     dispatch({ type: types.LOADING, payload: true });
+    console.log('[ NEW JOB ]', newJob);
     await axios.post('/api/company/jobs', newJob, header)
       .then(() => {
         useJobsByCompany(header);
@@ -150,6 +151,7 @@ const CompanyJobView = (props) => {
   };
 
   const handlerEditJob = async () => {
+    console.log('[ EDIT JOB ]');
     if (state.editPhoto.length > 0) {
       editJob.logo = state.editPhoto[0].response.data.file;
     }

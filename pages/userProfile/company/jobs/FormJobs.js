@@ -30,7 +30,20 @@ const FormJobs = (props) => {
     options: [],
     all: [],
   });
-
+  let fields = [];
+  if(props.fields){
+    console.log(props.fields);
+    fields = props.fields.map((field)=>{
+      if(field['name'] == "city" || field['name'] == "state"){
+        if(typeof field['value'] === 'object'){
+          let id = field['value']._id;
+          field['value'] = id;
+        }
+      }
+      return field;
+    });
+  }
+  
   const fetchCities = async (stateId) => {
     await axios
       .get(`/api/address/cities/${stateId}`)
@@ -57,7 +70,8 @@ const FormJobs = (props) => {
         })
         console.log(err)
       })
-  }
+  };
+
 
   const onChangeProps = (changedFields) => {
     if (changedFields.length) {
@@ -71,8 +85,8 @@ const FormJobs = (props) => {
       <Form
         form={form}
         onFinish={handlerInput}
-        fields={props.fields}
-        name="new-job"
+        fields={fields}
+        name= {props.formType === 'create'?"new-job":"edit-job"}
         initialValues={{ remember: true }}
         onFieldsChange={onChangeProps}
         layout='vertical'>
@@ -110,7 +124,7 @@ const FormJobs = (props) => {
           }}
           rules={[
             {
-              required: true,
+              required: props.formType === 'create'?true:false,
               message: 'Photo is required!',
             },
           ]}
@@ -186,9 +200,10 @@ const FormJobs = (props) => {
                   noStyle
                   rules={[{ required: true, message: 'Province is required' }]}
                 >
-                  <Select placeholder="Select province">
+                  <Select 
+                    placeholder="Select province">
                     {
-                      stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
+                      stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id} val>{e.value}</Option>))
                     }
                   </Select>
                 </Form.Item>
@@ -205,6 +220,7 @@ const FormJobs = (props) => {
                     disabled={cityOptions.disabled}
                     placeholder="Select city"
                     showSearch
+                    value= {fields.city}
                     filterOption={(input, option) =>
                       option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }>

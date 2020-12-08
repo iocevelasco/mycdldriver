@@ -148,6 +148,10 @@ function addJob(job, company) {
                 console.error('[companyJobsController.addJob] No city data');
                 reject('No city data');
                 return false;
+            case !job.state:
+                console.error('[companyJobsController.addJob] No state data');
+                reject('No state data');
+                return false;
             case !job.areaCode:
                 console.error('[companyJobsController.addJob] No areaCode data');
                 reject('No areaCode data');
@@ -164,9 +168,9 @@ function addJob(job, company) {
                 console.error('[companyJobsController.addJob] No time data');
                 reject('No time data');
                 return false;
-            case !job.image:
-                console.error('[companyJobsController.addJob] No time data');
-                reject('No time data');
+            case !job.logo:
+                console.error('[companyJobsController.addJob] No logo data');
+                reject('No logo data');
                 return false;
         }
 
