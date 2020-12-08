@@ -130,10 +130,9 @@ const CompanyJobView = (props) => {
       newJob.logo = state.newPhoto[0].response.data.file;
     }
     dispatch({ type: types.LOADING, payload: true });
-    console.log('[ NEW JOB ]', newJob);
     await axios.post('/api/company/jobs', newJob, header)
       .then(() => {
-        useJobsByCompany(header);
+        //useJobsByCompany(header);
         notification['success']({
           message: 'Success',
           description:
@@ -150,14 +149,13 @@ const CompanyJobView = (props) => {
       })
   };
 
-  const handlerEditJob = async () => {
-    console.log('[ EDIT JOB ]');
+  const handlerEditJob = async (fields) => {
     if (state.editPhoto.length > 0) {
-      editJob.logo = state.editPhoto[0].response.data.file;
+      fields.logo = state.editPhoto[0].response.data.file;
     }
     try {
-      await axios.patch('/api/company/jobs/' + state.editJob._id, editJob, header);
-      fetchJobPositionData();
+      await axios.patch('/api/company/jobs/' + fields._id, fields, header);
+      //fetchJobPositionData();
       notification['success']({
         message: 'Success',
         description:

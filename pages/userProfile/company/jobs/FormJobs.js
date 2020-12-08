@@ -21,7 +21,7 @@ function beforeUpload(file) {
 }
 
 const FormJobs = (props) => {
-  const handlerInput = props.formType === 'create' ? props.onFinisCreateJobs : props.onFinisEditJobs;
+  const handlerInput = props.formType === 'create' ? props.onFinisCreateJobs : props.ediJob;
   const TextButton = props.formType === 'create' ? 'Create Job' : 'Save Changes';
   const [form] = Form.useForm();
   const [stateOptions, isFetchingState] = useListState();
@@ -32,7 +32,6 @@ const FormJobs = (props) => {
   });
   let fields = [];
   if(props.fields){
-    console.log(props.fields);
     fields = props.fields.map((field)=>{
       if(field['name'] == "city" || field['name'] == "state"){
         if(typeof field['value'] === 'object'){
@@ -90,6 +89,9 @@ const FormJobs = (props) => {
         initialValues={{ remember: true }}
         onFieldsChange={onChangeProps}
         layout='vertical'>
+        <Form.Item name="_id" noStyle>
+          <Input type="hidden" />
+        </Form.Item>
         <Form.Item
           name="title"
           label="Title/ Position name"
@@ -220,7 +222,6 @@ const FormJobs = (props) => {
                     disabled={cityOptions.disabled}
                     placeholder="Select city"
                     showSearch
-                    value= {fields.city}
                     filterOption={(input, option) =>
                       option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }>
