@@ -82,10 +82,15 @@ if (!dev && cluster.isMaster) {
       server.use(passport.session());
 
       passport.use(new LocalStrategy(
+        { usernameField: "email" },
         function (email, password, done) {
           console.log(email, password);
           const user = { email, password }
-          userController.loginUser(user);
+          userController.loginUser(user).then((fullUser) => {
+            return done(null, fullUser);
+          }).catch(err => {
+            return done(err);
+          });
         }
       ));
 
@@ -145,14 +150,6 @@ if (!dev && cluster.isMaster) {
 
       //AUTENTICACION
 
-      server.post('/auth/login', passport.authenticate('local',
-        {
-          successRedirect: '/',
-          failureRedirect: '/login',
-          failureFlash: true
-        })
-      );
-
       server.get('/logout', async (req, res) => {
         try {
           const header = {
@@ -177,6 +174,17 @@ if (!dev && cluster.isMaster) {
             res.send(false);
           });
       });
+      server.post('/auth/login', passport.authenticate('local', {
+        failureMessage: "Invalid username or password",
+      }),
+        async function (req, res) {
+          if(req.session.passport.user){
+            res.status(200).send(req.session.passport.user);
+          }else{
+            res.status(400).send("Invalid username or password");
+          }
+        }
+      );
       server.get('/auth/google', passport.authenticate('google', {
         scope: [
           'https://www.googleapis.com/auth/userinfo.profile',

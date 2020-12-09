@@ -65,6 +65,9 @@ async function updateCompany(id, user){
     if(user.lastname){
         foundUser.lastname = user.lastname;
     }
+    if(user.password){
+        foundUser.password = user.password;
+    }
     if(company.tradename){
         foundCompany.tradename = company.tradename;
     }
