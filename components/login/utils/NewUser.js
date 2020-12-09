@@ -10,16 +10,29 @@ import {
 import axios from 'axios';
 const { Title } = Typography;
 import { EyeTwoTone, EyeInvisibleOutlined, LeftOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
+import { withRouter } from 'next/router';
 
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateUserDrive: (newProps) => {
+      dispatch(updateUserDrive(newProps))
+    }
+  }
+}
 
 const NewUserForm = (props) => {
   const [form] = Form.useForm();
   const [fields, setFields] = useState([]);
 
-  const makeLogin = async (values) => {
-    await axios.post('/api/login', values)
-      .then((response) => { console.log('response', response) })
-      .catch((err) => { console.log('err', err) })
+  const makeReg = async (values) => {
+
   }
 
   return (
@@ -29,7 +42,7 @@ const NewUserForm = (props) => {
         <Form
           fields={fields}
           form={form}
-          onFinish={makeLogin}
+          onFinish={makeReg}
           name="global_state"
           layout='vertical'>
           <Space direction="vertical">
@@ -102,4 +115,4 @@ const NewUserForm = (props) => {
   )
 }
 
-export default NewUserForm;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NewUserForm)); 
