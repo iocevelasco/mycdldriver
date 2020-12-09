@@ -35,7 +35,7 @@ function mapStateToProps(state) {
     _id: user._id || null,
     token: user.token || null,
     driver: user.driver || {},
-    isUserRegistry: state.user.typeUser || null,
+    isUserRegistry: state.user._id || null,
   }
 }
 
@@ -46,6 +46,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const DriverUser = (props) => {
+  console.log('[ PROPS ]', props);
   const { router } = props;
   const [form] = Form.useForm();
   const [imageDln, setImage] = useState([]);

@@ -12,6 +12,8 @@ const { Title } = Typography;
 import { EyeTwoTone, EyeInvisibleOutlined, LeftOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
+import { setPropsUserReg } from '@store/reducers/user_reducer';
+import { handlerModalLogin } from '@store/reducers/landing_reducer';
 
 const mapStateToProps = (state) => {
   return {
@@ -21,18 +23,35 @@ const mapStateToProps = (state) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateUserDrive: (newProps) => {
-      dispatch(updateUserDrive(newProps))
-    }
+    setPropsUserReg: (newProps) => {
+      dispatch(setPropsUserReg(newProps))
+    },
+    handleModal: (props) => dispatch(handlerModalLogin(props))
   }
 }
 
 const NewUserForm = (props) => {
   const [form] = Form.useForm();
   const [fields, setFields] = useState([]);
+  const { router } = props;
 
   const makeReg = async (values) => {
-
+    const newUser = {
+      photo: 'https://icon-library.com/images/default-user-icon/default-user-icon-4.jpg',
+      name: values.name,
+      lastname: values.lastname,
+      email: values.email,
+      password: values.password,
+      typeUser: values.typeUser,
+      isLogin: true
+    }
+    props.setPropsUserReg(newUser);
+    props.handleModal(false);
+    if(values.typeUser === 1){
+      router.push('/userProfile/driver/profile');
+    }else if(values.typeUser === 2){
+      router.push('/userProfile/company/profile');
+    }
   }
 
   return (
@@ -87,7 +106,7 @@ const NewUserForm = (props) => {
                   message: 'Last name is required!',
                 },
               ]}
-              name='last-name'>
+              name='lastname'>
               <Input size='large' placeholder='Last name' />
             </Form.Item>
             <Form.Item
@@ -95,10 +114,10 @@ const NewUserForm = (props) => {
               rules={[
                 {
                   required: true,
-                  message: 'Last name is required!',
+                  message: 'User type is required!',
                 },
               ]}
-              name='userType'>
+              name='typeUser'>
               <Radio.Group>
                 <Radio value={1}>Driver</Radio>
                 <Radio value={2}>Company</Radio>

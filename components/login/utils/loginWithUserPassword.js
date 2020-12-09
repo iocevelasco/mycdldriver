@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import { Button, Input, Space, Form, message, notification } from 'antd';
-import { updateUserCompany } from '@store/reducers/user_reducer';
+import { updateUserCompany, updateUserDrive } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import { SpinnerComp } from 'components/helpers';
 import axios from 'axios';

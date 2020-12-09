@@ -29,7 +29,7 @@ function mapStateToProps(state) {
     _id: user._id || null,
     token: user.token || null,
     company: user.company || {},
-    isUserRegistry: state.user.typeUser || null,
+    isUserRegistry: state.user._id || null,
   }
 }
 
