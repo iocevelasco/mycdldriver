@@ -15,6 +15,9 @@ import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { RetweetOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
+import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
+import useListState from '@hooks/useListState';
+import AddressInputs from 'components/AddressInput';
 import axios from 'axios';
 const { Option } = Select;
 const { Title } = Typography;
@@ -33,22 +36,6 @@ function mapStateToProps(state) {
 const FormUserCompany = (props) => {
   const [form] = Form.useForm();
 
-  const [address, setAddress] = useState({
-    stateId: '',
-    cityId: ''
-  })
-
-  const [stateOptions, setOptions] = useState({
-    options: [],
-    all: []
-  });
-
-  const [cityOptions, setCities] = useState({
-    options: [],
-    all: [],
-    disabled: true
-  });
-
   const {
     loading,
     onChangeCompany,
@@ -59,69 +46,11 @@ const FormUserCompany = (props) => {
     propsPhoto,
     imageProfile } = props;
 
+
   const onChangeProps = (changedFields, allFields) => {
-    if (changedFields.length) {
-      let state = changedFields[0].name[0] === "state" ? changedFields[0] : false
-      if (state) fetchCities(state.value)
-    };
     onChangeCompany(allFields);
   }
 
-  const fetchState = async () => {
-    await axios.get('/api/address/state')
-      .then((response) => {
-        let options = response.data.data
-          .sort((a, b) => {
-            if (a.stateName < b.stateName) { return -1; }
-            if (a.stateName > b.stateName) { return 1; }
-            return 0;
-          })
-          .map((e) => { return { value: e.stateName, id: e._id } })
-        let all = response.data.data
-        setOptions({
-          options,
-          all
-        });
-      })
-      .catch((err) => {
-        setState([]);
-        console.log(err)
-      })
-  }
-
-  const fetchCities = async (stateId) => {
-    setCities({
-      options: [],
-      disabled: true
-    })
-    await axios.get(`/api/address/cities/${stateId}`)
-      .then((response) => {
-        let options = response.data.data
-          .sort((a, b) => {
-            if (a.cityName < b.cityName) { return -1; }
-            if (a.cityName > b.cityName) { return 1; }
-            return 0;
-          })
-          .map((e) => { return { value: e.cityName, id: e._id } })
-        let all = response.data.data
-        setCities({
-          options,
-          all,
-          disabled: false
-        })
-      })
-      .catch((err) => {
-        setCities([]);
-        console.log(err)
-      })
-  }
-
-  useEffect(() => {
-    fetchState();
-  }, []);
-  useEffect(() => {
-    //fetchCities(cityInit);
-  }, []);
 
   return (
     <div className='profile-driver'>
@@ -207,17 +136,36 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[
-                {
-                  required: true,
-                  message: 'Email is required!',
-                },
-              ]}>
-              <Input />
-            </Form.Item>
+            <Row gutter={[24]} justify='space-between' >
+              <Col span={12}>
+                <Form.Item
+                  label='Change password'
+                  rules={[
+                    {
+                      required: false,
+                    },
+                  ]}
+                  name='password'>
+                  <Input.Password
+                    placeholder="password"
+                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="email"
+                  label="Email"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Email is required!',
+                    },
+                  ]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
             <Row gutter={[24]} justify='space-between' >
               <Col span={6}>
                 <Form.Item
@@ -274,57 +222,7 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={[24]} justify='space-between' >
-              <Col span={8}>
-                <Form.Item label="State / Province / Reagion">
-                  <Form.Item
-                    name={'state'}
-                    noStyle
-                    rules={[{ required: true, message: 'Province is required' }]}
-                  >
-                    <Select placeholder="Select province">
-                      {
-                        stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
-                      }
-                    </Select>
-                  </Form.Item>
-                </Form.Item>
-              </Col>
-              <Col span={10}>
-                <Form.Item label="City">
-                  <Form.Item
-                    name={'city'}
-                    noStyle
-                    rules={[{ required: true, message: 'City is required' }]}
-                  >
-                    <Select
-                      disabled={cityOptions.disabled}
-                      placeholder="Select city"
-                      showSearch
-                      filterOption={(input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }>
-                      {
-                        cityOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
-                      }
-                    </Select>
-                  </Form.Item>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  name='zipCode'
-                  label="Zip / Postal Code"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Zip code is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
+            <AddressInputs {...props} />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button

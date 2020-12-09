@@ -3,13 +3,11 @@ import { Menu, Col, Button, } from 'antd';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import {
-  HomeOutlined,
   UserOutlined,
   TeamOutlined,
-  ToolOutlined,
+  CarOutlined,
   DashboardOutlined,
   LeftOutlined,
-  CarOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -91,6 +89,11 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
       path: '/userProfile/driver/my-jobs',
       section_name: 'My Jobs',
       icon: <DashboardOutlined />
+    },
+    {
+      path: '/userProfile/driver/experience',
+      section_name: 'Experience',
+      icon: <CarOutlined />
     }
   ]
   // const driverOption = [

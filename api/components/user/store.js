@@ -109,9 +109,9 @@ async function updatePhoto(id, photo){
 async function loginUser(mail, pass){
     try {
         const user = await User.findByCredentials(mail, pass);
-        const {_id, name, lastname, photo, email, date} = user;
+        const {_id, name, lastname, photo, email, date, typeUser, driver, company} = user;
         const token = await user.generateAuthToken();
-        return { _id, name, lastname, photo, email, date, token };
+        return { _id, name, lastname, photo, email, date, typeUser, driver, company, token };
     }catch(error){
         console.log(error);
         return false;

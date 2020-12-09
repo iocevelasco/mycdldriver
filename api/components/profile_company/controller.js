@@ -60,6 +60,7 @@ function addCompany(company){
 }
 
 function updateCompany(id, company){
+    console.log('[ CONTROLLER UPDATE COMPANY ]', company);
     return new Promise(async (resolve, reject) => {
         if(!id){
             reject('[companyController.updateCompany] No user ID');
@@ -88,8 +89,10 @@ function updateCompany(id, company){
             name: company.base.name,
             lastname: company.base.lastname,
             photo: company.base.photo,
+            password: company.password,
             company: fullCompany
         };
+        console.log('[ CONTROLLER OBJECT COMPANY ]', user);
         
         const result = await store.update(id, user);
         resolve(result);

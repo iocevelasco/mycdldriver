@@ -1,18 +1,76 @@
 import { useState } from 'react';
-
+import { connect } from 'react-redux';
+import { withRouter } from 'next/router';
 import { Button, Input, Space, Form } from 'antd';
+import { updateUserCompany } from '@store/reducers/user_reducer';
+import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import axios from 'axios';
 
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateUserDrive: (newProps) => {
+      dispatch(updateUserDrive(newProps))
+    },
+    updateUserCompany: (newProps) => {
+      dispatch(updateUserCompany(newProps))
+    },
+    handleModal: (props) => dispatch(handlerModalLogin(props)),
+  }
+}
+
 const UserPassword = (props) => {
   const [form] = Form.useForm();
   const [fields, setFields] = useState([]);
+  const { router } = props;
 
   const makeLogin = async (values) => {
-    await axios.post('/api/login', values)
-      .then((response) => { console.log('response', response) })
-      .catch((err) => { console.log('err', err) })
+    await axios.post('/auth/login', values)
+      .then((response) => {
+        const { date, email, lastname, name, photo, token, typeUser, _id, company, driver } = response.data;
+
+        let user = {
+          date,
+          email,
+          lastname,
+          name,
+          photo,
+          token,
+          typeUser,
+          _id,
+        }
+
+        if (typeUser === 1) {
+          let data = {
+            user,
+            driver
+          }
+          props.updateUserDrive(data);
+          props.handleModal(false);
+          router.push('/userProfile/driver/profile');
+        }
+
+        if (typeUser === 2) {
+          let data = {
+            user,
+            company
+          }
+          props.updateUserCompany(data);
+          props.handleModal(false);
+          router.push('/userProfile/company/profile');
+        }
+
+      })
+      .catch((err) => {
+        console.log('err', err);
+      })
   }
 
   return (
@@ -57,4 +115,5 @@ const UserPassword = (props) => {
   )
 }
 
-export default UserPassword;
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserPassword)); 

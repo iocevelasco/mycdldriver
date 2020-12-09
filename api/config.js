@@ -4,6 +4,10 @@ const dbName = 'TESTNODEWS';
 const cluster = 'cluster0.mtjcn';
 const key = 'AimeGabrielaSophia';
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+  }
+
 const config = {
     dbUrl: process.env.BD_URL || 'mongodb+srv://' + dbUser + ':' + dbPass + '@' + cluster + '.mongodb.net/' + dbName + '?retryWrites=true&w=majority',
     port: process.env.PORT || 3000,

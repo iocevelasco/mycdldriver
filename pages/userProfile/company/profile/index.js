@@ -247,6 +247,7 @@ const CompanyProfileView = (props) => {
     const fullCompany = { base: base, ...company };
     try {
       dispatch({ type: types.LOADING, payload: true });
+      console.log('[USER COMPANY]', fullCompany);
       const { data } = await axios.patch('/api/company/' + props._id, fullCompany, header);
 
       let update = {

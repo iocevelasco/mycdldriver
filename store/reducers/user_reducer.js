@@ -11,7 +11,8 @@ const types = {
     HANDLE_INPUTS_BASE: 'HANDLE_INPUTS_BASE',
     HANDLE_INPUTS_DRIVER: 'HANDLE_INPUTS_DRIVER',
     HANDLER_PICKERS: 'HANDLER_PICKERS',
-    HANDLE_INPUTS: 'HANDLE_INPUTS'
+    HANDLE_INPUTS: 'HANDLE_INPUTS',
+    LOGIN_SUCCESS_MODAL: 'LOGIN_SUCCESS_MODAL'
 }
 
 const initialState = {
@@ -58,7 +59,6 @@ function updateUserCompany(props) {
 }
 
 function updateUserDrive(props) {
-    console.log(props);
     let { user, driver } = props;
     return {
         type: types.UPDATE_USER_DRIVER,
