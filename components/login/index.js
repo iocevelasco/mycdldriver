@@ -55,7 +55,9 @@ const ModalLogin = ({ visible_modal_login, router, ...props }) => {
             <div className='login--title'>
               <Title level={3}>Welcome!</Title>
             </div>
-            <UserPassword setNewUser={setNewUser} />
+            <UserPassword
+
+              setNewUser={setNewUser} />
             <div className='login--divider'>
               <span> </span><p> or </p><span> </span>
             </div>

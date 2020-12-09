@@ -23,7 +23,6 @@ function fetchJobPositionData(qs) {
     return (dispatch) => {
         return axios.get(`/api/company/jobs?${qs}`)
             .then(({ data }) => {
-console.log(data);
                 let jobs = data.data;
                 dispatch(({
                     type: types.FETCH_JOBS,

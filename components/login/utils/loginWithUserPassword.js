@@ -2,21 +2,27 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import { Button, Input, Space, Form } from 'antd';
-import { updateUserCompany, updateUserDrive } from '../../../store/reducers/user_reducer';
+import { updateUserCompany } from '@store/reducers/user_reducer';
+import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import axios from 'axios';
 
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const mapStateToProps = (state) => {
   return {
-    user: state.use,
+    user: state.user,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateUserCompany: (newProps) => dispatch(updateUserCompany(newProps)),
-    updateUserDrive: (newProps) => dispatch(updateUserDrive(newProps)),
+    updateUserDrive: (newProps) => {
+      dispatch(updateUserDrive(newProps))
+    },
+    updateUserCompany: (newProps) => {
+      dispatch(updateUserCompany(newProps))
+    },
+    handleModal: (props) => dispatch(handlerModalLogin(props)),
   }
 }
 
@@ -26,7 +32,6 @@ const UserPassword = (props) => {
   const { router } = props;
 
   const makeLogin = async (values) => {
-    //await axios.post('/prevpath', { prevpath: router.pathname, asPath: router.asPath });
     await axios.post('/auth/login', values)
       .then((response) => {
         const { date, email, lastname, name, photo, token, typeUser, _id, company, driver } = response.data;
@@ -47,7 +52,9 @@ const UserPassword = (props) => {
             user,
             driver
           }
-          updateUserDrive(data);
+          props.updateUserDrive(data);
+          props.handleModal(false);
+          router.push('/userProfile/driver/profile');
         }
 
         if (typeUser === 2) {
@@ -55,8 +62,11 @@ const UserPassword = (props) => {
             user,
             company
           }
-          updateUserCompany(data);
+          props.updateUserCompany(data);
+          props.handleModal(false);
+          router.push('/userProfile/company/profile');
         }
+
       })
       .catch((err) => {
         console.log('err', err);
