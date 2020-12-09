@@ -34,6 +34,7 @@ const UserPassword = (props) => {
   const [loading, setLoader] = useState(false);
 
   const makeLogin = async (values) => {
+    console.log(values);
     setLoader(true);
     await axios.post('/auth/login', values)
       .then((response) => {

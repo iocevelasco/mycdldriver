@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import { setPropsUserReg } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
+import { SpinnerComp } from 'components/helpers';
 
 const mapStateToProps = (state) => {
   return {
@@ -33,9 +34,11 @@ function mapDispatchToProps(dispatch) {
 const NewUserForm = (props) => {
   const [form] = Form.useForm();
   const [fields, setFields] = useState([]);
+  const [loading, setLoader] = useState(false);
   const { router } = props;
 
   const makeReg = async (values) => {
+    setLoader(true);
     const newUser = {
       photo: 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png',
       name: values.name,
@@ -130,6 +133,7 @@ const NewUserForm = (props) => {
         </Form>
       </div>
       <Button icon={<LeftOutlined />} type='link' onClick={() => props.setNewUser(false)}> Go back </Button>
+      <SpinnerComp active={loading} />
     </div>
   )
 }

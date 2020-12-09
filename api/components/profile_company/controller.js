@@ -35,6 +35,7 @@ function addCompany(company){
             typeUser: company.base.typeUser,
             photo: company.base.photo,
             email: company.base.email,
+            password: company.password,
             google_id: company.base.google_id,
             facebook_id: company.base.facebook_id,
             company: fullCompany

@@ -113,7 +113,7 @@ async function loginUser(mail, pass){
         const token = await user.generateAuthToken();
         return { _id, name, lastname, photo, email, date, typeUser, driver, company, token };
     }catch(error){
-        console.log(error);
+        console.log('[ LOGINUSER STORE ]', error);
         return false;
     }
 }
