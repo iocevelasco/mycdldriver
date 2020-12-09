@@ -116,6 +116,7 @@ if (!dev && cluster.isMaster) {
           });
         }
       ));
+
       passport.use(new FacebookStrategy({
         clientID: config.oauth.facebook.clientID,
         clientSecret: config.oauth.facebook.clientSecret,
