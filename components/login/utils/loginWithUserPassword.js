@@ -1,9 +1,24 @@
 import { useState } from 'react';
-
+import { connect } from 'react-redux';
+import { withRouter } from 'next/router';
 import { Button, Input, Space, Form } from 'antd';
+import { updateUserCompany, updateUserDrive } from '../../../store/reducers/user_reducer';
 import axios from 'axios';
 
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.use,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateUserCompany: (newProps) => dispatch(updateUserCompany(newProps)),
+    updateUserDrive: (newProps) => dispatch(updateUserDrive(newProps)),
+  }
+}
 
 const UserPassword = (props) => {
   const [form] = Form.useForm();
@@ -11,15 +26,41 @@ const UserPassword = (props) => {
   const { router } = props;
 
   const makeLogin = async (values) => {
-    console.log('values', values);
     //await axios.post('/prevpath', { prevpath: router.pathname, asPath: router.asPath });
-    try{
-      const resp = await axios.post('/auth/login', values);
-      console.log('[RESP LOGIN]', resp);
-    }catch(e){
-      console.log('[ERROR LOGIN]', e);
-    }
-    
+    await axios.post('/auth/login', values)
+      .then((response) => {
+        const { date, email, lastname, name, photo, token, typeUser, _id, company, driver } = response.data;
+
+        let user = {
+          date,
+          email,
+          lastname,
+          name,
+          photo,
+          token,
+          typeUser,
+          _id,
+        }
+
+        if (typeUser === 1) {
+          let data = {
+            user,
+            driver
+          }
+          updateUserDrive(data);
+        }
+
+        if (typeUser === 2) {
+          let data = {
+            user,
+            company
+          }
+          updateUserCompany(data);
+        }
+      })
+      .catch((err) => {
+        console.log('err', err);
+      })
   }
 
   return (
@@ -64,4 +105,5 @@ const UserPassword = (props) => {
   )
 }
 
-export default UserPassword;
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserPassword)); 

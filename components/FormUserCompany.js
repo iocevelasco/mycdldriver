@@ -222,7 +222,7 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <AddressInputs {...props} cityOptions={cityOptions} />
+            <AddressInputs {...props} />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button

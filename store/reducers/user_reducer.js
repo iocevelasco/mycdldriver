@@ -58,7 +58,6 @@ function updateUserCompany(props) {
 }
 
 function updateUserDrive(props) {
-    console.log(props);
     let { user, driver } = props;
     return {
         type: types.UPDATE_USER_DRIVER,
@@ -103,6 +102,7 @@ const userReducer = (state = initialState, action) => {
         case types.UPDATE_USER_DRIVER:
             return { ...state, ...action.payload }
         case types.UPDATE_USER_COMPANY:
+            console.log('action', action.payload);
             return { ...state, ...action.payload }
         case types.LOGOUT_USER:
             return { ...state, ...action.payload }
