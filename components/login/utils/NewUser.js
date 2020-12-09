@@ -37,7 +37,7 @@ const NewUserForm = (props) => {
 
   const makeReg = async (values) => {
     const newUser = {
-      photo: 'https://icon-library.com/images/default-user-icon/default-user-icon-4.jpg',
+      photo: 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png',
       name: values.name,
       lastname: values.lastname,
       email: values.email,
