@@ -38,6 +38,7 @@ function addDriver(driver){
             typeUser: driver.base.typeUser,
             photo: driver.base.photo,
             email: driver.base.email,
+            password: driver.password,
             google_id: driver.base.google_id,
             facebook_id: driver.base.facebook_id,
             driver: fullDriver
@@ -94,6 +95,7 @@ function updateDriver(id, driver){
             name: driver.base.name,
             lastname: driver.base.lastname,
             photo: driver.base.photo,
+            password: driver.password,
             driver: fullDriver
         };
         

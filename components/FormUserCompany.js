@@ -16,7 +16,6 @@ import { connect } from 'react-redux';
 import { RetweetOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
-import useListState from '@hooks/useListState';
 import AddressInputs from 'components/AddressInput';
 import axios from 'axios';
 const { Option } = Select;
@@ -29,7 +28,7 @@ function mapStateToProps(state) {
     _id: user._id || null,
     token: user.token || null,
     company: user.company || {},
-    isUserRegistry: state.user.typeUser || null,
+    isUserRegistry: state.user._id || null,
   }
 }
 

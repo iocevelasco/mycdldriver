@@ -11,13 +11,14 @@ const ListJobs = (props) => {
   const deleteJob = async (id) => {
     try {
       await axios.delete(`/api/company/jobs/${id}`, props.header);
-      props.jobsByCompany(props.header);
+      props.setReload(true);
       notification['success']({
         message: 'Success',
         description:
           "Done! the position has been deleted."
       });
     } catch (err) {
+      props.setReload(true);
       console.log(err);
       notification['error']({
         message: 'error',

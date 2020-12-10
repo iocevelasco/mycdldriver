@@ -96,6 +96,13 @@ const getInitialPropsUser = (props) => {
     }
 }
 
+const setPropsUserReg = (props) => {
+    return {
+        type: types.LOGIN_SUCCESS,
+        payload: props
+    }
+}
+
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.LOGIN_SUCCESS:
@@ -123,4 +130,5 @@ export {
     getInitialPropsUser,
     logoutUser,
     getCurrentLocation,
+    setPropsUserReg
 };

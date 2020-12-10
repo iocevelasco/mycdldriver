@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
-import { Button, Input, Space, Form } from 'antd';
-import { updateUserCompany } from '@store/reducers/user_reducer';
+import { Button, Input, Space, Form, message, notification } from 'antd';
+import { updateUserCompany, updateUserDrive } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
+import { SpinnerComp } from 'components/helpers';
 import axios from 'axios';
 
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
@@ -30,22 +31,15 @@ const UserPassword = (props) => {
   const [form] = Form.useForm();
   const [fields, setFields] = useState([]);
   const { router } = props;
+  const [loading, setLoader] = useState(false);
 
   const makeLogin = async (values) => {
+    console.log(values);
+    setLoader(true);
     await axios.post('/auth/login', values)
       .then((response) => {
         const { date, email, lastname, name, photo, token, typeUser, _id, company, driver } = response.data;
-
-        let user = {
-          date,
-          email,
-          lastname,
-          name,
-          photo,
-          token,
-          typeUser,
-          _id,
-        }
+        let user = { date, email, lastname, name, photo, token, typeUser, _id }
 
         if (typeUser === 1) {
           let data = {
@@ -69,7 +63,13 @@ const UserPassword = (props) => {
 
       })
       .catch((err) => {
+        setLoader(false);
         console.log('err', err);
+        notification['error']({
+          message: 'error',
+          description:
+            "Sorry! email or password incorrect. "
+        });
       })
   }
 
@@ -111,6 +111,7 @@ const UserPassword = (props) => {
             htmlType="submit" > Login </Button>
         </Space>
       </Form>
+      <SpinnerComp active={loading} />
     </div>
   )
 }

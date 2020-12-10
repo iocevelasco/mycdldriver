@@ -72,6 +72,9 @@ const AddressInputs = (props) => {
       })
   }
 
+  function onChangeState(value){
+    fetchCities(value);
+  }
 
   return (
     <Row gutter={[24]} justify='space-between' >
@@ -82,7 +85,9 @@ const AddressInputs = (props) => {
             noStyle
             rules={[{ required: true, message: 'Province is required' }]}
           >
-            <Select placeholder="Select province">
+            <Select 
+              placeholder="Select province"
+              onChange={onChangeState}>
               {
                 stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
               }
