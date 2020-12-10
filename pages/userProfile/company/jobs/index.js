@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import MainLayout from 'components/layout';
 import { Row, Col, Typography, message, Drawer, notification, Divider } from 'antd';
 import { connect } from 'react-redux';
@@ -61,13 +61,17 @@ function mapStateToProps(state) {
 
 const CompanyJobView = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [reload, setReload] = useState(false)
   const { user } = props;
 
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
+  const [jobsByCompany, isFetching] = useJobsByCompany(header, reload, setReload);
 
-  const [jobsByCompany, isFetching] = useJobsByCompany(header);
+  useEffect(() => {
+    if (!isFetching) setReload(reload);
+  }, [isFetching])
 
   const propsUpload = {
     name: 'logo',
@@ -131,8 +135,10 @@ const CompanyJobView = (props) => {
     }
     dispatch({ type: types.LOADING, payload: true });
     await axios.post('/api/company/jobs', newJob, header)
-      .then(() => {
-        //useJobsByCompany(header);
+      .then((response) => {
+        setReload(true);
+        console.log('response', response);
+        jobsByCompany
         notification['success']({
           message: 'Success',
           description:
@@ -141,6 +147,7 @@ const CompanyJobView = (props) => {
       })
       .catch((err) => {
         console.log(err);
+        setReload(true);
         notification['error']({
           message: 'error',
           description:
@@ -155,13 +162,14 @@ const CompanyJobView = (props) => {
     }
     try {
       await axios.patch('/api/company/jobs/' + fields._id, fields, header);
-      //fetchJobPositionData();
+      setReload(!reload);
       notification['success']({
         message: 'Success',
         description:
           "Success ! Your position has been edited correctly"
       });
     } catch (err) {
+      setReload(true);
       console.log(err);
       notification['error']({
         message: 'error',
@@ -216,6 +224,7 @@ const CompanyJobView = (props) => {
             <WrapperSection row={24} styles={styleWrapper}>
               <JobsList
                 header={header}
+                setReload={setReload}
                 isFetching={isFetching}
                 openDrawer={openDrawer}
                 jobsByCompany={jobsByCompany} />

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const useJobsByCompany = (header) => {
+const useJobsByCompany = (header, reload, setReload) => {
+    console.log('relodad', reload);
     const [isFetching, setIsFetching] = useState(true);
     const [jobsByCompany, setOptions] = useState([])
 
@@ -18,7 +19,7 @@ const useJobsByCompany = (header) => {
                 setOptions([]);
                 console.log(err)
             })
-    }, []);
+    }, [reload]);
 
     return [jobsByCompany, isFetching];
 }
