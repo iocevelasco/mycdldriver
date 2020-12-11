@@ -99,7 +99,14 @@ router.post('/apply', auth(1), function (req, res) {
     req.body.driver = req.user._id;
     controller.applyJob(req.body)
     .then((Job) => {
-        response.success(req, res, Job, 200);
+        switch(Job.status){
+            case 200:
+                response.success(req, res, Job.message, Job.status);
+                break;
+            case 500:
+                response.error(req, res, Job.message, Job.status);
+                break;
+        }
     }).catch(e => {
         console.log(e);
         response.error(req, res, 'Unexpected Error', 500);

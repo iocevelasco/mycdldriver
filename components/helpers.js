@@ -76,6 +76,23 @@ const MessageSuccess = ({ title, subTitle, extra }) => {
   )
 }
 
+const MessageError = ({ title, subTitle, extra }) => {
+  const styles = {
+    height: 300
+  }
+
+  return (
+    <div styles={styles}>
+      <Result
+        status="error"
+        title={title}
+        subTitle={subTitle}
+        extra={extra}
+      />
+    </div>
+  )
+}
+
 const SpinnerComp = ({ active }) => {
   const styles = {
     wrapper: {
@@ -122,5 +139,6 @@ export {
   WrapperSection,
   BuildSection,
   MessageSuccess,
-  SpinnerComp
+  SpinnerComp,
+  MessageError
 };

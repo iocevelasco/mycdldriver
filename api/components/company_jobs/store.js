@@ -1,7 +1,6 @@
 const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
 const { User } = require('../user/model');
 const ProfileCompany = require('../profile_company/model');
-const ProfileDriver = require('../profile_driver/model');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -185,7 +184,8 @@ async function getApplyCompanyJobs(query){
     if(id){
         filter = {company: id};
     }
-    const jobs = await JobsModel.find(filter);
+    const jobs = await JobsModel.find(filter)
+    .populate('city');
     result = await Promise.all(jobs.map( async (job) => {
         let item = {
             id: job._id,
@@ -195,7 +195,7 @@ async function getApplyCompanyJobs(query){
             logo: job.logo,
             phoneNumber: job.phoneNumber,
             email: job.email,
-            city: job.city,
+            city: job.city.cityName,
             time: job.time,
             tags: job.tags
         };
@@ -211,6 +211,7 @@ async function getApplyCompanyJobs(query){
             const id = apply._id;
             let users = await User.findOne(filterDriver)
             .populate('driver');
+            
             if(users){
                 const { name, lastname, photo, email, driver } = users;
                 return { id, name, lastname, photo, email, driver };
@@ -315,6 +316,9 @@ async function addJob(job){
 
 async function applyJob(job){
     try{
+        const foundJob = await JobsModel.findOne({_id: job.job});
+        job.company = foundJob.company;
+        console.log('[ JOB OBJECT SENT ]', job);
         const newApply = new JobsApplysModel(job);
         const resp = await newApply.save();
         if(resp){

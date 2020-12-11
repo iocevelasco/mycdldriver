@@ -13,14 +13,17 @@ const JobsApplysSchema = mongoose.Schema({
     company: {
         type: Schema.ObjectId,
         ref: 'ProfileCompany',
+        required: true,
     },
     driver: {
         type: Schema.ObjectId,
         ref: 'User',
+        required: true,
     },
     job: {
         type: Schema.ObjectId,
         ref: 'CompanyJobs',
+        required: true,
     },
     status: {
         type: Number,

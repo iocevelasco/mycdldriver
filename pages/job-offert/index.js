@@ -11,7 +11,7 @@ import {
   Drawer
 } from 'antd';
 import FormUserDriver from 'components/FormUserDriver';
-import { WrapperSection, MessageSuccess } from 'components/helpers';
+import { WrapperSection, MessageSuccess, MessageError } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import { connect } from 'react-redux';
@@ -26,6 +26,7 @@ const { TextArea } = Input;
 
 const initialState = {
   showSuccess: false,
+  showError: false,
   title: '',
   logo: '',
   can_apply: false,
@@ -41,6 +42,7 @@ const initialState = {
 const types = {
   FETCH_DETAIL: 'FETCH_DETAIL',
   SHOW_SUCCESS: 'SHOW_SUCCESS',
+  SHOW_ERROR: 'SHOW_ERROR',
   PROPS_APPLY: 'PROPS_APPLY',
   SHOW_DRAWER: 'SHOW_DRAWER',
   PROPS_BASE: 'PROPS_BASE',
@@ -57,6 +59,8 @@ const reducer = (state, action) => {
       return { ...state, visible: action.payload }
     case types.SHOW_SUCCESS:
       return { ...state, showSuccess: action.payload }
+    case types.SHOW_ERROR:
+      return { ...state, showError: action.payload }
     case types.PROPS_APPLY:
       return { ...state, can_apply: action.payload }
     default:
@@ -125,13 +129,13 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
         headers: { Authorization: `Bearer ${user.token}` }
       };
       const apply = {
-        job: router.query.id,
-        company: state.company
+        job: router.query.id
       };
       await axios.post('/api/company/jobs/apply', apply, header);
       dispatch({ type: types.SHOW_SUCCESS, payload: true });
       dispatch({ type: types.PROPS_APPLY, payload: false });
     } catch (e) {
+      dispatch({ type: types.SHOW_ERROR, payload: true });
       console.log(e);
     }
   }
@@ -237,6 +241,20 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
             }}>
             <MessageSuccess
               title="You applied successfully"
+              subTitle="Thank you for applying to this vacancy, the company will contact you as soon as possible."
+            />
+          </Drawer>
+          <Drawer
+            title='Error apply'
+            placement="right"
+            closable={true}
+            width={720}
+            visible={state.showError}
+            onClose={() => {
+              dispatch({ type: types.SHOW_ERROR, payload: false });
+            }}>
+            <MessageError
+              title="You applied not successfully"
               subTitle="Thank you for applying to this vacancy, the company will contact you as soon as possible."
             />
           </Drawer>
