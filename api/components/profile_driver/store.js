@@ -66,6 +66,9 @@ async function updateDriver(id, user){
     if(user.lastname){
         foundUser.lastname = user.lastname;
     }
+    if(user.password){
+        foundUser.password = user.password;
+    }
     if(user.photo){
         try {
             fs.unlinkSync("." + foundUser.photo);
