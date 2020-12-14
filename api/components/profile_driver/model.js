@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const profileDriverSchema = mongoose.Schema({
+const profileDriverSchema = Schema({
     dln: {
         type: Number,
         required: true,
@@ -33,10 +33,7 @@ const profileDriverSchema = mongoose.Schema({
         type: Number,
         trim: true
     },
-    experience: {
-        type: Number,
-        trim: true
-    },
+    twicCard: Boolean,
     zipCode: {
         type: String,
         trim: true
@@ -60,7 +57,19 @@ const profileDriverSchema = mongoose.Schema({
     city: {
         type: Schema.ObjectId,
         ref: 'Cities',
-    }
+    },
+    experience: [{
+        name: {
+            type: String,
+            required: true,
+            trim: true
+         },
+         have: Boolean,
+         years: {
+             type: Number,
+             default: 0
+         }
+    }]
 });
 
 const ProfileDriver = mongoose.model('ProfileDriver', profileDriverSchema);

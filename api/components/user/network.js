@@ -110,7 +110,10 @@ router.delete('/:id', auth(), function (req, res) {
  * @apiSuccess {Number} driver.areaCode Codigo de area del telefono 
  * @apiSuccess {Number} driver.phoneNumber Numero de telefono 
  * @apiSuccess {Number} driver.sex Sexo del usuario (1-> Hombre | 2-> Mujer | 3-> Otro) 
- * @apiSuccess {Number} driver.experience Años de experiencia 
+ * @apiSuccess {Object[]} driver.experience Años de experiencia 
+ * @apiSuccess {Number} driver.experience.years Cantidad de años de experiencia 
+ * @apiSuccess {String} driver.experience.name Nombre del campo de experiencia 
+ * @apiSuccess {Boolean} driver.experience.have Indica si posee ese campo de experiencia 
  * @apiSuccess {String} driver.address Direccion fisica de habitacion  
  * @apiSuccess {Number} driver.zipCode Zip Code  
  * @apiSuccess {String} driver.description Descripcion breve del conductor, habilidades, destrezas, etc... 
@@ -127,7 +130,7 @@ router.delete('/:id', auth(), function (req, res) {
  * @apiSuccessExample {json} Ejemplo de respuesta correcta
  * {
   "error": 0,
-  "mensaje": {
+  "data": {
     _id: 5f8f6781b57fcf31145bb164,
     name: 'Pedro',
     lastname: 'Perez',
@@ -145,11 +148,49 @@ router.delete('/:id', auth(), function (req, res) {
         areaCode: 424,
         phoneNumber: 7845612,
         sex: 1,
-        experience: 10,
         address: 'Lorem ipsum dolor sit amet',
         zipCode: '1030',
         description: 'Donec sit amet fringilla libero, in dictum neque',
-        expDateDln: 2021-03-21T00:00:00.000Z
+        expDateDln: 2021-03-21T00:00:00.000Z,
+        twicCard: true,
+        experience: [
+            {
+                years: 4,
+                _id: "5fd7a053398f454368ccb2be",
+                name: "Tamk endorsed",
+                have: true
+            },
+            {
+                years: 2,
+                _id: "5fd7a053398f454368ccb2bf",
+                name: "Hazmat",
+                have: true
+            },
+            {
+                years: 0,
+                _id: "5fd7a053398f454368ccb2c0",
+                name: "Referred loads",
+                have: false
+            },
+            {
+                years: 1,
+                _id: "5fd7a053398f454368ccb2c1",
+                name: "Van",
+                have: true
+            },
+            {
+                years: 10,
+                _id: "5fd7a053398f454368ccb2c2",
+                name: "Car Carrier",
+                have: true
+            },
+            {
+                years: 3,
+                _id: "5fd7a053398f454368ccb2c3",
+                name: "Flat Bed",
+                have: true
+            }
+        ]
     },
     company: {
         tradename: 'Lorem Ipsum',

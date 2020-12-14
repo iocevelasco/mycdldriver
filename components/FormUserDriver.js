@@ -146,7 +146,7 @@ const DriverUser = (props) => {
     const fullDriver = { base: base, ...driver };
     try {
       setLoader(true);
-      await axios.patch('/api/driver/' + _id, fullDriver, header)
+      await axios.patch('/api/driver', fullDriver, header)
         .then((response) => {
           props.handleNewDriverProps(response.data.data);
           if (props.isJobs) {

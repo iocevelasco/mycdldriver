@@ -1,9 +1,17 @@
 const store = require('./store');
 const config = require('../../config');
 
-function getDriver(filter){
+function getDriver(){
     return new Promise((resolve, reject) => {
-        resolve(store.list(filter));
+        const response = store.list();
+        switch(response.status){
+            case 200:
+                resolve(response);
+                break;
+            default:
+                reject(response);
+                break;
+        }
     });
 }
 
@@ -46,7 +54,7 @@ function addDriver(driver){
 
         const driverResolve = store.add(user); 
         switch(driverResolve.status){
-            case 200:
+            case 201:
                 resolve(driverResolve);
                 break;
             case 500:
@@ -66,29 +74,30 @@ function addDriver(driver){
 function updateDriver(id, driver){
     return new Promise(async (resolve, reject) => {
         if(!id){
-            reject('[driverController.updateDriver] No user ID');
+            reject({
+                status: 400,
+                message: 'No user ID'
+            });
             return false;
         }
         if(!driver){
-            reject('[driverController.updateDriver] No user data');
+            reject({
+                status: 400,
+                message: 'No user data'
+            });
             return false;
         }
 
         const fullDriver = {
-            dln: driver.dln,
-            imageDln: driver.imageDln,
-            expDateDln: driver.expDateDln,
             birthDate: driver.birthDate,
             areaCode: driver.areaCode,
             phoneNumber: driver.phoneNumber,
             sex: driver.sex,
-            experience: driver.experience,
             address: driver.address,
             address2: driver.address2,
             zipCode: driver.zipCode,
             city: driver.city,
-            state: driver.state,
-            description: driver.description
+            state: driver.state
         };
 
         const user = {
@@ -98,10 +107,48 @@ function updateDriver(id, driver){
             password: driver.password,
             driver: fullDriver
         };
+        try{
+            const result = await store.update(id, user);
+            switch(result.status){
+                case 200: 
+                    resolve(result);
+                    break;
+                default:
+                    reject(result);
+                    break;
+            }
+        }catch(e){
+            reject(e);
+        }
         
-        const result = await store.update(id, user);
-        resolve(result);
     });
+}
+
+async function updateExperience(id, driver){
+    if(!id){
+        return {
+            status: 400,
+            message: 'Not id for driver'
+        };
+    }
+    if(!driver){
+        return {
+            status: 400,
+            message: 'Not data to driver update'
+        };
+    }
+    
+    try{
+        const result = await store.experience(id, driver);
+        return result;
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected Error',
+            detail: e
+        };
+    }
+    
 }
 
 function deleteDriver(id){
@@ -124,5 +171,6 @@ module.exports = {
     getDriver,
     addDriver,
     updateDriver,
-    deleteDriver
+    deleteDriver,
+    updateExperience
 }

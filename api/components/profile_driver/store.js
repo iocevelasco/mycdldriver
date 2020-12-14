@@ -4,17 +4,20 @@ const fs = require('fs');
 
 async function getDriver(filterDriver){
     return new Promise((resolve, reject) => {
-        let filter = {};
-        if(filterDriver !== null){
-            filter = {
-                dln: filterDriver,
-            };
+        try{
+            driverResult = Model.find()
+            .populate('state')
+            .populate('city');
+    
+            resolve({status: 200, message: driverResult});
+        }catch(e){
+            reject({
+                status: 400,
+                message: 'Driver list error',
+                detail: e
+            });
         }
-        driverResult = Model.find(filter)
-        .populate('state')
-        .populate('city');
-
-        resolve(driverResult);
+        
     });
 }
 
@@ -30,7 +33,7 @@ async function addDriver(user){
             const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
             const token = await myUser.generateAuthToken();
             user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date, token };
-            return {status: 200, user, driver};
+            return {status: 201, message: {user, driver}};
         }catch(e){
             await Model.deleteOne({
                 _id: driver._id
@@ -56,9 +59,23 @@ async function updateDriver(id, user){
     const foundUser = await User.findOne({
         _id: id
     });
+    if(!foundUser){
+        return {
+            status: 404,
+            message: 'User not found',
+            detail: e
+        }
+    }
     const foundDriver = await Model.findOne({
         _id: foundUser.driver
     });
+    if(!foundDriver){
+        return {
+            status: 404,
+            message: 'Driver not found',
+            detail: e
+        }
+    }
 
     if(user.name){
         foundUser.name = user.name;
@@ -77,23 +94,8 @@ async function updateDriver(id, user){
         }
         foundUser.photo = user.photo;
     }
-
-    if(driver.dln){
-        foundDriver.dln = driver.dln;
-    }
     if(driver.birthDate){
         foundDriver.birthDate = driver.birthDate;
-    }
-    if(driver.expDateDln){
-        foundDriver.expDateDln = driver.expDateDln;
-    }
-    if(driver.imageDln){
-        try {
-            fs.unlinkSync("." + foundDriver.imageDln);
-        } catch(err) {
-            console.error(err);
-        }
-        foundDriver.imageDln = driver.imageDln;
     }
     if(driver.areaCode){
         foundDriver.areaCode = driver.areaCode;
@@ -104,14 +106,8 @@ async function updateDriver(id, user){
     if(driver.sex){
         foundDriver.sex = driver.sex;
     }
-    if(driver.experience){
-        foundDriver.experience = driver.experience;
-    }
     if(driver.zipCode){
         foundDriver.zipCode = driver.zipCode;
-    }
-    if(driver.description){
-        foundDriver.description = driver.description;
     }
     if(driver.address){
         foundDriver.address = driver.address;
@@ -126,11 +122,73 @@ async function updateDriver(id, user){
         foundDriver.state = driver.state;
     }
     
-    await foundUser.save();
-    await foundDriver.save();
-    const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = foundUser;
-    user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date };
-    return {user, foundDriver};
+    try{
+        await foundUser.save();
+        await foundDriver.save();
+        const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = foundUser;
+        user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date };
+        return {
+            status: 200,
+            message: {user, foundDriver}
+        }
+    }catch(e){
+        return {
+            status: 400,
+            message: 'Unexpected Error',
+            detail: e
+        }
+    }
+    
+}
+
+async function updateExperience(id, driver){
+    const foundDriver = await Model.findOne({
+        _id: id
+    });
+    if(!foundDriver){
+        return {
+            status: 404,
+            message: 'Driver not found',
+            detail: e
+        }
+    }
+
+    if(driver.dln){
+        foundDriver.dln = driver.dln;
+    }
+    if(driver.expDateDln){
+        foundDriver.expDateDln = driver.expDateDln;
+    }
+    if(driver.imageDln){
+        try {
+            fs.unlinkSync("." + foundDriver.imageDln);
+        } catch(err) {
+            console.error(err);
+        }
+        foundDriver.imageDln = driver.imageDln;
+    }
+    if(driver.description){
+        foundDriver.description = driver.description;
+    }
+    if(driver.experience){
+        foundDriver.experience = driver.experience;
+    }
+
+    foundDriver.twicCard = driver.twicCard;
+    try {
+        await foundDriver.save();
+        return {
+            status: 200,
+            message: 'User experience updated'
+        }
+    }catch(e){
+        console.log(e);
+        return {
+            status: 400,
+            message: 'User experience error',
+            detail: e
+        }
+    }
 }
 
 async function deleteDriver(id){
@@ -156,5 +214,6 @@ module.exports = {
     list: getDriver,
     add: addDriver,
     update: updateDriver,
-    delete: deleteDriver
+    delete: deleteDriver,
+    experience: updateExperience
 }
