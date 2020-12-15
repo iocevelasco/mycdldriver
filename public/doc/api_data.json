@@ -914,6 +914,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.rating",
+            "description": "<p>Promedio de puntuacion del driver</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "driver.description",
@@ -952,7 +959,7 @@
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n    \"error\": 0,\n    \"data\": {\n      \"user\": {\n        \"_id\": \"5fd2a024658229177cb3e66c\",\n        \"name\": \"Pedro\",\n        \"lastname\": \"Perez\",\n        \"typeUser\": 1,\n        \"photo\": \"https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png\",\n        \"google_id\": \"104953011490801331331\",\n        \"email\": \"pedro.perez@gmail.com\",\n        \"date\": \"2020-12-10T22:24:36.492Z\"\n      },\n      \"driver\": {\n        \"_id\": \"5fd2a024658229177cb3e66b\",\n        \"dln\": 161342589,\n        \"expDateDln\": \"2025-03-21T00:00:00.000Z\",\n        \"birthDate\": \"1985-03-21T00:00:00.000Z\",\n        \"areaCode\": 414,\n        \"phoneNumber\": \"3168556\",\n        \"sex\": 1,\n        \"address\": \"Av Sucre de los Dos Caminos\",\n        \"zipCode\": \"1030\",\n        \"__v\": 1,\n        \"description\": \"Esta es una prueba de edicion desde experiencia directamente\",\n        \"experience\": [\n          {\n            \"years\": 4,\n            \"_id\": \"5fd7a053398f454368ccb2be\",\n            \"name\": \"Tamk endorsed\",\n            \"have\": true\n          },\n          {\n            \"years\": 2,\n            \"_id\": \"5fd7a053398f454368ccb2bf\",\n            \"name\": \"Hazmat\",\n            \"have\": true\n          },\n          {\n            \"years\": 0,\n            \"_id\": \"5fd7a053398f454368ccb2c0\",\n            \"name\": \"Referred loads\",\n            \"have\": false\n          },\n          {\n            \"years\": 1,\n            \"_id\": \"5fd7a053398f454368ccb2c1\",\n            \"name\": \"Van\",\n            \"have\": true\n          },\n          {\n            \"years\": 10,\n            \"_id\": \"5fd7a053398f454368ccb2c2\",\n            \"name\": \"Car Carrier\",\n            \"have\": true\n          },\n          {\n            \"years\": 3,\n            \"_id\": \"5fd7a053398f454368ccb2c3\",\n            \"name\": \"Flat Bed\",\n            \"have\": true\n          }\n        ],\n        \"twicCard\": true\n      }\n    }\n  }",
+          "content": "{\n    \"error\": 0,\n    \"data\": {\n      \"user\": {\n        \"_id\": \"5fd2a024658229177cb3e66c\",\n        \"name\": \"Pedro\",\n        \"lastname\": \"Perez\",\n        \"typeUser\": 1,\n        \"photo\": \"https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png\",\n        \"google_id\": \"104953011490801331331\",\n        \"email\": \"pedro.perez@gmail.com\",\n        \"date\": \"2020-12-10T22:24:36.492Z\"\n      },\n      \"driver\": {\n        \"_id\": \"5fd2a024658229177cb3e66b\",\n        \"dln\": 161342589,\n        \"expDateDln\": \"2025-03-21T00:00:00.000Z\",\n        \"birthDate\": \"1985-03-21T00:00:00.000Z\",\n        \"areaCode\": 414,\n        \"phoneNumber\": \"3168556\",\n        \"sex\": 1,\n        \"address\": \"Av Sucre de los Dos Caminos\",\n        \"zipCode\": \"1030\",\n        \"rating\": 3,\n        \"description\": \"Esta es una prueba de edicion desde experiencia directamente\",\n        \"experience\": [\n          {\n            \"years\": 4,\n            \"_id\": \"5fd7a053398f454368ccb2be\",\n            \"name\": \"Tamk endorsed\",\n            \"have\": true\n          },\n          {\n            \"years\": 2,\n            \"_id\": \"5fd7a053398f454368ccb2bf\",\n            \"name\": \"Hazmat\",\n            \"have\": true\n          },\n          {\n            \"years\": 0,\n            \"_id\": \"5fd7a053398f454368ccb2c0\",\n            \"name\": \"Referred loads\",\n            \"have\": false\n          },\n          {\n            \"years\": 1,\n            \"_id\": \"5fd7a053398f454368ccb2c1\",\n            \"name\": \"Van\",\n            \"have\": true\n          },\n          {\n            \"years\": 10,\n            \"_id\": \"5fd7a053398f454368ccb2c2\",\n            \"name\": \"Car Carrier\",\n            \"have\": true\n          },\n          {\n            \"years\": 3,\n            \"_id\": \"5fd7a053398f454368ccb2c3\",\n            \"name\": \"Flat Bed\",\n            \"have\": true\n          }\n        ],\n        \"twicCard\": true\n      }\n    }\n  }",
           "type": "json"
         }
       ]
@@ -1455,7 +1462,7 @@
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n  \"error\": 0,\n  \"mensaje\": \"Usuario 5f72ba72f5aa7224d8cc9ee2 eliminado\"\n}",
+          "content": "{\n  \"data\": \"Usuario 5f72ba72f5aa7224d8cc9ee2 eliminado\"\n}",
           "type": "json"
         }
       ]
@@ -1475,124 +1482,312 @@
   },
   {
     "type": "get",
-    "url": "/user",
+    "url": "/user/:type",
     "title": "getUserList",
     "group": "User",
     "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Tipo de usuario (1-&gt; Driver | 2-&gt; Company)</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "user",
-            "description": "<p>Datos del usuario registrado</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "Id",
             "optional": false,
-            "field": "user._id",
+            "field": "_id",
             "description": "<p>ID de usuario</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "user.name",
+            "field": "name",
             "description": "<p>Nombre del usuario</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "user.lastname",
+            "field": "lastname",
             "description": "<p>Apellido del usuario</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "user.photo",
+            "field": "photo",
             "description": "<p>Url de la imagen del usuario</p>"
           },
           {
             "group": "Success 200",
             "type": "Date",
             "optional": false,
-            "field": "user.date",
+            "field": "date",
             "description": "<p>Fecha de registro del usuario</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "user.email",
+            "field": "email",
             "description": "<p>Correo electronico del usuario</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "user.typeUser",
-            "description": "<p>Tipo de usuario (1-&gt; Driver | 2-&gt; Company)</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "user.google_id",
-            "description": "<p>ID de usuario de google cuando se loguea desde esa red social</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "user.facebook_id",
-            "description": "<p>ID de usuario de facebook cuando se loguea desde esa red social</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "user.driver",
+            "field": "driver",
             "description": "<p>Si el usuario es Driver (1) aqui estan todos sus datos</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "user.company",
-            "description": "<p>Si el usuario es Driver (1) aqui estan todos sus datos</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "user.tokens",
-            "description": "<p>Listado de tokens de seguridad registrados por el usuario</p>"
           },
           {
             "group": "Success 200",
             "type": "Id",
             "optional": false,
-            "field": "user.tokens._id",
-            "description": "<p>ID del token</p>"
+            "field": "driver._id",
+            "description": "<p>Id del driver</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.dln",
+            "description": "<p>Numero de identificacion de la licencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "driver.expDateDln",
+            "description": "<p>Fecha de expiracion de la licencia</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "user.tokens.token",
-            "description": "<p>Token de seguridad</p>"
+            "field": "driver.imageDln",
+            "description": "<p>Url de la imagen de la licencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "driver.birthDate",
+            "description": "<p>Fecha de cumpleaños del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.areaCode",
+            "description": "<p>Codigo de area del telefono</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.phoneNumber",
+            "description": "<p>Numero de telefono</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.sex",
+            "description": "<p>Sexo del driver (1-&gt; Hombre | 2-&gt; Mujer | 3-&gt; Otro)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.address",
+            "description": "<p>Direccion fisica de habitacion</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.zipCode",
+            "description": "<p>Zip Code</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.rating",
+            "description": "<p>Promedio de puntuacion del driver</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.description",
+            "description": "<p>Descripcion breve del Driver</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "driver.experience",
+            "description": "<p>Arreglo de objetos con campos de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.experience.name",
+            "description": "<p>Nombre del campos de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "driver.experience.have",
+            "description": "<p>Indica si posee el campo de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.experience.years",
+            "description": "<p>Numero de años de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "company",
+            "description": "<p>Si el usuario es Company (2) aqui estan todos sus datos</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "company._id",
+            "description": "<p>Id de la empresa</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.tradename",
+            "description": "<p>Nombre comercial</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.legalNumber",
+            "description": "<p>Numero de identificacion de la empresa</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "company.areaCode",
+            "description": "<p>Codigo de area del telefono</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.phoneNumber",
+            "description": "<p>Numero de telefono</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.address",
+            "description": "<p>Direccion fisica de la empresa</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.address2",
+            "description": "<p>Direccion segunda linea</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.description",
+            "description": "<p>Descripcion corta de la empresa</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.zipCode",
+            "description": "<p>ZipCode</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.logo",
+            "description": "<p>Url de la imagen de la empresa</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.state",
+            "description": "<p>Estado donde esta ubicada</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "company.state._id",
+            "description": "<p>Id del estado</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.state.stateName",
+            "description": "<p>Nombre del estado</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.ciudad",
+            "description": "<p>Ciudad donde esta ubicada</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "company.ciudad._id",
+            "description": "<p>Id de la ciudad</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.ciudad.stateName",
+            "description": "<p>Nombre de la ciudad</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n    \"error\": 0,\n    \"mensaje\": [\n        {\n        \"_id\": \"5f72aad62f9b9a1c605e2978\",\n        \"name\": \"Juan\",\n        \"lastname\": \"Perez\",\n        \"date\": \"2020-02-10T15:46:51.778Z\",\n        \"email\": \"juanperez@gmail.com\",\n        \"typeUser\": 1,\n        \"google_id\": \"107579236887242099879\",\n        \"facebook_id\": \"10158714673184036\",\n        \"driver\": \"5f8f6780b57fcf31145bb163\",\n        \"company\": \"5f8f726442cd1a1498021acf\",\n        \"photo\": \"http://localhost:3000./public/files/haHR0E2O68nPpcpx668vEJRYC33hHSritUY0tOIE42nkOyN94saIKDB7QzJ-q-iS.jpg\",\n        \"tokens\": [\n            {\n            \"_id\": \"5f72aad62f9b9a1c605e2979\",\n            \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjcyYWFkNjJmOWI5YTFjNjA1ZTI5NzgiLCJpYXQiOjE2MDEzNTAzNTh9.yaU-FnWzUKzBvNxAchS0O6sGWoD5GpyC-lWombv4rA8\"\n            }\n        ],\n        \"__v\": 1\n        }\n    ]\n}",
+          "content": "{\n    \"data\": [\n    {\n        \"_id\": \"5fb5479b949d6a2d98a91945\",\n        \"name\": \"Erick\",\n        \"lastname\": \"Hernandez\",\n        \"photo\": \"https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png\",\n        \"email\": \"takashi@dragonrock.com.ve\",\n        \"date\": \"2020-11-18T16:11:07.098Z\",\n        \"driver\": {\n            \"_id\": \"5fb5479a949d6a2d98a91944\",\n            \"dln\": 16436589,\n            \"imageDln\": \"/public/files/KhSaP8-nHTasW2R6rgPZR0kuVijdX3Z9NKo7oa-fHX3JVaBluSxGyBjY9sHM-4qk.jpg\",\n            \"expDateDln\": \"2020-11-28T04:00:00.000Z\",\n            \"birthDate\": \"2020-11-01T04:00:00.000Z\",\n            \"areaCode\": 414,\n            \"phoneNumber\": \"3168556\",\n            \"rating\": 3,\n            \"sex\": 1,\n            \"experience\": [\n            {\n                \"years\": 4,\n                \"_id\": \"5fd7a053398f454368ccb2be\",\n                \"name\": \"Tamk endorsed\",\n                \"have\": true\n            },\n            {\n                \"years\": 2,\n                \"_id\": \"5fd7a053398f454368ccb2bf\",\n                \"name\": \"Hazmat\",\n                \"have\": true\n            },\n            {\n                \"years\": 0,\n                \"_id\": \"5fd7a053398f454368ccb2c0\",\n                \"name\": \"Referred loads\",\n                \"have\": false\n            },\n            {\n                \"years\": 1,\n                \"_id\": \"5fd7a053398f454368ccb2c1\",\n                \"name\": \"Van\",\n                \"have\": true\n            },\n            {\n                \"years\": 10,\n                \"_id\": \"5fd7a053398f454368ccb2c2\",\n                \"name\": \"Car Carrier\",\n                \"have\": true\n            },\n            {\n                \"years\": 3,\n                \"_id\": \"5fd7a053398f454368ccb2c3\",\n                \"name\": \"Flat Bed\",\n                \"have\": true\n            }\n            ],\n            \"address\": \"Venezuela\",\n            \"zipCode\": \"1030\",\n            \"description\": \"klhg gh kh fth dr\"\n        },\n        \"company\": {\n            \"_id\": \"5faeb15ef909381520db5c50\",\n            \"tradename\": \"Dragonrock\",\n            \"legalNumber\": \"1478956327\",\n            \"areaCode\": 414,\n            \"phoneNumber\": \"31685567\",\n            \"address\": \"Los Dos Caminos\",\n            \"address2\": \"ghfhfh\",\n            \"description\": \"Cualquier cosa\",\n            \"zipCode\": \"1030\",\n            \"logo\": \"/public/files/UWy-arz6QFkscjZpxGfJiuIO1syhP6XDrLmJuzwAZWkwk5HfbcPkhM8240n4CWgT.png\",\n            \"state\": {\n                \"_id\": \"5fc68b66fd5663f19004aca6\",\n                \"stateName\": \"California\"\n            },\n            \"city\": {\n                \"_id\": \"5fc6a427fd5663f1900b7813\",\n                \"cityName\": \"Floriston\"\n            }\n        }\n    }\n    ]\n}",
           "type": "json"
         }
       ]
@@ -1608,7 +1803,7 @@
     },
     "filename": "api/components/user/network.js",
     "groupTitle": "User",
-    "name": "GetUser"
+    "name": "GetUserType"
   },
   {
     "type": "post",
@@ -1695,6 +1890,13 @@
             "optional": false,
             "field": "driver",
             "description": "<p>Datos del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "driver._id",
+            "description": "<p>Id del conductor</p>"
           },
           {
             "group": "Success 200",
@@ -1803,6 +2005,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "company._id",
+            "description": "<p>Id de la empresa</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "company.tradename",
@@ -1841,7 +2050,14 @@
             "type": "String",
             "optional": false,
             "field": "company.address",
-            "description": "<p>Direccion fisica de habitacion</p>"
+            "description": "<p>Direccion fisica de empresa</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.address2",
+            "description": "<p>Direccion linea 2</p>"
           },
           {
             "group": "Success 200",
@@ -1856,13 +2072,55 @@
             "optional": false,
             "field": "company.zipCode",
             "description": "<p>Zip Code</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.state",
+            "description": "<p>Estado donde esta ubicada</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "company.state._id",
+            "description": "<p>Id del estado</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.state.stateName",
+            "description": "<p>Nombre del estado</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.ciudad",
+            "description": "<p>Ciudad donde esta ubicada</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "company.ciudad._id",
+            "description": "<p>Id de la ciudad</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "company.ciudad.stateName",
+            "description": "<p>Nombre de la ciudad</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n  \"error\": 0,\n  \"data\": {\n    _id: 5f8f6781b57fcf31145bb164,\n    name: 'Pedro',\n    lastname: 'Perez',\n    typeUser: 1,\n    photo: 'https://lh3.googleusercontent.com/a-/AOhZR5U4Eu0rGUgUybuzcSMw=s96-c',\n    email: 'pedro.perez@gmail.com',\n    google_id: '107579238748342099879',\n    facebook_id: '10158547873184036',\n    date: 2020-10-20T22:41:05.496Z,\n    token: 'eyJhbGciOiJIUzI19LIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjhmNjc4MWI1N2ZjZjMxMTQ1YmIxNjQiLCJpYXQiOjE2MDM2NTgzOTB9.GIdlwhPUgpIQkJH61y31U26bdxDChRvK_xGT7Pf-VK0',\n    driver: {\n        dln: 14258369,\n        imageDln: '/public/files/undefined',\n        birthDate: 1988-05-11T00:00:00.000Z,\n        areaCode: 424,\n        phoneNumber: 7845612,\n        sex: 1,\n        address: 'Lorem ipsum dolor sit amet',\n        zipCode: '1030',\n        description: 'Donec sit amet fringilla libero, in dictum neque',\n        expDateDln: 2021-03-21T00:00:00.000Z,\n        twicCard: true,\n        experience: [\n            {\n                years: 4,\n                _id: \"5fd7a053398f454368ccb2be\",\n                name: \"Tamk endorsed\",\n                have: true\n            },\n            {\n                years: 2,\n                _id: \"5fd7a053398f454368ccb2bf\",\n                name: \"Hazmat\",\n                have: true\n            },\n            {\n                years: 0,\n                _id: \"5fd7a053398f454368ccb2c0\",\n                name: \"Referred loads\",\n                have: false\n            },\n            {\n                years: 1,\n                _id: \"5fd7a053398f454368ccb2c1\",\n                name: \"Van\",\n                have: true\n            },\n            {\n                years: 10,\n                _id: \"5fd7a053398f454368ccb2c2\",\n                name: \"Car Carrier\",\n                have: true\n            },\n            {\n                years: 3,\n                _id: \"5fd7a053398f454368ccb2c3\",\n                name: \"Flat Bed\",\n                have: true\n            }\n        ]\n    },\n    company: {\n        tradename: 'Lorem Ipsum',\n        legalNumber: 'V14258369',\n        areaCode: 424,\n        phoneNumber: 7845612,\n        logo: '/public/files/undefined',\n        address: 'Miranda - Caracas - Venezuela',\n        description: 'Maecenas consectetur velit sit amet lorem auctor ultrices',\n        zipCode: '1031'\n    }\n}",
+          "content": "{\n  \"data\": {\n    _id: 5f8f6781b57fcf31145bb164,\n    name: 'Pedro',\n    lastname: 'Perez',\n    typeUser: 1,\n    photo: 'https://lh3.googleusercontent.com/a-/AOhZR5U4Eu0rGUgUybuzcSMw=s96-c',\n    email: 'pedro.perez@gmail.com',\n    google_id: '107579238748342099879',\n    facebook_id: '10158547873184036',\n    date: 2020-10-20T22:41:05.496Z,\n    token: 'eyJhbGciOiJIUzI19LIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjhmNjc4MWI1N2ZjZjMxMTQ1YmIxNjQiLCJpYXQiOjE2MDM2NTgzOTB9.GIdlwhPUgpIQkJH61y31U26bdxDChRvK_xGT7Pf-VK0',\n    driver: {\n        _id: \"5faeb15ef909381520db5c50\",\n        dln: 14258369,\n        imageDln: '/public/files/undefined',\n        birthDate: 1988-05-11T00:00:00.000Z,\n        areaCode: 424,\n        phoneNumber: 7845612,\n        sex: 1,\n        address: 'Lorem ipsum dolor sit amet',\n        zipCode: '1030',\n        description: 'Donec sit amet fringilla libero, in dictum neque',\n        expDateDln: 2021-03-21T00:00:00.000Z,\n        twicCard: true,\n        experience: [\n            {\n                years: 4,\n                _id: \"5fd7a053398f454368ccb2be\",\n                name: \"Tamk endorsed\",\n                have: true\n            },\n            {\n                years: 2,\n                _id: \"5fd7a053398f454368ccb2bf\",\n                name: \"Hazmat\",\n                have: true\n            },\n            {\n                years: 0,\n                _id: \"5fd7a053398f454368ccb2c0\",\n                name: \"Referred loads\",\n                have: false\n            },\n            {\n                years: 1,\n                _id: \"5fd7a053398f454368ccb2c1\",\n                name: \"Van\",\n                have: true\n            },\n            {\n                years: 10,\n                _id: \"5fd7a053398f454368ccb2c2\",\n                name: \"Car Carrier\",\n                have: true\n            },\n            {\n                years: 3,\n                _id: \"5fd7a053398f454368ccb2c3\",\n                name: \"Flat Bed\",\n                have: true\n            }\n        ]\n    },\n    company: {\n        _id: \"5faeb15ef909381520db5c50\",\n        tradename: 'Lorem Ipsum',\n        legalNumber: 'V14258369',\n        areaCode: 424,\n        phoneNumber: 7845612,\n        logo: '/public/files/undefined',\n        address: 'Miranda - Caracas',\n        address2: 'Venezuela',\n        description: 'Maecenas consectetur velit sit amet lorem auctor ultrices',\n        zipCode: '1031',\n        state: {\n          _id: \"5fc68b66fd5663f19004aca6\",\n          stateName: \"California\"\n        },\n        city: {\n          _id: \"5fc6a427fd5663f1900b7813\",\n          cityName: \"Floriston\"\n        }\n    }\n}",
           "type": "json"
         }
       ]
@@ -1904,7 +2162,7 @@
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n  \"error\": 0,\n  \"mensaje\": \"Done\"\n}",
+          "content": "{\n  \"data\": \"Done\"\n}",
           "type": "json"
         }
       ]
@@ -1946,7 +2204,7 @@
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n  \"error\": 0,\n  \"mensaje\": \"Done\"\n}",
+          "content": "{\n  \"data\": \"Done\"\n}",
           "type": "json"
         }
       ]
