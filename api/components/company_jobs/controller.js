@@ -107,21 +107,17 @@ function setStatus(id, status) {
     });
 }
 
-function setRating(id, ranking, commnet) {
-    return new Promise((resolve, reject) => {
-        const result = store.setRanking(id, ranking, commnet);
-        switch (result.status) {
-            case 200:
-                resolve(result);
-                break;
-            case 500:
-                reject(result);
-                break;
-            default:
-                resolve(result);
-                break;
-        }
-    });
+async function setRating(id, ranking, commnet) {
+    try{
+        const result = await store.setRanking(id, ranking, commnet);
+        return result;
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Invalid data recived for apply job',
+            detail: e
+        };
+    }
 }
 
 function addJob(job, company) {

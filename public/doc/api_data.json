@@ -527,143 +527,129 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "driver",
-            "description": "<p>Datos del conductor registrado</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "Id",
             "optional": false,
-            "field": "driver._id",
+            "field": "_id",
             "description": "<p>ID de conductor</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "driver.cdl",
+            "field": "dln",
             "description": "<p>Numero de identificacion del conductor</p>"
           },
           {
             "group": "Success 200",
             "type": "Date",
             "optional": false,
-            "field": "driver.birthDate",
+            "field": "birthDate",
             "description": "<p>Fecha de nacimiento del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "expDateDln",
+            "description": "<p>Fecha de vencimiento del DLN</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "driver.imageCdl",
+            "field": "imageDln",
             "description": "<p>Url de la imagen de la licencia del conductor</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "driver.sex",
+            "field": "sex",
             "description": "<p>Sexo del conductor</p>"
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Number",
             "optional": false,
-            "field": "driver.habilities",
-            "description": "<p>Habilidades del conductor</p>"
+            "field": "areaCode",
+            "description": "<p>Codigo de area del telefono</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "phoneNumber",
+            "description": "<p>Numero de telefono</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "driver.description",
+            "field": "description",
             "description": "<p>Descripcion del conductor</p>"
           },
           {
             "group": "Success 200",
-            "type": "Object[]",
+            "type": "String",
             "optional": false,
-            "field": "driver.user",
-            "description": "<p>Listado de datos del conductor</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Id",
-            "optional": false,
-            "field": "driver.user._id",
-            "description": "<p>ID del usuario</p>"
+            "field": "address",
+            "description": "<p>Direccion del conductor</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "driver.user.name",
-            "description": "<p>Nombre del usuario</p>"
+            "field": "zipCode",
+            "description": "<p>Codigo postal del conductor</p>"
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Boolean",
             "optional": false,
-            "field": "driver.user.lastname",
-            "description": "<p>Apellido del usuario</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "driver.user.photo",
-            "description": "<p>Url de la imagen del usuario</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "driver.user.date",
-            "description": "<p>Fecha de registro del usuario</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "driver.user.email",
-            "description": "<p>Correo electronico del usuario</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "driver.user.password",
-            "description": "<p>Clave cifrada electronico del usuario</p>"
+            "field": "twicCard",
+            "description": "<hr>"
           },
           {
             "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "driver.user.tokens",
-            "description": "<p>Listado de tokens de seguridad registrados por el usuario</p>"
+            "field": "experience",
+            "description": "<p>Listado de campos de experiencia del conductor</p>"
           },
           {
             "group": "Success 200",
             "type": "Id",
             "optional": false,
-            "field": "driver.user.tokens._id",
-            "description": "<p>ID del token</p>"
+            "field": "experience._id",
+            "description": "<p>ID del campo de experiencia</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "driver.user.tokens.token",
-            "description": "<p>Token de seguridad</p>"
+            "field": "experience.name",
+            "description": "<p>Nombre del campo de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "experience.years",
+            "description": "<p>Años de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "experience.have",
+            "description": "<p>Indica si posee el campo de experiencia</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n  \"error\": 0,\n  \"mensaje\": [\n    {\n      \"_id\": \"5f735483938ab21aa0cb13dd\",\n      \"cdl\": 16134236,\n      \"birthDate\": \"1985-05-21T06:28:57.779Z\",\n      \"imageCdl\": \"/public/files/RHyJbGRuQtNSFrdZrAONpU84_bGlrf_aoNAkaeSdRBPFfJj7RtO4mrUKOTjT_M1L.jpg\",\n      \"sex\": 1,\n      \"habilities\": \"Manejo muy bien la bicicleta\",\n      \"description\": \"Me he caido muy poco\",\n      \"user\": {\n        \"_id\": \"5f72d42900e63838cce64756\",\n        \"name\": \"Erick\",\n        \"lastname\": \"Hernandez\",\n        \"email\": \"takashi.onimaru@gmail.com\",\n        \"password\": \"$2a$08$Yc/sqrnErDnpwoCSkfuGWOOq0exC4n7CEXCy5rKyz/Z5/G.2.c2E6\",\n        \"photo\": \"/public/files/d1fMhe9_efe_lXtntP-fReUycKThnRdNVWjM4k9UcEpHtA-X59CCK3sYTgVnDXCo.jpg\",\n        \"date\": \"2020-09-29T06:28:57.779Z\",\n        \"tokens\": [\n          {\n            \"_id\": \"5f7353e6938ab21aa0cb13dc\",\n            \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjcyZDQyOTAwZTYzODM4Y2NlNjQ3NTYiLCJpYXQiOjE2MDEzOTM2Mzh9.qzb15XXY8iPW8TSZptXHIotMGVXogWm-adGf0pVK8AE\"\n          }\n        ],\n        \"__v\": 5\n      },\n      \"__v\": 0\n    }\n  ]\n}",
+          "content": "{\n  \"error\": 0,\n  \"mensaje\": [\n    {\n      _id: \"5fd2a024658229177cb3e66b\",\n      dln: 161342589,\n      expDateDln: \"2025-03-21T00:00:00.000Z\",\n      birthDate: \"1985-03-21T00:00:00.000Z\",\n      areaCode: 414,\n      phoneNumber: \"3168556\",\n      sex: 1,\n      address: \"Av Sucre de los Dos Caminos\",\n      zipCode: \"1030\",\n      __v: 1,\n      description: \"Esta es una prueba de edicion desde experiencia directamente\",\n      experience: [\n        {\n          years: 4,\n          _id: \"5fd7a053398f454368ccb2be\",\n          name: \"Tamk endorsed\",\n          have: true\n        },\n        {\n          years: 2,\n          _id: \"5fd7a053398f454368ccb2bf\",\n          name: \"Hazmat\",\n          have: true\n        },\n        {\n          years: 0,\n          _id: \"5fd7a053398f454368ccb2c0\",\n          name: \"Referred loads\",\n          have: false\n        },\n        {\n          years: 1,\n          _id: \"5fd7a053398f454368ccb2c1\",\n          name: \"Van\",\n          have: true\n        },\n        {\n          years: 10,\n          _id: \"5fd7a053398f454368ccb2c2\",\n          name: \"Car Carrier\",\n          have: true\n        },\n        {\n          years: 3,\n          _id: \"5fd7a053398f454368ccb2c3\",\n          name: \"Flat Bed\",\n          have: true\n        }\n      ],\n      twicCard: true\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -726,20 +712,6 @@
           },
           {
             "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "dln",
-            "description": "<p>Numero de licencia del conductor</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": false,
-            "field": "expDateDln",
-            "description": "<p>Fecha de vencimiento de la licencia</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "Date",
             "optional": false,
             "field": "birthDate",
@@ -768,10 +740,10 @@
           },
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "experience",
-            "description": "<p>Años de experiencia</p>"
+            "field": "password",
+            "description": "<p>Clave de acceso del usuario</p>"
           },
           {
             "group": "Parameter",
@@ -786,29 +758,201 @@
             "optional": false,
             "field": "zipCode",
             "description": "<p>Zip Code</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "description",
-            "description": "<p>Descripcion breve de la empresa</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Ejemplo de peticion",
-          "content": "{\n    \"base\": {\n      \"name\": \"Pedro\",\n      \"lastname\": \"Perez\"\n    },\n    \"dln\": 14258369,\n    \"expDateDln\": \"2025-05-21T06:28:57.779Z\",\n    \"birthDate\": \"1985-05-21T06:28:57.779Z\",\n    \"areaCode\": 212,\n    \"phoneNumber\": 4145689,\n    \"sex\": 1,\n    \"experience\": 5,\n    \"address\": \"Venezuela\",\n    \"zipCode\": 10548,\n    \"description\": \"Donec sit amet fringilla libero, in dictum neque\"\n  }",
+          "content": "{\n    \"base\": {\n      \"name\": \"Pedro\",\n      \"lastname\": \"Perez\"\n    },\n    \"birthDate\": \"1985-05-21T06:28:57.779Z\",\n    \"areaCode\": 212,\n    \"phoneNumber\": 4145689,\n    \"sex\": 1,\n    \"address\": \"Venezuela\",\n    \"password\": \"123456789\",\n    \"zipCode\": 10548\n  }",
           "type": "json"
         }
       ]
     },
     "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "user",
+            "description": "<p>Datos basicos de usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "user._id",
+            "description": "<p>ID del usuario registrado</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "user.name",
+            "description": "<p>Nombre del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "user.lastname",
+            "description": "<p>Apellido del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "user.typeUser",
+            "description": "<p>Tipo de usuario (1-&gt; Driver | 2-&gt; Company)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "user.photo",
+            "description": "<p>Foto del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "user.google_id",
+            "description": "<p>ID de usuario de google cuando se loguea desde esa red social</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "user.facebook_id",
+            "description": "<p>ID de usuario de facebook cuando se loguea desde esa red social</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "user.email",
+            "description": "<p>Correo electronico del usuario</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "user.date",
+            "description": "<p>Fecha de regitro del conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "driver",
+            "description": "<p>Datos del usuario asociados al rol de conductor</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Id",
+            "optional": false,
+            "field": "driver._id",
+            "description": "<p>ID del Driver</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.dln",
+            "description": "<p>Numero de licencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "driver.expDateDln",
+            "description": "<p>Fecha de expiracion de la licencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "driver.birthDate",
+            "description": "<p>Fecha de nacimiento del driver</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.areaCode",
+            "description": "<p>Codigo de area del telefono</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.phoneNumber",
+            "description": "<p>Numero telefono</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.sex",
+            "description": "<p>Sexo del usuario (1-&gt; Hombre | 2-&gt; Mujer | 3-&gt; Otro)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.address",
+            "description": "<p>Direccion fisica de habitacion</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.zipCode",
+            "description": "<p>Zip Code</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.description",
+            "description": "<p>Descripcion breve del Driver</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "driver.experience",
+            "description": "<p>Arreglo de objetos con campos de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.experience.name",
+            "description": "<p>Nombre del campos de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "driver.experience.have",
+            "description": "<p>Indica si posee el campo de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.experience.years",
+            "description": "<p>Numero de años de experiencia</p>"
+          }
+        ]
+      },
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n    \"error\": 0,\n    \"mensaje\": true\n  }",
+          "content": "{\n    \"error\": 0,\n    \"data\": {\n      \"user\": {\n        \"_id\": \"5fd2a024658229177cb3e66c\",\n        \"name\": \"Pedro\",\n        \"lastname\": \"Perez\",\n        \"typeUser\": 1,\n        \"photo\": \"https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png\",\n        \"google_id\": \"104953011490801331331\",\n        \"email\": \"pedro.perez@gmail.com\",\n        \"date\": \"2020-12-10T22:24:36.492Z\"\n      },\n      \"driver\": {\n        \"_id\": \"5fd2a024658229177cb3e66b\",\n        \"dln\": 161342589,\n        \"expDateDln\": \"2025-03-21T00:00:00.000Z\",\n        \"birthDate\": \"1985-03-21T00:00:00.000Z\",\n        \"areaCode\": 414,\n        \"phoneNumber\": \"3168556\",\n        \"sex\": 1,\n        \"address\": \"Av Sucre de los Dos Caminos\",\n        \"zipCode\": \"1030\",\n        \"__v\": 1,\n        \"description\": \"Esta es una prueba de edicion desde experiencia directamente\",\n        \"experience\": [\n          {\n            \"years\": 4,\n            \"_id\": \"5fd7a053398f454368ccb2be\",\n            \"name\": \"Tamk endorsed\",\n            \"have\": true\n          },\n          {\n            \"years\": 2,\n            \"_id\": \"5fd7a053398f454368ccb2bf\",\n            \"name\": \"Hazmat\",\n            \"have\": true\n          },\n          {\n            \"years\": 0,\n            \"_id\": \"5fd7a053398f454368ccb2c0\",\n            \"name\": \"Referred loads\",\n            \"have\": false\n          },\n          {\n            \"years\": 1,\n            \"_id\": \"5fd7a053398f454368ccb2c1\",\n            \"name\": \"Van\",\n            \"have\": true\n          },\n          {\n            \"years\": 10,\n            \"_id\": \"5fd7a053398f454368ccb2c2\",\n            \"name\": \"Car Carrier\",\n            \"have\": true\n          },\n          {\n            \"years\": 3,\n            \"_id\": \"5fd7a053398f454368ccb2c3\",\n            \"name\": \"Flat Bed\",\n            \"have\": true\n          }\n        ],\n        \"twicCard\": true\n      }\n    }\n  }",
           "type": "json"
         }
       ]
@@ -825,6 +969,123 @@
     "filename": "api/components/profile_driver/network.js",
     "groupTitle": "Driver",
     "name": "PatchDriver"
+  },
+  {
+    "type": "patch",
+    "url": "/driver/experience",
+    "title": "UpdateExperience",
+    "group": "Driver",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "Bearer",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token de acceso de usuario.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "dln",
+            "description": "<p>Numero de licencia</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "expDateDln",
+            "description": "<p>Fecha de vencimiento de la licencia</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "imageDln",
+            "description": "<p>Url de la imagen con la foto de la licencia</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>Descripcion breve del Driver</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "twicCard",
+            "description": "<hr>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object[]",
+            "optional": false,
+            "field": "experience",
+            "description": "<p>Arreglo de objetos con campos de experiencia</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "experience.name",
+            "description": "<p>Nombre del campos de experiencia</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "experience.have",
+            "description": "<p>Indica si posee el campo de experiencia</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "experience.years",
+            "description": "<p>Numero de años de experiencia</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Ejemplo de peticion",
+          "content": "{\n    \"dln\": 161342589,\n    \"expDateDln\": \"2025-03-21T00:00:00.000Z\",\n    \"imageDln\": \"\",\n    \"description\": \"Esta es una prueba de edicion desde experiencia directamente\",\n    \"twicCard\": true,\n    \"experience\": [{\n      \"name\": \"Tamk endorsed\",\n      \"have\": true,\n      \"years\": 4\n    },\n    {\n      \"name\": \"Hazmat\",\n      \"have\": true,\n      \"years\": 2\n    },\n    {\n      \"name\": \"Referred loads\",\n      \"have\": false,\n      \"years\": 0\n    },\n    {\n      \"name\": \"Van\",\n      \"have\": true,\n      \"years\": 1\n    },\n    {\n      \"name\": \"Car Carrier\",\n      \"have\": true,\n      \"years\": 10\n    },\n    {\n      \"name\": \"Flat Bed\",\n      \"have\": true,\n      \"years\": 3\n    }]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Ejemplo de respuesta correcta",
+          "content": "{\n    \"error\": 0,\n    \"data\": \"User experience updated\"\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "List error",
+          "content": "HTTP/1.1 500 Internal Server Error",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "api/components/profile_driver/network.js",
+    "groupTitle": "Driver",
+    "name": "PatchDriverExperience"
   },
   {
     "type": "post",
@@ -935,10 +1196,10 @@
           },
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "experience",
-            "description": "<p>Años de experiencia</p>"
+            "field": "password",
+            "description": "<p>Clave de acceso del usuario</p>"
           },
           {
             "group": "Parameter",
@@ -953,20 +1214,13 @@
             "optional": false,
             "field": "zipCode",
             "description": "<p>Zip Code</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "description",
-            "description": "<p>Descripcion breve de la empresa</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Ejemplo de peticion",
-          "content": "{\n    \"base\": {\n      \"name\": \"Pedro\",\n      \"lastname\": \"Perez\",\n      \"typeUser\": 1,\n      \"photo\": \"https://lh3.googleusercontent.com/a-/AOhZR5U4Eu0rGUgUybuzcSMw=s96-c\",\n      \"email\": \"pedro.perez@gmail.com\",\n      \"google_id\": 107579238748342099879,\n      \"facebook_id\": 10158547873184036\n    },\n    \"dln\": 14258369,\n    \"expDateDln\": \"2025-05-21T06:28:57.779Z\",\n    \"birthDate\": \"1985-05-21T06:28:57.779Z\",\n    \"areaCode\": 212,\n    \"phoneNumber\": 4145689,\n    \"sex\": 1,\n    \"experience\": 5,\n    \"address\": \"Venezuela\",\n    \"zipCode\": \"10548\",\n    \"description\": \"Donec sit amet fringilla libero, in dictum neque\"\n  }",
+          "content": "{\n    \"base\": {\n      \"name\": \"Pedro\",\n      \"lastname\": \"Perez\",\n      \"typeUser\": 1,\n      \"photo\": \"https://lh3.googleusercontent.com/a-/AOhZR5U4Eu0rGUgUybuzcSMw=s96-c\",\n      \"email\": \"pedro.perez@gmail.com\",\n      \"google_id\": 107579238748342085879,\n      \"facebook_id\": 10158547873145036\n    },\n    \"dln\": 14258369,\n    \"expDateDln\": \"2025-05-21T06:28:57.779Z\",\n    \"birthDate\": \"1985-05-21T06:28:57.779Z\",\n    \"areaCode\": 212,\n    \"phoneNumber\": 4145689,\n    \"password\": \"123456789\"\n    \"sex\": 1,\n    \"address\": \"Venezuela\",\n    \"zipCode\": \"10548\"\n  }",
           "type": "json"
         }
       ]
@@ -1147,7 +1401,7 @@
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n    \"error\": 0,\n    \"mensaje\": {\n      \"user\": {\n        \"_id\": \"5f95ea6f84ada2278899d071\",\n        \"name\": \"Pedro\",\n        \"lastname\": \"Perez\",\n        \"typeUser\": 1,\n        \"photo\": \"https://lh3.googleusercontent.com/a-/AOhZR5U4Eu0rGUgUybuzcSMw=s96-c\",\n        \"google_id\": \"107579238748342090000\",\n        \"facebook_id\": \"10158547873184036\",\n        \"email\": \"pedro.perez@gmail.com\",\n        \"date\": \"2020-10-25T21:13:19.437Z\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk1ZWE2Zjg0YWRhMjI3ODg5OWQwNzEiLCJpYXQiOjE2MDM2NjAzOTl9.6QpKf1byRLCgk7uXWjfYygzQwhAGz8MmdvsTkRplms4\"\n      },\n      \"driver\": {\n        \"_id\": \"5f95ea6e84ada2278899d070\",\n        \"dln\": 14258369,\n        \"imageDln\": \"\",\n        \"expDateDln\": \"2025-05-21T06:28:57.779Z\",\n        \"birthDate\": \"1985-05-21T06:28:57.779Z\",\n        \"areaCode\": 212,\n        \"phoneNumber\": 4145689,\n        \"sex\": 1,\n        \"experience\": 5,\n        \"address\": \"Venezuela\",\n        \"zipCode\": 10548,\n        \"description\": \"Donec sit amet fringilla libero, in dictum neque\",\n        \"__v\": 0\n      }\n    }\n  }",
+          "content": "{\n    \"error\": 0,\n    \"data\": {\n      driver: {\n        _id: \"5fd7c15b7e44982680f994ac\",\n        address: \"Los Dos Caminos\",\n        areaCode: 414,\n        birthDate: \"2020-12-14T04:00:00.000Z\",\n        dln: 147854623,\n        expDateDln: \"2020-12-14T04:00:00.000Z\",\n        experience: [],\n        phoneNumber: \"3168556\",\n        sex: 1,\n        zipCode: \"1030\",\n        __v: 0\n      },\n      user: {\n        _id: \"5fd7c15b7e44982680f994ad\", \n        name: \"Pedro\", \n        lastname: \"Perez\", \n        typeUser: 1,\n        date: \"2020-12-14T19:47:39.826Z\",\n        email: \"pedro.perez@gmail.com\",\n        photo: \"https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png\",\n        token: \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ3YzE1YjdlNDQ5ODI2ODBmOTk0YWQiLCJpYXQiOjE2MDc5NzUyNjB9.OLl6EAVD-vd4xw0vqdCl945yCa5u7lgfx27VBlKFKNI\"\n      }\n    }\n  }",
           "type": "json"
         }
       ]
@@ -1486,10 +1740,31 @@
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "Object[]",
             "optional": false,
             "field": "driver.experience",
             "description": "<p>Años de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "driver.experience.years",
+            "description": "<p>Cantidad de años de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "driver.experience.name",
+            "description": "<p>Nombre del campo de experiencia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "driver.experience.have",
+            "description": "<p>Indica si posee ese campo de experiencia</p>"
           },
           {
             "group": "Success 200",
@@ -1587,7 +1862,7 @@
       "examples": [
         {
           "title": "Ejemplo de respuesta correcta",
-          "content": "{\n  \"error\": 0,\n  \"mensaje\": {\n    _id: 5f8f6781b57fcf31145bb164,\n    name: 'Pedro',\n    lastname: 'Perez',\n    typeUser: 1,\n    photo: 'https://lh3.googleusercontent.com/a-/AOhZR5U4Eu0rGUgUybuzcSMw=s96-c',\n    email: 'pedro.perez@gmail.com',\n    google_id: '107579238748342099879',\n    facebook_id: '10158547873184036',\n    date: 2020-10-20T22:41:05.496Z,\n    token: 'eyJhbGciOiJIUzI19LIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjhmNjc4MWI1N2ZjZjMxMTQ1YmIxNjQiLCJpYXQiOjE2MDM2NTgzOTB9.GIdlwhPUgpIQkJH61y31U26bdxDChRvK_xGT7Pf-VK0',\n    driver: {\n        dln: 14258369,\n        imageDln: '/public/files/undefined',\n        birthDate: 1988-05-11T00:00:00.000Z,\n        areaCode: 424,\n        phoneNumber: 7845612,\n        sex: 1,\n        experience: 10,\n        address: 'Lorem ipsum dolor sit amet',\n        zipCode: '1030',\n        description: 'Donec sit amet fringilla libero, in dictum neque',\n        expDateDln: 2021-03-21T00:00:00.000Z\n    },\n    company: {\n        tradename: 'Lorem Ipsum',\n        legalNumber: 'V14258369',\n        areaCode: 424,\n        phoneNumber: 7845612,\n        logo: '/public/files/undefined',\n        address: 'Miranda - Caracas - Venezuela',\n        description: 'Maecenas consectetur velit sit amet lorem auctor ultrices',\n        zipCode: '1031'\n    }\n}",
+          "content": "{\n  \"error\": 0,\n  \"data\": {\n    _id: 5f8f6781b57fcf31145bb164,\n    name: 'Pedro',\n    lastname: 'Perez',\n    typeUser: 1,\n    photo: 'https://lh3.googleusercontent.com/a-/AOhZR5U4Eu0rGUgUybuzcSMw=s96-c',\n    email: 'pedro.perez@gmail.com',\n    google_id: '107579238748342099879',\n    facebook_id: '10158547873184036',\n    date: 2020-10-20T22:41:05.496Z,\n    token: 'eyJhbGciOiJIUzI19LIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjhmNjc4MWI1N2ZjZjMxMTQ1YmIxNjQiLCJpYXQiOjE2MDM2NTgzOTB9.GIdlwhPUgpIQkJH61y31U26bdxDChRvK_xGT7Pf-VK0',\n    driver: {\n        dln: 14258369,\n        imageDln: '/public/files/undefined',\n        birthDate: 1988-05-11T00:00:00.000Z,\n        areaCode: 424,\n        phoneNumber: 7845612,\n        sex: 1,\n        address: 'Lorem ipsum dolor sit amet',\n        zipCode: '1030',\n        description: 'Donec sit amet fringilla libero, in dictum neque',\n        expDateDln: 2021-03-21T00:00:00.000Z,\n        twicCard: true,\n        experience: [\n            {\n                years: 4,\n                _id: \"5fd7a053398f454368ccb2be\",\n                name: \"Tamk endorsed\",\n                have: true\n            },\n            {\n                years: 2,\n                _id: \"5fd7a053398f454368ccb2bf\",\n                name: \"Hazmat\",\n                have: true\n            },\n            {\n                years: 0,\n                _id: \"5fd7a053398f454368ccb2c0\",\n                name: \"Referred loads\",\n                have: false\n            },\n            {\n                years: 1,\n                _id: \"5fd7a053398f454368ccb2c1\",\n                name: \"Van\",\n                have: true\n            },\n            {\n                years: 10,\n                _id: \"5fd7a053398f454368ccb2c2\",\n                name: \"Car Carrier\",\n                have: true\n            },\n            {\n                years: 3,\n                _id: \"5fd7a053398f454368ccb2c3\",\n                name: \"Flat Bed\",\n                have: true\n            }\n        ]\n    },\n    company: {\n        tradename: 'Lorem Ipsum',\n        legalNumber: 'V14258369',\n        areaCode: 424,\n        phoneNumber: 7845612,\n        logo: '/public/files/undefined',\n        address: 'Miranda - Caracas - Venezuela',\n        description: 'Maecenas consectetur velit sit amet lorem auctor ultrices',\n        zipCode: '1031'\n    }\n}",
           "type": "json"
         }
       ]

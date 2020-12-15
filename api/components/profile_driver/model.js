@@ -61,7 +61,6 @@ const profileDriverSchema = Schema({
     experience: [{
         name: {
             type: String,
-            required: true,
             trim: true
          },
          have: Boolean,
