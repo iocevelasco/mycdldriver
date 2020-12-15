@@ -54,12 +54,18 @@ const mailer = require('../../middelware/mailer');
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.get('/', function (req, res) {
-    const filterUsers = req.query.user || null;
-    controller.getUsers(filterUsers)
+router.get('/:type', function (req, res) {
+    controller.getUsers(req.params.type)
     .then((userList) => {
         //mailer('takashi.onimaru@gmail.com', 'Prueba desde NodeJs para Ioce', 'Este es un titulo personailizado para ti BB', 'Mensaje de prueba de que se envio desde NODE JS, aqui pasariamos cualquier tipo de mensaje como el de usuario creado, recuperar contraseña, no se que más, pero seria una estructura base para montar correos, dime que te parece para darle plomo.')
-        response.success(req, res, userList, 200);
+        switch(userList.status){
+            case 200:
+                response.success(req, res, userList.message, userList.status);
+                break;
+            default:
+                response.error(req, res, userList.message, userList.status, userList.detail);
+                break;
+        }
     }).catch(e => {
         response.error(req, res, 'Unexpected Error', 500, e);
     });
