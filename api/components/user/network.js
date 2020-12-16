@@ -45,10 +45,10 @@ const mailer = require('../../middelware/mailer');
  * @apiSuccess {String} company.description Descripcion corta de la empresa 
  * @apiSuccess {String} company.zipCode ZipCode 
  * @apiSuccess {String} company.logo Url de la imagen de la empresa 
- * @apiSuccess {String} company.state Estado donde esta ubicada 
+ * @apiSuccess {Object[]} company.state Estado donde esta ubicada 
  * @apiSuccess {Id} company.state._id Id del estado 
  * @apiSuccess {String} company.state.stateName Nombre del estado 
- * @apiSuccess {String} company.ciudad Ciudad donde esta ubicada 
+ * @apiSuccess {Object[]} company.ciudad Ciudad donde esta ubicada 
  * @apiSuccess {Id} company.ciudad._id Id de la ciudad 
  * @apiSuccess {String} company.ciudad.stateName Nombre de la ciudad 
  * @apiSuccessExample {json} Ejemplo de respuesta correcta
@@ -220,10 +220,10 @@ router.delete('/:id', auth(), function (req, res) {
  * @apiSuccess {String} company.address2 Direccion linea 2  
  * @apiSuccess {String} company.description Descripcion breve de la empresa
  * @apiSuccess {Number} company.zipCode Zip Code  
- * @apiSuccess {String} company.state Estado donde esta ubicada 
+ * @apiSuccess {Object[]} company.state Estado donde esta ubicada 
  * @apiSuccess {Id} company.state._id Id del estado 
  * @apiSuccess {String} company.state.stateName Nombre del estado 
- * @apiSuccess {String} company.ciudad Ciudad donde esta ubicada 
+ * @apiSuccess {Object[]} company.ciudad Ciudad donde esta ubicada 
  * @apiSuccess {Id} company.ciudad._id Id de la ciudad 
  * @apiSuccess {String} company.ciudad.stateName Nombre de la ciudad 
  * @apiSuccessExample {json} Ejemplo de respuesta correcta

@@ -1,34 +1,34 @@
 const Model = require('./model');
 const {User} = require('../user/model');
-
-function getCompany(filterCompany){
-    return new Promise((resolve, reject) => {
-        let filter = {};
-        if(filterCompany !== null){
-            filter = {
-                legalNumber: filterCompany,
-            };
-        }
-        result = Model.find(filter)
-        .populate('state')
-        .populate('city');
-
-        resolve(result);
-    });
-}
+const fs = require('fs');
 
 async function addCompany(user){
+    if(!user){
+        return {
+            status: 404,
+            message: 'No user data recived'
+        }
+    }
+    if(!user.company){
+        return {
+            status: 404,
+            message: 'No company data recived'
+        }
+    }
     const company = new Model(user.company);
     try{
         await company.save();
         user.company = company;
+        const foundCompany = await Model.findOne({_id: company._id})
+        .populate('state', 'stateName')
+        .populate('city', 'cityName');
         const myUser = new User(user);
         try{
             await myUser.save();
             const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = myUser;
             const token = await myUser.generateAuthToken();
             user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date, token };
-            return {status: 200, user, company};
+            return {status: 201, message: {user, company: foundCompany}};
         }catch(e){
             await Model.deleteOne({
                 _id: company._id
@@ -55,9 +55,23 @@ async function updateCompany(id, user){
     const foundUser = await User.findOne({
         _id: id
     });
+    if(!foundUser){
+        return {
+            status: 404,
+            message: 'User not found'
+        }
+    }
     const foundCompany = await Model.findOne({
         _id: foundUser.company
-    });
+    })
+    .populate('state', 'stateName')
+    .populate('city', 'cityName');
+    if(!foundCompany){
+        return {
+            status: 404,
+            message: 'Company not found'
+        }
+    }
 
     if(user.name){
         foundUser.name = user.name;
@@ -74,18 +88,8 @@ async function updateCompany(id, user){
     if(user.photo){
         try {
             fs.unlinkSync("." + foundUser.photo);
-        } catch(err) {
-            console.error(err);
-        }
+        } catch(err) {}
         foundUser.photo = user.photo;
-    }
-    if(company.logo){
-        try {
-            fs.unlinkSync("." + foundCompany.logo);
-        } catch(err) {
-            console.error(err);
-        }
-        foundCompany.logo = company.logo;
     }
     if(company.legalNumber){
         foundCompany.legalNumber = company.legalNumber;
@@ -115,15 +119,23 @@ async function updateCompany(id, user){
         foundCompany.state = company.state;
     }
     
-    await foundUser.save();
-    await foundCompany.save();
-    const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = foundUser;
-    user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date };
-    return {user, foundCompany};
+    try{
+        await foundUser.save();
+        await foundCompany.save();
+        const {_id, name, lastname, typeUser, photo, google_id, facebook_id, email, date} = foundUser;
+        user = { _id, name, lastname, typeUser, photo, google_id, facebook_id, email, date };
+        return {status: 200, message: {user, company: foundCompany}};
+    }catch(e){
+        return {
+            status: 400,
+            message: 'Error saving company',
+            detail: e
+        }
+    }
+    
 }
 
 module.exports = {
-    list: getCompany,
     add: addCompany,
     update: updateCompany
 }
