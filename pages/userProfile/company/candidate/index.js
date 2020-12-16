@@ -269,9 +269,7 @@ const CandidateView = ({ user, ...props }) => {
                 <Col span={12}>
                   <DescriptionItem title="Sex" content={resoltSexType(detail.driver.sex)} />
                 </Col>
-                <Col span={12}>
-                  <DescriptionItem title="Experience" content={detail.driver.experience || 0} />
-                </Col>
+                
               </Row>
               <Divider />
               <p className="site-description-item-profile-p">Contacts</p>

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { CitiesModel, StatesModel } = require('../cities/model')
 const Schema = mongoose.Schema;
 
 const profileCompanySchema = mongoose.Schema({
@@ -37,11 +38,11 @@ const profileCompanySchema = mongoose.Schema({
     },
     state: {
         type: Schema.ObjectId,
-        ref: 'States',
+        ref: StatesModel,
     },
     city: {
         type: Schema.ObjectId,
-        ref: 'Cities',
+        ref: CitiesModel,
     }
 });
 

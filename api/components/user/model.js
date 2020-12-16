@@ -113,8 +113,20 @@ const userSchema = mongoose.Schema({
     }
     const user = await User.findOne({ email} )
       .select("-__v")
-      .populate('driver', "-_id -__v")
-      .populate('company', "-_id -__v");
+      .populate('driver', "-__v")
+      .populate({
+         path: 'company',
+         model: 'ProfileCompany',
+         select: '__v',
+         populate: [{
+            path: 'state',
+            select: 'stateName'
+         },
+         {
+            path: 'city',
+            select: 'cityName'
+         }]
+     });
 
     if (!user) {
        throw new Error({ error: 'Invalid login credentials' });

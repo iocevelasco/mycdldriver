@@ -3,15 +3,41 @@ const driverModel = require('../profile_driver/model');
 const companyModel = require('../profile_company/model');
 const fs = require('fs');
 
-async function getUser(filterUser){
+async function getUser(type){
     let filter = {};
-    if(filterUser !== null){
+    if(type !== null){
         filter = {
-            name: filterUser,
+            typeUser: type,
         };
     }
-    const list = await User.find(filter);
-    return list;
+    try{
+        const list = await User.find(filter)
+        .select('name lastname photo date email')
+        .populate('driver')
+        .populate({
+            path: 'company',
+            model: 'ProfileCompany',
+            populate: [{
+                path: 'state',
+                select: 'stateName'
+            },
+            {
+                path: 'city',
+                select: 'cityName'
+            }]
+        });
+        return {
+            status: 200,
+            message: list
+        };
+    }catch(e){
+        return {
+            status: 500,
+            message: "Unexpected error",
+            detail: e
+        };
+    }
+    
 }
 
 async function setPrelogin(data){

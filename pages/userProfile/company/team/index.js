@@ -67,8 +67,7 @@ const TeamCompanyView = ({ user, ...props }) => {
     loading: state.loading,
   }
 
-  const showRate = (job, record) => {
-    console.log(job, record);
+  const showRate = (job) => {
     setRateJob(job);
     setVisible(true);
   };
@@ -98,11 +97,23 @@ const TeamCompanyView = ({ user, ...props }) => {
     try {
       setLoadin(true);
       const { data } = await axios.get(`/api/company/jobs/staff`, header);
+      setPromedio(data.data[0].jobs);
       dispatch({ type: types.FETCH_DATA, payload: data.data });
       setLoadin(false);
     } catch (err) {
       console.log(err)
     }
+  }
+
+  //ELIMINAR LUEGO
+  function setPromedio(data) {
+    const rank = data.map((job) => {
+      const result = job.apply.ranking;
+      return result;
+    });
+    let sum = rank.reduce((previous, current) => current += previous);
+    let avg = sum / rank.length;
+    console.log('[ RESULT ]', avg);
   }
 
   const changeRanking = async () => {
