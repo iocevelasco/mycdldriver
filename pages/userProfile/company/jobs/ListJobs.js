@@ -59,11 +59,6 @@ const ListJobs = (props) => {
                     <Text> {item.areaCode}-{item.phoneNumber} | {item.email}</Text>
                     <Text> Description | <Text strong> {item.description}  </Text> </Text>
                     <div>
-                      {
-                        /*item.tags || [].map((e, i) => {
-                          return <Tag> {e.name} </Tag>
-                        })*/
-                      }
                     </div>
                   </div>
                   <div className='image'>
