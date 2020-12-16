@@ -36,7 +36,7 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
     },
     {
       path: '/userProfile/company/jobs',
-      section_name: 'Jobs',
+      section_name: 'Create jobs',
       icon: <CarOutlined />
     },
     {
@@ -45,7 +45,7 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
       icon: <TeamOutlined />
     },
     {
-      path: '/userProfile/company/team',
+      path: '/userProfile/company/staff',
       section_name: 'Staff',
       icon: <TeamOutlined />
     },

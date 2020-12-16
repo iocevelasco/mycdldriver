@@ -11,6 +11,7 @@ import SocialNetworkButtons from './utils/SocialNetwork';
 import UserPassword from './utils/loginWithUserPassword';
 import NewUserForm from './utils/NewUser';
 const { Text, Title } = Typography;
+import "./modal-login.less";
 
 function mapStateToProps(state) {
   return {

@@ -18,6 +18,7 @@ module.exports = withLess({
     config.resolve.alias['components'] = path.resolve('./components');
     config.resolve.alias['@hooks'] = path.resolve('./pages/hooks');
     config.resolve.alias['@store'] = path.resolve('./store');
+    config.resolve.alias['@utils'] = path.resolve('./pages/utils');
 
     if (isServer) {
       const antStyles = /antd\/.*?\/style.*?/

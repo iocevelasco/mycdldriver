@@ -22,6 +22,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { withRouter } from 'next/router';
+import AddressInputs from './AddressInput';
 
 const { TextArea } = Input;
 
@@ -220,44 +221,6 @@ const DriverUser = (props) => {
     }
   };
 
-  const propsUpload = {
-    name: 'logo',
-    action: '/api/files',
-    headers: {
-      authorization: 'authorization-text'
-    },
-    async onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-      let fileList = [...info.fileList];
-      fileList = fileList.slice(-1);
-      fileList = fileList.map(file => {
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        return file;
-      });
-
-      if (imageDln.length > 0) {
-        try {
-          const file = {
-            foto: imageDln[0].response.data.file
-          };
-          await axios.post(`/api/files/delete`, file);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      setImage(fileList);
-    }
-  };
-
   const beforeToCreateProfile = () => {
     let base = {}
     let driver = {}
@@ -408,39 +371,6 @@ const DriverUser = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-
-            <Row gutter={[24]} justify='space-between' align='middle'>
-              <Col span={12}>
-                <Form.Item
-                  label='Dln'
-                  name="dln"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'dln is required!',
-                    },
-                  ]}>
-                  <InputNumber
-                    min={0}
-                    max={900000000000000}
-                    style={{ width: '100%' }} />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label='Dln expiration'
-                  name="expDateDln"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Dln expiration date is required!',
-                    },
-                  ]}>
-                  <DatePicker style={{ width: '100%' }} />
-                </Form.Item>
-              </Col>
-            </Row>
-
             <Row gutter={[24]} justify='space-between' >
               <Col span={6}>
                 <Form.Item
@@ -469,35 +399,7 @@ const DriverUser = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-
-            <Row gutter={[24]} justify='space-between' >
-              <Col span={6}>
-                <Form.Item
-                  name='zipCode'
-                  label="Zip Code"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Zip code is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={18}>
-                <Form.Item
-                  name='address'
-                  label="Address"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Address is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
+            <AddressInputs />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button
