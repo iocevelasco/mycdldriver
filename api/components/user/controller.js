@@ -1,10 +1,18 @@
 const store = require('./store');
 const config = require('../../config');
 
-function getUsers(filterUsers){
-    return new Promise((resolve, reject) => {
-        resolve(store.list(filterUsers));
-    });
+async function getUsers(filterUsers){
+    try{
+        const result = await store.list(filterUsers);
+        return result;
+    }catch(e){
+        return {
+            status: 500,
+            message: "Unexpected error",
+            detail: e
+        };
+    }
+        
 }
 
 function setPhoto(id, photo){

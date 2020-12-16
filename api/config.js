@@ -10,6 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const config = {
     dbUrl: process.env.BD_URL || 'mongodb+srv://' + dbUser + ':' + dbPass + '@' + cluster + '.mongodb.net/' + dbName + '?retryWrites=true&w=majority',
+    monDebug: process.env.MONGO_DEBUG || false,
     port: process.env.PORT || 3000,
     host: process.env.HOST || 'http://localhost',
     JWT_KEY: process.env.JWT_KEY || key,

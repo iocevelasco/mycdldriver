@@ -1,6 +1,7 @@
 const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
 const { User } = require('../user/model');
 const ProfileCompany = require('../profile_company/model');
+const ProfileDriver = require('../profile_driver/model');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -163,17 +164,30 @@ async function setRanking(id, ranking, comment){
         if(comment){
             apply.comment = comment;
         }
-        
         await apply.save();
+        const applyList = await JobsApplysModel.find({
+            driver: apply.driver,
+            ranking: { $gt: 0, $lt: 6 }
+        });
+        const listRank = applyList.map((apply) => {
+            const result = apply.ranking;
+            return result;
+        });
+        let sum = listRank.reduce((previous, current) => current += previous);
+        let avg = sum / listRank.length;
+        const user = await User.findOne({_id: apply.driver}).select('driver');
+        const driver = await ProfileDriver.findOne({_id: user.driver});
+        driver.rating = avg;
+        await driver.save();
         return {
             status: 200,
             message: 'Ok'
         };
     }catch(e){
-        console.log(e);
         return {
             status: 500,
-            message: 'Invalid data recived for apply job'
+            message: 'Invalid data recived for apply job',
+            detail: e
         };
     }
 }

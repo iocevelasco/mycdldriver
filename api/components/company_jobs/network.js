@@ -137,25 +137,22 @@ router.patch('/change_status', auth(2), function (req, res) {
 router.patch('/change_rank', auth(2), function (req, res) {
     const data = req.body;
     if(data.ranking < 0 || data.ranking > 5){
-        response.error(req, res, "Invalid rank rank", 500);
+        response.error(req, res, "Invalid rank", 500);
         return;
     }
     controller.setRating(data.id, data.ranking, data.commnet)
     .then((Job) => {
+        console.log('[ RESPONSE ]', Job);
         switch (Job.status){
             case 200:
                 response.success(req, res, Job.message, 200);
                 break;
-            case 500:
-                response.error(req, res, Job.message, 500);
-                break;
             default:
-                response.success(req, res, Job.message, 200);
+                response.error(req, res, Job.message, Job.status, Job.detail);
                 break;
         }
     }).catch(e => {
-        console.log(e);
-        response.error(req, res, 'Unexpected Error', 500);
+        response.error(req, res, 'Unexpected Error', 500, e);
     });
 });
 

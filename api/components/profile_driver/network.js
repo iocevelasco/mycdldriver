@@ -28,8 +28,7 @@ const controller = require('./controller');
  * @apiSuccess {Boolean} experience.have Indica si posee el campo de experiencia
  * @apiSuccessExample {json} Ejemplo de respuesta correcta
  * {
-  "error": 0,
-  "mensaje": [
+  "data": [
     {
       _id: "5fd2a024658229177cb3e66b",
       dln: 161342589,
@@ -164,7 +163,6 @@ router.get('/', function (req, res) {
  * @apiSuccess {String} driver.description Descripcion breve de la empresa 
  * @apiSuccessExample {json} Ejemplo de respuesta correcta
  * {
-    "error": 0,
     "data": {
       driver: {
         _id: "5fd7c15b7e44982680f994ac",
@@ -265,6 +263,7 @@ router.post('/', function (req, res) {
  * @apiSuccess {Number} driver.sex Sexo del usuario (1-> Hombre | 2-> Mujer | 3-> Otro)  
  * @apiSuccess {String} driver.address Direccion fisica de habitacion 
  * @apiSuccess {Number} driver.zipCode Zip Code 
+ * @apiSuccess {Number} driver.rating Promedio de puntuacion del driver 
  * @apiSuccess {String} driver.description Descripcion breve del Driver 
  * @apiSuccess {Object[]} driver.experience Arreglo de objetos con campos de experiencia 
  * @apiSuccess {String} driver.experience.name Nombre del campos de experiencia 
@@ -272,7 +271,6 @@ router.post('/', function (req, res) {
  * @apiSuccess {Number} driver.experience.years Numero de años de experiencia 
  * @apiSuccessExample {json} Ejemplo de respuesta correcta
  * {
-    "error": 0,
     "data": {
       "user": {
         "_id": "5fd2a024658229177cb3e66c",
@@ -294,7 +292,7 @@ router.post('/', function (req, res) {
         "sex": 1,
         "address": "Av Sucre de los Dos Caminos",
         "zipCode": "1030",
-        "__v": 1,
+        "rating": 3,
         "description": "Esta es una prueba de edicion desde experiencia directamente",
         "experience": [
           {
@@ -417,7 +415,6 @@ router.patch('/', auth(1), function (req, res){
   }
  * @apiSuccessExample {json} Ejemplo de respuesta correcta
  * {
-    "error": 0,
     "data": "User experience updated"
   }
  * @apiErrorExample {json} List error

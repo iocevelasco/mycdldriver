@@ -124,6 +124,21 @@ const CompanyJobView = (props) => {
     }
   };
 
+  function beforeUpload(file) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+      dispatch({ type: types.NEW_PHOTO, payload: [''] });
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+      dispatch({ type: types.NEW_PHOTO, payload: [''] });
+    }
+    return isJpgOrPng && isLt2M;
+  }
+
+
   const onFinisCreateJobs = async (fields) => {
     let newJob = fields;
     newJob.tags = [];
@@ -215,6 +230,7 @@ const CompanyJobView = (props) => {
               </div>
               <Divider />
               <FormJobs
+                beforeUpload={beforeUpload}
                 propsUpload={propsUpload}
                 formType='create'
                 onFinisCreateJobs={onFinisCreateJobs}
@@ -239,6 +255,7 @@ const CompanyJobView = (props) => {
           onClose={onCloseDrawer}
           visible={state.visible}>
           <FormJobs
+            beforeUpload={beforeUpload}
             fields={state.fields}
             propsUpload={propsUpload}
             formType='edit'

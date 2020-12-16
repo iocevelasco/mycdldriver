@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const statesSchema = mongoose.Schema({
+const statesSchema = Schema({
     stateName: {
         type: String,
         trim: true
@@ -20,7 +20,7 @@ const statesSchema = mongoose.Schema({
     }
 });
 
-const citiesSchema = mongoose.Schema({
+const citiesSchema = Schema({
     cityName: {
         type: String,
         trim: true

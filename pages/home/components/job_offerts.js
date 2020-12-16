@@ -54,6 +54,7 @@ const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
     <>
       <List
         bordered={false}
+        style={{ width: '100%' }}
         dataSource={jobs}
         pagination={{
           pageSize: 10,
@@ -71,7 +72,7 @@ const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
 
 const DescriptionSmall = ({ item }) => {
   return (
-    <div className='job-offert-list small'>
+    <div className='job-offert-list-small'>
       <Link href={{
         pathname: '/job-offert',
         query: {
@@ -88,7 +89,6 @@ const DescriptionSmall = ({ item }) => {
           <div className='container'>
             <div className='image'>
               <Avatar size={80} src={item.company.photo} />
-              <Avatar size={80} src={item.logo} />
             </div>
             <div className='job-offert__description'>
               <div>
@@ -100,6 +100,8 @@ const DescriptionSmall = ({ item }) => {
                   <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
                 </div>
               </div>
+            </div>
+            <div className="thumbanails" style={{ backgroundImage: "url(" + item.logo + ")" }}>
             </div>
           </div>
         </Card>
