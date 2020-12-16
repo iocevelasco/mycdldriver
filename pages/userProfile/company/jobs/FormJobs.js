@@ -6,19 +6,6 @@ import axios from 'axios';
 const { TextArea } = Input;
 const { Option } = Select;
 
-function beforeUpload(file) {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-    dispatch({ type: types.NEW_PHOTO, payload: [''] });
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-    dispatch({ type: types.NEW_PHOTO, payload: [''] });
-  }
-  return isJpgOrPng && isLt2M;
-}
 
 const FormJobs = (props) => {
   const handlerInput = props.formType === 'create' ? props.onFinisCreateJobs : props.ediJob;
@@ -31,10 +18,10 @@ const FormJobs = (props) => {
     all: [],
   });
   let fields = [];
-  if(props.fields){
-    fields = props.fields.map((field)=>{
-      if(field['name'] == "city" || field['name'] == "state"){
-        if(typeof field['value'] === 'object'){
+  if (props.fields) {
+    fields = props.fields.map((field) => {
+      if (field['name'] == "city" || field['name'] == "state") {
+        if (typeof field['value'] === 'object') {
           let id = field['value']._id;
           field['value'] = id;
         }
@@ -42,7 +29,7 @@ const FormJobs = (props) => {
       return field;
     });
   }
-  
+
   const fetchCities = async (stateId) => {
     await axios
       .get(`/api/address/cities/${stateId}`)
@@ -85,7 +72,7 @@ const FormJobs = (props) => {
         form={form}
         onFinish={handlerInput}
         fields={fields}
-        name= {props.formType === 'create'?"new-job":"edit-job"}
+        name={props.formType === 'create' ? "new-job" : "edit-job"}
         initialValues={{ remember: true }}
         onFieldsChange={onChangeProps}
         layout='vertical'>
@@ -126,14 +113,14 @@ const FormJobs = (props) => {
           }}
           rules={[
             {
-              required: props.formType === 'create'?true:false,
+              required: props.formType === 'create' ? true : false,
               message: 'Photo is required!',
             },
           ]}
         >
           <Upload {...props.propsUpload}
             fileList={props.newPhoto}
-            beforeUpload={beforeUpload}
+            beforeUpload={props.beforeUpload}
           >
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>
@@ -202,7 +189,7 @@ const FormJobs = (props) => {
                   noStyle
                   rules={[{ required: true, message: 'Province is required' }]}
                 >
-                  <Select 
+                  <Select
                     placeholder="Select province">
                     {
                       stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id} val>{e.value}</Option>))

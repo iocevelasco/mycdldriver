@@ -1,23 +1,10 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import MainLayout from 'components/layout';
-import {
-  Row,
-  Col,
-  List,
-  Avatar,
-  Card,
-  Table,
-  Typography,
-  Modal,
-  Button,
-  Rate,
-  Input
-} from 'antd';
+import { Row, Col, List, Avatar, Card, Table, Typography, Modal, Button, Rate, Input, Space } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import axios from 'axios';
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -80,8 +67,8 @@ const TeamCompanyView = ({ user, ...props }) => {
     loading: state.loading,
   }
 
-  const showRate = (job) => {
-    console.log(job);
+  const showRate = (job, record) => {
+    console.log(job, record);
     setRateJob(job);
     setVisible(true);
   };
@@ -174,7 +161,7 @@ const TeamCompanyView = ({ user, ...props }) => {
         <SideNav
           currentLocation='3' />
         <Col span={20}>
-          <WrapperSection row={18} styles={stylesWrapper}>
+          <WrapperSection row={22} styles={stylesWrapper}>
             <Card>
               <Table
                 rowKey='id'
@@ -191,7 +178,7 @@ const TeamCompanyView = ({ user, ...props }) => {
                         <List.Item
                           key={item._d}
                           actions={[
-                            <a onClick={() => showRate(item)}>
+                            <a onClick={() => showRate(item, record)}>
                               Rate
                         </a>,
                           ]}>
@@ -207,7 +194,6 @@ const TeamCompanyView = ({ user, ...props }) => {
                     />
                   }
                 }}
-                dataSource={state.jobs}
               />
             </Card>
           </WrapperSection>
@@ -227,24 +213,32 @@ const TeamCompanyView = ({ user, ...props }) => {
           </Button>,
         ]}
       >
-        <Rate
-          allowHalf
-          allowClear={false}
-          value={rateJob.apply.ranking}
-          onChange={(val) => {
-            rateJob.apply.ranking = val;
-            setRateJob(rateJob);
-          }} />
-        <p>
-          <TextArea
-            rows={4}
-            value={rateJob.apply.comment}
-            placeholder="Describe your experience working with this driver"
-            onChange={(val) => {
-              rateJob.apply.comment = val.target.value;
-              setRateJob(rateJob);
-            }}
-          /></p>
+        <Row>
+          <Col span={24}>
+            <Title level={3}> How was your experience with ioce?</Title>
+          </Col>
+          <Col span={24}>
+            <Rate
+              allowHalf
+              allowClear={false}
+              value={rateJob.apply.ranking}
+              onChange={(val) => {
+                rateJob.apply.ranking = val;
+                setRateJob(rateJob);
+              }} />
+          </Col>
+          <Col span={24}>
+            <TextArea
+              rows={4}
+              value={rateJob.apply.comment}
+              placeholder="Describe your experience working with this driver"
+              onChange={(val) => {
+                rateJob.apply.comment = val.target.value;
+                setRateJob(rateJob);
+              }}
+            />
+          </Col>
+        </Row>
       </Modal>
     </MainLayout>
   )
