@@ -1,4 +1,4 @@
-const {TagsModel, JobsModel, JobsApplysModel} = require('./model');
+const { TagsModel, JobsModel, JobsApplysModel } = require('./model');
 const { User } = require('../user/model');
 const ProfileCompany = require('../profile_company/model');
 const ProfileDriver = require('../profile_driver/model');
@@ -6,55 +6,55 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 
 function capitalize(text) {
-    return text.replace(/\b\w/g , function(m){ return m.toUpperCase(); } );
+    return text.replace(/\b\w/g, function (m) { return m.toUpperCase(); });
 }
 
-async function saveTags(tags){
+async function saveTags(tags) {
     let array = [];
-    try{
-        array = await Promise.all(tags.map(async (tag) => { 
+    try {
+        array = await Promise.all(tags.map(async (tag) => {
             let element = new TagsModel(tag);
             const tagEncontrado = await TagsModel.findOneAndUpdate(
-                {name: capitalize(tag.name)},
-                {name: capitalize(element.name)},
-                {upsert: true, new: true, rawResult: true}
+                { name: capitalize(tag.name) },
+                { name: capitalize(element.name) },
+                { upsert: true, new: true, rawResult: true }
             );
             return tagEncontrado.value._id;
         }));
-    }catch(e){
+    } catch (e) {
         console.log(e);
     }
-    
+
     return array;
 }
 
-async function getJobs(filterCompany){
+async function getJobs(filterCompany) {
     let filter = {};
     let filterOr = [];
-    if(filterCompany.company){
+    if (filterCompany.company) {
         filter = filterCompany;
     }
-    if(filterCompany.id){
-        filter = {_id: filterCompany.id};
+    if (filterCompany.id) {
+        filter = { _id: filterCompany.id };
     }
-    if(filterCompany.input){
-        filterOr.push({title: new RegExp(filterCompany.input, 'i')});
-        filterOr.push({description: new RegExp(filterCompany.input, 'i')});
+    if (filterCompany.input) {
+        filterOr.push({ title: new RegExp(filterCompany.input, 'i') });
+        filterOr.push({ description: new RegExp(filterCompany.input, 'i') });
     }
-    if(filterCompany.city){
-        filterOr.push({city: new RegExp(filterCompany.city, 'i')});
+    if (filterCompany.city) {
+        filterOr.push({ city: new RegExp(filterCompany.city, 'i') });
     }
-    if(filterCompany.date){
-        filterOr.push({date: filterCompany.date});
+    if (filterCompany.date) {
+        filterOr.push({ date: filterCompany.date });
     }
-    if(filterOr.length > 1){
-        filter = {$or: filterOr};
-    }else if(filterOr.length == 1 && filterCompany.input){
+    if (filterOr.length > 1) {
+        filter = { $or: filterOr };
+    } else if (filterOr.length == 1 && filterCompany.input) {
         filter = {
             title: new RegExp(filterCompany.input, 'i'),
             description: new RegExp(filterCompany.input, 'i')
         };
-    }else if(filterOr.length == 1 && filterCompany.city){
+    } else if (filterOr.length == 1 && filterCompany.city) {
         filter = {
             city: new RegExp(filterCompany.city, 'i')
         };
@@ -65,7 +65,7 @@ async function getJobs(filterCompany){
         .populate('state')
         .populate('tags');
 
-    let result = await Promise.all(jobs.map( async (job) => {
+    let result = await Promise.all(jobs.map(async (job) => {
         let resp = {
             _id: job._id,
             tags: job.tags,
@@ -80,13 +80,14 @@ async function getJobs(filterCompany){
             state: job.state,
             areaCode: job.areaCode,
             phoneNumber: job.phoneNumber,
+            isActive: job.isActive
         };
         const findComp = await User.findOne({
             company: job.company,
             typeUser: 2
         }).select('-tokens')
-        .populate('company');
-        try{
+            .populate('company');
+        try {
             resp.company = {
                 _id: findComp.company._id,
                 tradename: findComp.company.tradename,
@@ -102,7 +103,7 @@ async function getJobs(filterCompany){
                 email: findComp.email
             };
             return resp;
-        }catch(e){
+        } catch (e) {
             //console.log(e);
         }
     }));
@@ -110,26 +111,26 @@ async function getJobs(filterCompany){
     return result;
 }
 
-function getApplyJobs(filterQuery){
+function getApplyJobs(filterQuery) {
     return new Promise((resolve, reject) => {
         let filter = {};
-        if(filterQuery){
+        if (filterQuery) {
             filter = filterQuery;
         }
         result = JobsApplysModel.find(filter)
-        .populate('company')
-        .populate('driver')
-        .populate('job');
+            .populate('company')
+            .populate('driver')
+            .populate('job');
         resolve(result);
     });
 }
 
-async function setStatus(id, status){
+async function setStatus(id, status) {
     const filter = {
         _id: id
     };
-    try{
-        if(!id){
+    try {
+        if (!id) {
             throw new Error();
         }
         const apply = await JobsApplysModel.findOne(filter);
@@ -139,29 +140,29 @@ async function setStatus(id, status){
             status: 200,
             message: 'Ok'
         };
-    }catch(e){
+    } catch (e) {
         console.log(e);
         return {
             status: 500,
             message: 'Invalid data recived for apply job'
         };
     }
-    
+
 }
 
-async function setRanking(id, ranking, comment){
+async function setRanking(id, ranking, comment) {
     const filter = {
         _id: id
     };
-    try{
+    try {
         const apply = await JobsApplysModel.findOne(filter);
-        if(!id){
+        if (!id) {
             throw new Error();
         }
-        if(ranking){
+        if (ranking) {
             apply.ranking = ranking;
         }
-        if(comment){
+        if (comment) {
             apply.comment = comment;
         }
         await apply.save();
@@ -175,15 +176,15 @@ async function setRanking(id, ranking, comment){
         });
         let sum = listRank.reduce((previous, current) => current += previous);
         let avg = sum / listRank.length;
-        const user = await User.findOne({_id: apply.driver}).select('driver');
-        const driver = await ProfileDriver.findOne({_id: user.driver});
+        const user = await User.findOne({ _id: apply.driver }).select('driver');
+        const driver = await ProfileDriver.findOne({ _id: user.driver });
         driver.rating = avg;
         await driver.save();
         return {
             status: 200,
             message: 'Ok'
         };
-    }catch(e){
+    } catch (e) {
         return {
             status: 500,
             message: 'Invalid data recived for apply job',
@@ -192,15 +193,15 @@ async function setRanking(id, ranking, comment){
     }
 }
 
-async function getApplyCompanyJobs(query){
-    let result = []; 
+async function getApplyCompanyJobs(query) {
+    let result = [];
     var id = mongoose.Types.ObjectId(query.company);
-    if(id){
-        filter = {company: id};
+    if (id) {
+        filter = { company: id };
     }
     const jobs = await JobsModel.find(filter)
-    .populate('city');
-    result = await Promise.all(jobs.map( async (job) => {
+        .populate('city');
+    result = await Promise.all(jobs.map(async (job) => {
         let item = {
             id: job._id,
             title: job.title,
@@ -218,21 +219,21 @@ async function getApplyCompanyJobs(query){
             status: 0
         };
         let applys = await JobsApplysModel.find(filterApply);
-        let driversApply = await Promise.all(applys.map( async (apply) =>{
+        let driversApply = await Promise.all(applys.map(async (apply) => {
             const filterDriver = {
                 _id: apply.driver
             };
             const id = apply._id;
             let users = await User.findOne(filterDriver)
-            .populate('driver');
-            
-            if(users){
+                .populate('driver');
+
+            if (users) {
                 const { name, lastname, photo, email, driver } = users;
                 return { id, name, lastname, photo, email, driver };
             }
         }));
         driversApply = driversApply.filter(Boolean);
-        if(driversApply.length > 0){
+        if (driversApply.length > 0) {
             item.appys = driversApply;
             item.totaluser = driversApply.length;
             return item;
@@ -242,24 +243,23 @@ async function getApplyCompanyJobs(query){
     return result;
 }
 
-async function getStaffCompanyJobs(query){
-    let result = []; 
+async function getStaffCompanyJobs(query) {
+    let result = [];
     var id = mongoose.Types.ObjectId(query.company);
-    if(id){
+    if (id) {
         filter = {
             company: id,
             status: 1
         };
     }
     const drivers = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
-    
-    result = await Promise.all(drivers.map( async (response) => {
-        const userDriver = await User.findOne({_id:response})
-        .select('name lastname photo date email')
-        .populate('driver');
-        let resDriver = null;
 
-        if(userDriver){
+    result = await Promise.all(drivers.map(async (response) => {
+        const userDriver = await User.findOne({ _id: response })
+            .select('name lastname photo date email')
+            .populate('driver');
+        let resDriver = null;
+        if (userDriver) {
             resDriver = {
                 id: userDriver._id,
                 name: userDriver.name,
@@ -275,40 +275,43 @@ async function getStaffCompanyJobs(query){
                 status: 1
             };
             const jobsDriver = await JobsApplysModel.find(filterJob).populate('job');
-            resDriver.jobs = await Promise.all(jobsDriver.map( async (resp) => {
-                let response = {
-                    _id: resp.job._id,
-                    tags: resp.job.tags,
-                    title: resp.job.title,
-                    description: resp.job.description,
-                    areaCode: resp.job.areaCode,
-                    phoneNumber: resp.job.phoneNumber,
-                    logo: resp.job.logo,
-                    email: resp.job.email,
-                    city: resp.job.city,
-                    time: resp.job.time,
-                    apply: {
-                        _id: resp._id,
-                        ranking: resp.ranking,
-                        comment: resp.comment
-                    },
-                };
-                return response;
+            resDriver.jobs = await Promise.all(jobsDriver.map(async (resp) => {
+                if (resp.job) {
+                    let response = {
+                        _id: resp.job._id,
+                        tags: resp.job.tags,
+                        title: resp.job.title,
+                        description: resp.job.description,
+                        areaCode: resp.job.areaCode,
+                        phoneNumber: resp.job.phoneNumber,
+                        logo: resp.job.logo,
+                        email: resp.job.email,
+                        city: resp.job.city,
+                        time: resp.job.time,
+                        apply: {
+                            _id: resp._id,
+                            ranking: resp.ranking,
+                            comment: resp.comment
+                        },
+                    };
+                    return response;
+                }
             }));
         }
+        resDriver.jobs = resDriver.jobs.filter(Boolean);
         return resDriver;
     }));
     return result.filter(Boolean);
 }
 
-async function getCustomList(){
+async function getCustomList() {
     const titles = await JobsModel.find({}).select("title");
     //const citys = await JobsModel.find({}).distinct('city');
     const companys = await ProfileCompany.find({}).select("tradename");
-    let titleArray = titles.map((job)=>{
+    let titleArray = titles.map((job) => {
         return job.title;
     });
-    let companyArray = companys.map((company)=>{
+    let companyArray = companys.map((company) => {
         return company.tradename;
     });
     const listado = {
@@ -320,7 +323,7 @@ async function getCustomList(){
     return listado;
 }
 
-async function addJob(job){
+async function addJob(job) {
     /*const listTags = await saveTags(job.tags);
     job.tags = listTags;*/
     const newJob = new JobsModel(job);
@@ -328,20 +331,20 @@ async function addJob(job){
     return newJob;
 }
 
-async function applyJob(job){
-    try{
-        const foundJob = await JobsModel.findOne({_id: job.job});
+async function applyJob(job) {
+    try {
+        const foundJob = await JobsModel.findOne({ _id: job.job });
         job.company = foundJob.company;
         console.log('[ JOB OBJECT SENT ]', job);
         const newApply = new JobsApplysModel(job);
         const resp = await newApply.save();
-        if(resp){
+        if (resp) {
             return {
                 status: 200,
                 message: 'Ok'
             };
         }
-    }catch(e){
+    } catch (e) {
         console.log(e);
         return {
             status: 500,
@@ -350,53 +353,53 @@ async function applyJob(job){
     }
 }
 
-async function updateJob(id, job, company){
+async function updateJob(id, job, company) {
     const foundJob = await JobsModel.findOne({
         _id: id
     });
 
-    if(!foundJob){
+    if (!foundJob) {
         return {
             status: 404,
             message: 'Job not found'
         };
     }
 
-    if(company != company){//TODO: NO SE PORQUE NO FUNCIONA CUANDO COMPARO CONTRA LA BASE DE DATOS foundJob.company
+    if (company != company) {//TODO: NO SE PORQUE NO FUNCIONA CUANDO COMPARO CONTRA LA BASE DE DATOS foundJob.company
         return {
             status: 401,
             message: 'Not authorized to access this resource'
         };
     }
 
-    if(job.title){
+    if (job.title) {
         foundJob.title = job.title;
     }
-    if(job.description){
+    if (job.description) {
         foundJob.description = job.description;
     }
-    if(job.city){
+    if (job.city) {
         foundJob.city = job.city;
     }
-    if(job.state){
+    if (job.state) {
         foundJob.city = job.city;
     }
-    if(job.time){
+    if (job.time) {
         foundJob.time = job.time;
     }
-    if(job.areaCode){
+    if (job.areaCode) {
         foundJob.areaCode = job.areaCode;
     }
-    if(job.phoneNumber){
+    if (job.phoneNumber) {
         foundJob.phoneNumber = job.phoneNumber;
     }
-    if(job.email){
+    if (job.email) {
         foundJob.email = job.email;
     }
-    if(job.logo){
+    if (job.logo) {
         try {
             fs.unlinkSync("." + foundJob.logo);
-        } catch(err) {
+        } catch (err) {
             console.error(err);
         }
         foundJob.logo = job.logo;
@@ -407,7 +410,7 @@ async function updateJob(id, job, company){
             foundJob.tags = listTags;
         }
     }*/
-    
+
     await foundJob.save();
     return {
         status: 200,
@@ -415,29 +418,33 @@ async function updateJob(id, job, company){
     };
 }
 
-async function deleteJob(id, company){
+async function deleteJob(id, company) {
     const foundJob = await JobsModel.findOne({
         _id: id
     });
 
-    if(!foundJob){
+    if (!foundJob) {
         return {
             status: 404,
             message: 'Job not found'
         };
     }
 
-    if(company != company){//TODO: NO SE PORQUE NO FUNCIONA CUANDO COMPARO CONTRA LA BASE DE DATOS foundJob.company
+    if (company != company) {//TODO: NO SE PORQUE NO FUNCIONA CUANDO COMPARO CONTRA LA BASE DE DATOS foundJob.company
         return {
             status: 401,
             message: 'Not authorized to access this resource'
         };
     }
-        
+
+    await JobsApplysModel.delete({
+        job: id
+    });
+
     await JobsModel.deleteOne({
         _id: id
     });
-    
+
     return {
         status: 200,
         message: 'Job ' + foundJob.title + ' Borrado correctamente'

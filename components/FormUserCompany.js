@@ -193,34 +193,6 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={[24]} justify='space-between' >
-              <Col span={12}>
-                <Form.Item
-                  name='address'
-                  label="Address line 1"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'State is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name='address2'
-                  label="Address line 2"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Address line 2 is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
             <AddressInputs {...props} />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>

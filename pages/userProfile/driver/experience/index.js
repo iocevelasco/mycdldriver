@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MainLayout from 'components/layout';
 import {
   Row,
   Col,
 } from 'antd';
-import FormUserExperience from './FormUserExperience';
+import FormExperience from './FormExperience';
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
+import { connect } from 'react-redux';
+import axios from 'axios';
+import { withRouter } from 'next/router';
+import './styles.less';
 
-const DriverProfileView = (props) => {
+
+function mapStateToProps(state) {
+  const { user } = state;
+  return {
+    user: user,
+    photo: user.photo || '',
+    facebook_id: user.facebook_id || '',
+    google_id: user.google_id || '',
+    _id: user._id || null,
+    token: user.token || null,
+    driver: user.driver || {},
+    isUserRegistry: state.user.typeUser || null,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
+  }
+}
+
+const DriverExperience = (props) => {
+  const [fields, setFields] = useState([]);
+
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
     paddingTop: 24,
@@ -16,13 +43,52 @@ const DriverProfileView = (props) => {
     backgroundSize: 'contain',
   }
 
+  const propsUpload = {
+    name: 'logo',
+    action: '/api/files',
+    headers: {
+      authorization: 'authorization-text'
+    },
+    async onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+
+      if (imageDln.length > 0) {
+        try {
+          const file = {
+            foto: imageDln[0].response.data.file
+          };
+          await axios.post(`/api/files/delete`, file);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      setImage(fileList);
+    }
+  };
   return (
     <MainLayout title='Experience'>
       <Row display='flex' justify='center'>
         <SideNav currentLocation='2' />
         <Col span={20}>
-          <WrapperSection styles={stylesWrapper} row={16} mt={0}>
-            <FormUserExperience />
+          <WrapperSection styles={stylesWrapper} row={22} mt={0}>
+            <FormExperience
+              fields={fields}
+              propsUpload={propsUpload} />
           </WrapperSection>
         </Col>
       </Row>
@@ -30,4 +96,6 @@ const DriverProfileView = (props) => {
   )
 };
 
-export default DriverProfileView;
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)
+    (DriverExperience)); 

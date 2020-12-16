@@ -118,7 +118,7 @@ const controller = require('./controller');
  */
 router.post('/', function (req, res) {
 
-    controller.addCompany(req.body, req.user)
+    controller.addCompany(req.body)
     .then((fullCompany) => {
         switch (fullCompany.status){
             case 201:

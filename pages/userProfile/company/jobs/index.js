@@ -220,7 +220,7 @@ const CompanyJobView = (props) => {
     <>
       <MainLayout title='Create Jobs'>
         <Row>
-          <SideNav currentLocation="2" />
+          <SideNav currentLocation="1" />
           <Col span={18} className="profile-company__jobs">
             {/* // CRUM JOBS */}
             <WrapperSection row={16} styles={styleWrapper}>

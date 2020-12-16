@@ -1,32 +1,12 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import {
-  Row,
-  Col,
-  Input,
-  Avatar,
-  Form,
-  Button,
-  Upload,
-  Typography,
-  Select
-} from 'antd';
+import { Row, Col, Input, Form, Select } from 'antd';
 
 import useListState from '@hooks/useListState';
 import axios from 'axios';
 const { Option } = Select;
-const { Title } = Typography;
-function mapStateToProps(state) {
-  const { user } = state;
-  return {
-    user: user,
-    photoProfile: user.photo || '',
-    _id: user._id || null,
-    token: user.token || null,
-    company: user.company || {},
-    isUserRegistry: state.user.typeUser || null,
-  }
-}
+
+
 
 const AddressInputs = (props) => {
   const { company } = props
@@ -39,9 +19,11 @@ const AddressInputs = (props) => {
   });
 
   useEffect(() => {
-    if (company.state) {
-      let stateId = company.state
-      fetchCities(stateId);
+    if (company) {
+      if (company.state) {
+        let stateId = company.state
+        fetchCities(stateId);
+      }
     }
   }, [company]);
 
@@ -72,60 +54,90 @@ const AddressInputs = (props) => {
       })
   }
 
-  function onChangeState(value){
+  function onChangeState(value) {
     fetchCities(value);
   }
 
   return (
-    <Row gutter={[24]} justify='space-between' >
-      <Col span={8}>
-        <Form.Item label="State / Province / Reagion">
+    <>
+      <Row gutter={[24]} justify='space-between' >
+        <Col span={12}>
           <Form.Item
-            name={'state'}
-            noStyle
-            rules={[{ required: true, message: 'Province is required' }]}
-          >
-            <Select 
-              placeholder="Select province"
-              onChange={onChangeState}>
+            name='address'
+            label="Address line 1"
+            rules={[
               {
-                stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
-              }
-            </Select>
+                required: true,
+                message: 'State is required!',
+              },
+            ]}>
+            <Input />
           </Form.Item>
-        </Form.Item>
-      </Col>
-      <Col span={10}>
-        <Form.Item label="City">
+        </Col>
+        <Col span={12}>
           <Form.Item
-            name={'city'}
-            noStyle
-            rules={[{ required: true, message: 'City is required' }]}
-          >
-            <Select
-              disabled={cityOptions.disabled}
-              placeholder="Select city">
+            name='address2'
+            label="Address line 2"
+            rules={[
               {
-                cityOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
-              }
-            </Select>
+                required: true,
+                message: 'Address line 2 is required!',
+              },
+            ]}>
+            <Input />
           </Form.Item>
-        </Form.Item>
-      </Col>
-      <Col span={6}>
-        <Form.Item
-          name='zipCode'
-          label="Zip / Postal Code"
-          rules={[
-            {
-              required: true,
-              message: 'Zip code is required!',
-            },
-          ]}>
-          <Input />
-        </Form.Item>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+      <Row gutter={[24]} justify='space-between' >
+        <Col span={8}>
+          <Form.Item label="State / Province / Reagion">
+            <Form.Item
+              name={'state'}
+              noStyle
+              rules={[{ required: true, message: 'Province is required' }]}
+            >
+              <Select
+                placeholder="Select province"
+                onChange={onChangeState}>
+                {
+                  stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
+                }
+              </Select>
+            </Form.Item>
+          </Form.Item>
+        </Col>
+        <Col span={10}>
+          <Form.Item label="City">
+            <Form.Item
+              name={'city'}
+              noStyle
+              rules={[{ required: true, message: 'City is required' }]}
+            >
+              <Select
+                disabled={cityOptions.disabled}
+                placeholder="Select city">
+                {
+                  cityOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
+                }
+              </Select>
+            </Form.Item>
+          </Form.Item>
+        </Col>
+        <Col span={6}>
+          <Form.Item
+            name='zipCode'
+            label="Zip / Postal Code"
+            rules={[
+              {
+                required: true,
+                message: 'Zip code is required!',
+              },
+            ]}>
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
+    </>
   )
 }
 

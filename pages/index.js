@@ -13,7 +13,7 @@ import axios from 'axios';
 
 //mock
 import mock_ranking from '../mock/ranking.json';
-
+import "./home/styles.less";
 //View components
 import HeaderLandingComp from './home/components/header_home';
 import OffertJobComp from './home/components/job_offerts';
