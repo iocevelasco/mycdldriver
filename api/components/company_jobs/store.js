@@ -435,6 +435,10 @@ async function deleteJob(id, company){
             message: 'Not authorized to access this resource'
         };
     }
+
+    await JobsApplysModel.delete({
+        job: id
+    });
         
     await JobsModel.deleteOne({
         _id: id
