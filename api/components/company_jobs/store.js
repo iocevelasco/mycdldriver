@@ -258,7 +258,6 @@ async function getStaffCompanyJobs(query){
         .select('name lastname photo date email')
         .populate('driver');
         let resDriver = null;
-
         if(userDriver){
             resDriver = {
                 id: userDriver._id,
@@ -276,26 +275,29 @@ async function getStaffCompanyJobs(query){
             };
             const jobsDriver = await JobsApplysModel.find(filterJob).populate('job');
             resDriver.jobs = await Promise.all(jobsDriver.map( async (resp) => {
-                let response = {
-                    _id: resp.job._id,
-                    tags: resp.job.tags,
-                    title: resp.job.title,
-                    description: resp.job.description,
-                    areaCode: resp.job.areaCode,
-                    phoneNumber: resp.job.phoneNumber,
-                    logo: resp.job.logo,
-                    email: resp.job.email,
-                    city: resp.job.city,
-                    time: resp.job.time,
-                    apply: {
-                        _id: resp._id,
-                        ranking: resp.ranking,
-                        comment: resp.comment
-                    },
-                };
-                return response;
+                if(resp.job){
+                    let response = {
+                        _id: resp.job._id,
+                        tags: resp.job.tags,
+                        title: resp.job.title,
+                        description: resp.job.description,
+                        areaCode: resp.job.areaCode,
+                        phoneNumber: resp.job.phoneNumber,
+                        logo: resp.job.logo,
+                        email: resp.job.email,
+                        city: resp.job.city,
+                        time: resp.job.time,
+                        apply: {
+                            _id: resp._id,
+                            ranking: resp.ranking,
+                            comment: resp.comment
+                        },
+                    };
+                    return response;
+                }
             }));
         }
+        resDriver.jobs = resDriver.jobs.filter(Boolean);
         return resDriver;
     }));
     return result.filter(Boolean);

@@ -142,7 +142,6 @@ router.patch('/change_rank', auth(2), function (req, res) {
     }
     controller.setRating(data.id, data.ranking, data.commnet)
     .then((Job) => {
-        console.log('[ RESPONSE ]', Job);
         switch (Job.status){
             case 200:
                 response.success(req, res, Job.message, 200);
