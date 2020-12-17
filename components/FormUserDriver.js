@@ -347,45 +347,44 @@ const DriverUser = (props) => {
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={10}>
+              <Col span={12}>
                 <Form.Item
-                  label='Dln'
-                  name="dln"
+                  label='Change password'
+                  rules={[
+                    {
+                      required: false,
+                    },
+                  ]}
+                  name='password'>
+                  <Input.Password
+                    placeholder="Password"
+                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="confirm"
+                  label="Confirm Password"
+                  dependencies={['password']}
+                  hasFeedback
                   rules={[
                     {
                       required: true,
-                      message: 'dln is required!',
+                      message: 'Please confirm your password!',
                     },
-                  ]}>
-                  <InputNumber
-                    min={0}
-                    max={900000000000000}
-                    style={{ width: '100%' }} />
-                </Form.Item>
-              </Col>
-              <Col span={10}>
-                <Form.Item
-                  label='Dln expiration'
-                  name="expDateDln"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Dln expiration date is required!',
-                    },
-                  ]}>
-                  <DatePicker style={{ width: '100%' }} />
-                </Form.Item>
-              </Col>
-              <Col span={4}>
-                <Form.Item
-                  label='Dln picture'
-                  name="imageDln">
-                  <Upload {...propsUpload}
-                    fileList={props.imageDln}
-                    beforeUpload={beforeUpload}
-                  >
-                    <Button icon={<UploadOutlined />}>Add picture</Button>
-                  </Upload>
+                    ({ getFieldValue }) => ({
+                      validator(rule, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject('The two passwords that you entered do not match!');
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password
+                    placeholder="Confirm Password" />
                 </Form.Item>
               </Col>
             </Row>
@@ -405,17 +404,18 @@ const DriverUser = (props) => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label='Change password'
+                  label='Dln'
+                  name="dln"
                   rules={[
                     {
-                      required: false,
+                      required: true,
+                      message: 'dln is required!',
                     },
-                  ]}
-                  name='password'>
-                  <Input.Password
-                    placeholder="password"
-                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                  />
+                  ]}>
+                  <InputNumber
+                    min={0}
+                    max={900000000000000}
+                    style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
             </Row>
