@@ -47,7 +47,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const DriverUser = (props) => {
-  console.log('[ PROPS ]', props);
+
   const { router } = props;
   const [form] = Form.useForm();
   const [imageDln, setImage] = useState([]);
@@ -55,6 +55,43 @@ const DriverUser = (props) => {
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
 
+  const propsUpload = {
+    name: 'logo',
+    action: '/api/files',
+    headers: {
+      authorization: 'authorization-text'
+    },
+    async onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+
+      if (imageDln.length > 0) {
+        try {
+          const file = {
+            foto: imageDln[0].response.data.file
+          };
+          await axios.post(`/api/files/delete`, file);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      setImage(fileList);
+    }
+  };
   useEffect(() => {
     let fields = [];
 
@@ -306,6 +343,49 @@ const DriverUser = (props) => {
                     },
                   ]}>
                   <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={[24]} justify='space-between' >
+              <Col span={10}>
+                <Form.Item
+                  label='Dln'
+                  name="dln"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'dln is required!',
+                    },
+                  ]}>
+                  <InputNumber
+                    min={0}
+                    max={900000000000000}
+                    style={{ width: '100%' }} />
+                </Form.Item>
+              </Col>
+              <Col span={10}>
+                <Form.Item
+                  label='Dln expiration'
+                  name="expDateDln"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Dln expiration date is required!',
+                    },
+                  ]}>
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item
+                  label='Dln picture'
+                  name="imageDln">
+                  <Upload {...propsUpload}
+                    fileList={props.imageDln}
+                    beforeUpload={beforeUpload}
+                  >
+                    <Button icon={<UploadOutlined />}>Add picture</Button>
+                  </Upload>
                 </Form.Item>
               </Col>
             </Row>
