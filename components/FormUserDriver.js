@@ -402,7 +402,7 @@ const DriverUser = (props) => {
                   <Input />
                 </Form.Item>
               </Col>
-              {props.isUserRegistry ?
+              {props.isUserRegistry ? '':
               <Col span={12}>
                 <Form.Item
                   label='Dln'
@@ -418,7 +418,7 @@ const DriverUser = (props) => {
                     max={900000000000000}
                     style={{ width: '100%' }} />
                 </Form.Item>
-              </Col> : ''}
+              </Col>}
             </Row>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>

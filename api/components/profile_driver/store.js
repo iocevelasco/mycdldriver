@@ -225,11 +225,47 @@ async function checkDriver(mail){
     
 }
 
+async function addStaff(user){
+    const driver = new Model({
+        dln: user.dln
+    });
+    
+    try{
+        await driver.save();
+        user.driver = driver;
+        const myUser = new User(user);
+        try{
+            await myUser.save();
+            const {_id, name, lastname, typeUser, photo, email, date} = myUser;
+            const token = await myUser.generateAuthToken();
+            user = { _id, name, lastname, typeUser, photo, email, date, token };
+            return {status: 201, message: {user, driver}};
+        }catch(e){
+            await Model.deleteOne({
+                _id: driver._id
+            });
+            return {
+                status: 400,
+                message: 'User registration error',
+                detail: e
+            }
+        }
+    }catch(e){
+        return {
+            status: 400,
+            message: 'Driver registration error',
+            detail: e
+        }
+    }
+    
+}
+
 module.exports = {
     list: getDriver,
     add: addDriver,
     update: updateDriver,
     delete: deleteDriver,
     experience: updateExperience,
-    check: checkDriver
+    check: checkDriver,
+    addStaff
 }
