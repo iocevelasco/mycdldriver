@@ -210,10 +210,26 @@ async function deleteDriver(id){
 
 }
 
+async function checkDriver(mail){
+    try{
+        const user = await User.findOne({
+            email: mail
+        })
+        .select('name lastname typeUser photo date email')
+        .populate('driver')
+        .populate('company');
+        return user;
+    }catch(e){
+        return e;
+    }
+    
+}
+
 module.exports = {
     list: getDriver,
     add: addDriver,
     update: updateDriver,
     delete: deleteDriver,
-    experience: updateExperience
+    experience: updateExperience,
+    check: checkDriver
 }

@@ -166,10 +166,54 @@ function deleteDriver(id) {
     });
 }
 
+async function checkDriver(mail){
+    if(!mail){
+        return {
+            status: 400,
+            message: 'No email recived'
+        }
+    }
+
+    try{
+        const user = await store.check(mail);
+        if(user){
+            if(user.typeUser == 1){
+                return {
+                    status: 200,
+                    message: {
+                        isDriver: true,
+                        user: user
+                    }
+                }
+            }else{
+                return {
+                    status: 200,
+                    message: {
+                        isDriver: false,
+                        user: user
+                    }
+                }
+            }
+        }else{
+            return {
+                status: 404,
+                message: 'User not found'
+            }
+        }
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
+}
+
 module.exports = {
     getDriver,
     addDriver,
     updateDriver,
     deleteDriver,
-    updateExperience
+    updateExperience,
+    checkDriver
 }
