@@ -185,8 +185,8 @@ const FormJobs = (props) => {
           </Col>
           <Col span={12}>
             <Form.Item
-              name="active">
-                <Switch checkedChildren="Active" unCheckedChildren="Inactive" defaultChecked />
+              name="isActive">
+                <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
             </Form.Item>
           </Col>
         </Row>

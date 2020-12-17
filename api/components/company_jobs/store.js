@@ -404,6 +404,7 @@ async function updateJob(id, job, company) {
         }
         foundJob.logo = job.logo;
     }
+    foundJob.active = job.isActive;
     /*if(job.tags.length > 0){
         const listTags = await saveTags(job.tags);
         if(listTags){

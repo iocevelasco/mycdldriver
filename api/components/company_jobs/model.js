@@ -64,6 +64,9 @@ const CompanyJobsSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    active: {
+        type: Boolean
+    },
     tags: [{
         type: Schema.ObjectId,
         ref: 'tagsJobs',
