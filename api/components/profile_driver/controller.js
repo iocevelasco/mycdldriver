@@ -209,11 +209,27 @@ async function checkDriver(mail){
     }
 }
 
+async function addStaff(user){
+    if(!user){
+        return {
+            status: 400,
+            message: 'No user recived'
+        }
+    }
+
+    try{
+        const user = await store.addStaff(user);
+    }catch(e){
+
+    }
+}
+
 module.exports = {
     getDriver,
     addDriver,
     updateDriver,
     deleteDriver,
     updateExperience,
-    checkDriver
+    checkDriver,
+    addStaff
 }
