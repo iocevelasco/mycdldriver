@@ -115,14 +115,15 @@ const TeamCompanyView = ({ user }) => {
   }
 
   const showRate = (job, user) => {
-    const { title, _id } = job;
+    console.log('job', job);
+    const { title, _id, apply } = job;
     const { name, lastname, photo } = user;
 
     const modalProps = {
-      jobTitle: title,
+      title,
+      _id: apply._id,
       fullname: `${name} ${lastname}`,
       photo,
-      jobId: _id
     }
     dispatch({ type: types.SHOW_MODAL, payload: modalProps })
   };
@@ -135,13 +136,13 @@ const TeamCompanyView = ({ user }) => {
     const { ranking, comment } = fiels;
     const { modalProps } = state
     const data = {
-      id: modalProps.jobId,
+      id: modalProps._id,
       ranking,
       commnet: comment
     };
     await axios.patch(`/api/company/jobs/change_rank`, data, header)
       .then((response) => {
-        fetchJobs();
+        fetchStaffList();
       })
       .catch((err) => {
         console.log(err)
@@ -220,7 +221,7 @@ const TeamCompanyView = ({ user }) => {
       </Row>
       <Modal
         visible={state.modalVisible}
-        title={state.modalProps.jobTitle}
+        title={state.modalProps.title}
         onCancel={handleCancel}
         footer={null}
       >
