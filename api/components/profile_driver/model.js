@@ -8,8 +8,7 @@ const profileDriverSchema = Schema({
         unique: true
     },
     expDateDln: {
-        type: Date,
-        required: true
+        type: Date
     },
     birthDate: {
         type: Date,
