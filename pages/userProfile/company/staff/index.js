@@ -134,7 +134,7 @@ const TeamCompanyView = ({ user }) => {
 
   const changeRanking = async (fiels) => {
     const { ranking, comment } = fiels;
-    const { modalProps } = state
+    const { modalProps } = state;
     const data = {
       id: modalProps._id,
       ranking,
@@ -143,6 +143,7 @@ const TeamCompanyView = ({ user }) => {
     await axios.patch(`/api/company/jobs/change_rank`, data, header)
       .then((response) => {
         fetchStaffList();
+        dispatch({ type: types.CLOSE_MODAL })
       })
       .catch((err) => {
         console.log(err)

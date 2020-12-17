@@ -148,6 +148,13 @@ const CompanyJobView = (props) => {
     if (state.newPhoto.length > 0) {
       newJob.logo = state.newPhoto[0].response.data.file;
     }
+    
+    if(newJob.isActive){
+      newJob.active = true;
+    }else{
+      newJob.active = false;
+    }
+    delete newJob.isActive;
     dispatch({ type: types.LOADING, payload: true });
     await axios.post('/api/company/jobs', newJob, header)
       .then((response) => {
@@ -175,6 +182,12 @@ const CompanyJobView = (props) => {
     if (state.editPhoto.length > 0) {
       fields.logo = state.editPhoto[0].response.data.file;
     }
+    if(fields.isActive){
+      fields.active = true;
+    }else{
+      fields.active = false;
+    }
+    delete fields.isActive;
     try {
       await axios.patch('/api/company/jobs/' + fields._id, fields, header);
       setReload(!reload);

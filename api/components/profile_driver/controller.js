@@ -1,10 +1,10 @@
 const store = require('./store');
 const config = require('../../config');
 
-function getDriver(){
+function getDriver() {
     return new Promise((resolve, reject) => {
         const response = store.list();
-        switch(response.status){
+        switch (response.status) {
             case 200:
                 resolve(response);
                 break;
@@ -15,9 +15,9 @@ function getDriver(){
     });
 }
 
-function addDriver(driver){
+function addDriver(driver) {
     return new Promise((resolve, reject) => {
-        if(!driver){
+        if (!driver) {
             console.error('[driverController.addDriver] No driver data');
             reject('[driverController.addDriver] No driver data');
             return false;
@@ -26,7 +26,6 @@ function addDriver(driver){
         const fullDriver = {
             dln: driver.dln,
             imageDln: driver.imageDln,
-            expDateDln: driver.expDateDln,
             birthDate: driver.birthDate,
             areaCode: driver.areaCode,
             phoneNumber: driver.phoneNumber,
@@ -52,8 +51,8 @@ function addDriver(driver){
             driver: fullDriver
         };
 
-        const driverResolve = store.add(user); 
-        switch(driverResolve.status){
+        const driverResolve = store.add(user);
+        switch (driverResolve.status) {
             case 201:
                 resolve(driverResolve);
                 break;
@@ -68,19 +67,19 @@ function addDriver(driver){
                 break;
         }
     });
-    
+
 }
 
-function updateDriver(id, driver){
+function updateDriver(id, driver) {
     return new Promise(async (resolve, reject) => {
-        if(!id){
+        if (!id) {
             reject({
                 status: 400,
                 message: 'No user ID'
             });
             return false;
         }
-        if(!driver){
+        if (!driver) {
             reject({
                 status: 400,
                 message: 'No user data'
@@ -107,53 +106,53 @@ function updateDriver(id, driver){
             password: driver.password,
             driver: fullDriver
         };
-        try{
+        try {
             const result = await store.update(id, user);
-            switch(result.status){
-                case 200: 
+            switch (result.status) {
+                case 200:
                     resolve(result);
                     break;
                 default:
                     reject(result);
                     break;
             }
-        }catch(e){
+        } catch (e) {
             reject(e);
         }
-        
+
     });
 }
 
-async function updateExperience(id, driver){
-    if(!id){
+async function updateExperience(id, driver) {
+    if (!id) {
         return {
             status: 400,
             message: 'Not id for driver'
         };
     }
-    if(!driver){
+    if (!driver) {
         return {
             status: 400,
             message: 'Not data to driver update'
         };
     }
-    
-    try{
+
+    try {
         const result = await store.experience(id, driver);
         return result;
-    }catch(e){
+    } catch (e) {
         return {
             status: 500,
             message: 'Unexpected Error',
             detail: e
         };
     }
-    
+
 }
 
-function deleteDriver(id){
+function deleteDriver(id) {
     return new Promise(async (resolve, reject) => {
-        if(!id){
+        if (!id) {
             reject('Invalid data');
             return false;
         }
@@ -162,9 +161,52 @@ function deleteDriver(id){
                 resolve();
             })
             .catch(e => {
-                reject(e); 
+                reject(e);
             });
     });
+}
+
+async function checkDriver(mail){
+    if(!mail){
+        return {
+            status: 400,
+            message: 'No email recived'
+        }
+    }
+
+    try{
+        const user = await store.check(mail);
+        if(user){
+            if(user.typeUser == 1){
+                return {
+                    status: 200,
+                    message: {
+                        isDriver: true,
+                        user: user
+                    }
+                }
+            }else{
+                return {
+                    status: 200,
+                    message: {
+                        isDriver: false,
+                        user: user
+                    }
+                }
+            }
+        }else{
+            return {
+                status: 404,
+                message: 'User not found'
+            }
+        }
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
 }
 
 module.exports = {
@@ -172,5 +214,6 @@ module.exports = {
     addDriver,
     updateDriver,
     deleteDriver,
-    updateExperience
+    updateExperience,
+    checkDriver
 }

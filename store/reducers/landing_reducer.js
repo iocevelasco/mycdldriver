@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 const types = {
     FETCH_JOBS: 'FETCH_JOBS',
     VISIBLE_MODAL_LOGIN: 'VISIBLE_MODAL_LOGIN',

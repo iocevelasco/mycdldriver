@@ -47,7 +47,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const DriverUser = (props) => {
-  console.log('[ PROPS ]', props);
+
   const { router } = props;
   const [form] = Form.useForm();
   const [imageDln, setImage] = useState([]);
@@ -55,6 +55,43 @@ const DriverUser = (props) => {
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
 
+  const propsUpload = {
+    name: 'logo',
+    action: '/api/files',
+    headers: {
+      authorization: 'authorization-text'
+    },
+    async onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      fileList = fileList.map(file => {
+        if (file.response) {
+          file.url = file.response.url;
+        }
+        return file;
+      });
+
+      if (imageDln.length > 0) {
+        try {
+          const file = {
+            foto: imageDln[0].response.data.file
+          };
+          await axios.post(`/api/files/delete`, file);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      setImage(fileList);
+    }
+  };
   useEffect(() => {
     let fields = [];
 
@@ -309,6 +346,48 @@ const DriverUser = (props) => {
                 </Form.Item>
               </Col>
             </Row>
+            <Row gutter={[24]} justify='space-between' >
+              <Col span={12}>
+                <Form.Item
+                  label='Change password'
+                  rules={[
+                    {
+                      required: false,
+                    },
+                  ]}
+                  name='password'>
+                  <Input.Password
+                    placeholder="Password"
+                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="confirm"
+                  label="Confirm Password"
+                  dependencies={['password']}
+                  hasFeedback
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please confirm your password!',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(rule, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject('The two passwords that you entered do not match!');
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password
+                    placeholder="Confirm Password" />
+                </Form.Item>
+              </Col>
+            </Row>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
                 <Form.Item
@@ -323,21 +402,23 @@ const DriverUser = (props) => {
                   <Input />
                 </Form.Item>
               </Col>
+              {props.isUserRegistry ?
               <Col span={12}>
                 <Form.Item
-                  label='Change password'
+                  label='Dln'
+                  name="dln"
                   rules={[
                     {
-                      required: false,
+                      required: true,
+                      message: 'dln is required!',
                     },
-                  ]}
-                  name='password'>
-                  <Input.Password
-                    placeholder="password"
-                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                  />
+                  ]}>
+                  <InputNumber
+                    min={0}
+                    max={900000000000000}
+                    style={{ width: '100%' }} />
                 </Form.Item>
-              </Col>
+              </Col> : ''}
             </Row>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>

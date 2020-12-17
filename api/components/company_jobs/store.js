@@ -354,6 +354,7 @@ async function applyJob(job) {
 }
 
 async function updateJob(id, job, company) {
+    console.log('[STORE]', job);
     const foundJob = await JobsModel.findOne({
         _id: id
     });
@@ -404,6 +405,7 @@ async function updateJob(id, job, company) {
         }
         foundJob.logo = job.logo;
     }
+    foundJob.active = job.active;
     /*if(job.tags.length > 0){
         const listTags = await saveTags(job.tags);
         if(listTags){
@@ -411,6 +413,7 @@ async function updateJob(id, job, company) {
         }
     }*/
 
+    console.log('[STORE SAVED]', foundJob);
     await foundJob.save();
     return {
         status: 200,
