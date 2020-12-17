@@ -12,10 +12,6 @@ const useJobsByCompany = (header, reload, setReload) => {
             .get('/api/company/jobs/private', header)
             .then((response) => {
                 let options = response.data.data;
-                options = options.map((opt) => {
-                    opt.active = opt.isActive;
-                    return opt;
-                });
                 setOptions(options);
                 setIsFetching(false);
             })

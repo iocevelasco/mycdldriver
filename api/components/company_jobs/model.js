@@ -104,7 +104,7 @@ const CompanyJobsSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    isActive: {
+    active: {
         type: Boolean,
         default: false
     }

@@ -156,6 +156,7 @@ router.patch('/change_rank', auth(2), function (req, res) {
 });
 
 router.patch('/:id', auth(2), function (req, res){
+    console.log('[NETWORK]', req.body);
     controller.updateJob(req.params.id, req.body, req.user.company)
         .then((data) => {
             response.success(req, res, data, 200);

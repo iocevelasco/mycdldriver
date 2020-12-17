@@ -205,6 +205,7 @@ function updateJob(id, job, company) {
             reject({ status: 400, message: 'No company data' });
             return false;
         }
+        console.log('[CONTROLLER]', job);
         const result = store.update(id, job, company);
         switch (result.status) {
             case 200:
