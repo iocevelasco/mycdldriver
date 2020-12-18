@@ -42,7 +42,7 @@ const DriverExperience = (props) => {
     paddingBottom: 24,
     backgroundSize: 'contain',
   }
-
+console.log(props.propsUpload,"esto es propsUpload")
   return (
     <MainLayout title='Experience'>
       <Row display='flex' justify='center'>
@@ -51,7 +51,7 @@ const DriverExperience = (props) => {
           <WrapperSection styles={stylesWrapper} row={22} mt={0}>
             <FormExperience
               fields={fields}
-              propsUpload={propsUpload} />
+              propsUpload={props.upload} />
           </WrapperSection>
         </Col>
       </Row>
