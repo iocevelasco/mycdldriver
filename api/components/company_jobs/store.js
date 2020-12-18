@@ -80,7 +80,6 @@ async function getJobs(filterCompany) {
             state: job.state,
             areaCode: job.areaCode,
             phoneNumber: job.phoneNumber,
-            isActive: job.isActive
         };
         const findComp = await User.findOne({
             company: job.company,

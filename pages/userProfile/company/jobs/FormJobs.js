@@ -183,12 +183,6 @@ const FormJobs = (props) => {
               </Radio.Group>
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item
-              name="isActive">
-                <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
-            </Form.Item>
-          </Col>
         </Row>
         <Form.Item>
           <Row gutter={[16, 16]} justify='space-between' >
