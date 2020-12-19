@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import MainLayout from '../../components/layout';
 import { WrapperSection } from 'components/helpers';
+import { updateTypeUser } from '@store/reducers/user_reducer';
 import {
   Row,
   Col,
@@ -20,15 +21,21 @@ function mapStateToProps(state) {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    updateTypeUser: (type) => dispatch(updateTypeUser(type))
+  }
+}
+
 const UserProfile = ({ user, ...props }) => {
 
   useEffect(() => {
     switch (user.typeUser) {
       case 1:
-        props.router.push('/userProfile/driver');
+        props.router.push('/userProfile/driver/profile');
         break;
       case 2:
-        props.router.push('/userProfile/company');
+        props.router.push('/userProfile/company/profile');
         break;
       default:
         break;
@@ -76,4 +83,4 @@ const UserProfile = ({ user, ...props }) => {
   )
 };
 
-export default withRouter(connect(mapStateToProps)(UserProfile));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProfile));

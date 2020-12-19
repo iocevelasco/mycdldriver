@@ -12,7 +12,7 @@ const types = {
     HANDLE_INPUTS_DRIVER: 'HANDLE_INPUTS_DRIVER',
     HANDLER_PICKERS: 'HANDLER_PICKERS',
     HANDLE_INPUTS: 'HANDLE_INPUTS',
-    LOGIN_SUCCESS_MODAL: 'LOGIN_SUCCESS_MODAL'
+    LOGIN_SUCCESS_MODAL: 'LOGIN_SUCCESS_MODAL',
 }
 
 const initialState = {
@@ -39,7 +39,18 @@ const initialState = {
         zipCode: '',
         description: ''
     },
-    company: null,
+    company: {
+        tradename: '',
+        legalNumber: '',
+        address: '',
+        address2: '',
+        description: '',
+        areaCode: '',
+        experience: '',
+        phoneNumber: '',
+        state: '',
+        city: '',
+    },
     currentLocation: ''
 }
 
@@ -65,6 +76,7 @@ function updateUserDrive(props) {
         payload: { ...user, driver: driver }
     }
 }
+
 
 const logoutUser = () => {
     const state = {
@@ -97,6 +109,7 @@ const getInitialPropsUser = (props) => {
 }
 
 const setPropsUserReg = (props) => {
+    console.log('proos', props);
     return {
         type: types.LOGIN_SUCCESS,
         payload: props
@@ -130,5 +143,5 @@ export {
     getInitialPropsUser,
     logoutUser,
     getCurrentLocation,
-    setPropsUserReg
+    setPropsUserReg,
 };

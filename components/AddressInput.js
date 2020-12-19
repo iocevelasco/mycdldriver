@@ -10,7 +10,7 @@ const { Option } = Select;
 
 const AddressInputs = (props) => {
   console.log('props', props);
-  const { company } = props
+  const { stateId } = props
   const [stateOptions, isFetching] = useListState();
 
   const [cityOptions, setCities] = useState({
@@ -19,6 +19,11 @@ const AddressInputs = (props) => {
     disabled: true
   });
 
+  useEffect(() => {
+    if (stateId) {
+      fetchCities(stateId);
+    }
+  }, [stateId]);
 
   const fetchCities = async (stateId) => {
     console.log('state', stateId);
