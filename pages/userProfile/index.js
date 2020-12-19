@@ -45,7 +45,7 @@ const UserProfile = ({ user, ...props }) => {
   }
 
   return (
-    <MainLayout title='Profile' user={user}>
+    <>
       <WrapperSection styles={stylesWrapper}>
         <div className="profile-driver__route">
           <div className="title">
@@ -74,7 +74,7 @@ const UserProfile = ({ user, ...props }) => {
           </div>
         </div>
       </WrapperSection>
-    </MainLayout>
+    </>
   )
 };
 

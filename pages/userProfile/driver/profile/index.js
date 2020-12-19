@@ -1,5 +1,4 @@
 import React from 'react';
-import MainLayout from 'components/layout';
 import {
   Row,
   Col,
@@ -17,7 +16,7 @@ const DriverProfileView = (props) => {
   }
 
   return (
-    <MainLayout title='Profile'>
+    <>
       <Row display='flex' justify='center'>
         <SideNav currentLocation='0' />
         <Col span={20}>
@@ -26,7 +25,7 @@ const DriverProfileView = (props) => {
           </WrapperSection>
         </Col>
       </Row>
-    </MainLayout>
+    </>
   )
 };
 

@@ -128,35 +128,33 @@ const Home = ({
 
   return (
     <>
-      <MainLayout {...layoutProps}>
-        <HeaderLandingComp
-          handlerSearch={handlerSearch}
-          filter_selected={state.filter_selected}
-          query={state.query}
-        />
-        <WrapperSection xs={24} row={20} style={wrapperStyle}  >
-          <CarouselComp carousel_data={state.carousel_data} />
-        </WrapperSection>
-        <WrapperSection xs={24} row={18}>
-          <OffertJobComp type='large' />
-        </WrapperSection>
-        <WrapperSection xs={24} row={18} style={wrapperStyle} >
-          <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
-            <Col span={14}>
-              <Title style={{ textAlign: 'center' }}>Our Drivers</Title>
-              <Text style={{ textAlign: 'center', display: 'flex' }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
-            </Col>
-          </Row>
-          <Row justify='center' align='middle' gutter={[16, 16]}>
-            <RankingComp rankingDriver={state.ranking} />
-          </Row>
-        </WrapperSection>
-        <div className='delete-user' style={{ display: 'block' }}>
-          <Tooltip title=" Borrar usuario">
-            <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined />} />
-          </Tooltip>
-        </div>
-      </MainLayout>
+      <HeaderLandingComp
+        handlerSearch={handlerSearch}
+        filter_selected={state.filter_selected}
+        query={state.query}
+      />
+      <WrapperSection xs={24} row={20} style={wrapperStyle}  >
+        <CarouselComp carousel_data={state.carousel_data} />
+      </WrapperSection>
+      <WrapperSection xs={24} row={18}>
+        <OffertJobComp type='large' />
+      </WrapperSection>
+      <WrapperSection xs={24} row={18} style={wrapperStyle} >
+        <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
+          <Col span={14}>
+            <Title style={{ textAlign: 'center' }}>Our Drivers</Title>
+            <Text style={{ textAlign: 'center', display: 'flex' }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
+          </Col>
+        </Row>
+        <Row justify='center' align='middle' gutter={[16, 16]}>
+          <RankingComp rankingDriver={state.ranking} />
+        </Row>
+      </WrapperSection>
+      <div className='delete-user' style={{ display: 'block' }}>
+        <Tooltip title=" Borrar usuario">
+          <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined />} />
+        </Tooltip>
+      </div>
     </>
   )
 }

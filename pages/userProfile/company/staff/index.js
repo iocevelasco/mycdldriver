@@ -209,7 +209,7 @@ const TeamCompanyView = ({ user }) => {
   }
 
   return (
-    <MainLayout {...configSection}>
+    <>
       <Row>
         <SideNav
           currentLocation='3' />
@@ -323,7 +323,7 @@ const TeamCompanyView = ({ user }) => {
           </Form>
         </Row>
       </Modal>
-    </MainLayout>
+    </>
   )
 };
 

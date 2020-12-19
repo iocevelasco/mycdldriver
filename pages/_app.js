@@ -1,5 +1,6 @@
 import React from "react";
 import App, { Container as NextContainer } from "next/app";
+import MainLayout from 'components/layout'
 import withReduxStore from '../lib/with-redux-store'
 import { Provider } from 'react-redux';
 
@@ -23,7 +24,9 @@ class MyApp extends App {
     return (
       <NextContainer>
         <Provider store={reduxStore}>
-          <Component {...this.state} />
+          <MainLayout {...this.state}>
+            <Component {...this.state} />
+          </MainLayout>
         </Provider>
       </NextContainer>
     );

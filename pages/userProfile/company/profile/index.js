@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from 'components/layout';
 import { Row, Col, notification, message } from 'antd';
 import axios from 'axios';
 import FormUserCompany from 'components/FormUserCompany';
@@ -74,11 +73,6 @@ const CompanyProfileView = (props) => {
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
-  const configSection = {
-    title: 'Profile',
-    user: props.user,
-    loading: state.loading,
-  }
 
   useEffect(() => {
     let fields = [];
@@ -294,7 +288,7 @@ const CompanyProfileView = (props) => {
   }
 
   return (
-    <MainLayout {...configSection}>
+    <>
       <Row display='flex' justify='center'>
         <SideNav currentLocation='0' />
         <Col span={20}>
@@ -303,7 +297,7 @@ const CompanyProfileView = (props) => {
           </WrapperSection>
         </Col>
       </Row>
-    </MainLayout>
+    </>
   )
 };
 

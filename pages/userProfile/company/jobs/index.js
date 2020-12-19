@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useReducer } from 'react';
-import MainLayout from 'components/layout';
 import { Row, Col, Typography, message, Drawer, notification, Divider } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
@@ -221,52 +220,50 @@ const CompanyJobView = (props) => {
 
   return (
     <>
-      <MainLayout title='Create Jobs'>
-        <Row>
-          <SideNav currentLocation="1" />
-          <Col span={18} className="profile-company__jobs">
-            {/* // CRUM JOBS */}
-            <WrapperSection row={16} styles={styleWrapper}>
-              <div className="title" >
-                <Title level={3}> Create and edit your position </Title>
-                <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
-              </div>
-              <Divider />
-              <FormJobs
-                beforeUpload={beforeUpload}
-                propsUpload={propsUpload}
-                formType='create'
-                onFinisCreateJobs={onFinisCreateJobs}
-              />
-            </WrapperSection>
-            {/* listado de jobs */}
-            <WrapperSection row={24} styles={styleWrapper}>
-              <JobsList
-                header={header}
-                setReload={setReload}
-                isFetching={isFetching}
-                openDrawer={openDrawer}
-                jobsByCompany={jobsByCompany}
-              />
-            </WrapperSection>
-          </Col>
-        </Row>
-        <Drawer
-          title='Edit Job'
-          placement="right"
-          closable={true}
-          width={680}
-          onClose={onCloseDrawer}
-          visible={state.visible}>
-          <FormJobs
-            beforeUpload={beforeUpload}
-            fields={state.fields}
-            propsUpload={propsUpload}
-            formType='edit'
-            ediJob={handlerEditJob}
-          />
-        </Drawer>
-      </MainLayout >
+      <Row>
+        <SideNav currentLocation="1" />
+        <Col span={18} className="profile-company__jobs">
+          {/* // CRUM JOBS */}
+          <WrapperSection row={16} styles={styleWrapper}>
+            <div className="title" >
+              <Title level={3}> Create and edit your position </Title>
+              <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
+            </div>
+            <Divider />
+            <FormJobs
+              beforeUpload={beforeUpload}
+              propsUpload={propsUpload}
+              formType='create'
+              onFinisCreateJobs={onFinisCreateJobs}
+            />
+          </WrapperSection>
+          {/* listado de jobs */}
+          <WrapperSection row={24} styles={styleWrapper}>
+            <JobsList
+              header={header}
+              setReload={setReload}
+              isFetching={isFetching}
+              openDrawer={openDrawer}
+              jobsByCompany={jobsByCompany}
+            />
+          </WrapperSection>
+        </Col>
+      </Row>
+      <Drawer
+        title='Edit Job'
+        placement="right"
+        closable={true}
+        width={680}
+        onClose={onCloseDrawer}
+        visible={state.visible}>
+        <FormJobs
+          beforeUpload={beforeUpload}
+          fields={state.fields}
+          propsUpload={propsUpload}
+          formType='edit'
+          ediJob={handlerEditJob}
+        />
+      </Drawer>
     </>
   )
 }
