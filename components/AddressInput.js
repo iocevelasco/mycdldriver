@@ -9,7 +9,8 @@ const { Option } = Select;
 
 
 const AddressInputs = (props) => {
-  const { company } = props
+  console.log('props', props);
+  const { stateId } = props
   const [stateOptions, isFetching] = useListState();
 
   const [cityOptions, setCities] = useState({
@@ -19,21 +20,20 @@ const AddressInputs = (props) => {
   });
 
   useEffect(() => {
-    if (company) {
-      if (company.state) {
-        let stateId = company.state
-        fetchCities(stateId);
-      }
+    if (stateId) {
+      fetchCities(stateId);
     }
-  }, [company]);
+  }, [stateId]);
 
   const fetchCities = async (stateId) => {
+    console.log('state', stateId);
     setCities({
       options: [],
       disabled: true
     })
     await axios.get(`/api/address/cities/${stateId}`)
       .then((response) => {
+        console.log('res', response)
         let options = response.data.data
           .sort((a, b) => {
             if (a.cityName < b.cityName) { return -1; }

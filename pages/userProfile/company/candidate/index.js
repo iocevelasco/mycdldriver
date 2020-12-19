@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import MainLayout from 'components/layout';
 import {
   Row,
   Col,
@@ -19,10 +18,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import axios from 'axios';
 const { Title, Text } = Typography;
-
-const types = {
-  FETCH_DATA: 'FETCH_DATA',
-}
 
 function mapStateToProps(state) {
   return {
@@ -187,7 +182,7 @@ const CandidateView = ({ user, ...props }) => {
   }
 
   return (
-    <MainLayout {...configSection}>
+    <>
       <Row>
         <SideNav
           currentLocation='2' />
@@ -269,7 +264,7 @@ const CandidateView = ({ user, ...props }) => {
                 <Col span={12}>
                   <DescriptionItem title="Sex" content={resoltSexType(detail.driver.sex)} />
                 </Col>
-                
+
               </Row>
               <Divider />
               <p className="site-description-item-profile-p">Contacts</p>
@@ -283,16 +278,16 @@ const CandidateView = ({ user, ...props }) => {
               </Row>
               <Row justify='center' gutter={[16]} align='middle'>
                 <Col span={8}>
-                  <Button 
-                    shape="round" 
-                    block={true} 
+                  <Button
+                    shape="round"
+                    block={true}
                     type='secondary'
                     onClick={() => changeStatus(detail.id, 2)}> Reject </Button>
                 </Col>
                 <Col span={8}>
-                  <Button 
-                    shape="round" 
-                    block={true} 
+                  <Button
+                    shape="round"
+                    block={true}
                     type='primary'
                     onClick={() => changeStatus(detail.id, 1)} > Accept </Button>
                 </Col>
@@ -301,7 +296,7 @@ const CandidateView = ({ user, ...props }) => {
           </WrapperSection>
         </Col>
       </Row>
-    </MainLayout>
+    </>
   )
 };
 

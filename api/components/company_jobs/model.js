@@ -64,6 +64,9 @@ const CompanyJobsSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    active: {
+        type: Boolean
+    },
     tags: [{
         type: Schema.ObjectId,
         ref: 'tagsJobs',
@@ -101,7 +104,7 @@ const CompanyJobsSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    isActive: {
+    active: {
         type: Boolean,
         default: false
     }

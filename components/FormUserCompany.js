@@ -20,6 +20,7 @@ import AddressInputs from 'components/AddressInput';
 import axios from 'axios';
 const { Option } = Select;
 const { Title } = Typography;
+
 function mapStateToProps(state) {
   const { user } = state;
   return {
@@ -31,6 +32,8 @@ function mapStateToProps(state) {
     isUserRegistry: state.user._id || null,
   }
 }
+
+
 
 const FormUserCompany = (props) => {
   const [form] = Form.useForm();
@@ -193,7 +196,7 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <AddressInputs {...props} />
+            <AddressInputs stateId={props.user.company.state} />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button

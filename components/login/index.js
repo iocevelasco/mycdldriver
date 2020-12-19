@@ -63,7 +63,7 @@ const ModalLogin = ({ visible_modal_login, router, ...props }) => {
               <span> </span><p> or </p><span> </span>
             </div>
             <SocialNetworkButtons />
-            <div class="login--registry-box">
+            <div className="login--registry-box">
               <p> Are you driver or company and you don't have account?</p>
               <Button type='link' onClick={() => setNewUser(true)}>Create Account</Button>
             </div>

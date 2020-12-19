@@ -47,7 +47,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 const DriverUser = (props) => {
-  console.log('[ PROPS ]', props);
   const { router } = props;
   const [form] = Form.useForm();
   const [imageDln, setImage] = useState([]);
@@ -87,12 +86,12 @@ const DriverUser = (props) => {
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
-  const apply = {
-    job: router.query.id,
-    company: props.company
-  };
 
   const saveApply = async () => {
+    const apply = {
+      job: router.query.id,
+      company: props.company
+    };
     await axios.post('/api/company/jobs/apply', apply, header)
       .then((response) => {
         dispatch({ type: types.SHOW_SUCCESS, payload: true });
@@ -100,26 +99,15 @@ const DriverUser = (props) => {
       });
   }
 
-  const newDrivers = async () => {
-    const { driver, base } = beforeToCreateProfile();
-    setLoader(true);
-    if (imageDln.length > 0) {
-      driver.imageDln = imageDln[0].response.data.file;
-    }
-    base.photo = props.photo;
-    base.typeUser = 1;
-    if (props.facebook_id)
-      base.facebook_id = props.facebook_id;
-    if (props.google_id)
-      base.google_id = props.google_id;
-
+  const newDrivers = async (fields) => {
+    const { driver, base } = await beforeToCreateProfile(fields, 'create');
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
       .then((response) => {
         props.handleNewDriverProps(response.data.data);
         if (props.isJobs) {
           saveApply();
-        }
+        };
         setLoader(false);
         notification['success']({
           message: 'Success',
@@ -138,18 +126,18 @@ const DriverUser = (props) => {
       })
   }
 
-  const updateDriver = async () => {
-    const { _id } = props;
-    const { driver, base } = beforeToCreateProfile();
-    if (imageDln.length > 0) {
-      driver.imageDln = imageDln[0].response.data.file;
-    }
+  const updateDriver = async (fields) => {
+    const { driver, base } = await beforeToCreateProfile(fields, 'update');
     const fullDriver = { base: base, ...driver };
     try {
-      setLoader(true);
       await axios.patch('/api/driver', fullDriver, header)
         .then((response) => {
-          props.handleNewDriverProps(response.data.data);
+          const { foundDriver, user } = response.data.data
+          const data = {
+            driver: foundDriver,
+            user
+          }
+          props.handleNewDriverProps(data);
           if (props.isJobs) {
             saveApply();
           }
@@ -221,31 +209,51 @@ const DriverUser = (props) => {
     }
   };
 
-  const beforeToCreateProfile = () => {
-    let base = {}
-    let driver = {}
-    fields.forEach((e) => {
-      if (
-        e.name[0] == 'name' ||
-        e.name[0] == 'email' ||
-        e.name[0] == 'lastname' ||
-        e.name[0] == 'photo' ||
-        e.name[0] == 'facebook_id' ||
-        e.name[0] == 'google_id'
-      ) {
-        base[e.name[0]] = e.value
-      } else if (
-        e.name[0] == 'birthDate' || e.name[0] == 'expDateDln'
-      ) {
-        driver[e.name[0]] = moment(e.value).format('MM-DD-YYYY')
+  const beforeToCreateProfile = async (fields, type) => {
+    setLoader(true);
+    try {
+      const { google_id, facebook_id, photo, email } = props.user;
+      const { name, dln, lastname, zipCode, state, sex, phoneNumber, password, confirm, city, birthDate, areaCode, address2, address } = fields;
+
+      let base = {}
+      let driver = {}
+
+      if (type === 'update') {
+        base.name = name;
+        base.lastname = lastname;
+        base.typeUser = 1;
       }
-      else {
-        driver[e.name[0]] = e.value
+      if (type === 'create') {
+        base.name = name;
+        base.lastname = lastname;
+        base.typeUser = 1;
+        base.photo = photo;
+        base.email = email;
+        base.google_id = google_id;
+        base.facebook_id = facebook_id;
+        base.password = password;
       }
-    });
-    return {
-      driver,
-      base
+
+      driver.zipCode = zipCode;
+      driver.state = state;
+      driver.imageDln = '',
+        driver.dln = dln;
+      driver.sex = sex;
+      driver.phoneNumber = phoneNumber;
+      driver.password = password;
+      driver.confirm = confirm;
+      driver.city = city;
+      driver.birthDate = birthDate;
+      driver.areaCode = areaCode;
+      driver.address2 = address2;
+      driver.address = address;
+
+      return {
+        driver,
+        base
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -309,6 +317,48 @@ const DriverUser = (props) => {
                 </Form.Item>
               </Col>
             </Row>
+            <Row gutter={[24]} justify='space-between' >
+              <Col span={12}>
+                <Form.Item
+                  label='Change password'
+                  rules={[
+                    {
+                      required: false,
+                    },
+                  ]}
+                  name='password'>
+                  <Input.Password
+                    placeholder="Password"
+                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="confirm"
+                  label="Confirm Password"
+                  dependencies={['password']}
+                  hasFeedback
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please confirm your password!',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(rule, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject('The two passwords that you entered do not match!');
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password
+                    placeholder="Confirm Password" />
+                </Form.Item>
+              </Col>
+            </Row>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
                 <Form.Item
@@ -323,21 +373,23 @@ const DriverUser = (props) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item
-                  label='Change password'
-                  rules={[
-                    {
-                      required: false,
-                    },
-                  ]}
-                  name='password'>
-                  <Input.Password
-                    placeholder="password"
-                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                  />
-                </Form.Item>
-              </Col>
+              {props.isUserRegistry ? '' :
+                <Col span={12}>
+                  <Form.Item
+                    label='Dln'
+                    name="dln"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'dln is required!',
+                      },
+                    ]}>
+                    <InputNumber
+                      min={0}
+                      max={900000000000000}
+                      style={{ width: '100%' }} />
+                  </Form.Item>
+                </Col>}
             </Row>
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
@@ -399,7 +451,7 @@ const DriverUser = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <AddressInputs />
+            <AddressInputs stateId={props.user.driver.state} />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button

@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import MainLayout from '../../components/layout';
 import { WrapperSection } from 'components/helpers';
+
 import {
   Row,
   Col,
@@ -20,15 +21,16 @@ function mapStateToProps(state) {
   }
 }
 
+
 const UserProfile = ({ user, ...props }) => {
 
   useEffect(() => {
     switch (user.typeUser) {
       case 1:
-        props.router.push('/userProfile/driver');
+        props.router.push('/userProfile/driver/profile');
         break;
       case 2:
-        props.router.push('/userProfile/company');
+        props.router.push('/userProfile/company/profile');
         break;
       default:
         break;
@@ -43,7 +45,7 @@ const UserProfile = ({ user, ...props }) => {
   }
 
   return (
-    <MainLayout title='Profile' user={user}>
+    <>
       <WrapperSection styles={stylesWrapper}>
         <div className="profile-driver__route">
           <div className="title">
@@ -72,8 +74,8 @@ const UserProfile = ({ user, ...props }) => {
           </div>
         </div>
       </WrapperSection>
-    </MainLayout>
+    </>
   )
 };
 
-export default withRouter(connect(mapStateToProps)(UserProfile));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProfile));

@@ -1,8 +1,9 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import MainLayout from 'components/layout';
-import { Row, Col, List, Avatar, Card, Form, Table, Typography, Modal, Button, Rate, Input } from 'antd';
+import { Row, Col, List, Space, Avatar, notification, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
+import { StarFilled } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -134,7 +135,7 @@ const TeamCompanyView = ({ user }) => {
 
   const changeRanking = async (fiels) => {
     const { ranking, comment } = fiels;
-    const { modalProps } = state
+    const { modalProps } = state;
     const data = {
       id: modalProps._id,
       ranking,
@@ -143,6 +144,12 @@ const TeamCompanyView = ({ user }) => {
     await axios.patch(`/api/company/jobs/change_rank`, data, header)
       .then((response) => {
         fetchStaffList();
+        dispatch({ type: types.CLOSE_MODAL })
+        notification['success']({
+          message: 'Success',
+          description:
+            "Congratulation! you have done this rate"
+        });
       })
       .catch((err) => {
         console.log(err)
@@ -151,31 +158,58 @@ const TeamCompanyView = ({ user }) => {
 
   const columns = [
     {
-      title: 'Photo',
+      title: 'Name',
       dataIndex: 'photo',
       key: 'photo',
+      width: '10%',
       render: url => <Avatar size={80} src={url} />
     },
     {
-      title: 'Name',
       dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      width: '15%',
+      render: ((n, item) => {
+        const { name, lastname } = item
+        return <span> {`${name} ${lastname}`} </span>
+      })
     },
     {
-      title: 'Lastname',
-      dataIndex: 'lastname',
-      key: 'lastname',
+      title: 'Rating',
+      dataIndex: 'driver',
+      key: 'rate',
+      render: (driver) => {
+        return (
+          <Space >
+            <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />
+            <span> {driver.rating} </span>
+          </Space>
+        )
+      }
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
     },
+    {
+      title: 'Phone',
+      dataIndex: 'driver',
+      key: 'rate',
+      render: (driver) => {
+        return <span> {driver.phoneNumber} </span>
+      }
+    },
   ];
 
+  const styles = {
+    listJObs: {
+      display: 'flex',
+      flexDirection: 'column',
+    }
+  }
 
   return (
-    <MainLayout {...configSection}>
+    <>
       <Row>
         <SideNav
           currentLocation='3' />
@@ -199,16 +233,27 @@ const TeamCompanyView = ({ user }) => {
                           key={item._d}
                           actions={[
                             <a onClick={() => showRate(item, record)}>
-                              Rate
+                              Rate this job
                         </a>,
                           ]}>
-                          <List.Item.Meta
-                            avatar={
-                              <Avatar src={item.logo} />
-                            }
-                            title={<p>{`${item.title}`} </p>}
-                            description={item.description}
-                          />
+                          <div style={{ width: '100%' }}>
+                            <Row gutter={[24]} justify='space-between' align='middle'>
+                              <Col span={2}>
+                                <Avatar shape="square" size={80} src={item.logo} />
+                              </Col>
+                              <Col span={1}>
+                                <Space>
+                                  <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />
+                                  <span> {item.apply.ranking} </span>
+                                </Space>
+                              </Col>
+                              <Col span={18}>
+                                <div style={styles.listJObs}>
+                                  <p>{item.title} </p>
+                                </div>
+                              </Col>
+                            </Row>
+                          </div>
                         </List.Item>
                       )}
                     />
@@ -278,7 +323,7 @@ const TeamCompanyView = ({ user }) => {
           </Form>
         </Row>
       </Modal>
-    </MainLayout>
+    </>
   )
 };
 

@@ -106,7 +106,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
     }
     await axios.post(`/api/company/jobs/detail`, applyJob)
       .then((response) => {
-        const { title, logo, can_apply, postion_id, description, address, date, company_name, company } = response.data.data;
+        const { title, logo, phoneNumber, email, can_apply, postion_id, description, address, date, company_name, company } = response.data.data;
         let detail = {
           title: title || '',
           logo: logo || '',
@@ -117,6 +117,8 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
           date: moment(date).format('MM DD YYYY') || '',
           company_name: company_name || '',
           tradename: company ? company.tradename : '',
+          phoneNumber: phoneNumber,
+          email: email
         };
         dispatch({ type: types.FETCH_DETAIL, payload: { ...detail } });
       })

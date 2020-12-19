@@ -43,43 +43,6 @@ const DriverExperience = (props) => {
     backgroundSize: 'contain',
   }
 
-  const propsUpload = {
-    name: 'logo',
-    action: '/api/files',
-    headers: {
-      authorization: 'authorization-text'
-    },
-    async onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-      let fileList = [...info.fileList];
-      fileList = fileList.slice(-1);
-      fileList = fileList.map(file => {
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        return file;
-      });
-
-      if (imageDln.length > 0) {
-        try {
-          const file = {
-            foto: imageDln[0].response.data.file
-          };
-          await axios.post(`/api/files/delete`, file);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      setImage(fileList);
-    }
-  };
   return (
     <MainLayout title='Experience'>
       <Row display='flex' justify='center'>

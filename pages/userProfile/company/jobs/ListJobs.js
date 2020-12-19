@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Typography, Tag, Card, List, notification, Avatar, Image } from 'antd';
+import { Button, Typography, Switch, Card, List, notification, Avatar, Image } from 'antd';
 import axios from 'axios';
 import propTypes, { arrayOf, node } from 'prop-types';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -7,10 +7,11 @@ import Link from 'next/link';
 
 const { Text } = Typography
 
-const ListJobs = (props) => {
+const ListJobs = ({ headers, isFetching, jobsByCompany, openDrawer, ...props }) => {
+
   const deleteJob = async (id) => {
     try {
-      await axios.delete(`/api/company/jobs/${id}`, props.header);
+      await axios.delete(`/api/company/jobs/${id}`, header);
       props.setReload(true);
       notification['success']({
         message: 'Success',
@@ -28,20 +29,26 @@ const ListJobs = (props) => {
     }
   };
 
+  const inactiveJob = async (ev) => {
+    console.log('ev', ev);
+    await axios.post('/api/company/change_status', newJob, header)
+  }
+
   return (
     <Card>
       <List
         itemLayout="vertical"
         size="large"
-        loading={props.isFetching}
+        loading={isFetching}
         rowKey='_id'
-        dataSource={props.jobsByCompany}
+        dataSource={jobsByCompany}
         renderItem={(item, ind) => (
           <List.Item
             key={ind}
             actions={[
               <Button style={{ borderRadius: 50 }} onClick={() => deleteJob(item._id)} icon={<DeleteOutlined />}>Delete</Button>,
-              <Button style={{ borderRadius: 50 }} onClick={() => props.openDrawer(item)} icon={<EditOutlined />}>Edit</Button>,
+              <Button style={{ borderRadius: 50 }} onClick={() => openDrawer(item)} icon={<EditOutlined />}>Edit</Button>,
+              <Switch onChange={props.inactiveJob} checkedChildren="Inactive" unCheckedChildren="Active" />,
               <Link href={{
                 pathname: '/userProfile/company/candidate',
                 query: { id: item._id },

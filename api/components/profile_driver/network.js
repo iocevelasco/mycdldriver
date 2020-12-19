@@ -197,17 +197,11 @@ router.post('/', function (req, res) {
     .then((fullDriver) => {
       switch (fullDriver.status){
         case 201:
-            response.success(req, res, fullDriver.message, 201);
-            break;
-        case 400:
-            response.error(req, res, fullDriver.message, 400, fullDriver.detail);
-            break;
-        case 500:
-            response.error(req, res, fullDriver.message, 500, fullDriver.detail);
-            break;
+          response.success(req, res, fullDriver.message, 201);
+          break;
         default:
-            response.success(req, res, fullDriver, 200);
-            break;
+          response.error(req, res, fullDriver.message, fullDriver.status, fullDriver.detail);
+          break;
     }
     }).catch(e => {
         response.error(req, res, 'Unexpected Error', 500, e);
@@ -421,20 +415,50 @@ router.patch('/', auth(1), function (req, res){
  *    HTTP/1.1 500 Internal Server Error
  */
 router.patch('/experience', auth(1), function (req, res){
-    const id= req.user.driver || null;
-    controller.updateExperience(id, req.body)
-      .then((data) => {
-        switch(data.status){
-          case 200:
-            response.success(req, res, data.message, 200);
-            break;
-          default:
-            response.error(req, res, data.message, data.status, data.detail);
-        }
-      })
-      .catch(e => {
-        response.error(req, res, e.message, e.status, e.detail);
-      });
+  const id= req.user.driver || null;
+  controller.updateExperience(id, req.body)
+    .then((data) => {
+      switch(data.status){
+        case 200:
+          response.success(req, res, data.message, 200);
+          break;
+        default:
+          response.error(req, res, data.message, data.status, data.detail);
+      }
+    })
+    .catch(e => {
+      response.error(req, res, e.message, e.status, e.detail);
+    });
+});
+
+router.post('/check', auth(2), function (req, res){
+  controller.checkDriver(req.body.mail).then((data) => {
+    switch(data.status){
+      case 200:
+        response.success(req, res, data.message, 200);
+        break;
+      default:
+        response.error(req, res, data.message, data.status, data.detail);
+    }
+  })
+  .catch(e => {
+    response.error(req, res, e.message, e.status, e.detail);
+  });
+});
+
+router.post('/newstaff', auth(2), function (req, res){
+  controller.checkDriver(req.body).then((data) => {
+    switch(data.status){
+      case 200:
+        response.success(req, res, data.message, 200);
+        break;
+      default:
+        response.error(req, res, data.message, data.status, data.detail);
+    }
+  })
+  .catch(e => {
+    response.error(req, res, 'Unexpected error', 500, e);
+  });
 });
 
 module.exports = router;
