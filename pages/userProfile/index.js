@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import MainLayout from '../../components/layout';
 import { WrapperSection } from 'components/helpers';
-import { updateTypeUser } from '@store/reducers/user_reducer';
+
 import {
   Row,
   Col,
@@ -21,11 +21,6 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    updateTypeUser: (type) => dispatch(updateTypeUser(type))
-  }
-}
 
 const UserProfile = ({ user, ...props }) => {
 
