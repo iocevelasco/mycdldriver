@@ -39,7 +39,7 @@ const JobsApplysSchema = mongoose.Schema({
     },
 
 });
-JobsApplysSchema.index({company: 1, driver: 1, job: 1}, {unique: true});
+JobsApplysSchema.index({ company: 1, driver: 1, job: 1 }, { unique: true });
 
 const CompanyJobsSchema = mongoose.Schema({
     title: {
@@ -63,6 +63,9 @@ const CompanyJobsSchema = mongoose.Schema({
     time: {
         type: Number,
         required: true
+    },
+    active: {
+        type: Boolean
     },
     tags: [{
         type: Schema.ObjectId,
@@ -100,6 +103,10 @@ const CompanyJobsSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    active: {
+        type: Boolean,
+        default: false
     }
 });
 

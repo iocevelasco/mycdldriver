@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from 'components/layout';
 import {
   Row,
   Col,
@@ -45,12 +44,6 @@ const JobsDriverView = ({ user, ...props }) => {
     headers: { Authorization: `Bearer ${user.token}` }
   };
 
-  const configSection = {
-    title: 'Our Drivers',
-    user: { user },
-    loading: state.loading,
-  }
-
   useEffect(() => {
     fetchJobs();
   }, [user]);
@@ -73,7 +66,7 @@ const JobsDriverView = ({ user, ...props }) => {
   }
 
   return (
-    <MainLayout {...configSection}>
+    <>
       <Row>
         <SideNav
           currentLocation='1' />
@@ -116,7 +109,7 @@ const JobsDriverView = ({ user, ...props }) => {
           </WrapperSection>
         </Col>
       </Row>
-    </MainLayout>
+    </>
   )
 };
 

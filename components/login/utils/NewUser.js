@@ -50,9 +50,9 @@ const NewUserForm = (props) => {
     }
     props.setPropsUserReg(newUser);
     props.handleModal(false);
-    if(values.typeUser === 1){
+    if (values.typeUser === 1) {
       router.push('/userProfile/driver/profile');
-    }else if(values.typeUser === 2){
+    } else if (values.typeUser === 2) {
       router.push('/userProfile/company/profile');
     }
   }

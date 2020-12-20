@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Button, Input, Select, Form, Radio, Upload, message } from 'antd';
+import { Row, Col, Button, Input, Select, Form, Radio, Upload, message, Switch } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import useListState from '@hooks/useListState';
 import axios from 'axios';
@@ -166,20 +166,24 @@ const FormJobs = (props) => {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item
-          name="time"
-          rules={[
-            {
-              required: true,
-              message: 'Time is required!',
-            },
-          ]}>
-          <Radio.Group>
-            <Radio value={0}>Part-time</Radio>
-            <Radio value={1} >Full-time</Radio>
-            <Radio value={2}>Eventual</Radio>
-          </Radio.Group>
-        </Form.Item>
+        <Row gutter={[16, 16]} justify='space-between' >
+          <Col span={12}>
+            <Form.Item
+              name="time"
+              rules={[
+                {
+                  required: true,
+                  message: 'Time is required!',
+                },
+              ]}>
+              <Radio.Group>
+                <Radio value={0}>Part-time</Radio>
+                <Radio value={1} >Full-time</Radio>
+                <Radio value={2}>Eventual</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Col>
+        </Row>
         <Form.Item>
           <Row gutter={[16, 16]} justify='space-between' >
             <Col span={12}>
