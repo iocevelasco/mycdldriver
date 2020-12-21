@@ -38,7 +38,7 @@ const NewDriverForm = ({ addNewDriver, header, loader, ...props }) => {
             <Row gutter={[24]} justify='center'  >
               <Col span={22}>
                 <Form.Item
-                  name="job_id"
+                  name="job"
                   label="Select Job"
                   rules={[
                     {

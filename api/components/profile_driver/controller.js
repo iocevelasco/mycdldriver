@@ -216,7 +216,6 @@ async function checkDriver(mail) {
 }
 
 async function addStaff(user, company) {
-    console.log('[ COMPANY ]', company);
     if (!user) {
         return {
             status: 400,
