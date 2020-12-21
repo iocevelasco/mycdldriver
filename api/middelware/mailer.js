@@ -65,7 +65,7 @@ module.exports = (para, asunto, titulo, mensaje)=>{
         </body>
         </html>`
     };
-    
+    console.log('[ EMAIL RECIVED ]', para, asunto, titulo, mensaje);
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log('[ ERROR MAILER ]', error);

@@ -51,7 +51,7 @@ const DriverExperience = (props) => {
           <WrapperSection styles={stylesWrapper} row={22} mt={0}>
             <FormExperience
               fields={fields}
-              propsUpload={propsUpload} />
+              propsUpload={props.upload} />
           </WrapperSection>
         </Col>
       </Row>

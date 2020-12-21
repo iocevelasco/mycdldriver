@@ -11,8 +11,7 @@ const profileDriverSchema = Schema({
         type: Date
     },
     birthDate: {
-        type: Date,
-        required: true
+        type: Date
     },
     imageDln: {
         type: String,
@@ -25,8 +24,7 @@ const profileDriverSchema = Schema({
         type: String
     },
     sex: {
-        type: Number,
-        required: true
+        type: Number
     },
     rating: {
         type: Number,

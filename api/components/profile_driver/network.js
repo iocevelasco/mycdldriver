@@ -446,11 +446,11 @@ router.post('/check', auth(2), function (req, res){
   });
 });
 
-router.post('/newstaff', auth(2), function (req, res){
-  controller.checkDriver(req.body).then((data) => {
+router.post('/staff/new', auth(2), function (req, res){
+  controller.addStaff(req.body, req.user.company).then((data) => {
     switch(data.status){
-      case 200:
-        response.success(req, res, data.message, 200);
+      case 201:
+        response.success(req, res, data.message, data.status);
         break;
       default:
         response.error(req, res, data.message, data.status, data.detail);
@@ -459,6 +459,10 @@ router.post('/newstaff', auth(2), function (req, res){
   .catch(e => {
     response.error(req, res, 'Unexpected error', 500, e);
   });
+});
+
+router.post('/staff/get', auth(1), function (req, res){
+  response.success(req, res, req.user, 200);
 });
 
 module.exports = router;

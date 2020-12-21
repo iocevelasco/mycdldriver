@@ -1,5 +1,6 @@
 const Model = require('./model');
 const {User} = require('../user/model');
+const {JobsModel, JobsApplysModel} = require('../company_jobs/model');
 const fs = require('fs');
 
 async function getDriver(filterDriver){
@@ -226,9 +227,26 @@ async function checkDriver(mail){
 }
 
 async function addStaff(user){
+    let foundJob = "";
     const driver = new Model({
         dln: user.dln
     });
+    try{
+        foundJob = await JobsModel.findOne({ _id: user.job });
+        if(!foundJob){
+            return {
+                status: 404,
+                message: 'Job not found',
+                detail: e
+            }
+        }
+    }catch(e){
+        return {
+            status: 400,
+            message: 'Error: find job error',
+            detail: e
+        }
+    }
     
     try{
         await driver.save();
@@ -239,7 +257,30 @@ async function addStaff(user){
             const {_id, name, lastname, typeUser, photo, email, date} = myUser;
             const token = await myUser.generateAuthToken();
             user = { _id, name, lastname, typeUser, photo, email, date, token };
-            return {status: 201, message: {user, driver}};
+
+            try{
+                const applyJob = {
+                    company: foundJob.company,
+                    driver: myUser,
+                    job: foundJob._id,
+                    status: 1
+                }
+                const newApply = new JobsApplysModel(applyJob);
+                await newApply.save();
+                return {status: 201, message: {user, driver}};
+            }catch(e){
+                await Model.deleteOne({
+                    _id: driver._id
+                });
+                await User.deleteOne({
+                    _id: myUser._id
+                });
+                return {
+                    status: 400,
+                    message: 'Apply job error',
+                    detail: e
+                }
+            }
         }catch(e){
             await Model.deleteOne({
                 _id: driver._id

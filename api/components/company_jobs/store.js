@@ -334,7 +334,6 @@ async function applyJob(job) {
     try {
         const foundJob = await JobsModel.findOne({ _id: job.job });
         job.company = foundJob.company;
-        console.log('[ JOB OBJECT SENT ]', job);
         const newApply = new JobsApplysModel(job);
         const resp = await newApply.save();
         if (resp) {

@@ -18,6 +18,7 @@ import {
   updateUserDrive
 } from '@store/reducers/user_reducer';
 import { SpinnerComp } from 'components/helpers';
+import UploadImage from 'components/UploadImage';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -49,7 +50,6 @@ function mapDispatchToProps(dispatch) {
 const DriverUser = (props) => {
   const { router } = props;
   const [form] = Form.useForm();
-  const [imageDln, setImage] = useState([]);
   const [photo, setPhoto] = useState([]);
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
@@ -92,6 +92,7 @@ const DriverUser = (props) => {
       job: router.query.id,
       company: props.company
     };
+
     await axios.post('/api/company/jobs/apply', apply, header)
       .then((response) => {
         dispatch({ type: types.SHOW_SUCCESS, payload: true });
@@ -159,56 +160,6 @@ const DriverUser = (props) => {
     }
   };
 
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-  }
-
-  const propsPhoto = {
-    name: 'logo',
-    action: '/api/files',
-    headers: {
-      authorization: `Bearer ${props.token}`
-    },
-    async onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-      let fileList = [...info.fileList];
-      fileList = fileList.slice(-1);
-      fileList = fileList.map(file => {
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        return file;
-      });
-
-      if (photo > 0) {
-        try {
-          const file = {
-            foto: photo[0].response.data.file
-          };
-          await axios.post(`/api/files/delete`, file);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      setPhoto(fileList);
-    }
-  };
-
   const beforeToCreateProfile = async (fields, type) => {
     setLoader(true);
     try {
@@ -222,6 +173,7 @@ const DriverUser = (props) => {
         base.name = name;
         base.lastname = lastname;
         base.typeUser = 1;
+
       }
       if (type === 'create') {
         base.name = name;
@@ -267,18 +219,15 @@ const DriverUser = (props) => {
         <Col className='profile-driver__form' span={24}>
           <Row justify='center'>
             <div className='avatar'>
-              <Avatar src={props.photo} size={120} />
-              <Upload {...propsPhoto}
+              <UploadImage
                 fileList={photo}
-                showUploadList={false}
-                beforeUpload={beforeUpload}
-              >
-                <Button
-                  type='primary'
-                  size='small'
-                  shape="circle"
-                  icon={<RetweetOutlined />} />
-              </Upload>
+                setFileList={setPhoto} />
+              <Avatar src={props.photo} size={120} />
+              <Button
+                type='primary'
+                size='small'
+                shape="circle"
+                icon={<RetweetOutlined />} />
             </div>
           </Row>
           <Form
@@ -345,7 +294,7 @@ const DriverUser = (props) => {
                       message: 'Please confirm your password!',
                     },
                     ({ getFieldValue }) => ({
-                      validator(rule, value) {
+                      validator(value) {
                         if (!value || getFieldValue('password') === value) {
                           return Promise.resolve();
                         }
@@ -467,7 +416,7 @@ const DriverUser = (props) => {
         </Col>
       </Row>
       <SpinnerComp active={loading} />
-    </div>
+    </div >
   )
 }
 

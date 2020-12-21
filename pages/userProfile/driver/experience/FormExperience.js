@@ -85,6 +85,7 @@ const FormExperience = (props) => {
                     min={0}
                     max={100} />
                 </Form.Item>
+
                 <Form.Item>
                   <Upload {...props.propsUpload}
                     fileList={props.imageDln}
@@ -93,6 +94,8 @@ const FormExperience = (props) => {
                     <Button icon={<UploadOutlined />}>Add your DLN picture</Button>
                   </Upload>
                 </Form.Item>
+
+
               </Row>
               <Form.Item
                 label='Description'
