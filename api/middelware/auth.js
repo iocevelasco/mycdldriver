@@ -7,7 +7,9 @@ module.exports = function auth(typeUserReq = 0){
       try {
          const token = req.header('Authorization').replace('Bearer ', '');
          const data = jwt.verify(token, config.JWT_KEY);
-         const user = await User.findOne({ _id: data._id, 'tokens.token': token });
+         const user = await User.findOne({ _id: data._id, 'tokens.token': token })
+         .populate('driver')
+         .populate('company');
          if (!user) {
             throw new Error();
          }
