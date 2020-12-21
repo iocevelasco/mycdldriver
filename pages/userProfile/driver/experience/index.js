@@ -85,7 +85,7 @@ const DriverExperience = (props) => {
 
   const onSubmitExperience = async (body) => {
     try {
-      body.imageDln = "imagen";
+      body.imageDln = imageDln[0].response.data.file;
       const response = await axios.patch(
         "/api/driver/experience",
         body,

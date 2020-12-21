@@ -54,17 +54,15 @@ const FormExperience = (props) => {
     }
     return isJpgOrPng && isLt2M;
   };
-
   const isUserRegistry = async (fields) => {
     let body = {
       dln: fields.dln,
       description: fields.description,
-      expDateDln: fields.expDateDln,
+      expDateDln: fields.expDateDln._d,
       twicCard: twicCard,
     };
 
     body.experience = { ...switchValues };
-    //body.expDateDln = body.expDateDln._d.format("MM-DD-YYYY");
     props.onSubmitExperience(body);
   };
 
