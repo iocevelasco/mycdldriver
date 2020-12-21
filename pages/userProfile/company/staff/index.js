@@ -118,6 +118,8 @@ const StaffCompanyView = ({ user }) => {
           description:
             "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
         });
+        onCloseDrawer();
+        fetchStaffList();
       })
       .catch((err) => {
         console.log('[ user registry error ]', err);
@@ -269,11 +271,12 @@ const StaffCompanyView = ({ user }) => {
     },
     {
       title: 'Percentage complete',
-      dataIndex: 'status',
+      dataIndex: 'completeProfile',
       align: 'center',
-      key: 'status',
-      render: () => {
-        return <Progress percent={30} />
+      key: 'completeProfile',
+      render: (n, item) => {
+        console.log('item', item);
+        return <Progress percent={item.completeProfile} />
       }
     },
   ];

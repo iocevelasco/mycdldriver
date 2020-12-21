@@ -258,6 +258,8 @@ async function getStaffCompanyJobs(query) {
             .select('name lastname photo date email')
             .populate('driver');
         let resDriver = null;
+        let completeFelds = 5;
+        let totalFelds = 16;
         if (userDriver) {
             resDriver = {
                 id: userDriver._id,
@@ -268,6 +270,41 @@ async function getStaffCompanyJobs(query) {
                 date: userDriver.date,
                 driver: userDriver.driver
             };
+            if(userDriver.driver.expDateDln){
+                completeFelds ++;
+            }
+            if(userDriver.driver.birthDate){
+                completeFelds ++;
+            }
+            if(userDriver.driver.imageDln){
+                completeFelds ++;
+            }
+            if(userDriver.driver.areaCode){
+                completeFelds ++;
+            }
+            if(userDriver.driver.phoneNumber){
+                completeFelds ++;
+            }
+            if(userDriver.driver.sex){
+                completeFelds ++;
+            }
+            if(userDriver.driver.rating){
+                completeFelds ++;
+            }
+            if(userDriver.driver.zipCode){
+                completeFelds ++;
+            }
+            if(userDriver.driver.description){
+                completeFelds ++;
+            }
+            if(userDriver.driver.address){
+                completeFelds ++;
+            }
+            if(userDriver.driver.address2){
+                completeFelds ++;
+            }
+            const completeProfile = completeFelds * 100 / totalFelds;
+            resDriver.completeProfile = completeProfile;
             const filterJob = {
                 driver: response,
                 company: id,
