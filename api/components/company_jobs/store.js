@@ -103,11 +103,39 @@ async function getJobs(filterCompany) {
             };
             return resp;
         } catch (e) {
-            //console.log(e);
+            console.log(e);
         }
     }));
     result = result.filter(Boolean);
     return result;
+}
+
+async function getJob(idJob){
+    if(!idJob){
+        return {
+            status: 400,
+            message: 'No Id recived'
+        }
+    }
+    try{
+        job = await JobsModel.findOne({_id: idJob})
+        .select("-__v")
+        .populate('city')
+        .populate('state')
+        .populate('company')
+        .populate('tags');
+        return {
+            status: 200,
+            message: job
+        }
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
+    
 }
 
 function getApplyJobs(filterQuery) {
@@ -369,6 +397,7 @@ async function addJob(job) {
 
 async function applyJob(job) {
     try {
+        console.log('[ APPLY JOB ]', job);
         const foundJob = await JobsModel.findOne({ _id: job.job });
         job.company = foundJob.company;
         const newApply = new JobsApplysModel(job);
@@ -378,12 +407,17 @@ async function applyJob(job) {
                 status: 200,
                 message: 'Ok'
             };
+        }else{
+            return {
+                status: 400,
+                message: 'No apply saved'
+            };
         }
     } catch (e) {
-        console.log(e);
         return {
             status: 500,
-            message: 'Invalid data recived for apply job'
+            message: 'Invalid data recived for apply job',
+            detail: e
         };
     }
 }
@@ -492,6 +526,7 @@ async function deleteJob(id, company) {
 
 module.exports = {
     list: getJobs,
+    getJob,
     add: addJob,
     update: updateJob,
     delete: deleteJob,
