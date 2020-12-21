@@ -1,5 +1,6 @@
 const store = require('./store');
 const config = require('../../config');
+const mailer = require('../../middelware/mailer');
 
 function getDriver() {
     return new Promise((resolve, reject) => {
@@ -208,7 +209,8 @@ async function checkDriver(mail) {
     }
 }
 
-async function addStaff(user) {
+async function addStaff(user, company) {
+    console.log('[ COMPANY ]', company);
     if (!user) {
         return {
             status: 400,
@@ -216,10 +218,26 @@ async function addStaff(user) {
         }
     }
 
-    try {
-        const user = await store.addStaff(user);
-    } catch (e) {
+    user.typeUser = 1;
+    user.photo = 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png';
 
+    try {
+        const newStaff = await store.addStaff(user);
+        if(newStaff.status == 201){
+            const url = config.host + '/' + config.port + '/driver/complete_register/' + newStaff.message.user.token;
+            mailer(
+                user.email, 
+                'Invitacion a MYCDL Driver', 
+                `The ${company.tradename} Company has invited you to join its Staff`,
+                `Follow the link below to complete your registration: <a href='${url}'>${url}</a>`)
+        }
+        return newStaff;
+    } catch (e) {
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
     }
 }
 
