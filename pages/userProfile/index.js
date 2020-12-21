@@ -78,4 +78,4 @@ const UserProfile = ({ user, ...props }) => {
   )
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProfile));
+export default withRouter(connect(mapStateToProps)(UserProfile));
