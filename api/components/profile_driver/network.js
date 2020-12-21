@@ -415,7 +415,7 @@ router.patch('/', auth(1), function (req, res){
  *    HTTP/1.1 500 Internal Server Error
  */
 router.patch('/experience', auth(1), function (req, res){
-  const id= req.user.driver || null;
+  const id= req.user.driver._id || null;
   controller.updateExperience(id, req.body)
     .then((data) => {
       switch(data.status){

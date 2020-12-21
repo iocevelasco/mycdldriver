@@ -54,6 +54,12 @@ function addDriver(driver) {
         const driverResolve = store.add(user);
         switch (driverResolve.status) {
             case 201:
+                mailer(
+                    user.email, 
+                    'Welcome to MyCDL Driver!', 
+                    `Your profile has been created , you can now start searching for your next job.`,
+                    `Tip: For a better experience , remember to maintain your profile up to date. You can edit your profile here! [url] 
+                    <p>Have a great at day , My CDL Driver Team.</p>`);
                 resolve(driverResolve);
                 break;
             case 500:
@@ -227,9 +233,11 @@ async function addStaff(user, company) {
             const url = config.host + '/' + config.port + '/driver/complete_register/' + newStaff.message.user.token;
             mailer(
                 user.email, 
-                'Invitacion a MYCDL Driver', 
-                `The ${company.tradename} Company has invited you to join its Staff`,
-                `Follow the link below to complete your registration: <a href='${url}'>${url}</a>`)
+                'Invitation to MYCDL Driver', 
+                `Hello ${user.name} ${user.lastname}! We welcome you to MyCDL Driver.`,
+                `${company.tradename} wants you to be part of their Drivers Staff, all you need to do is complete you information.
+                Here <a href='${url}'>${url}</a> you can do it in two simple steps. 
+                <p>Have a great at day , My CDL Driver Team.</p>`);
         }
         return newStaff;
     } catch (e) {

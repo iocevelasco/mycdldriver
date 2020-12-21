@@ -60,8 +60,10 @@ const AddDriverView = ({ user, ...props }) => {
 
   const addNewDriver = async (fields) => {
     const { newDriver } = await beforeToCreateProfile(fields);
-    await axios.post('/api/driver', newDriver)
+    newDriver.job = '5faeb39f2d69cc4484b6db26';
+    await axios.post('/api/driver/staff/new', newDriver, header)
       .then((response) => {
+        console.log(response);
         setLoader(false);
         notification['success']({
           message: 'Success',
