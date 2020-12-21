@@ -225,7 +225,10 @@ const StaffCompanyView = ({ user }) => {
       render: (driver) => {
         return (
           <Space >
-            <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />
+            {(driver.rating == 0) ? 
+            <StarFilled style={{ fontSize: '24px', color: '#d3d3d3' }} /> :
+            <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />}
+            
             <span> {driver.rating} </span>
           </Space>
         )
@@ -241,14 +244,21 @@ const StaffCompanyView = ({ user }) => {
       dataIndex: 'driver',
       key: 'rate',
       render: (driver) => {
-        return <span> {driver.phoneNumber} </span>
+        return <span> {driver.areaCode}-{driver.phoneNumber} </span>
       },
     },
     {
       title: 'dln',
-      dataIndex: 'dln',
+      dataIndex: 'driver',
       align: 'center',
       key: 'dln',
+      render: (driver) => {
+        return (
+          <Space >            
+            <span> {driver.dln} </span>
+          </Space>
+        )
+      }
     },
     {
       title: 'Status',
