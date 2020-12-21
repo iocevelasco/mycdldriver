@@ -22,12 +22,14 @@ import {
 } from "@ant-design/icons";
 import { updateUserDrive } from "@store/reducers/user_reducer";
 import { SpinnerComp } from "components/helpers";
+import moment from "moment";
 import { beforeUpload, propsUpload } from "@utils/form";
 import mockExperience from "./experience.json";
 const { TextArea } = Input;
 
 const FormExperience = (props) => {
   const [switchValues, setSwitchValues] = useState(mockExperience);
+  const [twicCard, setTwicCard] = useState({ twicCard: false });
   const [swtichInputs, setSwitchInputs] = useState([
     "Tamk endorsed",
     "Hazmat",
@@ -41,7 +43,30 @@ const FormExperience = (props) => {
 
   useEffect(() => {}, [switchValues]);
 
-  const isUserRegistry = async (fields) => {};
+  const beforeUpload = (file) => {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      message.error("You can only upload JPG/PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must smaller than 2MB!");
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
+  const isUserRegistry = async (fields) => {
+    let body = {
+      dln: fields.dln,
+      description: fields.description,
+      expDateDln: fields.expDateDln,
+      twicCard: twicCard,
+    };
+
+    body.experience = { ...switchValues };
+    //body.expDateDln = body.expDateDln._d.format("MM-DD-YYYY");
+    props.onSubmitExperience(body);
+  };
 
   const switchChange = async (value, name, type) => {
     switch (type) {
@@ -108,16 +133,20 @@ const FormExperience = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-
             <Col className="profile-driver__form-small" span={24}>
+              <Row gutter={24} className="selectTitle">
+                {" "}
+                <h4>Please select what kind of experience you have</h4>
+              </Row>
               <Row gutter={[24]} justify="space-between">
-                <Col span={12}>
+                <Col span={8}>
                   {swtichInputs.length >= 1 &&
-                    swtichInputs.map((inp) => {
+                    swtichInputs.map((inp, index) => {
                       return (
                         <Form.Item
                           className="formSwitch"
                           label={inp}
+                          key={index}
                           rules={[
                             {
                               required: false,
@@ -138,12 +167,13 @@ const FormExperience = (props) => {
                     })}
                 </Col>
 
-                <Col span={12}>
-                  {Object.keys(switchValues).map((inp) => {
+                <Col span={16}>
+                  {Object.keys(switchValues).map((inp, index) => {
                     return (
                       <Form.Item
                         name={switchValues[inp].name}
                         className="formNumber"
+                        key={index}
                         style={{
                           visibility: !switchValues[inp]["have"]
                             ? "collapse"
@@ -167,19 +197,45 @@ const FormExperience = (props) => {
                     );
                   })}
                 </Col>
-                <Form.Item>
-                  <Upload
-                    {...props.propsUpload}
-                    fileList={props.imageDln}
-                    beforeUpload={beforeUpload}
+                <Col
+                  span={24}
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Form.Item
+                    className="formSwitch"
+                    label={"Twic Card"}
+                    rules={[
+                      {
+                        required: false,
+                      },
+                    ]}
                   >
-                    <Button icon={<UploadOutlined />}>
-                      Add your DLN picture
-                    </Button>
-                  </Upload>
-                </Form.Item>
+                    <Switch
+                      onChange={(checked) => setTwicCard(checked)}
+                      name={"twicCard"}
+                      size="small"
+                      checkedChildren={"ON"}
+                      unCheckedChildren={"OFF"}
+                    />
+                  </Form.Item>
+                  <Form.Item style={{ paddingRight: "16px" }}>
+                    <Upload
+                      {...props.propsUpload}
+                      fileList={props.imageDln}
+                      beforeUpload={beforeUpload}
+                    >
+                      <Button icon={<UploadOutlined />}>
+                        Add your DLN picture
+                      </Button>
+                    </Upload>
+                  </Form.Item>
+                </Col>
               </Row>
-              <Form.Item label="Description" name="description">
+              <Form.Item
+                label="Description"
+                name="description"
+                style={{ paddingLeft: "16px", paddingRight: "16px" }}
+              >
                 <TextArea
                   rows={4}
                   placeholder="Tell us something about your background"
@@ -205,7 +261,7 @@ const FormExperience = (props) => {
           </Form>
         </Col>
       </Row>
-      <SpinnerComp active={props.loading} />
+      <SpinnerComp active={props.loading ? props.loading : false} />
     </div>
   );
 };
