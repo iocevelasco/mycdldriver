@@ -243,6 +243,7 @@ const StaffCompanyView = ({ user }) => {
       title: 'Phone',
       dataIndex: 'driver',
       key: 'rate',
+      width: '15%',
       render: (driver) => {
         return <span> {driver.areaCode}-{driver.phoneNumber} </span>
       },
