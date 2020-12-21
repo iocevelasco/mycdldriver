@@ -8,6 +8,9 @@ import {
   CarOutlined,
   DashboardOutlined,
   LeftOutlined,
+  UserAddOutlined,
+  HomeOutlined,
+  UserSwitchOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -32,7 +35,7 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
     {
       path: '/userProfile/company/profile',
       section_name: 'Profile',
-      icon: <UserOutlined />
+      icon: <HomeOutlined />
     },
     {
       path: '/userProfile/company/jobs',
@@ -42,12 +45,17 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
     {
       path: '/userProfile/company/candidate',
       section_name: 'Candidate',
-      icon: <TeamOutlined />
+      icon: <UserSwitchOutlined />
     },
     {
       path: '/userProfile/company/staff',
       section_name: 'Staff',
       icon: <TeamOutlined />
+    },
+    {
+      path: '/userProfile/company/add-driver',
+      section_name: 'Add Driver',
+      icon: <UserAddOutlined />
     },
   ]
 

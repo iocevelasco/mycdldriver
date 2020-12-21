@@ -24,7 +24,7 @@ class MyApp extends App {
     return (
       <NextContainer>
         <Provider store={reduxStore}>
-          <MainLayout {...this.state}>
+          <MainLayout title='My CDL Driver' {...this.state}>
             <Component {...this.state} />
           </MainLayout>
         </Provider>

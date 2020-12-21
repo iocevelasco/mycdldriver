@@ -21,7 +21,6 @@ function beforeUpload(file) {
 }
 
 const TagsComponent = (props) => {
-  console.log('props', props);
   const [stateOptions, isFetching] = ListState();
   const [inputVisible, setInputVisible] = useState(false);
   const [tags, setTags] = useState([]);
