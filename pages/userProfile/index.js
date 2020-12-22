@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import MainLayout from '../../components/layout';
+import MainLayout from '../';
 import { WrapperSection } from 'components/helpers';
 
 import {
