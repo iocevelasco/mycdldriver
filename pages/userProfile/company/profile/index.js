@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, notification, message } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import FormUserCompany from 'components/FormUserCompany';
+import FormUserCompany from './FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
@@ -60,8 +60,8 @@ const CompanyProfileView = ({ user, ...props }) => {
   const beforeToCreateProfile = async (fields, type) => {
     setLoader(true);
     try {
-      const { google_id, facebook_id, photo, email, name, lastname } = props.user;
-      const { tradename, legalNumber, address, address2, areaCode, zipCode, state, city } = fields;
+      const { google_id, facebook_id, photo, email, name, lastname } = user;
+      const { phoneNumber, tradename, legalNumber, address, address2, areaCode, zipCode, state, city, password } = fields;
 
       let base = {}
       let company = {}
@@ -86,7 +86,6 @@ const CompanyProfileView = ({ user, ...props }) => {
 
       company.tradename = tradename;
       company.legalNumber = legalNumber;
-
       company.phoneNumber = phoneNumber;
       company.password = password;
       company.city = city;
@@ -106,12 +105,16 @@ const CompanyProfileView = ({ user, ...props }) => {
   }
 
   const newCompany = async (fields) => {
-    const { base, company } = beforeToCreateProfile(fields, 'create');
+    const { base, company } = await beforeToCreateProfile(fields, 'create');
     const fullCompany = { base: base, ...company };
     try {
       const { data } = await axios.post('/api/company', fullCompany);
       setLoader(false);
-      props.handlreNewUserProps(data.data);
+      let create = {
+        user: data.data.user,
+        company: data.data.company
+      };
+      props.handlreNewUserProps(create);
       notification['success']({
         message: 'Success',
         description:
@@ -129,16 +132,14 @@ const CompanyProfileView = ({ user, ...props }) => {
   };
 
   const updateCompany = async (fields) => {
-    const { base, company } = beforeToCreateProfile(fields, 'update');
+    const { base, company } = await beforeToCreateProfile(fields, 'update');
     const fullCompany = { base: base, ...company };
     try {
       const { data } = await axios.patch('/api/company/' + props._id, fullCompany, header);
-
       let update = {
         user: data.data.user,
-        company: data.data.foundCompany
+        company: data.data.company
       };
-
       props.handlreNewUserProps(update);
       setLoader(false);
       notification['success']({
@@ -148,7 +149,7 @@ const CompanyProfileView = ({ user, ...props }) => {
       });
     } catch (err) {
       console.log(err);
-      dispatch({ type: types.LOADING, payload: false });
+      setLoader(false);
       notification['error']({
         message: 'error',
         description:

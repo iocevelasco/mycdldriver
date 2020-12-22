@@ -66,6 +66,7 @@ function getCurrentLocation(location) {
 
 function updateUserCompany(props) {
   let { user, company } = props;
+
   return {
     type: types.UPDATE_USER_COMPANY,
     payload: { ...user, company: company },

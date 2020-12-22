@@ -1,9 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from '../components/layout';
 import { Row, Col, Typography, Input, Select, Button, Tooltip } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
-import CarouselComp from '../components/carousel';
+import CarouselComp from 'components/carousel';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import queryString from "query-string";

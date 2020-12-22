@@ -45,11 +45,6 @@ const FormUserCompany = (props) => {
     token,
   } = props;
 
-
-  const onChangeProps = (changedFields, allFields) => {
-    onChangeCompany(allFields);
-  }
-
   const resolveImageProfile = (imageProfile, photoProfile) => {
     try {
       return {
@@ -63,7 +58,7 @@ const FormUserCompany = (props) => {
   }
 
   const { avatar } = resolveImageProfile(imageProfile, props.photoProfile)
-  console.log('avatar', avatar)
+
   return (
     <div className='profile-driver'>
       <Form
@@ -71,15 +66,12 @@ const FormUserCompany = (props) => {
         form={form}
         onFinish={!props.isUserRegistry ? newCompany : updateCompany}
         name="global_state"
-        layout='vertical'
-        onFieldsChange={onChangeProps} >
+        layout='vertical' >
 
         <Row justify='center'>
           <Col className='profile-driver__form' span={20}>
             <Row justify='center'>
               <ImageProfile
-                arr={arr}
-                setArr={setArr}
                 imageProfile={avatar}
                 setImageProfile={setImageProfile}
                 fileList={fileList}

@@ -106,21 +106,19 @@ const DriverExperience = (props) => {
     }
   };
   return (
-    <MainLayout title="Experience">
-      <Row display="flex" justify="center">
-        <SideNav currentLocation="2" />
-        <Col span={20}>
-          <WrapperSection styles={stylesWrapper} row={22} mt={0}>
-            <FormExperience
-              fields={fields}
-              propsUpload={propsUpload}
-              loading={false}
-              onSubmitExperience={onSubmitExperience}
-            />
-          </WrapperSection>
-        </Col>
-      </Row>
-    </MainLayout>
+    <Row display="flex" justify="center">
+      <SideNav currentLocation="2" />
+      <Col span={20}>
+        <WrapperSection styles={stylesWrapper} row={22} mt={0}>
+          <FormExperience
+            fields={fields}
+            propsUpload={propsUpload}
+            loading={false}
+            onSubmitExperience={onSubmitExperience}
+          />
+        </WrapperSection>
+      </Col>
+    </Row>
   );
 };
 
