@@ -1,24 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Row,
-  Col,
-  Input,
-  Avatar,
-  Form,
-  Button,
-  Upload,
-  Drawer,
-  InputNumber,
-  Radio,
-  DatePicker,
-  notification,
-  message
-} from 'antd';
-import {
-  updateUserDrive
-} from '@store/reducers/user_reducer';
+import { Row, Col, Input, Form, Button, InputNumber, Select } from 'antd';
+import { updateUserDrive } from '@store/reducers/user_reducer';
 import { SpinnerComp } from 'components/helpers';
-
+import useJobsByCompany from '@hooks/useJobsByCompany';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 
@@ -35,8 +20,10 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-const NewDriverForm = ({ addNewDriver, loader, ...props }) => {
+const NewDriverForm = ({ addNewDriver, header, loader, ...props }) => {
   const [form] = Form.useForm();
+  const [reload, setReload] = useState(false);
+  const [jobsByCompany, isFetching] = useJobsByCompany(header, reload, setReload);
 
   return (
     <div className='add-driver'>
@@ -48,11 +35,35 @@ const NewDriverForm = ({ addNewDriver, loader, ...props }) => {
             name="new_driver"
             layout='vertical'>
 
-            <Row gutter={[24]} justify='space-between' >
-              <Col span={24}>
+            <Row gutter={[24]} justify='center'  >
+              <Col span={22}>
+                <Form.Item
+                  name="job"
+                  label="Select Job"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Job is required!',
+                    },
+                  ]}>
+                  <Select
+                    showSearch
+                    style={{ width: '100%' }}
+                    placeholder="Select Job"
+                    optionFilterProp="children"
+                  >
+                    {
+                      jobsByCompany.map(e => {
+                        return <Option value={e._id}>{e.title}</Option>
+                      })
+                    }
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={22}>
                 <Form.Item
                   name="name"
-                  label="Name"
+                  label="Driver name"
                   rules={[
                     {
                       required: true,
@@ -62,7 +73,7 @@ const NewDriverForm = ({ addNewDriver, loader, ...props }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={24}>
+              <Col span={22}>
                 <Form.Item
                   name="lastname"
                   label="Last Name"
@@ -75,9 +86,7 @@ const NewDriverForm = ({ addNewDriver, loader, ...props }) => {
                   <Input />
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={[24]} justify='space-between' align='middle'>
-              <Col span={24}>
+              <Col span={22}>
                 <Form.Item
                   name="email"
                   label="Email"
@@ -90,7 +99,7 @@ const NewDriverForm = ({ addNewDriver, loader, ...props }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={24}>
+              <Col span={22}>
                 <Form.Item
                   label='Dln'
                   name="dln"
@@ -106,8 +115,6 @@ const NewDriverForm = ({ addNewDriver, loader, ...props }) => {
                     style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button
                   style={{ marginTop: 24 }}
@@ -121,7 +128,7 @@ const NewDriverForm = ({ addNewDriver, loader, ...props }) => {
           </Form>
         </Col>
       </Row>
-      <SpinnerComp active={loader} />
+      <SpinnerComp active={isFetching} />
     </div >
   )
 }

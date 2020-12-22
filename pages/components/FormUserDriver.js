@@ -18,7 +18,7 @@ import {
   updateUserDrive
 } from '@store/reducers/user_reducer';
 import { SpinnerComp } from 'components/helpers';
-import UploadImage from 'components/UploadImage';
+import { ImageProfile } from 'components/UploadImages';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -31,7 +31,7 @@ function mapStateToProps(state) {
   const { user } = state;
   return {
     user: user,
-    photo: user.photo || '',
+    photoProfile: user.photo || '',
     facebook_id: user.facebook_id || '',
     google_id: user.google_id || '',
     _id: user._id || null,
@@ -47,45 +47,37 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-const DriverUser = (props) => {
+const DriverUser = ({user, ...props}) => {
   const { router } = props;
   const [form] = Form.useForm();
-  const [photo, setPhoto] = useState([]);
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
-
-  useEffect(() => {
-    let fields = [];
-
-    for (let key in props.user) {
-      let inputs = {
-        name: [key],
-        value: props.user[key]
-      }
-      fields.push(inputs);
-    }
-
-    for (let key in props.user.driver) {
-      if (key == "birthDate" || key == "expDateDln") {
-        let inputs = {
-          name: [key],
-          value: moment(props.user.driver[key])
-        }
-        fields.push(inputs);
-      } else {
-        let inputs = {
-          name: [key],
-          value: props.user.driver[key]
-        }
-        fields.push(inputs);
-      }
-    }
-    setFields(fields);
-  }, []);
+  const [imageProfile, setImageProfile] = useState(null);
 
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
+
+    useEffect(() => {
+    let fields = [];
+
+    for (let key in user) {
+      let inputs = {
+        name: [key],
+        value: user[key]
+      }
+      fields.push(inputs);
+    }
+
+    for (let key in user.company) {
+      let inputs = {
+        name: [key],
+        value: user.company[key]
+      }
+      fields.push(inputs);
+    }
+    setFields(fields);
+  }, []);
 
   const saveApply = async () => {
     const apply = {
@@ -163,7 +155,7 @@ const DriverUser = (props) => {
   const beforeToCreateProfile = async (fields, type) => {
     setLoader(true);
     try {
-      const { google_id, facebook_id, photo, email } = props.user;
+      const { google_id, facebook_id, photo, email } = user;
       const { name, dln, lastname, zipCode, state, sex, phoneNumber, password, confirm, city, birthDate, areaCode, address2, address } = fields;
 
       let base = {}
@@ -173,13 +165,13 @@ const DriverUser = (props) => {
         base.name = name;
         base.lastname = lastname;
         base.typeUser = 1;
-
+        base.photo = imageProfile ? imageProfile.data.file : photo;
       }
       if (type === 'create') {
         base.name = name;
         base.lastname = lastname;
         base.typeUser = 1;
-        base.photo = photo;
+        base.photo = imageProfile ? imageProfile.data.file : photo;
         base.email = email;
         base.google_id = google_id;
         base.facebook_id = facebook_id;
@@ -209,34 +201,37 @@ const DriverUser = (props) => {
     }
   }
 
-  const onChangeProps = (changedFields, allFields) => {
-    setFields(allFields);
+  const resolveImageProfile = (imageProfile, photoProfile) => {
+    try {
+      return {
+        avatar: imageProfile ? imageProfile.data.file : photoProfile
+      }
+    } catch (err) {
+      return {
+        avatar: photoProfile
+      }
+    }
   }
+
+  const { avatar } = resolveImageProfile(imageProfile, props.photoProfile)
 
   return (
     <div className='profile-driver'>
       <Row justify='center'>
         <Col className='profile-driver__form' span={24}>
           <Row justify='center'>
-            <div className='avatar'>
-              <UploadImage
-                fileList={photo}
-                setFileList={setPhoto} />
-              <Avatar src={props.photo} size={120} />
-              <Button
-                type='primary'
-                size='small'
-                shape="circle"
-                icon={<RetweetOutlined />} />
-            </div>
+            <ImageProfile
+              imageProfile={avatar}
+              setImageProfile={setImageProfile}
+              token={props.token}
+            />
           </Row>
           <Form
             fields={fields}
             form={form}
             onFinish={props.isUserRegistry ? updateDriver : newDrivers}
             name="global_state"
-            layout='vertical'
-            onFieldsChange={onChangeProps}>
+            layout='vertical'>
 
             <Row gutter={[24]} justify='space-between' >
               <Col span={12}>
@@ -400,7 +395,7 @@ const DriverUser = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <AddressInputs stateId={props.user.driver.state} />
+            <AddressInputs stateId={user.driver.state} />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button

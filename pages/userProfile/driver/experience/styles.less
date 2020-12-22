@@ -1,9 +1,54 @@
-.driver-experience{
-  padding:16px;
-  border:1px solid #cecec3;
+.driver-experience {
+  padding: 16px;
+  border: 1px solid #cecec3;
   background: #fff;
 }
 
-.driver-experience--form{
-  
+.driver-experience--form {
+}
+
+.formSwitch {
+  padding-left: 16px;
+  display: flex;
+  flex-direction: row !important ;
+  .ant-switch {
+    margin-left: 32px !important ;
+    margin-top: 6px;
+  }
+}
+
+.formNumber {
+  display: flex;
+  flex-direction: row !important;
+  .ant-form-item-control {
+    padding-left: 32px;
+  }
+  .ant-form-item-control-input-content {
+    display: flex;
+    align-items: flex-end;
+    /* justify-content: center; */
+    margin-top: 6px;
+    & .ant-input-number {
+      height: 20px;
+      .ant-input-number-input {
+        height: 100% !important;
+      }
+    }
+  }
+}
+
+.selectTitle {
+  margin-right: -12px;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-left: 0px !important;
+  margin-bottom: 24px;
+  h4 {
+    padding-left: 16px;
+  }
+}
+
+.ant-form-item-label {
+  width: 150px !important;
 }

@@ -1,0 +1,32 @@
+{
+    "Tamk endorsed":  {
+        "name": "Tamk endorsed",
+        "have": false,
+        "years": 0
+      },
+      "Hazmat": {
+        "name": "Hazmat",
+        "have": false,
+        "years": 0
+      },
+      "Referred loads":{
+        "name": "Referred loads",
+        "have": false,
+        "years": 0
+      },
+      "Van": {
+        "name": "Van",
+        "have": false,
+        "years": 0
+      },
+      "Car Carrier":{
+        "name": "Car Carrier",
+        "have": false,
+        "years": 0
+      },
+      "Flat Bed":{
+        "name": "Flat Bed",
+        "have": false,
+        "years": 0
+      }
+}

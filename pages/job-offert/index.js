@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import MainLayout from '../../components/layout';
 import {
   Row,
   Col,
@@ -145,7 +144,6 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
 
   return (
     <>
-      <MainLayout title='Welcome'>
         <WrapperSection row={22} mt={0}>
           <div className='job-offert'>
             <Row>
@@ -285,7 +283,6 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
               </Button>} />
           </Drawer>
         </WrapperSection>
-      </MainLayout>
     </>
   )
 }

@@ -85,7 +85,7 @@ async function getJobs(filterCompany) {
             company: job.company,
             typeUser: 2
         }).select('-tokens')
-            .populate('company');
+        .populate('company');
         try {
             resp.company = {
                 _id: findComp.company._id,
@@ -108,6 +108,34 @@ async function getJobs(filterCompany) {
     }));
     result = result.filter(Boolean);
     return result;
+}
+
+async function getJob(idJob){
+    if(!idJob){
+        return {
+            status: 400,
+            message: 'No Id recived'
+        }
+    }
+    try{
+        job = await JobsModel.findOne({_id: idJob})
+        .select("-__v")
+        .populate('city')
+        .populate('state')
+        .populate('company')
+        .populate('tags');
+        return {
+            status: 200,
+            message: job
+        }
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
+    
 }
 
 function getApplyJobs(filterQuery) {
@@ -258,6 +286,8 @@ async function getStaffCompanyJobs(query) {
             .select('name lastname photo date email')
             .populate('driver');
         let resDriver = null;
+        let completeFelds = 5;
+        let totalFelds = 16;
         if (userDriver) {
             resDriver = {
                 id: userDriver._id,
@@ -268,6 +298,41 @@ async function getStaffCompanyJobs(query) {
                 date: userDriver.date,
                 driver: userDriver.driver
             };
+            if(userDriver.driver.expDateDln){
+                completeFelds ++;
+            }
+            if(userDriver.driver.birthDate){
+                completeFelds ++;
+            }
+            if(userDriver.driver.imageDln){
+                completeFelds ++;
+            }
+            if(userDriver.driver.areaCode){
+                completeFelds ++;
+            }
+            if(userDriver.driver.phoneNumber){
+                completeFelds ++;
+            }
+            if(userDriver.driver.sex){
+                completeFelds ++;
+            }
+            if(userDriver.driver.rating){
+                completeFelds ++;
+            }
+            if(userDriver.driver.zipCode){
+                completeFelds ++;
+            }
+            if(userDriver.driver.description){
+                completeFelds ++;
+            }
+            if(userDriver.driver.address){
+                completeFelds ++;
+            }
+            if(userDriver.driver.address2){
+                completeFelds ++;
+            }
+            const completeProfile = completeFelds * 100 / totalFelds;
+            resDriver.completeProfile = completeProfile;
             const filterJob = {
                 driver: response,
                 company: id,
@@ -341,12 +406,17 @@ async function applyJob(job) {
                 status: 200,
                 message: 'Ok'
             };
+        }else{
+            return {
+                status: 400,
+                message: 'No apply saved'
+            };
         }
     } catch (e) {
-        console.log(e);
         return {
             status: 500,
-            message: 'Invalid data recived for apply job'
+            message: 'Invalid data recived for apply job',
+            detail: e
         };
     }
 }
@@ -455,6 +525,7 @@ async function deleteJob(id, company) {
 
 module.exports = {
     list: getJobs,
+    getJob,
     add: addJob,
     update: updateJob,
     delete: deleteJob,

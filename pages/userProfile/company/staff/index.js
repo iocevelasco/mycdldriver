@@ -1,12 +1,13 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import MainLayout from 'components/layout';
-import { Row, Col, List, Space, Avatar, notification, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon } from 'antd';
+import { Row, Col, Progress, List, Space, Avatar, notification, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon, Drawer } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
 import { StarFilled } from '@ant-design/icons';
+import NewDriverForm from './FormNewDriver';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import "./styles.less";
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
@@ -14,6 +15,7 @@ const initialState = {
   loading: true,
   modalVisible: false,
   loadingModal: false,
+  drawerVisible: false,
   jobs: [],
   staffList: [],
   ranking: {
@@ -32,7 +34,8 @@ const types = {
   ACTIVE_LOADING: 'active_loading',
   SHOW_MODAL: 'show_modal',
   SET_RANKING: 'set_ranking',
-  CLOSE_MODAL: 'close_modal'
+  CLOSE_MODAL: 'close_modal',
+  DRAWER_VISIBLE: 'drawer_visible'
 }
 
 function mapStateToProps(state) {
@@ -76,12 +79,17 @@ const reducer = (state, action) => {
         staffList: action.payload,
         loading: false
       }
+    case types.DRAWER_VISIBLE:
+      return {
+        ...state,
+        drawerVisible: !state.drawerVisible
+      }
     default:
       throw new Error('Unexpected action');
   }
 }
 
-const TeamCompanyView = ({ user }) => {
+const StaffCompanyView = ({ user }) => {
   const [form] = Form.useForm();
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
@@ -101,14 +109,46 @@ const TeamCompanyView = ({ user }) => {
       .catch((error) => console.log(error));
   };
 
-  const configSection = {
-    title: 'Our Drivers',
-    user: { user },
-    loading: state.loading,
+  const addNewDriver = async (fields) => {
+    const { newDriver } = await beforeToCreateProfile(fields);
+    await axios.post('/api/driver/staff/new', newDriver, header)
+      .then((response) => {
+        notification['success']({
+          message: 'Success',
+          description:
+            "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
+        });
+        onCloseDrawer();
+        fetchStaffList();
+      })
+      .catch((err) => {
+        console.log('[ user registry error ]', err);
+        notification['error']({
+          message: 'error',
+          description:
+            "Sorry! We couldn't create this user, please try again. "
+        });
+      })
+  }
+
+  const beforeToCreateProfile = async (fields) => {
+    try {
+      const { name, dln, lastname, email, job } = fields;
+      let newDriver = {}
+      newDriver.name = name;
+      newDriver.lastname = lastname;
+      newDriver.email = email;
+      newDriver.dln = dln;
+      newDriver.job = job;
+      return {
+        newDriver,
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const stylesWrapper = {
-    background: `url('/static/images/bg-routes.jpg')`,
     paddingTop: 24,
     paddingBottom: 24,
     minHeight: '90vh',
@@ -116,7 +156,6 @@ const TeamCompanyView = ({ user }) => {
   }
 
   const showRate = (job, user) => {
-    console.log('job', job);
     const { title, _id, apply } = job;
     const { name, lastname, photo } = user;
 
@@ -156,18 +195,26 @@ const TeamCompanyView = ({ user }) => {
       })
   }
 
+  const openDrawer = () => {
+    dispatch({ type: types.DRAWER_VISIBLE });
+  };
+
+  const onCloseDrawer = () => {
+    dispatch({ type: types.DRAWER_VISIBLE });
+  }
+
   const columns = [
     {
       title: 'Name',
       dataIndex: 'photo',
       key: 'photo',
       width: '10%',
-      render: url => <Avatar size={80} src={url} />
+      render: url => <Avatar size={60} src={url} />
     },
     {
       dataIndex: 'name',
       key: 'name',
-      width: '15%',
+      width: '10%',
       render: ((n, item) => {
         const { name, lastname } = item
         return <span> {`${name} ${lastname}`} </span>
@@ -180,7 +227,10 @@ const TeamCompanyView = ({ user }) => {
       render: (driver) => {
         return (
           <Space >
-            <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />
+            {(driver.rating == 0) ? 
+            <StarFilled style={{ fontSize: '24px', color: '#d3d3d3' }} /> :
+            <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />}
+            
             <span> {driver.rating} </span>
           </Space>
         )
@@ -195,8 +245,38 @@ const TeamCompanyView = ({ user }) => {
       title: 'Phone',
       dataIndex: 'driver',
       key: 'rate',
+      width: '15%',
       render: (driver) => {
-        return <span> {driver.phoneNumber} </span>
+        return <span> {driver.areaCode}-{driver.phoneNumber} </span>
+      },
+    },
+    {
+      title: 'dln',
+      dataIndex: 'driver',
+      align: 'center',
+      key: 'dln',
+      render: (driver) => {
+        return (
+          <Space >            
+            <span> {driver.dln} </span>
+          </Space>
+        )
+      }
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      align: 'center',
+      key: 'status',
+    },
+    {
+      title: 'Percentage complete',
+      dataIndex: 'completeProfile',
+      align: 'center',
+      key: 'completeProfile',
+      render: (n, item) => {
+        console.log('item', item);
+        return <Progress percent={item.completeProfile} />
       }
     },
   ];
@@ -214,7 +294,21 @@ const TeamCompanyView = ({ user }) => {
         <SideNav
           currentLocation='3' />
         <Col span={20}>
-          <WrapperSection row={22} styles={stylesWrapper}>
+          <WrapperSection row={23} styles={stylesWrapper}>
+            <Row justify='space-between' align='middle' className='add-new-driver--header'>
+              <Col span={8}>
+                <Title level={4}> Driver's status </Title>
+              </Col>
+              <Col span={4}>
+                <Button
+                  type='primary'
+                  shape="round"
+                  size="large"
+                  onClick={openDrawer}>
+                  Create invitation
+                </Button>
+              </Col>
+            </Row>
             <Card>
               <Table
                 rowKey='id'
@@ -323,8 +417,21 @@ const TeamCompanyView = ({ user }) => {
           </Form>
         </Row>
       </Modal>
+      <Drawer
+        title='Add new driver'
+        placement="right"
+        closable={true}
+        width={480}
+        onClose={onCloseDrawer}
+        visible={state.drawerVisible}>
+        <NewDriverForm
+          addNewDriver={addNewDriver}
+          loader={state.loading}
+          header={header}
+        />
+      </Drawer>
     </>
   )
 };
 
-export default withRouter(connect(mapStateToProps)(TeamCompanyView));
+export default withRouter(connect(mapStateToProps)(StaffCompanyView));

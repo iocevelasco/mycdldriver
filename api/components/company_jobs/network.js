@@ -28,7 +28,7 @@ router.post('/myjobs', auth(), function (req, res) {
     if(req.user.typeUser == 1){
         query = {driver: req.user._id};
     }else{
-        query = {company: req.user.company};
+        query = {company: req.user.company._id};
     }
     controller.getJobsApply(query)
     .then((customList) => {
@@ -39,7 +39,7 @@ router.post('/myjobs', auth(), function (req, res) {
 });
 
 router.post('/applys', auth(2), function (req, res) {
-    let query = {company: req.user.company};
+    let query = {company: req.user.company._id};
     controller.getCompanyJobsApply(query)
     .then((list) => {
         response.success(req, res, list, 200);
@@ -49,7 +49,7 @@ router.post('/applys', auth(2), function (req, res) {
 });
 
 router.get('/staff', auth(2), function (req, res) {
-    let query = {company: req.user.company};
+    let query = {company: req.user.company._id};
     controller.getCompanyStaffApply(query)
     .then((list) => {
         response.success(req, res, list, 200);
@@ -75,7 +75,7 @@ router.post('/detail', function (req, res) {
 
 router.get('/private', auth(2), function (req, res) {
     const filter = {
-        company: req.user.company || null
+        company: req.user.company._id || null
     };
     controller.getJob(filter)
     .then((jobList) => {
@@ -86,7 +86,7 @@ router.get('/private', auth(2), function (req, res) {
 });
 
 router.post('/', auth(2), function (req, res) {
-    controller.addJob(req.body, req.user.company)
+    controller.addJob(req.body, req.user.company._id)
     .then((Job) => {
         response.success(req, res, Job, 201);
     }).catch(e => {
@@ -156,8 +156,7 @@ router.patch('/change_rank', auth(2), function (req, res) {
 });
 
 router.patch('/:id', auth(2), function (req, res){
-    console.log('[NETWORK]', req.body);
-    controller.updateJob(req.params.id, req.body, req.user.company)
+    controller.updateJob(req.params.id, req.body, req.user.company._id)
         .then((data) => {
             response.success(req, res, data, 200);
         })
@@ -168,7 +167,7 @@ router.patch('/:id', auth(2), function (req, res){
 });
 
 router.delete('/:id', auth(2), function (req, res) {
-    controller.deleteJob(req.params.id, req.user.company)
+    controller.deleteJob(req.params.id, req.user.company._id)
         .then((data) => {
             response.success(req, res, data, 200);
         })

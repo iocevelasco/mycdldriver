@@ -27,7 +27,7 @@ import {
 }
     from '@ant-design/icons';
 
-import '../styles/index.less';
+import '@styles/index.less';
 
 const { Text } = Typography;
 const { Content, Header } = Layout;

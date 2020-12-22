@@ -1,4 +1,5 @@
 const store = require('./store');
+const storeJob = require('../company_jobs/store');
 const config = require('../../config');
 const mailer = require('../../middelware/mailer');
 
@@ -54,6 +55,12 @@ function addDriver(driver) {
         const driverResolve = store.add(user);
         switch (driverResolve.status) {
             case 201:
+                mailer(
+                    user.email, 
+                    'Welcome to MyCDL Driver!', 
+                    `Your profile has been created , you can now start searching for your next job.`,
+                    `Tip: For a better experience , remember to maintain your profile up to date. You can edit your profile here! [url] 
+                    <p>Have a great at day , My CDL Driver Team.</p>`);
                 resolve(driverResolve);
                 break;
             case 500:
@@ -210,7 +217,6 @@ async function checkDriver(mail) {
 }
 
 async function addStaff(user, company) {
-    console.log('[ COMPANY ]', company);
     if (!user) {
         return {
             status: 400,
@@ -218,21 +224,79 @@ async function addStaff(user, company) {
         }
     }
 
-    user.typeUser = 1;
-    user.photo = 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png';
-
-    try {
-        const newStaff = await store.addStaff(user);
-        if(newStaff.status == 201){
-            const url = config.host + '/' + config.port + '/driver/complete_register/' + newStaff.message.user.token;
-            mailer(
-                user.email, 
-                'Invitacion a MYCDL Driver', 
-                `The ${company.tradename} Company has invited you to join its Staff`,
-                `Follow the link below to complete your registration: <a href='${url}'>${url}</a>`)
+    try{
+        const userFound = await store.check(user.email);
+        if (userFound) {
+            if (userFound.typeUser == 1) {
+                try{
+                    const foundJob = await storeJob.getJob(user.job);
+                    if(foundJob.status == 200){
+                        const jobResult = foundJob.message;
+                        if(!foundJob){
+                            return {
+                                status: 404,
+                                message: 'Job not found'
+                            }
+                        }
+                        const applyJob = {
+                            company: company._id,
+                            driver: userFound._id,
+                            job: jobResult._id,
+                            status: 1
+                        };
+                        try{
+                            return await storeJob.applyJob(applyJob);
+                        }catch(e){
+                            return {
+                                status: 400,
+                                message: 'Error: apply job error',
+                                detail: e
+                            }
+                        }
+                    }else{
+                        return foundJob;
+                    }
+                    
+                }catch(e){
+                    return {
+                        status: 400,
+                        message: 'Error: find job error',
+                        detail: e
+                    }
+                }
+                
+            }else{
+                return {
+                    status: 400,
+                    message: 'The user is already registered as a company'
+                }
+            }
+        }else{
+            user.typeUser = 1;
+            user.photo = 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png';
+        
+            try {
+                const newStaff = await store.addStaff(user);
+                if(newStaff.status == 201){
+                    const url = config.host + '/' + config.port + '/driver/complete_register/' + newStaff.message.user.token;
+                    mailer(
+                        user.email, 
+                        'Invitation to MYCDL Driver', 
+                        `Hello ${user.name} ${user.lastname}! We welcome you to MyCDL Driver.`,
+                        `${company.tradename} wants you to be part of their Drivers Staff, all you need to do is complete you information.
+                        Here <a href='${url}'>${url}</a> you can do it in two simple steps. 
+                        <p>Have a great at day , My CDL Driver Team.</p>`);
+                }
+                return newStaff;
+            } catch (e) {
+                return {
+                    status: 500,
+                    message: 'Unexpected error',
+                    detail: e
+                }
+            }
         }
-        return newStaff;
-    } catch (e) {
+    }catch(e){
         return {
             status: 500,
             message: 'Unexpected error',

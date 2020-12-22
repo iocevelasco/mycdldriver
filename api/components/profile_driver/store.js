@@ -236,8 +236,7 @@ async function addStaff(user){
         if(!foundJob){
             return {
                 status: 404,
-                message: 'Job not found',
-                detail: e
+                message: 'Job not found'
             }
         }
     }catch(e){

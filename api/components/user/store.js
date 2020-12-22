@@ -40,6 +40,43 @@ async function getUser(type){
     
 }
 
+async function getOneUser(id){
+    let filter = {};
+    if(id !== null){
+        filter = {
+            _id: id,
+        };
+    }
+    try{
+        const list = await User.findOne(filter)
+        .select('name lastname photo date email')
+        .populate('driver')
+        .populate({
+            path: 'company',
+            model: 'ProfileCompany',
+            populate: [{
+                path: 'state',
+                select: 'stateName'
+            },
+            {
+                path: 'city',
+                select: 'cityName'
+            }]
+        });
+        return {
+            status: 200,
+            message: list
+        };
+    }catch(e){
+        return {
+            status: 500,
+            message: "Unexpected error",
+            detail: e
+        };
+    }
+    
+}
+
 async function setPrelogin(data){
     let prelogin = new Prelogin(data);
     const userlogin = await Prelogin.findOneAndUpdate(
@@ -241,6 +278,7 @@ async function logoutAll(id){
 
 module.exports = {
     list: getUser,
+    oneUser: getOneUser,
     delete: deleteUser,
     login: loginUser,
     logout: logoutUser,

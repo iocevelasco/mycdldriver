@@ -15,8 +15,9 @@ module.exports = withLess({
     modifyVars: themeVariables, // antd custom color
   },
   webpack: (config, { isServer }) => {
-    config.resolve.alias['components'] = path.resolve('./components');
+    config.resolve.alias['components'] = path.resolve('./pages/components');
     config.resolve.alias['@hooks'] = path.resolve('./pages/hooks');
+    config.resolve.alias['@styles'] = path.resolve('./styles');
     config.resolve.alias['@store'] = path.resolve('./store');
     config.resolve.alias['@utils'] = path.resolve('./pages/utils');
 

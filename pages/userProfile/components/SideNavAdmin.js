@@ -51,41 +51,9 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
       path: '/userProfile/company/staff',
       section_name: 'Staff',
       icon: <TeamOutlined />
-    },
-    {
-      path: '/userProfile/company/add-driver',
-      section_name: 'Add Driver',
-      icon: <UserAddOutlined />
-    },
+    }
   ]
 
-  // const companyOption = [
-  //   {
-  //     path: '/userProfile/company',
-  //     section_name: 'Home',
-  //     icon: <HomeOutlined />
-  //   },
-  //   {
-  //     path: '/userProfile/company/profile',
-  //     section_name: 'Profile',
-  //     icon: <UserOutlined />
-  //   },
-  //   {
-  //     path: '/userProfile/company/team',
-  //     section_name: 'Team',
-  //     icon: <TeamOutlined />
-  //   },
-  //   {
-  //     path: '/userProfile/company/services',
-  //     section_name: 'Services',
-  //     icon: <ToolOutlined />
-  //   },
-  //   {
-  //     path: '/userProfile/company/jobs',
-  //     section_name: 'Jobs',
-  //     icon: <TeamOutlined />
-  //   },
-  // ]
 
   const driverOption = [
     {
@@ -104,23 +72,7 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
       icon: <CarOutlined />
     }
   ]
-  // const driverOption = [
-  //   {
-  //     path: '/userProfile/driver',
-  //     section_name: 'Home',
-  //     icon: <HomeOutlined />
-  //   },
-  //   {
-  //     path: '/userProfile/driver/profile',
-  //     section_name: 'Profile',
-  //     icon: <UserOutlined />
-  //   },
-  //   {
-  //     path: '/userProfile/driver/myJobs',
-  //     section_name: 'My Jobs',
-  //     icon: <DashboardOutlined />
-  //   },
-  // ]
+
   return (
     <Col span={4}
       style={{ background: '#001529' }}>

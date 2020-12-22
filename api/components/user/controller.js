@@ -15,6 +15,20 @@ async function getUsers(filterUsers){
         
 }
 
+async function getUser(id){
+    try{
+        const result = await store.oneUser(id);
+        return result;
+    }catch(e){
+        return {
+            status: 500,
+            message: "Unexpected error",
+            detail: e
+        };
+    }
+        
+}
+
 function setPhoto(id, photo){
     return new Promise((resolve, reject) => {
         resolve(store.updatePhoto(id, photo));
@@ -148,6 +162,7 @@ function getPrelogin(ip){
 
 module.exports = {
     getUsers,
+    getUser,
     deleteUser,
     loginUser,
     logoutUser,
