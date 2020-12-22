@@ -2,6 +2,7 @@ const { TagsModel, JobsModel, JobsApplysModel } = require('./model');
 const { User } = require('../user/model');
 const ProfileCompany = require('../profile_company/model');
 const ProfileDriver = require('../profile_driver/model');
+const {CitiesModel} = require('../cities/model');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -370,17 +371,24 @@ async function getStaffCompanyJobs(query) {
 
 async function getCustomList() {
     const titles = await JobsModel.find({}).select("title");
-    //const citys = await JobsModel.find({}).distinct('city');
+    const citys = await JobsModel.find().distinct('city');
     const companys = await ProfileCompany.find({}).select("tradename");
     let titleArray = titles.map((job) => {
         return job.title;
     });
+    let citysArray = await Promise.all(citys.map(async (city) => {
+        const citie = await CitiesModel.findOne({_id: city});
+        return {
+            id: citie._id,
+            name: citie.cityName
+        };
+    }));
     let companyArray = companys.map((company) => {
         return company.tradename;
     });
     const listado = {
         title: titleArray,
-        citys: [],
+        citys: citysArray,
         company: companyArray
     };
 

@@ -372,19 +372,19 @@ router.post('/logoutall', auth(), async(req, res) => {
  });
 
  router.post('/me', auth(), function (req, res) {
-     controller.getUser(req.user._id)
-     .then((userList) => {
-         switch(userList.status){
-             case 200:
-                 response.success(req, res, userList.message, userList.status);
-                 break;
-             default:
-                 response.error(req, res, userList.message, userList.status, userList.detail);
-                 break;
-         }
-     }).catch(e => {
-         response.error(req, res, 'Unexpected Error', 500, e);
-     });
+    controller.getUser(req.user._id)
+    .then((userList) => {
+        switch(userList.status){
+            case 200:
+                response.success(req, res, userList.message, userList.status);
+                break;
+            default:
+                response.error(req, res, userList.message, userList.status, userList.detail);
+                break;
+        }
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
  });
 
 module.exports = router;
