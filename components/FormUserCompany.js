@@ -4,22 +4,19 @@ import {
   Row,
   Col,
   Input,
-  Avatar,
   Form,
   Button,
-  Upload,
   Typography,
   Select
 } from 'antd';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
-import { RetweetOutlined } from '@ant-design/icons';
+
 import { SpinnerComp } from 'components/helpers';
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 import AddressInputs from 'components/AddressInput';
-import axios from 'axios';
-const { Option } = Select;
-const { Title } = Typography;
+import { ImageProfile } from 'components/UploadImages';
+
 
 function mapStateToProps(state) {
   const { user } = state;
@@ -33,27 +30,40 @@ function mapStateToProps(state) {
   }
 }
 
-
-
 const FormUserCompany = (props) => {
   const [form] = Form.useForm();
-
+  const [arr, setArr] = useState([]);
+  const fileList = [];
   const {
     loading,
     onChangeCompany,
     fields,
     newCompany,
     updateCompany,
-    beforeUpload,
-    propsPhoto,
-    imageProfile } = props;
+    setImageProfile,
+    imageProfile,
+    token,
+  } = props;
 
 
   const onChangeProps = (changedFields, allFields) => {
     onChangeCompany(allFields);
   }
 
+  const resolveImageProfile = (imageProfile, photoProfile) => {
+    try {
+      return {
+        avatar: imageProfile ? imageProfile.data.file : photoProfile
+      }
+    } catch (err) {
+      return {
+        avatar: photoProfile
+      }
+    }
+  }
 
+  const { avatar } = resolveImageProfile(imageProfile, props.photoProfile)
+  console.log('avatar', avatar)
   return (
     <div className='profile-driver'>
       <Form
@@ -67,20 +77,14 @@ const FormUserCompany = (props) => {
         <Row justify='center'>
           <Col className='profile-driver__form' span={20}>
             <Row justify='center'>
-              <div className='avatar'>
-                <Avatar src={imageProfile ? imageProfile.data.file : props.photoProfile} size={120} />
-                <Upload {...propsPhoto}
-                  fileList={props.photo}
-                  showUploadList={false}
-                  beforeUpload={beforeUpload}
-                >
-                  <Button
-                    type='primary'
-                    size='small'
-                    shape="circle"
-                    icon={<RetweetOutlined />} />
-                </Upload>
-              </div>
+              <ImageProfile
+                arr={arr}
+                setArr={setArr}
+                imageProfile={avatar}
+                setImageProfile={setImageProfile}
+                fileList={fileList}
+                token={token}
+              />
             </Row>
             <Row gutter={[24]} justify='space-between' >
               <Col span={12}>

@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, notification, message } from 'antd';
 import axios from 'axios';
+import moment from 'moment';
 import FormUserCompany from 'components/FormUserCompany';
 import SideNav from '../../components/SideNavAdmin';
 import { withRouter } from 'next/router';
@@ -8,53 +9,10 @@ import { connect } from 'react-redux';
 import { updateUserCompany } from '@store/reducers/user_reducer';
 import { WrapperSection } from 'components/helpers';
 
-const initialState = {
-  loading: false,
-  userLogin: false,
-  fields: [],
-  logo: [],
-  photo: [],
-  imageProfile: null,
-}
-
-const types = {
-  CREATE_NEW_USER: 'create_new_user',
-  PROPS_COMPANY: 'props_company',
-  DATA_COMPANY: 'DATA_COMPANY',
-  LOADING: 'LOADING',
-  UPLOAD_IMAGE: 'UPLOAD_IMAGE',
-  UPLOAD_PHOTO: 'UPLOAD_PHOTO',
-  LOGIN_SUCCCESS: 'LOGIN_SUCCCESS',
-  UPLOAD_IMAGE_PROFILE: 'UPLOAD_IMAGE_PROFILE'
-}
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case types.DATA_COMPANY:
-      return { ...state, fields: action.payload }
-    case types.LOADING:
-      return { ...state, loading: action.payload }
-    case types.LOGIN_SUCCCESS:
-      return { ...state, userLogin: action.payload }
-    case types.UPLOAD_IMAGE:
-      return { ...state, logo: action.payload }
-    case types.UPLOAD_PHOTO:
-      return { ...state, photo: action.payload }
-    case types.UPLOAD_PHOTO:
-      return { ...state, photo: action.payload }
-    case types.UPLOAD_IMAGE_PROFILE:
-      return { ...state, imageProfile: action.payload }
-    default:
-      throw new Error('Unexpected action');
-  }
-}
-
-// CONNECT WITH REDUX
 function mapStateToProps(state) {
   const { user } = state;
   return {
     user: user,
-    photo: user.photo || '',
     _id: user._id || null,
     token: user.token || null,
     company: user.company || {},
@@ -68,8 +26,12 @@ function mapDispatchToProps(dispatch) {
   }
 };
 
-const CompanyProfileView = (props) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const CompanyProfileView = ({ user, ...props }) => {
+  const [imageProfile, setImageProfile] = useState(null);
+  const [loading, setLoader] = useState(false);
+  const [fields, setFields] = useState([]);
+
+
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
@@ -77,141 +39,78 @@ const CompanyProfileView = (props) => {
   useEffect(() => {
     let fields = [];
 
-    for (let key in props.user) {
+    for (let key in user) {
       let inputs = {
         name: [key],
-        value: props.user[key]
+        value: user[key]
       }
-      fields.push(inputs)
+      fields.push(inputs);
     }
 
-    for (let key in props.user.company) {
-      if (key != 'date') {
-        let inputs = {
-          name: [key],
-          value: props.user.company[key]
-        }
-        fields.push(inputs);
+    for (let key in user.company) {
+      let inputs = {
+        name: [key],
+        value: user.company[key]
       }
+      fields.push(inputs);
     }
-    dispatch({ type: types.DATA_COMPANY, payload: fields });
+    setFields(fields);
   }, []);
 
-  const onChangeCompany = (allFields) => {
-    dispatch({ type: types.DATA_COMPANY, payload: allFields });
-  }
+  const beforeToCreateProfile = async (fields, type) => {
+    setLoader(true);
+    try {
+      const { google_id, facebook_id, photo, email, name, lastname } = props.user;
+      const { tradename, legalNumber, address, address2, areaCode, zipCode, state, city } = fields;
 
-  const propsUpload = {
-    name: 'photo',
-    action: '/api/files',
-    headers: {
-      Authorization: `Bearer ${props.token}`
-    },
-    async onChange(info) {
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-      let fileList = [...info.fileList];
-      fileList = fileList.slice(-1);
-      fileList = fileList.map(file => {
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        return file;
-      });
+      let base = {}
+      let company = {}
 
-      if (state.logo.length > 0) {
-        try {
-          const file = {
-            foto: state.logo[0].response.data.file
-          };
-          await axios.post(`/api/files/delete`, file);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      dispatch({ type: types.UPLOAD_IMAGE, payload: fileList });
-    }
-  };
+      if (type === 'update') {
+        base.name = name;
+        base.lastname = lastname;
+        base.typeUser = 2;
+        base.photo = imageProfile ? imageProfile.data.file : photo;
 
-  const propsPhoto = {
-    name: 'logo',
-    action: '/api/files',
-    headers: {
-      authorization: `Bearer ${props.token}`
-    },
-    async onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
       }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
+      if (type === 'create') {
+        base.name = name;
+        base.lastname = lastname;
+        base.typeUser = 2;
+        base.photo = imageProfile ? imageProfile.data.file : photo;
+        base.email = email;
+        base.google_id = google_id;
+        base.facebook_id = facebook_id;
+        base.password = password;
       }
-      let fileList = [...info.fileList];
-      fileList = fileList.slice(-1);
-      fileList = fileList.map(file => {
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        return file;
-      });
 
-      if (state.photo.length > 0) {
-        try {
-          const file = {
-            foto: state.photo[0].response.data.file
-          };
-          await axios.post(`/api/files/delete`, file);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      dispatch({ type: types.UPLOAD_IMAGE_PROFILE, payload: fileList[0].response });
-      dispatch({ type: types.UPLOAD_PHOTO, payload: fileList });
-    }
-  };
+      company.tradename = tradename;
+      company.legalNumber = legalNumber;
 
-  const beforeToCreateProfile = () => {
-    let base = {}
-    let company = {}
-    state.fields.forEach((e) => {
-      if (
-        e.name[0] == 'name' ||
-        e.name[0] == 'email' ||
-        e.name[0] == 'lastname'
-      ) {
-        base[e.name[0]] = e.value
+      company.phoneNumber = phoneNumber;
+      company.password = password;
+      company.city = city;
+      company.state = state;
+      company.areaCode = areaCode;
+      company.address2 = address2;
+      company.address = address;
+      company.zipCode = zipCode;
+
+      return {
+        company,
+        base
       }
-      else {
-        company[e.name[0]] = e.value
-      }
-    });
-    return {
-      base,
-      company
+    } catch (error) {
+      console.log(error);
     }
   }
 
-  const newCompany = async () => {
-    const { base, company } = beforeToCreateProfile();
-    base.typeUser = 2;
-    if (state.logo.length > 0) {
-      company.logo = state.logo[0].response.data.file;
-    }
-    if (state.photo.length > 0) {
-      base.photo = state.photo[0].response.data.file;
-    } else {
-      base.photo = props.photo;
-    }
-    const fullCompany = { base: base, ...company }
-    dispatch({ type: types.LOADING, payload: true });
+  const newCompany = async (fields) => {
+    const { base, company } = beforeToCreateProfile(fields, 'create');
+    const fullCompany = { base: base, ...company };
     try {
       const { data } = await axios.post('/api/company', fullCompany);
-      dispatch({ type: types.LOADING, payload: false });
+      setLoader(false);
       props.handlreNewUserProps(data.data);
       notification['success']({
         message: 'Success',
@@ -219,7 +118,7 @@ const CompanyProfileView = (props) => {
           "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
       });
     } catch (err) {
-      dispatch({ type: types.LOADING, payload: false });
+      setLoader(false);
       console.log(err);
       notification['error']({
         message: 'error',
@@ -229,19 +128,10 @@ const CompanyProfileView = (props) => {
     }
   };
 
-  const updateCompany = async () => {
-    const { base, company } = beforeToCreateProfile();
-    base.typeUser = 2;
-    if (state.logo.length > 0) {
-      company.logo = state.logo[0].response.data.file;
-    }
-    if (state.photo.length > 0) {
-      base.photo = state.photo[0].response.data.file;
-    }
+  const updateCompany = async (fields) => {
+    const { base, company } = beforeToCreateProfile(fields, 'update');
     const fullCompany = { base: base, ...company };
     try {
-      dispatch({ type: types.LOADING, payload: true });
-      console.log('[USER COMPANY]', fullCompany);
       const { data } = await axios.patch('/api/company/' + props._id, fullCompany, header);
 
       let update = {
@@ -250,7 +140,7 @@ const CompanyProfileView = (props) => {
       };
 
       props.handlreNewUserProps(update);
-      dispatch({ type: types.LOADING, payload: false });
+      setLoader(false);
       notification['success']({
         message: 'Success',
         description:
@@ -266,19 +156,6 @@ const CompanyProfileView = (props) => {
       });
     }
   };
-
-  const formConfig = {
-    logo: state.logo,
-    photo: state.photo,
-    fields: state.fields,
-    imageProfile: state.imageProfile,
-    onChangeCompany,
-    newCompany,
-    updateCompany,
-    propsUpload,
-    propsPhoto,
-    loading: state.loading
-  }
 
   const styleWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
@@ -293,7 +170,15 @@ const CompanyProfileView = (props) => {
         <SideNav currentLocation='0' />
         <Col span={20}>
           <WrapperSection row={24} styles={styleWrapper}>
-            <FormUserCompany {...formConfig} />
+            <FormUserCompany
+              imageProfile={imageProfile}
+              setImageProfile={imageProfile}
+              newCompany={newCompany}
+              updateCompany={updateCompany}
+              loading={loading}
+              setImageProfile={setImageProfile}
+              fields={fields}
+            />
           </WrapperSection>
         </Col>
       </Row>

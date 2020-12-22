@@ -54,35 +54,6 @@ const DriverUser = (props) => {
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
 
-  useEffect(() => {
-    let fields = [];
-
-    for (let key in props.user) {
-      let inputs = {
-        name: [key],
-        value: props.user[key]
-      }
-      fields.push(inputs);
-    }
-
-    for (let key in props.user.driver) {
-      if (key == "birthDate" || key == "expDateDln") {
-        let inputs = {
-          name: [key],
-          value: moment(props.user.driver[key])
-        }
-        fields.push(inputs);
-      } else {
-        let inputs = {
-          name: [key],
-          value: props.user.driver[key]
-        }
-        fields.push(inputs);
-      }
-    }
-    setFields(fields);
-  }, []);
-
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
@@ -209,10 +180,6 @@ const DriverUser = (props) => {
     }
   }
 
-  const onChangeProps = (changedFields, allFields) => {
-    setFields(allFields);
-  }
-
   return (
     <div className='profile-driver'>
       <Row justify='center'>
@@ -235,8 +202,7 @@ const DriverUser = (props) => {
             form={form}
             onFinish={props.isUserRegistry ? updateDriver : newDrivers}
             name="global_state"
-            layout='vertical'
-            onFieldsChange={onChangeProps}>
+            layout='vertical'>
 
             <Row gutter={[24]} justify='space-between' >
               <Col span={12}>
