@@ -85,7 +85,7 @@ async function getJobs(filterCompany) {
             company: job.company,
             typeUser: 2
         }).select('-tokens')
-            .populate('company');
+        .populate('company');
         try {
             resp.company = {
                 _id: findComp.company._id,
@@ -103,7 +103,7 @@ async function getJobs(filterCompany) {
             };
             return resp;
         } catch (e) {
-            console.log(e);
+            //console.log(e);
         }
     }));
     result = result.filter(Boolean);
@@ -397,7 +397,6 @@ async function addJob(job) {
 
 async function applyJob(job) {
     try {
-        console.log('[ APPLY JOB ]', job);
         const foundJob = await JobsModel.findOne({ _id: job.job });
         job.company = foundJob.company;
         const newApply = new JobsApplysModel(job);
