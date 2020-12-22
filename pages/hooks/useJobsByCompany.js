@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 const useJobsByCompany = (header, reload, setReload) => {
-    console.log('relodad', reload);
     const [isFetching, setIsFetching] = useState(true);
     const [jobsByCompany, setOptions] = useState([])
 
