@@ -168,6 +168,14 @@ async function updateExperience(id, driver){
         }
         foundDriver.imageDln = driver.imageDln;
     }
+    if(driver.mediCardImage){
+        try {
+            fs.unlinkSync("." + foundDriver.mediCardImage);
+        } catch(err) {
+            console.error(err);
+        }
+        foundDriver.mediCardImage = driver.mediCardImage;
+    }
     if(driver.description){
         foundDriver.description = driver.description;
     }

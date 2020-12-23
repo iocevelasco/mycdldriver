@@ -216,7 +216,7 @@ if (!dev && cluster.isMaster) {
           }
         });
 
-      server.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+      server.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'], display: 'popup' }));
       server.get('/auth/facebook/callback', passport.authenticate('facebook', {
         failureRedirect: '/error'
       }
