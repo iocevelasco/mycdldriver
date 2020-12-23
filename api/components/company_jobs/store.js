@@ -146,7 +146,6 @@ function getApplyJobs(filterQuery) {
         if (filterQuery) {
             filter = filterQuery;
         }
-        filter.deleted = false;
         result = JobsApplysModel.find(filter)
             .populate('company')
             .populate('driver')

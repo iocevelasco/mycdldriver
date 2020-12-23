@@ -11,7 +11,7 @@ async function connect(url){
         useCreateIndex: true,
         useFindAndModify: false 
     })
-    .then(() => console.log('[db] Conectada con exito'))
+    .then(() => console.log('[db] Conectada con exito', url))
     .catch(err => {
         console.log(`DB Connection Error: ${err.message}`);
     });

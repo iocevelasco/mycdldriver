@@ -27,4 +27,6 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 Para hacer la documentacion el comando es "apidoc -i api/ -o public/doc"
 
+BD_URL = "mongodb://127.0.0.1:27017/MYCDL?compressors=zlib&readPreference=primary&gssapiServiceName=mongodb&appname=MongoDB%20Compass&ssl=false"
+
 
