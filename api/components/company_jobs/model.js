@@ -107,6 +107,10 @@ const CompanyJobsSchema = mongoose.Schema({
     active: {
         type: Boolean,
         default: false
+    },
+    deleted: {
+        type: Boolean,
+        default: false
     }
 });
 

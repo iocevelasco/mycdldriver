@@ -60,6 +60,7 @@ async function getJobs(filterCompany) {
             city: new RegExp(filterCompany.city, 'i')
         };
     }
+    filter.deleted = false;
     jobs = await JobsModel.find(filter)
         .select("-__v")
         .populate('city')
@@ -119,7 +120,7 @@ async function getJob(idJob){
         }
     }
     try{
-        job = await JobsModel.findOne({_id: idJob})
+        job = await JobsModel.findOne({_id: idJob, deleted: false})
         .select("-__v")
         .populate('city')
         .populate('state')
@@ -145,6 +146,7 @@ function getApplyJobs(filterQuery) {
         if (filterQuery) {
             filter = filterQuery;
         }
+        filter.deleted = false;
         result = JobsApplysModel.find(filter)
             .populate('company')
             .populate('driver')
@@ -227,6 +229,7 @@ async function getApplyCompanyJobs(query) {
     if (id) {
         filter = { company: id };
     }
+    filter.deleted = false;
     const jobs = await JobsModel.find(filter)
         .populate('city');
     result = await Promise.all(jobs.map(async (job) => {
@@ -515,19 +518,23 @@ async function deleteJob(id, company) {
             message: 'Not authorized to access this resource'
         };
     }
+    try{
+        foundJob.deleted = true;
+        await foundJob.save();
+        return {
+            status: 200,
+            message: 'Job ' + foundJob.title + ' Borrado correctamente'
+        };
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        };
+    }
+    
 
-    await JobsApplysModel.delete({
-        job: id
-    });
-
-    await JobsModel.deleteOne({
-        _id: id
-    });
-
-    return {
-        status: 200,
-        message: 'Job ' + foundJob.title + ' Borrado correctamente'
-    };
+    
 
 }
 
