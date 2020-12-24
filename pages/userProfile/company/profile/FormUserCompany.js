@@ -31,12 +31,12 @@ function mapStateToProps(state) {
 }
 
 const FormUserCompany = (props) => {
+  const { company } = props.user;
   const [form] = Form.useForm();
   const [arr, setArr] = useState([]);
   const fileList = [];
   const {
     loading,
-    onChangeCompany,
     fields,
     newCompany,
     updateCompany,
@@ -54,6 +54,19 @@ const FormUserCompany = (props) => {
       return {
         avatar: photoProfile
       }
+    }
+  }
+
+  const resolveState = (state) => {
+    try {
+      if (state._id) {
+        return state._id;
+      } else {
+        return state
+      }
+    } catch (err) {
+      console.log(err);
+      return '';
     }
   }
 
@@ -192,7 +205,7 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <AddressInputs stateId={props.user.company.state} />
+            <AddressInputs stateId={resolveState(company.state)} />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button
