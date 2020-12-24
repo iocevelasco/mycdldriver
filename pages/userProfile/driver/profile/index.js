@@ -15,9 +15,21 @@ const DriverProfileView = (props) => {
     backgroundSize: 'contain',
   }
 
+  const closeWindow = () => {
+    if (typeof window !== "undefined") {
+      const params = window.location.search;
+      if (window.opener) {
+        window.opener.postMessage(params);
+        window.opener.location.reload();
+        window.close();
+      }
+    }
+  }
+
   return (
     <>
       <Row display='flex' justify='center'>
+        {closeWindow()}
         <SideNav currentLocation='0' />
         <Col span={20}>
           <WrapperSection styles={stylesWrapper} row={20} mt={0}>

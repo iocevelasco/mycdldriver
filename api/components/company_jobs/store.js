@@ -2,6 +2,7 @@ const { TagsModel, JobsModel, JobsApplysModel } = require('./model');
 const { User } = require('../user/model');
 const ProfileCompany = require('../profile_company/model');
 const ProfileDriver = require('../profile_driver/model');
+const {CitiesModel} = require('../cities/model');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -59,6 +60,7 @@ async function getJobs(filterCompany) {
             city: new RegExp(filterCompany.city, 'i')
         };
     }
+    filter.deleted = false;
     jobs = await JobsModel.find(filter)
         .select("-__v")
         .populate('city')
@@ -118,7 +120,7 @@ async function getJob(idJob){
         }
     }
     try{
-        job = await JobsModel.findOne({_id: idJob})
+        job = await JobsModel.findOne({_id: idJob, deleted: false})
         .select("-__v")
         .populate('city')
         .populate('state')
@@ -226,6 +228,7 @@ async function getApplyCompanyJobs(query) {
     if (id) {
         filter = { company: id };
     }
+    filter.deleted = false;
     const jobs = await JobsModel.find(filter)
         .populate('city');
     result = await Promise.all(jobs.map(async (job) => {
@@ -370,17 +373,24 @@ async function getStaffCompanyJobs(query) {
 
 async function getCustomList() {
     const titles = await JobsModel.find({}).select("title");
-    //const citys = await JobsModel.find({}).distinct('city');
+    const citys = await JobsModel.find().distinct('city');
     const companys = await ProfileCompany.find({}).select("tradename");
     let titleArray = titles.map((job) => {
         return job.title;
     });
+    let citysArray = await Promise.all(citys.map(async (city) => {
+        const citie = await CitiesModel.findOne({_id: city});
+        return {
+            id: citie._id,
+            name: citie.cityName
+        };
+    }));
     let companyArray = companys.map((company) => {
         return company.tradename;
     });
     const listado = {
         title: titleArray,
-        citys: [],
+        citys: citysArray,
         company: companyArray
     };
 
@@ -507,19 +517,23 @@ async function deleteJob(id, company) {
             message: 'Not authorized to access this resource'
         };
     }
+    try{
+        foundJob.deleted = true;
+        await foundJob.save();
+        return {
+            status: 200,
+            message: 'Job ' + foundJob.title + ' Borrado correctamente'
+        };
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        };
+    }
+    
 
-    await JobsApplysModel.delete({
-        job: id
-    });
-
-    await JobsModel.deleteOne({
-        _id: id
-    });
-
-    return {
-        status: 200,
-        message: 'Job ' + foundJob.title + ' Borrado correctamente'
-    };
+    
 
 }
 

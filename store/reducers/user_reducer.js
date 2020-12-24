@@ -1,4 +1,5 @@
 import moment from "moment";
+import axios from 'axios';
 
 const types = {
   USER_DATA: "USER_DATA",
@@ -14,6 +15,8 @@ const types = {
   HANDLE_INPUTS: "HANDLE_INPUTS",
   LOGIN_SUCCESS_MODAL: "LOGIN_SUCCESS_MODAL",
   UPDATE_EXPERIENCE: "UPDATE_EXPERIENCE",
+  SETTING_APP_HEADER: "SETTING_APP_HEADER",
+  RELOAD_PROPS: 'RELOAD_PROPS'
 };
 
 const initialState = {
@@ -28,6 +31,8 @@ const initialState = {
   facebook_id: "",
   date: "",
   token: null,
+  company: null,
+  currentLocation: "",
   driver: {
     dln: "",
     expDateDln: moment(),
@@ -40,8 +45,6 @@ const initialState = {
     zipCode: "",
     description: "",
   },
-  company: null,
-  currentLocation: "",
   company: {
     tradename: '',
     legalNumber: '',
@@ -55,7 +58,27 @@ const initialState = {
     city: '',
   },
   experience: {},
+  header: {
+    headers: { Authorization: `Bearer ${null}` }
+  }
 };
+
+function fetchUserData(token) {
+  return (dispatch) => {
+    return axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
+      .then((response) => {
+        let { date, company, lastname, name, _id, photo, email } = response.data.data;
+        dispatch(({
+          type: types.RELOAD_PROPS,
+          payload: {
+            date, company, lastname, name, _id, photo, email
+          }
+        }));
+      }).catch((error) => {
+        console.log(error);
+      });
+  }
+}
 
 function getCurrentLocation(location) {
   return {
@@ -81,7 +104,6 @@ function updateUserDrive(props) {
   };
 }
 
-
 const logoutUser = () => {
   const state = {
     _id: "",
@@ -95,8 +117,30 @@ const logoutUser = () => {
     facebook_id: "",
     date: "",
     token: null,
-    driver: null,
-    company: null,
+    driver: {
+      dln: "",
+      expDateDln: moment(),
+      birthDate: moment(),
+      areaCode: "",
+      phoneNumber: "",
+      experience: "",
+      sex: "",
+      address: "",
+      zipCode: "",
+      description: "",
+    },
+    company: {
+      tradename: '',
+      legalNumber: '',
+      address: '',
+      address2: '',
+      description: '',
+      areaCode: '',
+      experience: '',
+      phoneNumber: '',
+      state: '',
+      city: '',
+    },
     deviceType: "desktop",
   };
   return {
@@ -126,6 +170,17 @@ const addExperience = (props) => {
   };
 };
 
+const settingAppHeader = (authProps) => {
+  const { token, header } = authProps;
+  return {
+    type: types.SETTING_APP_HEADER,
+    payload: {
+      token,
+      header
+    },
+  };
+};
+
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.LOGIN_SUCCESS:
@@ -142,6 +197,8 @@ const userReducer = (state = initialState, action) => {
       return { ...state, currentLocation: action.payload };
     case types.UPDATE_EXPERIENCE:
       return { ...state, experiencie: action.payload };
+    case types.SETTING_APP_HEADER:
+      return { ...state, header: action.payload.header, token: action.payload.token };
     default:
       return state;
   }
@@ -157,4 +214,6 @@ export {
   getCurrentLocation,
   setPropsUserReg,
   addExperience,
+  settingAppHeader,
+  fetchUserData
 };

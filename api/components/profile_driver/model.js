@@ -17,6 +17,10 @@ const profileDriverSchema = Schema({
         type: String,
         trim: true
     },
+    mediCardImage: {
+        type: String,
+        trim: true
+    },
     areaCode: {
         type: Number
     },

@@ -178,9 +178,9 @@ if (!dev && cluster.isMaster) {
         failureMessage: "Invalid username or password",
       }),
         async function (req, res) {
-          if(req.session.passport.user){
+          if (req.session.passport.user) {
             res.status(200).send(req.session.passport.user);
-          }else{
+          } else {
             res.status(400).send("Invalid username or password");
           }
         }
@@ -216,7 +216,7 @@ if (!dev && cluster.isMaster) {
           }
         });
 
-      server.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+      server.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'], display: 'popup' }));
       server.get('/auth/facebook/callback', passport.authenticate('facebook', {
         failureRedirect: '/error'
       }

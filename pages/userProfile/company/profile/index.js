@@ -165,9 +165,21 @@ const CompanyProfileView = ({ user, ...props }) => {
     backgroundSize: 'contain',
   }
 
+  const closeWindow = () => {
+    if (typeof window !== "undefined") {
+      const params = window.location.search;
+      if (window.opener) {
+        window.opener.postMessage(params);
+        window.opener.location.reload();
+        window.close();
+      }
+    }
+  }
+
   return (
     <>
       <Row display='flex' justify='center'>
+        {closeWindow()}
         <SideNav currentLocation='0' />
         <Col span={20}>
           <WrapperSection row={24} styles={styleWrapper}>

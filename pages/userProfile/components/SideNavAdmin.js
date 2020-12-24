@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, Col, Button, } from 'antd';
 import { connect } from 'react-redux';
+import { withRouter } from 'next/router';
 import propTypes from 'prop-types';
+import { logoutUser } from '@store/reducers/user_reducer';
 import {
   UserOutlined,
   TeamOutlined,
@@ -9,6 +11,7 @@ import {
   DashboardOutlined,
   LeftOutlined,
   UserAddOutlined,
+  LogoutOutlined,
   HomeOutlined,
   UserSwitchOutlined
 } from '@ant-design/icons';
@@ -22,7 +25,14 @@ function mapStateToProps(state) {
   }
 }
 
-const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
+function mapDispatchToProps(dispatch) {
+  return {
+    logoutUser: () => dispatch(logoutUser()),
+  }
+};
+
+
+const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser }) => {
   const [menuOptions, setOptions] = useState([]);
   const { typeUser } = user;
 
@@ -109,6 +119,22 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess }) => {
           > Go Back </Button>
         </Link> : null
       }
+      <Button
+        shape="round"
+        size="large"
+        onClick={() => {
+          router.push('/logout')
+          logoutUser();
+          window.localStorage.removeItem('token');
+        }}
+        icon={<LogoutOutlined />}
+        type='link'
+        style={{
+          marginTop: 16,
+          width: '90%',
+          marginLeft: 12,
+        }}
+      > Logout </Button>
     </Col>
   )
 }
@@ -119,4 +145,6 @@ SideNavAdmin.propTypes = {
   isUserSuccess: propTypes.number.isRequired
 }
 
-export default connect(mapStateToProps)(SideNavAdmin);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps
+  )(SideNavAdmin));
