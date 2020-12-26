@@ -51,7 +51,7 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, jobs_name, citys, q
                     onChange={e => handlerSearch(e, 'city')}>
                     {
                       citys.map((e, i) => (
-                        <Option key={i} value={e}>{e}</Option>
+                        <Option key={i} value={e.id}>{e.name}</Option>
                       ))
                     }
                   </Select>
