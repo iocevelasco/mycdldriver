@@ -35,6 +35,7 @@ function fetchJobPositionData(qs) {
     }
 }
 
+
 function fetchCommonData() {
     return (dispatch) => {
         return axios.get(`/api/company/jobs/customlist`)

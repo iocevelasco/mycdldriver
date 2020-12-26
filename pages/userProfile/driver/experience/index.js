@@ -13,14 +13,9 @@ import "./styles.less";
 function mapStateToProps(state) {
   const { user } = state;
   return {
-    user: user,
-    photo: user.photo || "",
-    facebook_id: user.facebook_id || "",
-    google_id: user.google_id || "",
-    _id: user._id || null,
     token: user.token || null,
-    driver: user.driver || {},
-    isUserRegistry: state.user.typeUser || null,
+    header: state.user.header,
+    user: state.user
   };
 }
 
@@ -31,66 +26,53 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const DriverExperience = (props) => {
+const DriverExperience = ({ header, token, user, ...props }) => {
   const [fields, setFields] = useState([]);
-  const [imageDln, setImage] = useState([]);
+  const [imageDln, setImageDLN] = useState([]);
+  const [medicCard, setMedicCard] = useState([]);
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
     paddingTop: 24,
     paddingBottom: 24,
     backgroundSize: "contain",
   };
-  const header = {
-    headers: { Authorization: `Bearer ${props.token}` },
-  };
-  console.log(header, "esto es header ");
 
-  const propsUpload = {
-    name: "logo",
-    action: "/api/files",
-    headers: {
-      authorization: "authorization-text",
-    },
-    async onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-      let fileList = [...info.fileList];
-      fileList = fileList.slice(-1);
-      fileList = fileList.map((file) => {
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        return file;
-      });
+  useEffect(() => {
+    let fields = [];
 
-      if (imageDln.length > 0) {
-        try {
-          const file = {
-            foto: imageDln[0].response.data.file,
-          };
-          await axios.post(`/api/files/delete`, file);
-        } catch (e) {
-          console.log(e);
-        }
+    for (let key in user) {
+      let inputs = {
+        name: [key],
+        value: user[key]
       }
-      setImage(fileList);
-    },
-  };
+      fields.push(inputs);
+    }
+    console.log('user', user);
+    console.log('user', user.driver);
+    for (let key in user.driver) {
+      let inputs = {
+        name: [key],
+        value: user.driver[key]
+      }
+      fields.push(inputs);
+    }
+    setFields(fields);
+  }, []);
+
+  console.log('imageDln', imageDln)
+  console.log('medicCard', medicCard)
 
   const onSubmitExperience = async (body) => {
     try {
-      body.imageDln = imageDln[0].response.data.file;
-      const response = await axios.patch(
-        "/api/driver/experience",
-        body,
-        header
-      );
+      if (imageDln.data) {
+        body.imageDln = imageDln.data.file;
+      }
+      if (medicCard.data) {
+        body.medicCard = medicCard.data.file;
+      }
+
+      const response = await axios.patch("/api/driver/experience", body, header);
+      console.log('response', response);
       addExperience(body);
 
       notification["success"]({
@@ -99,6 +81,7 @@ const DriverExperience = (props) => {
           "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!",
       });
     } catch (err) {
+      console.log('err', err)
       notification["error"]({
         message: "error",
         description: "Sorry! We couldn't create this user, please try again. ",
@@ -112,9 +95,14 @@ const DriverExperience = (props) => {
         <WrapperSection styles={stylesWrapper} row={22} mt={0}>
           <FormExperience
             fields={fields}
-            propsUpload={propsUpload}
             loading={false}
+            imageDln={imageDln}
+            setImageDLN={setImageDLN}
+
+            medicCard={medicCard}
+            setMedicCard={setMedicCard}
             onSubmitExperience={onSubmitExperience}
+            token={token}
           />
         </WrapperSection>
       </Col>

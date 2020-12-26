@@ -33,7 +33,6 @@ function mapStateToProps(state) {
 const FormUserCompany = (props) => {
   const { company } = props.user;
   const [form] = Form.useForm();
-  const [arr, setArr] = useState([]);
   const fileList = [];
   const {
     loading,
