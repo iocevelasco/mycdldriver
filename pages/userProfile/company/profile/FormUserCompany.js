@@ -39,15 +39,15 @@ const FormUserCompany = (props) => {
     fields,
     newCompany,
     updateCompany,
-    setImageProfile,
-    imageProfile,
+    setNewImage,
+    newImage,
     token,
   } = props;
 
-  const resolveImageProfile = (imageProfile, photoProfile) => {
+  const resolveImageProfile = (newImage, photoProfile) => {
     try {
       return {
-        avatar: imageProfile ? imageProfile.data.file : photoProfile
+        avatar: newImage ? newImage : photoProfile
       }
     } catch (err) {
       return {
@@ -69,7 +69,7 @@ const FormUserCompany = (props) => {
     }
   }
 
-  const { avatar } = resolveImageProfile(imageProfile, props.photoProfile)
+  const { avatar } = resolveImageProfile(newImage, props.photoProfile)
 
   return (
     <div className='profile-driver'>
@@ -84,10 +84,10 @@ const FormUserCompany = (props) => {
           <Col className='profile-driver__form' span={20}>
             <Row justify='center'>
               <ImageProfile
-                imageProfile={avatar}
-                setImageProfile={setImageProfile}
-                fileList={fileList}
-                token={token}
+                avatar={avatar}
+                setNewImage={setNewImage}
+                newImage={newImage}
+                token={props.token}
               />
             </Row>
             <Row gutter={[24]} justify='space-between' >
