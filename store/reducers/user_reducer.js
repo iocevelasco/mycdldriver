@@ -64,16 +64,33 @@ const initialState = {
 };
 
 function fetchUserData(token) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const { typeUser } = getState().user
     return axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
-        let { date, company, lastname, name, _id, photo, email } = response.data.data;
-        dispatch(({
-          type: types.RELOAD_PROPS,
-          payload: {
-            date, company, lastname, name, _id, photo, email
-          }
-        }));
+
+        if (typeUser == 1) {
+          let { date, driver, lastname, name, _id, photo, email } = response.data.data;
+          dispatch(({
+            type: types.RELOAD_PROPS,
+            payload: {
+              company: null,
+              date, driver, lastname, name, _id, photo, email
+            }
+          }));
+        }
+
+        if (typeUser == 2) {
+          let { date, company, lastname, name, _id, photo, email } = response.data.data;
+          dispatch(({
+            type: types.RELOAD_PROPS,
+            payload: {
+              driver: null,
+              date, company, lastname, name, _id, photo, email
+            }
+          }));
+        }
+
       }).catch((error) => {
         console.log(error);
       });
