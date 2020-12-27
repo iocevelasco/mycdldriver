@@ -34,10 +34,7 @@ const FormExperience = (props) => {
       medicCard: medicCard,
     };
 
-
-
     body.experience = { ...switchValues };
-    console.log('body', body);
     props.onSubmitExperience(body);
   };
 
