@@ -36,7 +36,7 @@ const DriverUser = ({ user, ...props }) => {
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
   const [newImage, setNewImage] = useState(null);
-  console.log('fields', fields);
+
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
@@ -69,8 +69,6 @@ const DriverUser = ({ user, ...props }) => {
     }
     setFields(fields);
   }, []);
-
-  console.log('fields', fields);
 
   const saveApply = async () => {
     const apply = {
@@ -194,20 +192,20 @@ const DriverUser = ({ user, ...props }) => {
     }
   }
 
-  const resolveImageProfile = (newImage, photoProfile) => {
+  const resolveImageProfile = () => {
     try {
       return {
-        avatar: newImage ? newImage : photoProfile
+        avatar: newImage ? newImage : props.photoProfile
       }
     } catch (err) {
       return {
-        avatar: photoProfile
+        avatar: props.photoProfile
       }
     }
   }
 
   const { avatar } = resolveImageProfile(newImage, props.photoProfile)
-  console.log(newImage)
+
   return (
     <div className='profile-driver'>
       <Row justify='center'>

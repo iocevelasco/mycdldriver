@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import MainLayout from "components/layout";
 import { Row, Col, notification, message } from "antd";
 import FormExperience from "./FormExperience";
 import SideNav from "../../components/SideNavAdmin";
 import { WrapperSection } from "components/helpers";
 import { connect } from "react-redux";
+import moment from 'moment';
 import axios from "axios";
 import { withRouter } from "next/router";
 import { addExperience } from "../../../../store/reducers/user_reducer";
