@@ -43,7 +43,7 @@ async function getJobs(filterCompany) {
         filterOr.push({ description: new RegExp(filterCompany.input, 'i') });
     }
     if (filterCompany.city) {
-        filterOr.push({ city: new RegExp(filterCompany.city, 'i') });
+        filterOr.push({ city: filterCompany.city });
     }
     if (filterCompany.date) {
         filterOr.push({ date: filterCompany.date });
@@ -57,7 +57,7 @@ async function getJobs(filterCompany) {
         };
     } else if (filterOr.length == 1 && filterCompany.city) {
         filter = {
-            city: new RegExp(filterCompany.city, 'i')
+            city: filterCompany.city
         };
     }
     filter.deleted = false;
