@@ -38,15 +38,6 @@ function mapDispatchToProps(dispatch) {
 
 const MainLayout = ({ children, title, user, isLoading, router, bgActive, deviceType, ...props }) => {
 
-    const [userProps, setUserProps] = useState({
-        name: '',
-        email: '',
-        id: '',
-        photo: '',
-        typeUser: '',
-        token: ''
-    });
-
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -65,17 +56,6 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
                 props.settingAppHeader(authProps);
             }
         }
-
-        if (user) {
-            const { name, lastname, email, photo, _id, typeUser } = user;
-            setUserProps({
-                name: name + " " + lastname,
-                email: email,
-                id: _id,
-                photo: photo,
-                typeUser: typeUser
-            });
-        }
         props.handleDeviceType(deviceType)
     }, []);
 
@@ -89,7 +69,7 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
     const menu = (
         <Menu style={{ width: '200px', float: 'right' }}>
             <Menu.Item>
-                <Link href={userProps.typeUser === 1 ? '/userProfile/driver/profile' : '/userProfile/company/profile'}>
+                <Link href={user.typeUser === 1 ? '/userProfile/driver/profile' : '/userProfile/company/profile'}>
                     <Button type='link'>
                         Profile
                 </Button>
@@ -136,8 +116,8 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
                                     <Row justify='end' align='middle'>
                                         <Space size='large'>
                                             <DownOutlined />
-                                            <Text strong>{userProps.name}</Text>
-                                            <Avatar src={userProps.photo} />
+                                            <Text strong>{user.name + " " + user.lastname}</Text>
+                                            <Avatar src={user.photo} />
                                         </Space>
                                     </Row>
                                 </Dropdown>

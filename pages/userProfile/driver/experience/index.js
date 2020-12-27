@@ -28,8 +28,6 @@ function mapDispatchToProps(dispatch) {
 
 const DriverExperience = ({ header, token, user, ...props }) => {
   const [fields, setFields] = useState([]);
-  const [imageDln, setImageDLN] = useState([]);
-  const [medicCard, setMedicCard] = useState([]);
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
     paddingTop: 24,
@@ -47,30 +45,28 @@ const DriverExperience = ({ header, token, user, ...props }) => {
       }
       fields.push(inputs);
     }
-    console.log('user', user);
-    console.log('user', user.driver);
+
     for (let key in user.driver) {
-      let inputs = {
-        name: [key],
-        value: user.driver[key]
+      if (key === 'expDateDln') {
+        let inputs = {
+          name: [key],
+          value: moment(user.driver[key])
+        }
+        fields.push(inputs);
+      } else {
+        let inputs = {
+          name: [key],
+          value: user.driver[key]
+        }
+        fields.push(inputs);
       }
-      fields.push(inputs);
     }
     setFields(fields);
   }, []);
 
-  console.log('imageDln', imageDln)
-  console.log('medicCard', medicCard)
 
   const onSubmitExperience = async (body) => {
     try {
-      if (imageDln.data) {
-        body.imageDln = imageDln.data.file;
-      }
-      if (medicCard.data) {
-        body.medicCard = medicCard.data.file;
-      }
-
       const response = await axios.patch("/api/driver/experience", body, header);
       console.log('response', response);
       addExperience(body);
@@ -88,6 +84,7 @@ const DriverExperience = ({ header, token, user, ...props }) => {
       });
     }
   };
+
   return (
     <Row display="flex" justify="center">
       <SideNav currentLocation="2" />
@@ -96,11 +93,6 @@ const DriverExperience = ({ header, token, user, ...props }) => {
           <FormExperience
             fields={fields}
             loading={false}
-            imageDln={imageDln}
-            setImageDLN={setImageDLN}
-
-            medicCard={medicCard}
-            setMedicCard={setMedicCard}
             onSubmitExperience={onSubmitExperience}
             token={token}
           />

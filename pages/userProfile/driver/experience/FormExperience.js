@@ -8,14 +8,19 @@ const { TextArea } = Input;
 const FormExperience = (props) => {
   const [switchValues, setSwitchValues] = useState(mockExperience);
   const [twicCard, setTwicCard] = useState({ twicCard: false });
+
+  const [imageDln, setImageDLN] = useState('');
+  const [medicCard, setMedicCard] = useState('');
+
   const [swtichInputs, setSwitchInputs] = useState([
-    "Tamk endorsed",
+    "Tank Endorsed",
     "Hazmat",
-    "Referred loads",
+    "Refrigerated Loads",
     "Van",
     "Car Carrier",
     "Flat Bed",
   ]);
+
 
   const [form] = Form.useForm();
 
@@ -25,9 +30,14 @@ const FormExperience = (props) => {
       description: fields.description,
       expDateDln: fields.expDateDln._d,
       twicCard: twicCard,
+      imageDln: imageDln,
+      medicCard: medicCard,
     };
 
+
+
     body.experience = { ...switchValues };
+    console.log('body', body);
     props.onSubmitExperience(body);
   };
 
@@ -101,14 +111,14 @@ const FormExperience = (props) => {
                     <DraggerUpload
                       label='DLN'
                       button='Add photo'
-                      setImage={props.setImageDLN}
-                      image={props.imageDln}
+                      setDefaultFileList={setImageDLN}
+                      defaultFileList={imageDln}
                       token={props.token} />
                   </Col>
                   <Col span={24}>
                     <DraggerUpload
-                      setImage={props.setMedicCard}
-                      image={props.medicCard}
+                      setDefaultFileList={setMedicCard}
+                      defaultFileList={medicCard}
                       label='Medic card'
                       button='Add photo'
                       token={props.token} />
@@ -129,7 +139,7 @@ const FormExperience = (props) => {
               <Col className="driver-experience--form-switch" span={14}>
                 <Row gutter={24} className="selectTitle">
                   {" "}
-                  <h4>What kind of experience you have?</h4>
+                  <h4>What kind of experience do you have</h4>
                 </Row>
                 <Row gutter={[24]} justify="space-between">
                   <Col
