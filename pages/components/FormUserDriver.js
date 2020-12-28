@@ -213,13 +213,15 @@ const DriverUser = ({ user, ...props }) => {
   const { avatar } = resolveImageProfile(newImage, props.photoProfile)
 
   const passwordValidator = () => {
-    if (!configPsw.isPassword) {
-      notification['error']({
-        message: 'Error',
-        description:
-          'Please config your password'
-      });
-      return
+    if (user.isUserRegistry) {
+      if (!configPsw.isPassword) {
+        notification['error']({
+          message: 'Error',
+          description:
+            'Please config your password'
+        });
+        return
+      }
     }
   }
   return (
