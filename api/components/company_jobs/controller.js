@@ -1,5 +1,6 @@
 const store = require('./store');
 const config = require('../../config');
+const mailer = require('../../middelware/mailer');
 
 async function getJob(filter) {
     let filterQuery = {};
