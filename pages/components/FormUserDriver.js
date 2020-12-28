@@ -224,6 +224,7 @@ const DriverUser = ({ user, ...props }) => {
       }
     }
   }
+
   return (
     <div className='profile-driver'>
       <Row justify='center'>

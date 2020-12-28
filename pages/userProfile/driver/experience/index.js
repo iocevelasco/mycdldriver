@@ -64,7 +64,7 @@ const DriverExperience = ({ header, token, user, ...props }) => {
     setFields(fields);
   }, []);
 
-  function setFormatExperience(exp){
+  function setFormatExperience(exp) {
     const oldFormat = exp.experience;
     let newFormat = [];
 

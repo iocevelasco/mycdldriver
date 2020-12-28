@@ -46,6 +46,7 @@ const FormExperience = (props) => {
           ...switchValues,
           [name]: { ...switchValues[name], ...years },
         });
+        console.log('switchValues', switchValues);
         break;
       case "have":
         let have = { have: value };
