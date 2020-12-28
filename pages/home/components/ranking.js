@@ -16,6 +16,7 @@ const { Text, Title } = Typography
 const { Meta } = Card;
 
 function mapStateToProps(state) {
+  console.log('[ STATE ]', state);
   return {
     drivers: state.landing.drivers
   }
@@ -48,12 +49,18 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
               />
             }
             style={{ width: '100%', marginTop: 24, }}>
-            <div className='star-container'>
-              {stars.map((e, key)=> <StarFilled key={key} style={{color:'#FFE206'}} />)}
+            <div className='star-container'>{e.rating}
+              {e.driver.rating == 0 ?
+               <StarOutlined key={key} style={{color:'#FFE206'}} /> :
+               stars.map((p, key)=> {
+                {if (p <= e.driver.rating) {
+                  <StarFilled key={key} style={{color:'#FFE206'}} />
+                }}
+               })
+               }
             </div>
-            {fullname = e.name + e.lastname}
             <Meta
-              title={fullname}
+              title={`${e.name} ${e.lastname}`}
               description={`Address ${e.driver.address}`}
             />
           </Card>

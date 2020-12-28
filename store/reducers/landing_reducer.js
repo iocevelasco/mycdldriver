@@ -40,8 +40,8 @@ function fetchJobPositionData(qs) {
 function fetchDriversData() {
     return (dispatch) => {
         return axios.get(`/api/user/1`)
-            .then(({ response }) => {
-                let drivers = response.data;
+            .then(({ data }) => {
+                let drivers = data.data;
                 dispatch(({
                     type: types.FETCH_DRIVERS,
                     payload: {
