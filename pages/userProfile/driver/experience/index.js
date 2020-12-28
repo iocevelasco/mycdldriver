@@ -64,10 +64,27 @@ const DriverExperience = ({ header, token, user, ...props }) => {
     setFields(fields);
   }, []);
 
+  function setFormatExperience(exp){
+    const oldFormat = exp.experience;
+    let newFormat = [];
+
+    Object.keys(oldFormat).map((inp, index) => {
+      newFormat.push({
+        name: oldFormat[inp].name,
+        have: oldFormat[inp].have,
+        years: oldFormat[inp].years
+      });
+    });
+    exp.experience = newFormat;
+    return exp;
+  }
+
 
   const onSubmitExperience = async (body) => {
     try {
-      const response = await axios.patch("/api/driver/experience", body, header);
+      const formatExp = setFormatExperience(body);
+      console.log(formatExp);
+      const response = await axios.patch("/api/driver/experience", formatExp, header);
       console.log('response', response);
       addExperience(body);
 
