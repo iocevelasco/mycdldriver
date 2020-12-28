@@ -83,10 +83,9 @@ const DriverExperience = ({ header, token, user, ...props }) => {
   const onSubmitExperience = async (body) => {
     try {
       const formatExp = setFormatExperience(body);
-
       const response = await axios.patch("/api/driver/experience", formatExp, { headers: { Authorization: `Bearer ${token}` } });
-      console.log('response', response);
-      addExperience(body);
+
+      addExperience(formatExp);
 
       notification["success"]({
         message: "Success",
