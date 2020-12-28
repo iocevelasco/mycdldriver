@@ -1,24 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Row,
-  Col,
-  Input,
-  Avatar,
-  Form,
-  Button,
-  Upload,
-  InputNumber,
-  Radio,
-  DatePicker,
-  notification,
-  message
-} from 'antd';
-import { EyeTwoTone, EyeInvisibleOutlined, UploadOutlined, RetweetOutlined } from '@ant-design/icons';
-import {
-  updateUserDrive
-} from '@store/reducers/user_reducer';
+import { Row, Col, Input, Form, Button, InputNumber, Space, Radio, DatePicker, notification, message } from 'antd';
+import { updateUserDrive } from '@store/reducers/user_reducer';
+import { SafetyCertificateOutlined, WarningOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 import { ImageProfile } from 'components/UploadImages';
+import PasswordModal from 'components/PasswordModal';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -32,11 +18,7 @@ function mapStateToProps(state) {
   return {
     user: user,
     photoProfile: user.photo || '',
-    facebook_id: user.facebook_id || '',
-    google_id: user.google_id || '',
-    _id: user._id || null,
     token: user.token || null,
-    driver: user.driver || {},
     isUserRegistry: state.user._id || null,
   }
 }
@@ -47,18 +29,25 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-const DriverUser = ({user, ...props}) => {
+const DriverUser = ({ user, ...props }) => {
   const { router } = props;
   const [form] = Form.useForm();
+  const [visibleModalPassword, setVisiblePassword] = useState(false);
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
-  const [imageProfile, setImageProfile] = useState(null);
+  const [newImage, setNewImage] = useState(null);
+  const [configPsw, setPsw] = useState({
+    password: null,
+    isPassword: false
+  });
 
+  console.log(configPsw);
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
 
-    useEffect(() => {
+  useEffect(() => {
+
     let fields = [];
 
     for (let key in user) {
@@ -69,12 +58,20 @@ const DriverUser = ({user, ...props}) => {
       fields.push(inputs);
     }
 
-    for (let key in user.company) {
-      let inputs = {
-        name: [key],
-        value: user.company[key]
+    for (let key in user.driver) {
+      if (key === 'birthDate') {
+        let inputs = {
+          name: [key],
+          value: moment(user.driver[key])
+        }
+        fields.push(inputs);
+      } else {
+        let inputs = {
+          name: [key],
+          value: user.driver[key]
+        }
+        fields.push(inputs);
       }
-      fields.push(inputs);
     }
     setFields(fields);
   }, []);
@@ -153,6 +150,7 @@ const DriverUser = ({user, ...props}) => {
   };
 
   const beforeToCreateProfile = async (fields, type) => {
+    passwordValidator();
     setLoader(true);
     try {
       const { google_id, facebook_id, photo, email } = user;
@@ -165,26 +163,25 @@ const DriverUser = ({user, ...props}) => {
         base.name = name;
         base.lastname = lastname;
         base.typeUser = 1;
-        base.photo = imageProfile ? imageProfile.data.file : photo;
+        base.photo = newImage ? newImage : photo;
       }
       if (type === 'create') {
         base.name = name;
         base.lastname = lastname;
         base.typeUser = 1;
-        base.photo = imageProfile ? imageProfile.data.file : photo;
+        base.photo = newImage ? newImage : photo;
         base.email = email;
         base.google_id = google_id;
         base.facebook_id = facebook_id;
-        base.password = password;
+        base.password = configPsw;
       }
 
       driver.zipCode = zipCode;
       driver.state = state;
-      driver.imageDln = '',
-        driver.dln = dln;
+      driver.dln = dln;
       driver.sex = sex;
       driver.phoneNumber = phoneNumber;
-      driver.password = password;
+      driver.password = configPsw.password;
       driver.confirm = confirm;
       driver.city = city;
       driver.birthDate = birthDate;
@@ -201,19 +198,32 @@ const DriverUser = ({user, ...props}) => {
     }
   }
 
-  const resolveImageProfile = (imageProfile, photoProfile) => {
+  const resolveImageProfile = () => {
     try {
       return {
-        avatar: imageProfile ? imageProfile.data.file : photoProfile
+        avatar: newImage ? newImage : props.photoProfile
       }
     } catch (err) {
       return {
-        avatar: photoProfile
+        avatar: props.photoProfile
       }
     }
   }
 
-  const { avatar } = resolveImageProfile(imageProfile, props.photoProfile)
+  const { avatar } = resolveImageProfile(newImage, props.photoProfile)
+
+  const passwordValidator = () => {
+    if (user.isUserRegistry) {
+      if (!configPsw.isPassword) {
+        notification['error']({
+          message: 'Error',
+          description:
+            'Please config your password'
+        });
+        return
+      }
+    }
+  }
 
   return (
     <div className='profile-driver'>
@@ -221,8 +231,9 @@ const DriverUser = ({user, ...props}) => {
         <Col className='profile-driver__form' span={24}>
           <Row justify='center'>
             <ImageProfile
-              imageProfile={avatar}
-              setImageProfile={setImageProfile}
+              avatar={avatar}
+              setNewImage={setNewImage}
+              newImage={newImage}
               token={props.token}
             />
           </Row>
@@ -261,48 +272,7 @@ const DriverUser = ({user, ...props}) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={[24]} justify='space-between' >
-              <Col span={12}>
-                <Form.Item
-                  label='Change password'
-                  rules={[
-                    {
-                      required: false,
-                    },
-                  ]}
-                  name='password'>
-                  <Input.Password
-                    placeholder="Password"
-                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="confirm"
-                  label="Confirm Password"
-                  dependencies={['password']}
-                  hasFeedback
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please confirm your password!',
-                    },
-                    ({ getFieldValue }) => ({
-                      validator(value) {
-                        if (!value || getFieldValue('password') === value) {
-                          return Promise.resolve();
-                        }
-                        return Promise.reject('The two passwords that you entered do not match!');
-                      },
-                    }),
-                  ]}
-                >
-                  <Input.Password
-                    placeholder="Confirm Password" />
-                </Form.Item>
-              </Col>
-            </Row>
+
             <Row gutter={[24]} justify='space-between' align='middle'>
               <Col span={12}>
                 <Form.Item
@@ -349,7 +319,7 @@ const DriverUser = ({user, ...props}) => {
                   <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={6}>
                 <Form.Item
                   label='Sex'
                   name="sex"
@@ -365,6 +335,20 @@ const DriverUser = ({user, ...props}) => {
                     <Radio value={2}>Other</Radio>
                   </Radio.Group>
                 </Form.Item>
+              </Col>
+              <Col span={6}>
+                <PasswordModal
+                  setPsw={setPsw}
+                  visible={visibleModalPassword}
+                  password={user.password}
+                  handleModal={setVisiblePassword} />
+                <Button
+                  type={configPsw.isPassword ? '' : 'danger'}
+                  onClick={() => setVisiblePassword(true)}
+                  size='large'
+                  block
+                  icon={<SafetyCertificateOutlined />}
+                >Setting Password</Button>
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >

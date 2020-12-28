@@ -276,6 +276,24 @@ async function logoutAll(id){
     await foundUser.save();
 }
 
+async function changePassword(user, oldPass, newPass){
+    try{
+        const foundUser = await User.findByCredentials(user.email, oldPass);
+        foundUser.password = newPass;
+        foundUser.save();
+        return {
+            status: 200,
+            message: 'Password changed successfully'
+        };
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        };
+    }
+}
+
 module.exports = {
     list: getUser,
     oneUser: getOneUser,
@@ -287,5 +305,6 @@ module.exports = {
     loginAfterRegUser,
     setPrelogin,
     getPrelogin,
-    updatePhoto
+    updatePhoto,
+    changePassword
 }

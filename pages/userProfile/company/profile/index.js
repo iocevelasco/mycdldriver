@@ -27,7 +27,7 @@ function mapDispatchToProps(dispatch) {
 };
 
 const CompanyProfileView = ({ user, ...props }) => {
-  const [imageProfile, setImageProfile] = useState(null);
+  const [newImage, setNewImage] = useState(null);
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
 
@@ -70,14 +70,14 @@ const CompanyProfileView = ({ user, ...props }) => {
         base.name = name;
         base.lastname = lastname;
         base.typeUser = 2;
-        base.photo = imageProfile ? imageProfile.data.file : photo;
+        base.photo = newImage ? newImage : photo;
 
       }
       if (type === 'create') {
         base.name = name;
         base.lastname = lastname;
         base.typeUser = 2;
-        base.photo = imageProfile ? imageProfile.data.file : photo;
+        base.photo = newImage ? newImage : photo;
         base.email = email;
         base.google_id = google_id;
         base.facebook_id = facebook_id;
@@ -184,12 +184,11 @@ const CompanyProfileView = ({ user, ...props }) => {
         <Col span={20}>
           <WrapperSection row={24} styles={styleWrapper}>
             <FormUserCompany
-              imageProfile={imageProfile}
-              setImageProfile={imageProfile}
+              newImage={newImage}
+              setNewImage={setNewImage}
               newCompany={newCompany}
               updateCompany={updateCompany}
               loading={loading}
-              setImageProfile={setImageProfile}
               fields={fields}
             />
           </WrapperSection>
@@ -199,6 +198,8 @@ const CompanyProfileView = ({ user, ...props }) => {
   )
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProfileView));
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(CompanyProfileView)
+);
 
 

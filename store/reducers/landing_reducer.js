@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const types = {
     FETCH_JOBS: 'FETCH_JOBS',
+    FETCH_DRIVERS: 'FETCH_DRIVERS',
     VISIBLE_MODAL_LOGIN: 'VISIBLE_MODAL_LOGIN',
     DEVICETYPE: 'DEVICETYPE',
     IS_LOADING: 'IS_LOADING',
@@ -10,6 +11,7 @@ const types = {
 
 const initialState = {
     jobs: [],
+    drivers: [],
     citys: [],
     jobs_name: [],
     companies: [],
@@ -27,6 +29,23 @@ function fetchJobPositionData(qs) {
                     type: types.FETCH_JOBS,
                     payload: {
                         jobs: jobs,
+                    }
+                }));
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+}
+
+function fetchDriversData() {
+    return (dispatch) => {
+        return axios.get(`/api/user/1`)
+            .then(({ response }) => {
+                let drivers = response.data;
+                dispatch(({
+                    type: types.FETCH_DRIVERS,
+                    payload: {
+                        drivers: drivers,
                     }
                 }));
             }).catch((error) => {
@@ -87,6 +106,10 @@ const landingReducer = (state = initialState, action) => {
                 jobs: action.payload.jobs,
                 citys_available: action.payload.citys_available
             }
+        case types.FETCH_DRIVERS:
+            return {
+                ...state, drivers: action.payload.drivers
+            }
         case types.VISIBLE_MODAL_LOGIN:
             return {
                 ...state, visible_modal_login: action.payload
@@ -115,5 +138,6 @@ export {
     handlerModalLogin,
     deviceType,
     activeLoading,
-    fetchCommonData
+    fetchCommonData,
+    fetchDriversData
 };

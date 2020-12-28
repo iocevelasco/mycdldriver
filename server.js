@@ -178,9 +178,9 @@ if (!dev && cluster.isMaster) {
         failureMessage: "Invalid username or password",
       }),
         async function (req, res) {
-          if(req.session.passport.user){
+          if (req.session.passport.user) {
             res.status(200).send(req.session.passport.user);
-          }else{
+          } else {
             res.status(400).send("Invalid username or password");
           }
         }
@@ -196,7 +196,7 @@ if (!dev && cluster.isMaster) {
         failureRedirect: '/error'
       }),
         async function (req, res) {
-          const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+          /*const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
           let prelogin = {
             ruta: '',
             abspath: ''
@@ -213,7 +213,8 @@ if (!dev && cluster.isMaster) {
             res.redirect('/userProfile/company/profile');
           } else {
             res.redirect('/userProfile');
-          }
+          }*/
+          res.redirect('/loading_user');
         });
 
       server.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'], display: 'popup' }));
@@ -227,7 +228,7 @@ if (!dev && cluster.isMaster) {
             ruta: '',
             abspath: ''
           };
-          const respuesta = await userController.getPrelogin(ip);
+          /*const respuesta = await userController.getPrelogin(ip);
           prelogin.ruta = respuesta.ruta;
           prelogin.abspath = respuesta.abspath;
           if (prelogin.ruta == "/job-offert") {
@@ -239,7 +240,8 @@ if (!dev && cluster.isMaster) {
             res.redirect('/userProfile/company/profile');
           } else {
             res.redirect('/userProfile');
-          }
+          }*/
+          res.redirect('/loading_user');
         });
 
       const restrictAccess = (req, res, next) => {

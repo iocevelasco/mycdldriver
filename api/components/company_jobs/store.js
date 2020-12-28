@@ -42,9 +42,6 @@ async function getJobs(filterCompany) {
         filterOr.push({ title: new RegExp(filterCompany.input, 'i') });
         filterOr.push({ description: new RegExp(filterCompany.input, 'i') });
     }
-    if (filterCompany.city) {
-        filterOr.push({ city: new RegExp(filterCompany.city, 'i') });
-    }
     if (filterCompany.date) {
         filterOr.push({ date: filterCompany.date });
     }
@@ -55,10 +52,10 @@ async function getJobs(filterCompany) {
             title: new RegExp(filterCompany.input, 'i'),
             description: new RegExp(filterCompany.input, 'i')
         };
-    } else if (filterOr.length == 1 && filterCompany.city) {
-        filter = {
-            city: new RegExp(filterCompany.city, 'i')
-        };
+    }
+    
+    if (filterCompany.city) {
+        filter.city = filterCompany.city;
     }
     filter.deleted = false;
     jobs = await JobsModel.find(filter)

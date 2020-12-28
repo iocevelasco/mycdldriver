@@ -31,24 +31,23 @@ function mapStateToProps(state) {
 }
 
 const FormUserCompany = (props) => {
+  const { company } = props.user;
   const [form] = Form.useForm();
-  const [arr, setArr] = useState([]);
   const fileList = [];
   const {
     loading,
-    onChangeCompany,
     fields,
     newCompany,
     updateCompany,
-    setImageProfile,
-    imageProfile,
+    setNewImage,
+    newImage,
     token,
   } = props;
 
-  const resolveImageProfile = (imageProfile, photoProfile) => {
+  const resolveImageProfile = (newImage, photoProfile) => {
     try {
       return {
-        avatar: imageProfile ? imageProfile.data.file : photoProfile
+        avatar: newImage ? newImage : photoProfile
       }
     } catch (err) {
       return {
@@ -57,8 +56,20 @@ const FormUserCompany = (props) => {
     }
   }
 
-  const { avatar } = resolveImageProfile(imageProfile, props.photoProfile)
+  const resolveState = (state) => {
+    try {
+      if (state._id) {
+        return state._id;
+      } else {
+        return state
+      }
+    } catch (err) {
+      console.log(err);
+      return '';
+    }
+  }
 
+  const { avatar } = resolveImageProfile(newImage, props.photoProfile)
   return (
     <div className='profile-driver'>
       <Form
@@ -72,10 +83,10 @@ const FormUserCompany = (props) => {
           <Col className='profile-driver__form' span={20}>
             <Row justify='center'>
               <ImageProfile
-                imageProfile={avatar}
-                setImageProfile={setImageProfile}
-                fileList={fileList}
-                token={token}
+                avatar={avatar}
+                setNewImage={setNewImage}
+                newImage={newImage}
+                token={props.token}
               />
             </Row>
             <Row gutter={[24]} justify='space-between' >
@@ -192,7 +203,7 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <AddressInputs stateId={props.user.company.state} />
+            <AddressInputs stateId={resolveState(company.state)} />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button
