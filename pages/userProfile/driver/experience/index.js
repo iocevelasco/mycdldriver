@@ -83,7 +83,6 @@ const DriverExperience = ({ header, token, user, ...props }) => {
   const onSubmitExperience = async (body) => {
     try {
       const formatExp = setFormatExperience(body);
-      console.log(formatExp);
       const response = await axios.patch("/api/driver/experience", formatExp, header);
       console.log('response', response);
       addExperience(body);
