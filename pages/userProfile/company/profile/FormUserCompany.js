@@ -70,7 +70,6 @@ const FormUserCompany = (props) => {
   }
 
   const { avatar } = resolveImageProfile(newImage, props.photoProfile)
-  console.log('avatar', avatar)
   return (
     <div className='profile-driver'>
       <Form

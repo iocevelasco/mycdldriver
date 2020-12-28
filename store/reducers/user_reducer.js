@@ -70,7 +70,7 @@ function fetchUserData() {
     return axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
 
-        if (typeUser == 1) {
+        if (typeUser === 1) {
           let { date, driver, lastname, name, _id, photo, email } = response.data.data;
           dispatch(({
             type: types.RELOAD_PROPS_DRIVER,
@@ -81,7 +81,7 @@ function fetchUserData() {
           }));
         }
 
-        if (typeUser == 2) {
+        if (typeUser === 2) {
           let { date, company, lastname, name, _id, photo, email } = response.data.data;
           dispatch(({
             type: types.RELOAD_PROPS_COMPANY,
@@ -218,7 +218,6 @@ const userReducer = (state = initialState, action) => {
     case types.SETTING_APP_HEADER:
       return { ...state, header: action.payload.header, token: action.payload.token };
     case types.RELOAD_PROPS_DRIVER:
-      console.log(action.payload)
       return { ...state, ...action.payload, driver: action.payload.driver };
     case types.RELOAD_PROPS_COMPANY:
       return { ...state, ...action.payload, company: action.payload.company };
