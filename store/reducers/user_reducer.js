@@ -64,9 +64,9 @@ const initialState = {
   }
 };
 
-function fetchUserData() {
+function fetchUserData(token) {
   return (dispatch, getState) => {
-    const { typeUser, token } = getState().user
+    const { typeUser } = getState().user;
     return axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
 
