@@ -160,6 +160,18 @@ function getPrelogin(ip){
     });
 }
 
+async function changePassword(user, oldPass, newPass){
+    try{
+        return store.changePassword(user, oldPass, newPass);
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
+}
+
 module.exports = {
     getUsers,
     getUser,
@@ -172,5 +184,6 @@ module.exports = {
     loginAfterRegUser,
     setPrelogin,
     getPrelogin,
-    setPhoto
+    setPhoto,
+    changePassword
 }

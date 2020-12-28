@@ -23,13 +23,11 @@ function mapStateToProps(state) {
   }
 }
 
-
 function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query))
   }
 }
-
 
 const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
   useEffect(() => {

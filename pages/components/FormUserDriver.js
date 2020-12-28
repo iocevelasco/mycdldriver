@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Input, Form, Button, InputNumber, Radio, DatePicker, notification, message } from 'antd';
+import { Row, Col, Input, Form, Button, InputNumber, Space, Radio, DatePicker, notification, message } from 'antd';
 import { updateUserDrive } from '@store/reducers/user_reducer';
-import { SafetyCertificateOutlined } from '@ant-design/icons';
+import { SafetyCertificateOutlined, WarningOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 import { ImageProfile } from 'components/UploadImages';
 import PasswordModal from 'components/PasswordModal';
@@ -36,12 +36,18 @@ const DriverUser = ({ user, ...props }) => {
   const [loading, setLoader] = useState(false);
   const [fields, setFields] = useState([]);
   const [newImage, setNewImage] = useState(null);
+  const [configPsw, setPsw] = useState({
+    password: null,
+    isPassword: false
+  });
 
+  console.log(configPsw);
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
 
   useEffect(() => {
+
     let fields = [];
 
     for (let key in user) {
@@ -144,6 +150,7 @@ const DriverUser = ({ user, ...props }) => {
   };
 
   const beforeToCreateProfile = async (fields, type) => {
+    passwordValidator();
     setLoader(true);
     try {
       const { google_id, facebook_id, photo, email } = user;
@@ -166,16 +173,15 @@ const DriverUser = ({ user, ...props }) => {
         base.email = email;
         base.google_id = google_id;
         base.facebook_id = facebook_id;
-        base.password = password;
+        base.password = configPsw;
       }
 
       driver.zipCode = zipCode;
       driver.state = state;
-      driver.imageDln = '',
-        driver.dln = dln;
+      driver.dln = dln;
       driver.sex = sex;
       driver.phoneNumber = phoneNumber;
-      driver.password = password;
+      driver.password = configPsw.password;
       driver.confirm = confirm;
       driver.city = city;
       driver.birthDate = birthDate;
@@ -205,6 +211,19 @@ const DriverUser = ({ user, ...props }) => {
   }
 
   const { avatar } = resolveImageProfile(newImage, props.photoProfile)
+
+  const passwordValidator = () => {
+    if (user.isUserRegistry) {
+      if (!configPsw.isPassword) {
+        notification['error']({
+          message: 'Error',
+          description:
+            'Please config your password'
+        });
+        return
+      }
+    }
+  }
 
   return (
     <div className='profile-driver'>
@@ -318,7 +337,18 @@ const DriverUser = ({ user, ...props }) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Button onClick={() => setVisiblePassword(true)} size='large' icon={<SafetyCertificateOutlined />}>Change Password</Button>
+                <PasswordModal
+                  setPsw={setPsw}
+                  visible={visibleModalPassword}
+                  password={user.password}
+                  handleModal={setVisiblePassword} />
+                <Button
+                  type={configPsw.isPassword ? '' : 'danger'}
+                  onClick={() => setVisiblePassword(true)}
+                  size='large'
+                  block
+                  icon={<SafetyCertificateOutlined />}
+                >Setting Password</Button>
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
@@ -364,7 +394,6 @@ const DriverUser = ({ user, ...props }) => {
           </Form>
         </Col>
       </Row>
-      <PasswordModal visible={visibleModalPassword} password={user.password} />
       <SpinnerComp active={loading} />
     </div >
   )

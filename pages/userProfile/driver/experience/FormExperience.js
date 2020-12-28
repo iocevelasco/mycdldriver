@@ -10,7 +10,7 @@ const FormExperience = (props) => {
   const [twicCard, setTwicCard] = useState({ twicCard: false });
 
   const [imageDln, setImageDLN] = useState('');
-  const [medicCard, setMedicCard] = useState('');
+  const [medicCardImage, setMedicCardImage] = useState('');
 
   const [swtichInputs, setSwitchInputs] = useState([
     "Tank Endorsed",
@@ -31,7 +31,7 @@ const FormExperience = (props) => {
       expDateDln: fields.expDateDln._d,
       twicCard: twicCard,
       imageDln: imageDln,
-      medicCard: medicCard,
+      medicCardImage: medicCardImage,
     };
 
     body.experience = { ...switchValues };
@@ -46,6 +46,7 @@ const FormExperience = (props) => {
           ...switchValues,
           [name]: { ...switchValues[name], ...years },
         });
+        console.log('switchValues', switchValues);
         break;
       case "have":
         let have = { have: value };
@@ -114,8 +115,8 @@ const FormExperience = (props) => {
                   </Col>
                   <Col span={24}>
                     <DraggerUpload
-                      setDefaultFileList={setMedicCard}
-                      defaultFileList={medicCard}
+                      setDefaultFileList={setMedicCardImage}
+                      defaultFileList={medicCardImage}
                       label='Medic card'
                       button='Add photo'
                       token={props.token} />

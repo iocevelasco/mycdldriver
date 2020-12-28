@@ -16,7 +16,8 @@ const types = {
   LOGIN_SUCCESS_MODAL: "LOGIN_SUCCESS_MODAL",
   UPDATE_EXPERIENCE: "UPDATE_EXPERIENCE",
   SETTING_APP_HEADER: "SETTING_APP_HEADER",
-  RELOAD_PROPS: 'RELOAD_PROPS'
+  RELOAD_PROPS_DRIVER: 'RELOAD_PROPS_DRIVER',
+  RELOAD_PROPS_COMPANY: 'RELOAD_PROPS_COMPANY',
 };
 
 const initialState = {
@@ -65,14 +66,14 @@ const initialState = {
 
 function fetchUserData(token) {
   return (dispatch, getState) => {
-    const { typeUser } = getState().user
+    const { typeUser } = getState().user;
     return axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
 
-        if (typeUser == 1) {
+        if (typeUser === 1) {
           let { date, driver, lastname, name, _id, photo, email } = response.data.data;
           dispatch(({
-            type: types.RELOAD_PROPS,
+            type: types.RELOAD_PROPS_DRIVER,
             payload: {
               company: null,
               date, driver, lastname, name, _id, photo, email
@@ -80,10 +81,10 @@ function fetchUserData(token) {
           }));
         }
 
-        if (typeUser == 2) {
+        if (typeUser === 2) {
           let { date, company, lastname, name, _id, photo, email } = response.data.data;
           dispatch(({
-            type: types.RELOAD_PROPS,
+            type: types.RELOAD_PROPS_COMPANY,
             payload: {
               driver: null,
               date, company, lastname, name, _id, photo, email
@@ -216,6 +217,10 @@ const userReducer = (state = initialState, action) => {
       return { ...state, experiencie: action.payload };
     case types.SETTING_APP_HEADER:
       return { ...state, header: action.payload.header, token: action.payload.token };
+    case types.RELOAD_PROPS_DRIVER:
+      return { ...state, ...action.payload, driver: action.payload.driver };
+    case types.RELOAD_PROPS_COMPANY:
+      return { ...state, ...action.payload, company: action.payload.company };
     default:
       return state;
   }

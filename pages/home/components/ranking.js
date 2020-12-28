@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Row,
   Col,
@@ -7,19 +7,36 @@ import {
   Typography,
   Button
 } from 'antd';
-
+import { connect } from 'react-redux';
+import { fetchDriversData } from '@store/reducers/landing_reducer';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
+import { withRouter } from 'next/router';
 
 const { Text, Title } = Typography
 const { Meta } = Card;
 
-const RankingComp = ({ rankingDriver }) => {
+function mapStateToProps(state) {
+  return {
+    drivers: state.landing.drivers
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchDrivers: () => dispatch(fetchDriversData())
+  }
+}
+
+const RankingComp = ({ drivers, fetchDrivers }) => {
+  useEffect(() => {
+    fetchDrivers();
+  }, [])
   const stars = [1,2,3,4,5]
 
   return (
     <>
     {
-      rankingDriver.map((e,key)=>{
+      drivers.map((e,key)=>{
         return (
           <Col key={key} className="home--ranking" lg={6} md={12} sm={22}>
           <Card
@@ -27,16 +44,17 @@ const RankingComp = ({ rankingDriver }) => {
             cover={
               <img
                 alt="example"
-                src={e.image}
+                src={e.photo}
               />
             }
             style={{ width: '100%', marginTop: 24, }}>
             <div className='star-container'>
               {stars.map((e, key)=> <StarFilled key={key} style={{color:'#FFE206'}} />)}
             </div>
+            {fullname = e.name + e.lastname}
             <Meta
-              title={e.full_name}
-              description={`Address ${e.address}`}
+              title={fullname}
+              description={`Address ${e.driver.address}`}
             />
           </Card>
           </Col>
@@ -46,5 +64,4 @@ const RankingComp = ({ rankingDriver }) => {
     </>
   );
 }
-
-export default RankingComp;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RankingComp));

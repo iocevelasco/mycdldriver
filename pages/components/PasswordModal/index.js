@@ -1,36 +1,27 @@
-import { connect } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { withRouter } from 'next/router';
-import { handlerModalLogin, activeLoading } from '@store/reducers/landing_reducer';
 import { Typography, Modal, Button, Col, Row, Input, Form } from 'antd';
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 const { Text, Title } = Typography;
 import "./styles.less";
 
-function mapStateToProps(state) {
-  return {
 
-    visible_modal_login: state.landing.visible_modal_login
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    handleModal: (props) => dispatch(handlerModalLogin(props)),
-    handleActiveModal: (props) => dispatch(activeLoading(props))
-  }
-};
-
-const PasswordModal = ({ visible, password, router, ...props }) => {
+const PasswordModal = ({ visible, setPsw, handleModal }) => {
   const [form] = Form.useForm();
-  const handleModal = () => {
-    props.handleModal(false);
-    setNewUser(false);
-  }
 
   const style = {
     height: '400px',
     top: 16,
+  }
+
+  const onFinish = (fields) => {
+    const { password, confirm } = fields;
+    if (password === confirm) {
+      setPsw({
+        password,
+        isPassword: true
+      });
+      handleModal(false);
+    }
   }
 
   return (
@@ -39,7 +30,7 @@ const PasswordModal = ({ visible, password, router, ...props }) => {
       visible={visible}
       footer={null}
       width={420}
-      onCancel={handleModal}>
+      onCancel={() => handleModal(false)}>
       <div className='login_password'>
         <div className='login_password--title'>
           <Title level={3}> Change your password </Title>
@@ -47,18 +38,22 @@ const PasswordModal = ({ visible, password, router, ...props }) => {
         </div>
         <Form
           form={form}
-          name="global_state"
+          onFinish={onFinish}
+          name="config_password"
           layout='vertical'>
           <Row gutter={[24]} justify='space-between' >
             <Col span={24}>
               <Form.Item
-                label='Current password'
+                label='Password'
+                name='password'
+                hasFeedback
                 rules={[
                   {
-                    required: false,
+                    required: true,
+                    message: 'Please input your password!',
                   },
                 ]}
-                name='password'>
+              >
                 <Input.Password
                   placeholder="Password"
                   iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
@@ -73,21 +68,22 @@ const PasswordModal = ({ visible, password, router, ...props }) => {
                 hasFeedback
                 rules={[
                   {
-                    required: false,
+                    required: true,
                     message: 'Please confirm your password!',
                   },
                   ({ getFieldValue }) => ({
-                    validator(value) {
+                    validator(rule, value) {
                       if (!value || getFieldValue('password') === value) {
                         return Promise.resolve();
                       }
+
                       return Promise.reject('The two passwords that you entered do not match!');
                     },
                   }),
                 ]}
               >
                 <Input.Password
-                  placeholder="Confirm Password" />
+                  placeholder="Password" />
               </Form.Item>
             </Col>
           </Row>
@@ -97,7 +93,7 @@ const PasswordModal = ({ visible, password, router, ...props }) => {
                 style={{ marginTop: 24 }}
                 type='secondary'
                 shape="round"
-                htmlType="submit"
+                onClick={() => handleModal(false)}
                 block
                 size='large'> Cancel </Button>
             </Col>
@@ -117,6 +113,4 @@ const PasswordModal = ({ visible, password, router, ...props }) => {
   )
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(PasswordModal)
-);
+export default withRouter(PasswordModal);
