@@ -6,7 +6,7 @@ import CarouselComp from 'components/carousel';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import queryString from "query-string";
-import { fetchJobPositionData, fetchCommonData } from '@store/reducers/landing_reducer';
+import { fetchJobPositionData, fetchDriversData, fetchCommonData } from '@store/reducers/landing_reducer';
 import { logoutUser } from '@store/reducers/user_reducer';
 import axios from 'axios';
 
@@ -61,6 +61,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query)),
+    fetchDrivers: () => dispatch(fetchDriversData()),
     fetCommons: () => dispatch(fetchCommonData()),
     handleLogout: () => dispatch(logoutUser()),
   }
@@ -69,6 +70,7 @@ function mapDispatchToProps(dispatch) {
 const Home = ({
   user,
   fetchJobs,
+  fetchDrivers,
   deviceType,
   fetCommons,
   ...props
@@ -78,6 +80,7 @@ const Home = ({
   useEffect(() => {
     fetchJobs(state.query);
     fetchPosition();
+    fetchDrivers();
     fetCommons();
   }, [])
 

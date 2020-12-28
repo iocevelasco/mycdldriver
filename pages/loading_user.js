@@ -45,8 +45,20 @@ const LoadingUser = ({ active }) => {
     }
   }, [active]);
 
+  const closeWindow = () => {
+    if (typeof window !== "undefined") {
+      const params = window.location.search;
+      if (window.opener) {
+        window.opener.postMessage(params);
+        window.opener.location.reload();
+        window.close();
+      }
+    }
+  }
+
   return (
     <div style={styles.content}>
+      {closeWindow()}
       <div style={styles.wrapper}>
         <Spin indicator={antIcon} />
         <Title level={3} style={styles.title}> Loagin </Title>
