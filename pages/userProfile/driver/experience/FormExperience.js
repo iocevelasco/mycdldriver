@@ -31,7 +31,7 @@ const FormExperience = (props) => {
       expDateDln: fields.expDateDln._d,
       twicCard: twicCard,
       imageDln: imageDln,
-      medicCard: medicCard,
+      mediCardImage: medicCard,
     };
 
     body.experience = { ...switchValues };
@@ -46,6 +46,7 @@ const FormExperience = (props) => {
           ...switchValues,
           [name]: { ...switchValues[name], ...years },
         });
+        console.log('switchValues', switchValues);
         break;
       case "have":
         let have = { have: value };
