@@ -28,39 +28,39 @@ function mapDispatchToProps(dispatch) {
 }
 
 const RankingComp = ({ drivers, fetchDrivers }) => {
+
   useEffect(() => {
     fetchDrivers();
   }, [])
-  const stars = [1,2,3,4,5]
 
+  const stars = [1, 2, 3, 4, 5]
   return (
     <>
-    {
-      drivers.map((e,key)=>{
-        return (
-          <Col key={key} className="home--ranking" lg={6} md={12} sm={22}>
-          <Card
-           hoverable={true}
-            cover={
-              <img
-                alt="example"
-                src={e.photo}
-              />
-            }
-            style={{ width: '100%', marginTop: 24, }}>
-            <div className='star-container'>
-              {stars.map((e, key)=> <StarFilled key={key} style={{color:'#FFE206'}} />)}
-            </div>
-            {fullname = e.name + e.lastname}
-            <Meta
-              title={fullname}
-              description={`Address ${e.driver.address}`}
-            />
-          </Card>
-          </Col>
-        )
-      })
-    }
+      {
+        drivers.map((e, key) => {
+          return (
+            <Col key={key} className="home--ranking" lg={6} md={12} sm={22}>
+              <Card
+                hoverable={true}
+                cover={
+                  <img
+                    alt="example"
+                    src={e.photo}
+                  />
+                }
+                style={{ width: '100%', marginTop: 24, }}>
+                <div className='star-container'>
+                  {stars.map((e, key) => <StarFilled key={key} style={{ color: '#FFE206' }} />)}
+                </div>
+                <Meta
+                  title={e.name + " " + e.lastname}
+                  description={`Address ${e.driver.address}`}
+                />
+              </Card>
+            </Col>
+          )
+        })
+      }
     </>
   );
 }

@@ -7,7 +7,6 @@ import axios from 'axios';
 const { Option } = Select;
 
 
-
 const AddressInputs = (props) => {
   const { stateId } = props
   const [stateOptions, isFetching] = useListState();
@@ -19,8 +18,15 @@ const AddressInputs = (props) => {
   });
 
   useEffect(() => {
-    if (stateId) {
-      fetchCities(stateId);
+    try {
+      if (stateId._id) {
+        fetchCities(stateId._id);
+      } else {
+        fetchCities(stateId);
+      }
+    } catch (err) {
+      console.log(err);
+      return '';
     }
   }, [stateId]);
 
@@ -89,7 +95,7 @@ const AddressInputs = (props) => {
         <Col span={8}>
           <Form.Item label="State / Province / Reagion">
             <Form.Item
-              name={'state'}
+              name='state'
               noStyle
               rules={[{ required: true, message: 'Province is required' }]}
             >
@@ -106,7 +112,7 @@ const AddressInputs = (props) => {
         <Col span={10}>
           <Form.Item label="City">
             <Form.Item
-              name={'city'}
+              name='city'
               noStyle
               rules={[{ required: true, message: 'City is required' }]}
             >
@@ -114,7 +120,7 @@ const AddressInputs = (props) => {
                 disabled={cityOptions.disabled}
                 placeholder="Select city">
                 {
-                  cityOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
+                  cityOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value || ''}</Option>))
                 }
               </Select>
             </Form.Item>
