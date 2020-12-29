@@ -75,6 +75,7 @@ const DriverExperience = ({ header, token, user, ...props }) => {
         years: oldFormat[inp].years
       });
     });
+    exp.twicCard = exp.twicCard.twicCard;
     exp.experience = newFormat;
     return exp;
   }

@@ -6,11 +6,14 @@ import { DraggerUpload } from "components/UploadImages";
 const { TextArea } = Input;
 
 const FormExperience = (props) => {
+  
+  
+
   const [switchValues, setSwitchValues] = useState(mockExperience);
   const [twicCard, setTwicCard] = useState({ twicCard: false });
 
-  const [imageDln, setImageDLN] = useState('');
-  const [medicCardImage, setMedicCardImage] = useState('');
+  const [imageDln, setImageDLN] = useState(getImageFromFields('imageDln'));
+  const [medicCardImage, setMedicCardImage] = useState(getImageFromFields('medicCardImage'));
 
   const [swtichInputs, setSwitchInputs] = useState([
     "Tank Endorsed",
@@ -21,8 +24,16 @@ const FormExperience = (props) => {
     "Flat Bed",
   ]);
 
-
   const [form] = Form.useForm();
+
+  function getImageFromFields(name){
+    let tempImg = props.fields.map((response) => {
+      if(response['name'] == name){
+        return response['value'];
+      }
+    });
+    return tempImg.filter(Boolean);
+  }
 
   const isUserRegistry = async (fields) => {
     let body = {
