@@ -81,6 +81,7 @@ const DriverExperience = ({ header, token, user, ...props }) => {
     exp.experience = newFormat;
     return exp;
   }
+
   const onSubmitExperience = async (body) => {
     const formatExp = setFormatExperience(body);
     await axios.patch("/api/driver/experience", formatExp, { headers: { Authorization: `Bearer ${token}` } })
