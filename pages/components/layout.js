@@ -46,7 +46,7 @@ const MainLayout = ({
     deviceType,
     token,
     ...props }) => {
-    console.log('token', token);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
