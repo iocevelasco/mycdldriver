@@ -27,6 +27,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const DriverExperience = ({ header, token, user, ...props }) => {
+
   const [fields, setFields] = useState([]);
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
@@ -112,6 +113,7 @@ const DriverExperience = ({ header, token, user, ...props }) => {
             loading={false}
             onSubmitExperience={onSubmitExperience}
             token={token}
+            user={user}
           />
         </WrapperSection>
       </Col>

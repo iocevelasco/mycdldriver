@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Input, Form, Button, InputNumber, Switch, DatePicker, } from "antd";
 import { SpinnerComp } from "components/helpers";
 import mockExperience from "./experience.json";
@@ -6,14 +6,11 @@ import { DraggerUpload } from "components/UploadImages";
 const { TextArea } = Input;
 
 const FormExperience = (props) => {
-  
-  
-
   const [switchValues, setSwitchValues] = useState(mockExperience);
   const [twicCard, setTwicCard] = useState({ twicCard: false });
 
-  const [imageDln, setImageDLN] = useState(getImageFromFields('imageDln'));
-  const [medicCardImage, setMedicCardImage] = useState(getImageFromFields('medicCardImage'));
+  const [imageDln, setImageDLN] = useState('');
+  const [medicCardImage, setMedicCardImage] = useState('');
 
   const [swtichInputs, setSwitchInputs] = useState([
     "Tank Endorsed",
@@ -26,14 +23,23 @@ const FormExperience = (props) => {
 
   const [form] = Form.useForm();
 
-  function getImageFromFields(name){
+
+
+  function getImageFromFields(name) {
     let tempImg = props.fields.map((response) => {
-      if(response['name'] == name){
+      if (response['name'] == name) {
         return response['value'];
       }
     });
     return tempImg.filter(Boolean);
   }
+  useEffect(() => {
+    let { imageDln } = props.user.driver;
+    if (imageDln !== '') {
+      setImageDLN(imageDln);
+      setMedicCardImage(imageDln);
+    }
+  }, []);
 
   const isUserRegistry = async (fields) => {
     let body = {

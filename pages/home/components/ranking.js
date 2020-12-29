@@ -16,7 +16,6 @@ const { Text, Title } = Typography
 const { Meta } = Card;
 
 function mapStateToProps(state) {
-  console.log('[ STATE ]', state);
   return {
     drivers: state.landing.drivers
   }
