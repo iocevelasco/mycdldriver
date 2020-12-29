@@ -9,11 +9,11 @@ import {
   Typography,
   Select
 } from 'antd';
+import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
-
+import PasswordModal from 'components/PasswordModal';
 import { SpinnerComp } from 'components/helpers';
-import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 import AddressInputs from 'components/AddressInput';
 import { ImageProfile } from 'components/UploadImages';
 
@@ -32,8 +32,9 @@ function mapStateToProps(state) {
 
 const FormUserCompany = (props) => {
   const { company } = props.user;
+
   const [form] = Form.useForm();
-  const fileList = [];
+
   const {
     loading,
     fields,
@@ -41,7 +42,10 @@ const FormUserCompany = (props) => {
     updateCompany,
     setNewImage,
     newImage,
-    token,
+    setVisiblePassword,
+    visibleModalPassword,
+    configPsw,
+    setPsw
   } = props;
 
   const resolveImageProfile = (newImage, photoProfile) => {
@@ -53,19 +57,6 @@ const FormUserCompany = (props) => {
       return {
         avatar: photoProfile
       }
-    }
-  }
-
-  const resolveState = (state) => {
-    try {
-      if (state._id) {
-        return state._id;
-      } else {
-        return state
-      }
-    } catch (err) {
-      console.log(err);
-      return '';
     }
   }
 
@@ -148,21 +139,6 @@ const FormUserCompany = (props) => {
             <Row gutter={[24]} justify='space-between' >
               <Col span={12}>
                 <Form.Item
-                  label='Change password'
-                  rules={[
-                    {
-                      required: false,
-                    },
-                  ]}
-                  name='password'>
-                  <Input.Password
-                    placeholder="password"
-                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
                   name="email"
                   label="Email"
                   rules={[
@@ -173,6 +149,21 @@ const FormUserCompany = (props) => {
                   ]}>
                   <Input />
                 </Form.Item>
+              </Col>
+              <Col span={12}>
+                <span style={{ paddingTop: 39, display: 'block' }}>
+                  <PasswordModal
+                    setPsw={setPsw}
+                    visible={visibleModalPassword}
+                    handleModal={setVisiblePassword} />
+                  <Button
+                    type={configPsw.isPassword ? '' : 'danger'}
+                    onClick={() => setVisiblePassword(true)}
+                    size='large'
+                    block
+                    icon={<SafetyCertificateOutlined />}
+                  >Setting Password</Button>
+                </span>
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
@@ -203,7 +194,7 @@ const FormUserCompany = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <AddressInputs stateId={resolveState(company.state)} />
+            <AddressInputs stateId={company.state} />
             <Row gutter={[24]} justify='center' align='middle'>
               <Col span={12}>
                 <Button

@@ -29,7 +29,12 @@ function mapDispatchToProps(dispatch) {
 const CompanyProfileView = ({ user, ...props }) => {
   const [newImage, setNewImage] = useState(null);
   const [loading, setLoader] = useState(false);
+  const [visibleModalPassword, setVisiblePassword] = useState(false);
   const [fields, setFields] = useState([]);
+  const [configPsw, setPsw] = useState({
+    password: null,
+    isPassword: false
+  });
 
 
   const header = {
@@ -83,7 +88,7 @@ const CompanyProfileView = ({ user, ...props }) => {
         base.facebook_id = facebook_id;
         base.password = password;
       }
-
+      company.password = configPsw.password;
       company.tradename = tradename;
       company.legalNumber = legalNumber;
       company.phoneNumber = phoneNumber;
@@ -187,9 +192,13 @@ const CompanyProfileView = ({ user, ...props }) => {
               newImage={newImage}
               setNewImage={setNewImage}
               newCompany={newCompany}
+              visibleModalPassword={visibleModalPassword}
+              setVisiblePassword={setVisiblePassword}
               updateCompany={updateCompany}
               loading={loading}
+              setPsw={setPsw}
               fields={fields}
+              configPsw={configPsw}
             />
           </WrapperSection>
         </Col>

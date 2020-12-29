@@ -40,13 +40,11 @@ function fetchJobPositionData(qs) {
 function fetchDriversData() {
     return (dispatch) => {
         return axios.get(`/api/user/1`)
-            .then(({ response }) => {
-                let drivers = response.data;
+            .then(({ data }) => {
+                let drivers = data.data;
                 dispatch(({
                     type: types.FETCH_DRIVERS,
-                    payload: {
-                        drivers: drivers,
-                    }
+                    payload: drivers
                 }));
             }).catch((error) => {
                 console.log(error);
@@ -108,7 +106,7 @@ const landingReducer = (state = initialState, action) => {
             }
         case types.FETCH_DRIVERS:
             return {
-                ...state, drivers: action.payload.drivers
+                ...state, drivers: action.payload
             }
         case types.VISIBLE_MODAL_LOGIN:
             return {

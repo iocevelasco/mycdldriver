@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Input, Form, Button, InputNumber, Space, Radio, DatePicker, notification, message } from 'antd';
 import { updateUserDrive } from '@store/reducers/user_reducer';
-import { SafetyCertificateOutlined, WarningOutlined } from '@ant-design/icons';
+import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 import { ImageProfile } from 'components/UploadImages';
 import PasswordModal from 'components/PasswordModal';
@@ -173,7 +173,6 @@ const DriverUser = ({ user, ...props }) => {
         base.email = email;
         base.google_id = google_id;
         base.facebook_id = facebook_id;
-        base.password = configPsw;
       }
 
       driver.zipCode = zipCode;
@@ -340,7 +339,6 @@ const DriverUser = ({ user, ...props }) => {
                 <PasswordModal
                   setPsw={setPsw}
                   visible={visibleModalPassword}
-                  password={user.password}
                   handleModal={setVisiblePassword} />
                 <Button
                   type={configPsw.isPassword ? '' : 'danger'}

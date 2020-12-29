@@ -32,7 +32,8 @@ const profileDriverSchema = Schema({
     },
     rating: {
         type: Number,
-        trim: true
+        trim: true,
+        default: 0
     },
     twicCard: Boolean,
     zipCode: {

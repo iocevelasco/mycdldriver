@@ -51,18 +51,7 @@ async function getOneUser(id){
         const list = await User.findOne(filter)
         .select('name lastname photo date email')
         .populate('driver')
-        .populate({
-            path: 'company',
-            model: 'ProfileCompany',
-            populate: [{
-                path: 'state',
-                select: 'stateName'
-            },
-            {
-                path: 'city',
-                select: 'cityName'
-            }]
-        });
+        .populate('company');
         return {
             status: 200,
             message: list
