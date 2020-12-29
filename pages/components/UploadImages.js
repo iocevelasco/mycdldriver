@@ -59,9 +59,8 @@ const ImageProfile = ({ setNewImage, newImage, avatar }) => {
   )
 }
 
-const DraggerUpload = ({ defaultFileList, setDefaultFileList, label, token, image }) => {
+const DraggerUpload = ({ defaultFileList, setDefaultFileList, label }) => {
 
-  axios.defaults.headers.post['authorization'] = `Bearer ${token}`;
   const uploadImage = async options => {
     const { onSuccess, onError, file } = options;
 

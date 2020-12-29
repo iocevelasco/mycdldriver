@@ -60,18 +60,19 @@ const initialState = {
   experience: {},
 };
 
-function fetchUserData(token) {
-  return (dispatch, getState) => {
-    const { typeUser } = getState().user;
+function fetchUserData(token, typeUser) {
+  return (dispatch) => {
     return axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
-
-        if (typeUser === 1) {
+        if (typeUser == 1) {
           let { date, driver, lastname, name, _id, photo, email } = response.data.data;
-          dispatch(({
+          return dispatch(({
             type: types.RELOAD_PROPS_DRIVER,
             payload: {
               company: null,
+              isLogin: true,
+              token: token,
+              typeUser: 1,
               date, driver, lastname, name, _id, photo, email
             }
           }));
@@ -79,10 +80,13 @@ function fetchUserData(token) {
 
         if (typeUser === 2) {
           let { date, company, lastname, name, _id, photo, email } = response.data.data;
-          dispatch(({
+          return dispatch(({
             type: types.RELOAD_PROPS_COMPANY,
             payload: {
               driver: null,
+              isLogin: true,
+              typeUser: 2,
+              token: token,
               date, company, lastname, name, _id, photo, email
             }
           }));
