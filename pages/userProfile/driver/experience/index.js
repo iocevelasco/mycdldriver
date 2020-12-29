@@ -27,6 +27,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const DriverExperience = ({ header, token, user, ...props }) => {
+  console.log('user', user.driver.experience)
   const [fields, setFields] = useState([]);
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,

@@ -41,7 +41,7 @@ const DriverUser = ({ user, ...props }) => {
     isPassword: false
   });
 
-  console.log(configPsw);
+
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };

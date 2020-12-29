@@ -17,7 +17,6 @@ const beforeUpload = (file) => {
 }
 
 const ImageProfile = ({ setNewImage, newImage, avatar }) => {
-  console.log('avatar', avatar);
   const uploadImage = async options => {
     const { onSuccess, onError, file } = options;
 

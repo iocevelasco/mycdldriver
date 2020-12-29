@@ -15,7 +15,6 @@ const types = {
   HANDLE_INPUTS: "HANDLE_INPUTS",
   LOGIN_SUCCESS_MODAL: "LOGIN_SUCCESS_MODAL",
   UPDATE_EXPERIENCE: "UPDATE_EXPERIENCE",
-  SETTING_APP_HEADER: "SETTING_APP_HEADER",
   RELOAD_PROPS_DRIVER: 'RELOAD_PROPS_DRIVER',
   RELOAD_PROPS_COMPANY: 'RELOAD_PROPS_COMPANY',
 };
@@ -59,9 +58,6 @@ const initialState = {
     city: '',
   },
   experience: {},
-  header: {
-    headers: { Authorization: `Bearer ${null}` }
-  }
 };
 
 function fetchUserData(token) {
@@ -188,16 +184,6 @@ const addExperience = (props) => {
   };
 };
 
-const settingAppHeader = (authProps) => {
-  const { token, header } = authProps;
-  return {
-    type: types.SETTING_APP_HEADER,
-    payload: {
-      token,
-      header
-    },
-  };
-};
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -215,8 +201,6 @@ const userReducer = (state = initialState, action) => {
       return { ...state, currentLocation: action.payload };
     case types.UPDATE_EXPERIENCE:
       return { ...state, experiencie: action.payload };
-    case types.SETTING_APP_HEADER:
-      return { ...state, header: action.payload.header, token: action.payload.token };
     case types.RELOAD_PROPS_DRIVER:
       return { ...state, ...action.payload, driver: action.payload.driver };
     case types.RELOAD_PROPS_COMPANY:
@@ -236,6 +220,5 @@ export {
   getCurrentLocation,
   setPropsUserReg,
   addExperience,
-  settingAppHeader,
   fetchUserData
 };

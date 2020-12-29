@@ -6,7 +6,7 @@ import Footer from './footer';
 import Link from 'next/link';
 import { SpinnerComp } from 'components/helpers';
 import { connect } from 'react-redux';
-import { logoutUser, getCurrentLocation, settingAppHeader, fetchUserData } from '@store/reducers/user_reducer';
+import { logoutUser, getCurrentLocation, fetchUserData } from '@store/reducers/user_reducer';
 import { handlerModalLogin, deviceType } from '@store/reducers/landing_reducer';
 import ModalLogin from 'components/login';
 import { Layout, Row, Col, Button, Avatar, Typography, Menu, Dropdown, Space } from 'antd';
@@ -20,6 +20,7 @@ const { Content, Header } = Layout;
 function mapStateToProps(state) {
     return {
         user: state.user,
+        token: state.user.token,
         isLoading: state.landing.isLoading
     }
 }
@@ -31,13 +32,21 @@ function mapDispatchToProps(dispatch) {
         handleLocation: (location) => dispatch(getCurrentLocation(location)),
         handleDeviceType: (props) => dispatch(deviceType(props)),
         fetchUserProps: (p) => dispatch(fetchUserProps(token)),
-        settingAppHeader: (authProps) => dispatch(settingAppHeader(authProps)),
         fetchUserData: (token) => dispatch(fetchUserData(token))
     }
 };
 
-const MainLayout = ({ children, title, user, isLoading, router, bgActive, deviceType, ...props }) => {
-
+const MainLayout = ({
+    children,
+    title,
+    user,
+    isLoading,
+    router,
+    bgActive,
+    deviceType,
+    token,
+    ...props }) => {
+    console.log('token', token);
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -46,14 +55,6 @@ const MainLayout = ({ children, title, user, isLoading, router, bgActive, device
         if (user) {
             if (user.token !== null) {
                 localStorage.setItem("token", user.token);
-                const header = {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
-                let authProps = {
-                    header,
-                    token
-                }
-                props.settingAppHeader(authProps);
             }
         }
         props.handleDeviceType(deviceType)
