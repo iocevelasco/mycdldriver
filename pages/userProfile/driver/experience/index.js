@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import moment from 'moment';
 import axios from "axios";
 import { withRouter } from "next/router";
-import { addExperience } from "../../../../store/reducers/user_reducer";
+import { addExperience, fetchUserData } from "@store/reducers/user_reducer";
 import "./styles.less";
 
 function mapStateToProps(state) {
@@ -23,6 +23,7 @@ function mapDispatchToProps(dispatch) {
   return {
     handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
     addExperience: (experience) => dispatch(addExperience(experience)),
+    fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser))
   };
 }
 
@@ -81,26 +82,23 @@ const DriverExperience = ({ header, token, user, ...props }) => {
     return exp;
   }
 
-
   const onSubmitExperience = async (body) => {
-    try {
-      const formatExp = setFormatExperience(body);
-      const response = await axios.patch("/api/driver/experience", formatExp, { headers: { Authorization: `Bearer ${token}` } });
-
-      addExperience(formatExp);
-
-      notification["success"]({
-        message: "Success",
-        description:
-          "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!",
+    const formatExp = setFormatExperience(body);
+    await axios.patch("/api/driver/experience", formatExp, { headers: { Authorization: `Bearer ${token}` } })
+      .then(() => {
+        props.fetchUserData(token, user.typeUser);
+        notification["success"]({
+          message: "Success",
+          description:
+            "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!",
+        });
+      }).catch((err) => {
+        console.log('err', err)
+        notification["error"]({
+          message: "error",
+          description: "Sorry! We couldn't create this user, please try again. ",
+        });
       });
-    } catch (err) {
-      console.log('err', err)
-      notification["error"]({
-        message: "error",
-        description: "Sorry! We couldn't create this user, please try again. ",
-      });
-    }
   };
 
   return (
