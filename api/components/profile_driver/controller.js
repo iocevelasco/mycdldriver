@@ -25,13 +25,46 @@ function addDriver(driver) {
             return false;
         }
 
+        const expDefault = [
+            {
+                "name":"Tank Endorsed",
+                "have":false,
+                "years":0
+            },
+            {
+                "name":"Hazmat",
+                "have":false,
+                "years":0
+            },
+            {
+                "name":"Refrigerated Loads",
+                "have":false,
+                "years":0
+            },
+            {
+                "name":"Van",
+                "have":false,
+                "years":0
+            },
+            {
+                "name":"Car Carrier",
+                "have":false,
+                "years":0
+            },
+            {
+                "name":"Flat Bed",
+                "have":false,
+                "years":0
+            }
+        ];
+
         const fullDriver = {
             dln: driver.dln,
             birthDate: driver.birthDate,
             areaCode: driver.areaCode,
             phoneNumber: driver.phoneNumber,
             sex: driver.sex,
-            experience: driver.experience,
+            experience: expDefault,
             address: driver.address,
             address2: driver.address2,
             zipCode: driver.zipCode,
@@ -274,6 +307,40 @@ async function addStaff(user, company) {
         }else{
             user.typeUser = 1;
             user.photo = 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png';
+            
+            const expDefault = [
+                {
+                    "name":"Tank Endorsed",
+                    "have":false,
+                    "years":0
+                },
+                {
+                    "name":"Hazmat",
+                    "have":false,
+                    "years":0
+                },
+                {
+                    "name":"Refrigerated Loads",
+                    "have":false,
+                    "years":0
+                },
+                {
+                    "name":"Van",
+                    "have":false,
+                    "years":0
+                },
+                {
+                    "name":"Car Carrier",
+                    "have":false,
+                    "years":0
+                },
+                {
+                    "name":"Flat Bed",
+                    "have":false,
+                    "years":0
+                }
+            ];
+            user.driver.experience = expDefault;
         
             try {
                 const newStaff = await store.addStaff(user);

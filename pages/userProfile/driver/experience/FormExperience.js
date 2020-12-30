@@ -1,38 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Input, Form, Button, InputNumber, Switch, DatePicker, } from "antd";
 import { SpinnerComp } from "components/helpers";
-import mockExperience from "./experience.json";
+
 import { DraggerUpload } from "components/UploadImages";
+import { connect } from "react-redux";
+
+
 const { TextArea } = Input;
 
-const FormExperience = (props) => {
-  
-  
+function mapStateToProps(state) {
+  const { user } = state;
+  return {
+    experience: user.driver.experience
+  };
+}
 
-  const [switchValues, setSwitchValues] = useState(mockExperience);
-  const [twicCard, setTwicCard] = useState({ twicCard: false });
-
-  const [imageDln, setImageDLN] = useState(getImageFromFields('imageDln'));
-  const [medicCardImage, setMedicCardImage] = useState(getImageFromFields('medicCardImage'));
-
-  const [swtichInputs, setSwitchInputs] = useState([
-    "Tank Endorsed",
-    "Hazmat",
-    "Refrigerated Loads",
-    "Van",
-    "Car Carrier",
-    "Flat Bed",
-  ]);
-
+const FormExperience = ({ experience, ...props }) => {
+  const [switchValues, setSwitchValues] = useState({});
   const [form] = Form.useForm();
 
-  function getImageFromFields(name){
-    let tempImg = props.fields.map((response) => {
-      if(response['name'] == name){
-        return response['value'];
+  const [twicCard, setTwicCard] = useState(false);
+  const [imageDln, setImageDLN] = useState('');
+  const [medicCardImage, setMedicCardImage] = useState('');
+  const [switchInputs, setSwitchInputs] = useState(experience);
+
+  useEffect(() => {
+    let { imageDln, medicCardImage, twicCard } = props.user.driver;
+    if (imageDln !== '') {
+      setImageDLN(imageDln);
+      setMedicCardImage(medicCardImage);
+      setTwicCard(twicCard)
+    }
+
+    let values = {}
+    experience.forEach((e) => {
+      values[e.name] = {
+        name: e.name,
+        have: e.have,
+        years: e.years
       }
     });
-    return tempImg.filter(Boolean);
+
+    setSwitchValues(values);
+  }, []);
+
+  function setFormatExperience(exp) {
+    const oldFormat = exp.experience;
+    let newFormat = [];
+
+    Object.keys(oldFormat).map((inp, index) => {
+      newFormat.push({
+        name: oldFormat[inp].name,
+        have: oldFormat[inp].have,
+        years: oldFormat[inp].years
+      });
+    });
+    exp.experience = newFormat;
+    return exp;
   }
 
   const isUserRegistry = async (fields) => {
@@ -46,10 +70,12 @@ const FormExperience = (props) => {
     };
 
     body.experience = { ...switchValues };
-    props.onSubmitExperience(body);
+    const formatExp = setFormatExperience(body);
+    props.onSubmitExperience(formatExp);
   };
 
   const switchChange = async (value, name, type) => {
+
     switch (type) {
       case "years":
         let years = { years: value };
@@ -57,13 +83,18 @@ const FormExperience = (props) => {
           ...switchValues,
           [name]: { ...switchValues[name], ...years },
         });
-        console.log('switchValues', switchValues);
         break;
       case "have":
         let have = { have: value };
+        experience.forEach((e) => {
+          if (e.name === name.name) {
+            e.have = value
+          }
+        })
+        setSwitchInputs(experience)
         setSwitchValues({
           ...switchValues,
-          [name]: { ...switchValues[name], ...have },
+          [name.name]: { ...switchValues[name.name], ...have },
         });
         break;
     }
@@ -160,12 +191,13 @@ const FormExperience = (props) => {
                       label={"Twic Card"}
                       rules={[
                         {
-                          required: true,
+                          required: false,
                         },
                       ]}
                     >
                       <Switch
                         onChange={(checked) => setTwicCard(checked)}
+                        checked={twicCard}
                         name={"twicCard"}
                         checkedChildren={"ON"}
                         unCheckedChildren={"OFF"}
@@ -173,12 +205,12 @@ const FormExperience = (props) => {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    {swtichInputs.length >= 1 &&
-                      swtichInputs.map((inp, index) => {
+                    {switchInputs.length >= 1 &&
+                      switchInputs.map((inp, index) => {
                         return (
                           <Form.Item
                             className="formSwitch"
-                            label={inp}
+                            label={inp.name}
                             key={index}
                             rules={[
                               {
@@ -190,6 +222,7 @@ const FormExperience = (props) => {
                               onChange={(checked) =>
                                 switchChange(checked, inp, "have")
                               }
+                              checked={inp.have}
                               name={inp.name}
                               checkedChildren={"ON"}
                               unCheckedChildren={"OFF"}
@@ -206,6 +239,7 @@ const FormExperience = (props) => {
                           name={switchValues[inp].name}
                           className="formNumber"
                           key={index}
+                          initialValue={switchValues[inp].years}
                           style={{
                             visibility: !switchValues[inp]["have"]
                               ? "collapse"
@@ -254,4 +288,5 @@ const FormExperience = (props) => {
   );
 };
 
-export default FormExperience;
+export default connect(mapStateToProps)(FormExperience);
+

@@ -18,10 +18,12 @@ const { Text } = Typography;
 const { Content, Header } = Layout;
 
 function mapStateToProps(state) {
+    const { user, landing } = state;
     return {
-        user: state.user,
-        token: state.user.token,
-        isLoading: state.landing.isLoading
+        user: user,
+        token: user.token,
+        isLoading: landing.isLoading,
+        isAuthenticated: landing.isLogin
     }
 }
 
@@ -32,7 +34,7 @@ function mapDispatchToProps(dispatch) {
         handleLocation: (location) => dispatch(getCurrentLocation(location)),
         handleDeviceType: (props) => dispatch(deviceType(props)),
         fetchUserProps: (p) => dispatch(fetchUserProps(token)),
-        fetchUserData: (token) => dispatch(fetchUserData(token))
+        fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser))
     }
 };
 
@@ -45,16 +47,19 @@ const MainLayout = ({
     bgActive,
     deviceType,
     token,
+    isAuthenticated,
     ...props }) => {
-    console.log('token', token);
+
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            props.fetchUserData(token);
+        const tokenLS = localStorage.getItem('token');
+        const userTypeLS = localStorage.getItem('typeUser');
+        if (tokenLS) {
+            props.fetchUserData(tokenLS, userTypeLS);
         }
         if (user) {
             if (user.token !== null) {
                 localStorage.setItem("token", user.token);
+                localStorage.setItem("typeUser", user.typeUser);
             }
         }
         props.handleDeviceType(deviceType)
@@ -91,6 +96,22 @@ const MainLayout = ({
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
             <link rel="shortcut icon" href="../static/images/favicon.ico" />
+            
+            <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKQYTSNDNE"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+            
+              gtag('config', 'G-TKQYTSNDNE');
+            </script>
+              `,
+          }}
+        />
         </Head>
         <Layout>
             <Header className='header-component'>
