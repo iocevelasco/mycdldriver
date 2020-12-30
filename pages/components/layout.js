@@ -96,6 +96,22 @@ const MainLayout = ({
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
             <link rel="shortcut icon" href="../static/images/favicon.ico" />
+            
+            <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKQYTSNDNE"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+            
+              gtag('config', 'G-TKQYTSNDNE');
+            </script>
+              `,
+          }}
+        />
         </Head>
         <Layout>
             <Header className='header-component'>

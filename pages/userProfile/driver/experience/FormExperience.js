@@ -19,16 +19,17 @@ const FormExperience = ({ experience, ...props }) => {
   const [switchValues, setSwitchValues] = useState({});
   const [form] = Form.useForm();
 
-  const [twicCard, setTwicCard] = useState({ twicCard: false });
+  const [twicCard, setTwicCard] = useState(false);
   const [imageDln, setImageDLN] = useState('');
   const [medicCardImage, setMedicCardImage] = useState('');
   const [switchInputs, setSwitchInputs] = useState(experience);
 
   useEffect(() => {
-    let { imageDln } = props.user.driver;
+    let { imageDln, medicCardImage, twicCard } = props.user.driver;
     if (imageDln !== '') {
       setImageDLN(imageDln);
-      setMedicCardImage(imageDln);
+      setMedicCardImage(medicCardImage);
+      setTwicCard(twicCard)
     }
 
     let values = {}
@@ -43,6 +44,21 @@ const FormExperience = ({ experience, ...props }) => {
     setSwitchValues(values);
   }, []);
 
+  function setFormatExperience(exp) {
+    const oldFormat = exp.experience;
+    let newFormat = [];
+
+    Object.keys(oldFormat).map((inp, index) => {
+      newFormat.push({
+        name: oldFormat[inp].name,
+        have: oldFormat[inp].have,
+        years: oldFormat[inp].years
+      });
+    });
+    exp.experience = newFormat;
+    return exp;
+  }
+
   const isUserRegistry = async (fields) => {
     let body = {
       dln: fields.dln,
@@ -54,7 +70,8 @@ const FormExperience = ({ experience, ...props }) => {
     };
 
     body.experience = { ...switchValues };
-    props.onSubmitExperience(body);
+    const formatExp = setFormatExperience(body);
+    props.onSubmitExperience(formatExp);
   };
 
   const switchChange = async (value, name, type) => {
@@ -174,12 +191,13 @@ const FormExperience = ({ experience, ...props }) => {
                       label={"Twic Card"}
                       rules={[
                         {
-                          required: true,
+                          required: false,
                         },
                       ]}
                     >
                       <Switch
                         onChange={(checked) => setTwicCard(checked)}
+                        checked={twicCard}
                         name={"twicCard"}
                         checkedChildren={"ON"}
                         unCheckedChildren={"OFF"}

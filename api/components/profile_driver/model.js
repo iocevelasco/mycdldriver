@@ -17,7 +17,7 @@ const profileDriverSchema = Schema({
         type: String,
         trim: true
     },
-    mediCardImage: {
+    medicCardImage: {
         type: String,
         trim: true
     },

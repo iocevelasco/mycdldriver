@@ -3,6 +3,8 @@ import { Form, Button, Upload, message, Avatar, Image } from 'antd';
 import { RetweetOutlined, InboxOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 const { Dragger } = Upload;
+
+
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {

@@ -66,25 +66,10 @@ const DriverExperience = ({ header, token, user, ...props }) => {
     setFields(fields);
   }, []);
 
-  function setFormatExperience(exp) {
-    const oldFormat = exp.experience;
-    let newFormat = [];
 
-    Object.keys(oldFormat).map((inp, index) => {
-      newFormat.push({
-        name: oldFormat[inp].name,
-        have: oldFormat[inp].have,
-        years: oldFormat[inp].years
-      });
-    });
-    exp.twicCard = exp.twicCard.twicCard;
-    exp.experience = newFormat;
-    return exp;
-  }
 
   const onSubmitExperience = async (body) => {
-    const formatExp = setFormatExperience(body);
-    await axios.patch("/api/driver/experience", formatExp, { headers: { Authorization: `Bearer ${token}` } })
+    await axios.patch("/api/driver/experience", body, { headers: { Authorization: `Bearer ${token}` } })
       .then(() => {
         props.fetchUserData(token, user.typeUser);
         notification["success"]({
