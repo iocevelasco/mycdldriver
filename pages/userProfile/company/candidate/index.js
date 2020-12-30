@@ -266,6 +266,18 @@ const CandidateView = ({ user, ...props }) => {
                 </Col>
 
               </Row>
+              { Array.isArray(detail.driver.experience) &&
+              <span><Divider />
+              <p className="site-description-item-profile-p">Experience</p>
+              {detail.driver.experience.map((i) => {
+              return <Row>
+                <Col span={12}>
+                  {i.have ? <DescriptionItem title={i.name} content={`${i.years} years`} /> : <DescriptionItem title={i.name} content='Does not have' />}
+                </Col>
+              </Row>
+              })}
+              </span>
+              }
               <Divider />
               <p className="site-description-item-profile-p">Contacts</p>
               <Row>
