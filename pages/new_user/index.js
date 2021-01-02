@@ -47,7 +47,7 @@ const NewDriverUser = (props) => {
           }
           setFields(fields);
           setLoader(false);
-        })
+        });
     } catch (err) {
       console.log(err);
     }
