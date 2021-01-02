@@ -32,7 +32,7 @@ const LoadingUser = ({ active }) => {
       height: '100vh',
     },
     title: {
-      marginTop: 32
+      marginTop: 64
     }
   }
   useEffect(() => {
@@ -60,7 +60,6 @@ const LoadingUser = ({ active }) => {
     <div style={styles.content}>
       {closeWindow()}
       <div style={styles.wrapper}>
-        <Spin indicator={antIcon} />
         <Title level={3} style={styles.title}> Loagin </Title>
       </div>
     </div>

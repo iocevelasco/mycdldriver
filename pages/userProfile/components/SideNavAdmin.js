@@ -27,7 +27,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    logoutUser: () => dispatch(logoutUser()),
+    logoutUser: () => dispatch(logoutUser(router)),
   }
 };
 
@@ -124,7 +124,7 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser
         size="large"
         onClick={() => {
           router.push('/logout')
-          logoutUser();
+          logoutUser(router);
           window.localStorage.removeItem('token');
         }}
         icon={<LogoutOutlined />}

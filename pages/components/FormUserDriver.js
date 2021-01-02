@@ -90,6 +90,7 @@ const DriverUser = ({ user, ...props }) => {
   }
 
   const newDrivers = async (fields) => {
+    passwordValidator();
     const { driver, base } = await beforeToCreateProfile(fields, 'create');
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
@@ -150,7 +151,6 @@ const DriverUser = ({ user, ...props }) => {
   };
 
   const beforeToCreateProfile = async (fields, type) => {
-    passwordValidator();
     setLoader(true);
     try {
       const { google_id, facebook_id, photo, email } = user;

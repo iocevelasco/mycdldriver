@@ -22,13 +22,13 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    logoutUser: () => dispatch(logoutUser()),
+    logoutUser: (router) => dispatch(logoutUser(router)),
     fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser))
   }
 };
 
+
 const DrawerLayout = ({ setVisible, visible, typeUser, logoutUser, router }) => {
-  console.log('userType', typeUser)
   let accountUrl = typeUser === 1 ? '/userProfile/driver/profile' : '/userProfile/company/profile';
   return (<>
     <Drawer
@@ -59,10 +59,7 @@ const DrawerLayout = ({ setVisible, visible, typeUser, logoutUser, router }) => 
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<LogoutOutlined />} onClick={() => {
-            logoutUser();
-            router.push('/logout')
-          }} >
+          <Menu.Item key="3" icon={<LogoutOutlined />} onClick={() => logoutUser(router)} >
             Logout
           </Menu.Item>
         </Menu>

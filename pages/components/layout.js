@@ -122,6 +122,7 @@ const MainLayout = ({
                                             style={{ color: '#FF2A39' }}
                                             icon={<MenuFoldOutlined />}
                                             onClick={() => setVisible(true)} >
+                                            Account
                                         </Button>
                                         <Text strong>{user.name + " " + user.lastname}</Text>
                                         <Avatar src={user.photo} />
