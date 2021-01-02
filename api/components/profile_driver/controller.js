@@ -305,8 +305,7 @@ async function addStaff(user, company) {
                 }
             }
         }else{
-            user.typeUser = 1;
-            user.photo = 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png';
+            
             
             const expDefault = [
                 {
@@ -340,10 +339,19 @@ async function addStaff(user, company) {
                     "years":0
                 }
             ];
-            user.driver.experience = expDefault;
+            let newUser = {
+                name: user.name,
+                lastname: user.lastname,
+                email: user.email,
+                dln : user.dln,
+                experience: expDefault,
+                job: user.job,
+                typeUser: 1,
+                photo: 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png'
+            }
         
             try {
-                const newStaff = await store.addStaff(user);
+                const newStaff = await store.addStaff(newUser);
                 if(newStaff.status == 201){
                     const url = config.host + '/' + config.port + '/new_user?token=' + newStaff.message.user.token;
                     mailer(

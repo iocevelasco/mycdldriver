@@ -86,7 +86,7 @@ const JobsDriverView = ({ user, ...props }) => {
                           <Title level={3}> {item.job.title} </Title>
                           <div>
                             <Text> Address </Text>
-                            <Text strong> {item.job.city} </Text> <Text strong > | </Text>
+                            <Text strong> {item.job.title} </Text> <Text strong > | </Text>
                             <Text> Date </Text>
                             <Text strong> {moment(item.job.date).format('YYYY-MM-DD')} </Text>
                           </div>

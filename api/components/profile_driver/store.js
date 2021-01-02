@@ -237,7 +237,8 @@ async function checkDriver(mail){
 async function addStaff(user){
     let foundJob = "";
     const driver = new Model({
-        dln: user.dln
+        dln: user.dln,
+        experience: user.experience
     });
     try{
         foundJob = await JobsModel.findOne({ _id: user.job });
