@@ -340,10 +340,17 @@ async function addStaff(user, company) {
                     "years":0
                 }
             ];
-            user.driver.experience = expDefault;
+            let newUser = {
+                name: user.name,
+                lastname: user.lastname,
+                email: user.email,
+                dln : user.dln,
+                experience: expDefault,
+                job: user.job
+            }
         
             try {
-                const newStaff = await store.addStaff(user);
+                const newStaff = await store.addStaff(newUser);
                 if(newStaff.status == 201){
                     const url = config.host + '/' + config.port + '/new_user?token=' + newStaff.message.user.token;
                     mailer(
