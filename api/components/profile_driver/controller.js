@@ -305,8 +305,7 @@ async function addStaff(user, company) {
                 }
             }
         }else{
-            user.typeUser = 1;
-            user.photo = 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png';
+            
             
             const expDefault = [
                 {
@@ -346,7 +345,9 @@ async function addStaff(user, company) {
                 email: user.email,
                 dln : user.dln,
                 experience: expDefault,
-                job: user.job
+                job: user.job,
+                typeUser: 1,
+                photo: 'https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png'
             }
         
             try {
