@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 const { Text } = Typography
 
-const ListJobs = ({ headers, isFetching, jobsByCompany, openDrawer, ...props }) => {
+const ListJobs = ({ header, isFetching, jobsByCompany, openDrawer, ...props }) => {
 
   const deleteJob = async (id) => {
     try {
