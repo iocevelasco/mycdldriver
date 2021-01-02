@@ -52,6 +52,7 @@ const MainLayout = ({
     ...props }) => {
     const [visible, setVisible] = useState(false);
 
+
     useEffect(() => {
         const tokenLS = localStorage.getItem('token');
         const userTypeLS = localStorage.getItem('typeUser');
@@ -74,7 +75,7 @@ const MainLayout = ({
             background: `#fff`,
             backgroundSize: 'contain',
         }
-
+    console.log('isLoading', isLoading)
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
@@ -98,7 +99,7 @@ const MainLayout = ({
         </Head>
         <Layout>
             <Header className='header-component'>
-                <SpinnerComp active={isLoading} />
+                {/* <SpinnerComp active={isLoading} /> */}
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
@@ -126,7 +127,7 @@ const MainLayout = ({
                                             Account
                                         </Button>
                                         <Text strong>{user.name + " " + user.lastname}</Text>
-                                        <Avatar src={user.photo} />
+                                        <Avatar icon={<UserOutlined />} src={user.photo} />
                                     </Space>
                                 </Row>
                                 :

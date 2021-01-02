@@ -57,7 +57,6 @@ const initialState = {
     state: '',
     city: '',
   },
-  experience: {},
 };
 
 function fetchUserData(token, typeUser) {
