@@ -4,39 +4,17 @@ import { updateUserDrive } from '@store/reducers/user_reducer';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 import { ImageProfile } from 'components/UploadImages';
-import { fetchUserData } from '@store/reducers/user_reducer';
 import PasswordModal from 'components/PasswordModal';
-import moment from 'moment';
-import { connect } from 'react-redux';
 import axios from 'axios';
 import { withRouter } from 'next/router';
 import AddressInputs from 'components/AddressInput';
 import { WrapperSection } from 'components/helpers';
 
-const { TextArea } = Input;
-
-function mapStateToProps(state) {
-  const { user } = state;
-  return {
-    user: user,
-    photoProfile: user.photo || '',
-    token: user.token || null,
-    isUserRegistry: state.user._id || null,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
-    fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser))
-  }
-}
-
-const NewDriverUser = ({ user, ...props }) => {
+const NewDriverUser = (props) => {
   const { router } = props;
   const [form] = Form.useForm();
   const [visibleModalPassword, setVisiblePassword] = useState(false);
-  const [loading, setLoader] = useState(false);
+  const [loading, setLoader] = useState(true);
   const [fields, setFields] = useState([]);
   const [newImage, setNewImage] = useState(null);
   const [configPsw, setPsw] = useState({
@@ -44,102 +22,85 @@ const NewDriverUser = ({ user, ...props }) => {
     isPassword: false
   });
 
-  const header = {
-    headers: { Authorization: `Bearer ${props.token}` }
+  const token = router.query.token
+  console.log('token', token);
+  useEffect(() => {
+    if (token) {
+      fetchUserData(token)
+    } else {
+      router.push('/')
+    }
+  }, [])
+
+  const fetchUserData = async (token) => {
+    try {
+      await axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
+        .then((response) => {
+          let user = response.data.data;
+          let fields = [];
+          for (let key in user) {
+            let inputs = {
+              name: [key],
+              value: user[key]
+            }
+            fields.push(inputs);
+          }
+          setFields(fields);
+          setLoader(false);
+        })
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const updateDriver = async (fields) => {
+    const { driver, base } = await beforeToCreateProfile(fields);
+    const fullDriver = { base: base, ...driver };
+    try {
+      await axios.patch('/api/driver', fullDriver, { headers: { Authorization: `Bearer ${token}` } })
+        .then((response) => {
+          const { foundDriver, user } = response.data.data
+          const data = {
+            driver: foundDriver,
+            user
+          }
+          props.handleNewDriverProps(data);
+          if (props.isJobs) {
+            saveApply();
+          }
+          setLoader(false);
+          notification['success']({
+            message: 'Success',
+            description:
+              "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
+          });
+        })
+    } catch (err) {
+      setLoader(false);
+      notification['error']({
+        message: 'error',
+        description:
+          "Sorry! We couldn't save the information correctly , please try again."
+      });
+      console.log(err);
+    }
   };
 
-  useEffect(() => {
-    let fields = [];
-    for (let key in user) {
-      let inputs = {
-        name: [key],
-        value: user[key]
-      }
-      fields.push(inputs);
-    }
-    for (let key in user.driver) {
-      if (key === 'birthDate') {
-        let inputs = {
-          name: [key],
-          value: moment(user.driver[key])
-        }
-        fields.push(inputs);
-      } else {
-        let inputs = {
-          name: [key],
-          value: user.driver[key]
-        }
-        fields.push(inputs);
-      }
-    }
-    setFields(fields);
-  }, []);
-
-  const saveApply = async () => {
-    const apply = {
-      job: router.query.id,
-      company: props.company
-    };
-
-    await axios.post('/api/company/jobs/apply', apply, header)
-      .then((response) => {
-        dispatch({ type: types.SHOW_SUCCESS, payload: true });
-        dispatch({ type: types.PROPS_APPLY, payload: false });
-      });
-  }
-
-  const newDrivers = async (fields) => {
+  const beforeToCreateProfile = async (fields) => {
+    console.log('files', fields);
     passwordValidator();
-    const { driver, base } = await beforeToCreateProfile(fields, 'create');
-    const fullDriver = { base: base, ...driver };
-    await axios.post('/api/driver', fullDriver)
-      .then((response) => {
-        props.handleNewDriverProps(response.data.data);
-        if (props.isJobs) {
-          saveApply();
-        };
-        setLoader(false);
-        notification['success']({
-          message: 'Success',
-          description:
-            "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
-        });
-      })
-      .catch((err) => {
-        console.log('[ user registry error ]', err);
-        setLoader(false);
-        notification['error']({
-          message: 'error',
-          description:
-            "Sorry! We couldn't create this user, please try again. "
-        });
-      })
-  }
-
-  const beforeToCreateProfile = async (fields, type) => {
     setLoader(true);
     try {
-      const { google_id, facebook_id, photo, email } = user;
-      const { name, dln, lastname, zipCode, state, sex, phoneNumber, password, confirm, city, birthDate, areaCode, address2, address } = fields;
+      const { name, dln, lastname, zipCode, email, state, sex, phoneNumber, city, birthDate, areaCode, address2, address } = fields;
 
-      let base = {}
-      let driver = {}
+      let base = {};
+      let driver = {};
 
-      if (type === 'update') {
-        base.name = name;
-        base.lastname = lastname;
-        base.typeUser = 1;
-        base.photo = newImage ? newImage : photo;
-      }
-      if (type === 'create') {
-        base.name = name;
-        base.lastname = lastname;
-        base.typeUser = 1;
-        base.photo = newImage ? newImage : photo;
-        base.email = email;
-        base.google_id = google_id;
-        base.facebook_id = facebook_id;
-      }
+      base.name = name;
+      base.lastname = lastname;
+      base.typeUser = 1;
+      base.photo = newImage;
+      base.email = email;
 
       driver.zipCode = zipCode;
       driver.state = state;
@@ -147,13 +108,13 @@ const NewDriverUser = ({ user, ...props }) => {
       driver.sex = sex;
       driver.phoneNumber = phoneNumber;
       driver.password = configPsw.password;
-      driver.confirm = confirm;
       driver.city = city;
       driver.birthDate = birthDate;
       driver.areaCode = areaCode;
       driver.address2 = address2;
       driver.address = address;
 
+      console.log('driver', driver);
       return {
         driver,
         base
@@ -178,20 +139,18 @@ const NewDriverUser = ({ user, ...props }) => {
   const { avatar } = resolveImageProfile(newImage, props.photoProfile)
 
   const passwordValidator = () => {
-    if (user.isUserRegistry) {
-      if (!configPsw.isPassword) {
-        notification['error']({
-          message: 'Error',
-          description:
-            'Please config your password'
-        });
-        return
-      }
+    if (!configPsw.isPassword) {
+      notification['error']({
+        message: 'Error',
+        description:
+          'Please config your password'
+      });
+      return
     }
   }
 
   return (
-    <WrapperSection>
+    <WrapperSection row={18}>
       <div className='profile-driver'>
         <Row justify='center'>
           <Col className='profile-driver__form' span={24}>
@@ -206,7 +165,7 @@ const NewDriverUser = ({ user, ...props }) => {
             <Form
               fields={fields}
               form={form}
-              onFinish={newDrivers}
+              onFinish={updateDriver}
               name="global_state"
               layout='vertical'>
 
@@ -344,7 +303,7 @@ const NewDriverUser = ({ user, ...props }) => {
                   </Form.Item>
                 </Col>
               </Row>
-              <AddressInputs stateId={user} />
+              <AddressInputs stateId={props.user} />
               <Row gutter={[24]} justify='center' align='middle'>
                 <Col span={12}>
                   <Button
@@ -365,6 +324,4 @@ const NewDriverUser = ({ user, ...props }) => {
   )
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(NewDriverUser)
-); 
+export default withRouter(NewDriverUser); 

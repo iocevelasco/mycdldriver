@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Form, Button, Upload, message, Avatar, Image } from 'antd';
-import { RetweetOutlined, InboxOutlined, DeleteOutlined } from '@ant-design/icons';
+import { RetweetOutlined, InboxOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 const { Dragger } = Upload;
 
@@ -42,7 +42,7 @@ const ImageProfile = ({ setNewImage, newImage, avatar }) => {
 
   return (
     <div className='avatar'>
-      <Avatar src={avatar} size={120} />
+      <Avatar icon={<UserOutlined />} src={avatar} size={120} />
       <Upload
         customRequest={uploadImage}
         onChange={handleOnChange}

@@ -52,12 +52,7 @@ const MainLayout = ({
     ...props }) => {
     const [visible, setVisible] = useState(false);
 
-    const { query } = router;
-    console.log('router', router);
-    if (query.token) {
-        props.fetchUserData(query.token, 1);
-    };
-    console.log('token', query.token);
+
     useEffect(() => {
         const tokenLS = localStorage.getItem('token');
         const userTypeLS = localStorage.getItem('typeUser');
@@ -132,7 +127,7 @@ const MainLayout = ({
                                             Account
                                         </Button>
                                         <Text strong>{user.name + " " + user.lastname}</Text>
-                                        <Avatar src={user.photo} />
+                                        <Avatar icon={<UserOutlined />} src={user.photo} />
                                     </Space>
                                 </Row>
                                 :
