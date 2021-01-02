@@ -52,6 +52,12 @@ const MainLayout = ({
     ...props }) => {
     const [visible, setVisible] = useState(false);
 
+    const { query } = router;
+    console.log('router', router);
+    if (query.token) {
+        props.fetchUserData(query.token, 1);
+    };
+    console.log('token', query.token);
     useEffect(() => {
         const tokenLS = localStorage.getItem('token');
         const userTypeLS = localStorage.getItem('typeUser');
@@ -74,7 +80,7 @@ const MainLayout = ({
             background: `#fff`,
             backgroundSize: 'contain',
         }
-
+    console.log('isLoading', isLoading)
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
@@ -98,7 +104,7 @@ const MainLayout = ({
         </Head>
         <Layout>
             <Header className='header-component'>
-                <SpinnerComp active={isLoading} />
+                {/* <SpinnerComp active={isLoading} /> */}
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">

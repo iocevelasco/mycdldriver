@@ -4,6 +4,7 @@ import { updateUserDrive } from '@store/reducers/user_reducer';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 import { ImageProfile } from 'components/UploadImages';
+import { fetchUserData } from '@store/reducers/user_reducer';
 import PasswordModal from 'components/PasswordModal';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -26,6 +27,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
+    fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser))
   }
 }
 
@@ -44,8 +46,6 @@ const DriverUser = ({ user, ...props }) => {
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
-
-  console.log('roter', router);
 
   useEffect(() => {
     let fields = [];
