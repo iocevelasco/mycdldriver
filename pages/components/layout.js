@@ -5,12 +5,13 @@ import Head from 'next/head'
 import Footer from './footer';
 import Link from 'next/link';
 import { SpinnerComp } from 'components/helpers';
+import DrawerLayout from 'components/DrawerLayout';
 import { connect } from 'react-redux';
 import { logoutUser, getCurrentLocation, fetchUserData } from '@store/reducers/user_reducer';
 import { handlerModalLogin, deviceType } from '@store/reducers/landing_reducer';
 import ModalLogin from 'components/login';
-import { Layout, Row, Col, Button, Avatar, Typography, Menu, Dropdown, Space } from 'antd';
-import { UserOutlined, DownOutlined } from '@ant-design/icons';
+import { Layout, Row, Col, Button, Avatar, Typography, Menu, Drawer, Dropdown, Space } from 'antd';
+import { UserOutlined, MenuFoldOutlined } from '@ant-design/icons';
 
 import '@styles/index.less';
 
@@ -49,7 +50,7 @@ const MainLayout = ({
     token,
     isAuthenticated,
     ...props }) => {
-
+    const [visible, setVisible] = useState(false)
     useEffect(() => {
         const tokenLS = localStorage.getItem('token');
         const userTypeLS = localStorage.getItem('typeUser');
@@ -72,34 +73,15 @@ const MainLayout = ({
             background: `#fff`,
             backgroundSize: 'contain',
         }
-    const menu = (
-        <Menu style={{ width: '200px', float: 'right' }}>
-            <Menu.Item>
-                <Link href={user.typeUser === 1 ? '/userProfile/driver/profile' : '/userProfile/company/profile'}>
-                    <Button type='link'>
-                        Profile
-                </Button>
-                </Link>
-            </Menu.Item>
-            <Menu.Item >
-                <Button type='link' onClick={() => {
-                    props.logoutUser();
-                    router.push('/logout')
-                }} >
-                    Logout
-            </Button>
-            </Menu.Item>
-        </Menu>
-    );
 
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
             <link rel="shortcut icon" href="../static/images/favicon.ico" />
-            
+
             <script
-          dangerouslySetInnerHTML={{
-            __html: `
+                dangerouslySetInnerHTML={{
+                    __html: `
             <!-- Global site tag (gtag.js) - Google Analytics -->
             <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKQYTSNDNE"></script>
             <script>
@@ -110,8 +92,8 @@ const MainLayout = ({
               gtag('config', 'G-TKQYTSNDNE');
             </script>
               `,
-          }}
-        />
+                }}
+            />
         </Head>
         <Layout>
             <Header className='header-component'>
@@ -134,15 +116,17 @@ const MainLayout = ({
                     <Col span={10}>
                         {
                             user.typeUser || user.isLoading ?
-                                <Dropdown overlay={menu}>
-                                    <Row justify='end' align='middle'>
-                                        <Space size='large'>
-                                            <DownOutlined />
-                                            <Text strong>{user.name + " " + user.lastname}</Text>
-                                            <Avatar src={user.photo} />
-                                        </Space>
-                                    </Row>
-                                </Dropdown>
+                                <Row justify='end' align='middle'>
+                                    <Space size='large'>
+                                        <Button
+                                            style={{ color: '#FF2A39' }}
+                                            icon={<MenuFoldOutlined />}
+                                            onClick={() => setVisible(true)} >
+                                        </Button>
+                                        <Text strong>{user.name + " " + user.lastname}</Text>
+                                        <Avatar src={user.photo} />
+                                    </Space>
+                                </Row>
                                 :
                                 <Row justify='end' align='middle'>
                                     <Button
@@ -168,6 +152,7 @@ const MainLayout = ({
             </Content>
             <Footer />
             <ModalLogin />
+            <DrawerLayout visible={visible} setVisible={setVisible} />
         </Layout>
     </>
     )

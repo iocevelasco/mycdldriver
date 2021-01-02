@@ -33,10 +33,10 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
   return (
     <div style={{ width: "100%" }}>
       <Carousel
-        dots={false}
-        autoplay={false}
-        slidesToShow={widthScreen > 400 ? 3 : 1}
-        slidesToScroll={widthScreen > 400 ? 3 : 1}
+        dots={true}
+        autoplay={true}
+        slidesToShow={widthScreen > 400 ? 4 : 1}
+        slidesToScroll={widthScreen > 400 ? 4 : 1}
         ref={(ref) => {
           slider.current = ref;
         }}
@@ -55,14 +55,14 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
                   {e.driver.rating == 0 ? (
                     <StarOutlined key={key} style={{ color: "#FFE206" }} />
                   ) : (
-                    stars.map((p, key) => {
-                      {
-                        if (p <= e.driver.rating) {
-                          <StarFilled key={key} style={{ color: "#FFE206" }} />;
+                      stars.map((p, key) => {
+                        {
+                          if (p <= e.driver.rating) {
+                            <StarFilled key={key} style={{ color: "#FFE206" }} />;
+                          }
                         }
-                      }
-                    })
-                  )}
+                      })
+                    )}
                 </div>
                 <Meta
                   title={`${e.name} ${e.lastname}`}
