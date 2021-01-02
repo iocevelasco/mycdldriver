@@ -84,7 +84,7 @@ const AddressInputs = (props) => {
             label="Address line 2"
             rules={[
               {
-                required: true,
+                required: false,
                 message: 'Address line 2 is required!',
               },
             ]}>
