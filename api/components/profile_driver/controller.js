@@ -345,7 +345,7 @@ async function addStaff(user, company) {
             try {
                 const newStaff = await store.addStaff(user);
                 if(newStaff.status == 201){
-                    const url = config.host + '/' + config.port + '/driver/complete_register/' + newStaff.message.user.token;
+                    const url = config.host + '/' + config.port + '/new_user?token=' + newStaff.message.user.token;
                     mailer(
                         user.email, 
                         'Invitation to MYCDL Driver', 
