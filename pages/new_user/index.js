@@ -88,6 +88,8 @@ const NewDriverUser = (props) => {
       await axios.patch('/api/driver', fullDriver, { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
           const { foundDriver, user } = response.data.data
+          user.token = token;
+
           const data = {
             driver: foundDriver,
             user
