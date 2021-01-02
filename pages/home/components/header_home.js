@@ -20,7 +20,9 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-const HeaderLandingComp = ({ handlerSearch, filter_selected, jobs_name, citys, query, fetchJobs }) => {
+const HeaderLandingComp = ({ handlerSearch, cleanFilter, filter_selected, jobs_name, citys, query, fetchJobs }) => {
+
+  const clearFilters = query.length ? true : false;
   return (
     <>
       <div className="home-header"
@@ -34,7 +36,7 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, jobs_name, citys, q
                       DRIVING OUR SUCCESS
                     </Title>
               <Row gutter={[16]}>
-                <Col xs={24} lg={12} md={12}>
+                <Col xs={24} lg={clearFilters ? 10 : 12} md={clearFilters ? 10 : 12}>
                   <AutoComplete
                     options={jobs_name}
                     size='large'
@@ -56,7 +58,7 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, jobs_name, citys, q
                     }
                   </Select>
                 </Col>
-                <Col xs={24} lg={4} md={4}>
+                <Col xs={24} lg={3} md={3}>
                   <Button
                     onClick={() => fetchJobs(query)}
                     onKeyPress={event => {
@@ -68,6 +70,16 @@ const HeaderLandingComp = ({ handlerSearch, filter_selected, jobs_name, citys, q
                     style={{ width: '100%' }}
                     type="primary">Search </Button>
                 </Col>
+                {
+                  clearFilters &&
+                  <Col xs={24} lg={3} md={3}>
+                    <Button
+                      onClick={() => cleanFilter()}
+                      size="large"
+                      style={{ width: '100%' }}
+                      type="secondary">Clean Filters </Button>
+                  </Col>
+                }
               </Row>
             </div>
           </Col>

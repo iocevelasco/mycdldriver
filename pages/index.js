@@ -33,6 +33,7 @@ const types = {
   carousel_data: 'carousel_data',
   positions: 'positions',
   FILTER_SELECTED: 'ranking',
+  CLEAN_FILTERS: 'clean_filters'
 }
 
 const reducer = (state, action) => {
@@ -46,6 +47,10 @@ const reducer = (state, action) => {
         ...state,
         filter_selected: action.payload.filters,
         query: action.payload.query
+      }
+    case types.CLEAN_FILTERS:
+      return {
+        ...state, query: ''
       }
     default:
       throw new Error('Unexpected action');
@@ -83,6 +88,11 @@ const Home = ({
     fetchDrivers();
     fetCommons();
   }, [])
+
+  const cleanFilter = () => {
+    fetchJobs('');
+    dispatch({ type: types.CLEAN_FILTERS });
+  }
 
   const handlerSearch = (e, key) => {
     console.log(e, key);
@@ -128,6 +138,7 @@ const Home = ({
       <HeaderLandingComp
         handlerSearch={handlerSearch}
         filter_selected={state.filter_selected}
+        cleanFilter={cleanFilter}
         query={state.query}
       />
       <WrapperSection xs={24} row={20} style={wrapperStyle}  >
