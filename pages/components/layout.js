@@ -56,8 +56,11 @@ const MainLayout = ({
     useEffect(() => {
         const tokenLS = localStorage.getItem('token');
         const userTypeLS = localStorage.getItem('typeUser');
+
         if (tokenLS) {
-            props.fetchUserData(tokenLS, userTypeLS);
+            if (router.pathname !== "/new_user") {
+                props.fetchUserData(tokenLS, userTypeLS);
+            }
         }
         if (user) {
             if (user.token !== null) {

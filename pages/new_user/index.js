@@ -22,7 +22,7 @@ const NewDriverUser = (props) => {
     isPassword: false
   });
 
-  const token = router.query.token
+  const token = router.query.token;
   console.log('token', token);
   useEffect(() => {
     if (token) {
