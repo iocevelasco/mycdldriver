@@ -45,21 +45,21 @@ const DrawerLayout = ({ setVisible, visible, typeUser, logoutUser, router }) => 
           mode="inline"
           theme="dark"
         >
-          <Menu.Item key="1" icon={<HomeOutlined />}>
+          <Menu.Item onClick={() => setVisible(false)} key="1" icon={<HomeOutlined />}>
             <Link href='/'>
               <a>
                 Home
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<UserOutlined />}>
+          <Menu.Item onClick={() => setVisible(false)} key="2" icon={<UserOutlined />}>
             <Link href={accountUrl}>
               <a>
                 My Account
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<LogoutOutlined />} onClick={() => logoutUser(router)} >
+          <Menu.Item onClick={() => setVisible(false)} key="3" icon={<LogoutOutlined />} onClick={() => logoutUser(router)} >
             Logout
           </Menu.Item>
         </Menu>

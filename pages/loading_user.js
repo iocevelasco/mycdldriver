@@ -60,7 +60,7 @@ const LoadingUser = ({ active }) => {
     <div style={styles.content}>
       {closeWindow()}
       <div style={styles.wrapper}>
-        <Title level={3} style={styles.title}> Loagin </Title>
+        <Title level={3} style={styles.title}> Loading </Title>
       </div>
     </div>
   )

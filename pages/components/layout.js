@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { logoutUser, getCurrentLocation, fetchUserData } from '@store/reducers/user_reducer';
 import { handlerModalLogin, deviceType } from '@store/reducers/landing_reducer';
 import ModalLogin from 'components/login';
-import { Layout, Row, Col, Button, Avatar, Typography, Menu, Drawer, Dropdown, Space } from 'antd';
+import { Layout, Row, Col, Button, Avatar, Typography, Space } from 'antd';
 import { UserOutlined, MenuFoldOutlined } from '@ant-design/icons';
 
 import '@styles/index.less';
@@ -50,7 +50,8 @@ const MainLayout = ({
     token,
     isAuthenticated,
     ...props }) => {
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(false);
+
     useEffect(() => {
         const tokenLS = localStorage.getItem('token');
         const userTypeLS = localStorage.getItem('typeUser');

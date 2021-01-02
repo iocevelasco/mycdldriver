@@ -41,15 +41,14 @@ const DriverUser = ({ user, ...props }) => {
     isPassword: false
   });
 
-
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
 
+  console.log('roter', router);
+
   useEffect(() => {
-
     let fields = [];
-
     for (let key in user) {
       let inputs = {
         name: [key],
@@ -57,7 +56,6 @@ const DriverUser = ({ user, ...props }) => {
       }
       fields.push(inputs);
     }
-
     for (let key in user.driver) {
       if (key === 'birthDate') {
         let inputs = {
