@@ -90,7 +90,7 @@ function fetchUserData(token, typeUser) {
             }
           }));
         }
-        activeLoading(false);
+
       }).catch((error) => {
         console.log(error);
       });
@@ -109,7 +109,12 @@ function updateUserCompany(props) {
 
   return {
     type: types.UPDATE_USER_COMPANY,
-    payload: { ...user, company: company },
+    payload: {
+      ...user,
+      company: company,
+      isLogin: true,
+      typeUser: 2,
+    },
   };
 }
 
@@ -117,9 +122,16 @@ function updateUserDrive(props) {
   let { user, driver } = props;
   return {
     type: types.UPDATE_USER_DRIVER,
-    payload: { ...user, driver: driver },
+    type: types.UPDATE_USER_COMPANY,
+    payload: {
+      ...user,
+      driver: driver,
+      isLogin: true,
+      typeUser: 1,
+    },
   };
-}
+};
+
 
 const logoutUser = (router) => {
   const state = {

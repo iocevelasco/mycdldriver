@@ -8,7 +8,6 @@ const { Option } = Select;
 
 
 const AddressInputs = (props) => {
-  const { stateId } = props
   const [stateOptions, isFetching] = useListState();
 
   const [cityOptions, setCities] = useState({
@@ -19,16 +18,18 @@ const AddressInputs = (props) => {
 
   useEffect(() => {
     try {
-      if (stateId._id) {
-        fetchCities(stateId._id);
-      } else {
-        fetchCities(stateId);
+      if (props.stateId) {
+        if (props.stateId._id) {
+          fetchCities(props.stateId._id);
+        } else {
+          fetchCities(props.stateId);
+        }
       }
     } catch (err) {
       console.log(err);
       return '';
     }
-  }, [stateId]);
+  }, [props.stateId]);
 
   const fetchCities = async (stateId) => {
     setCities({

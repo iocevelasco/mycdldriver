@@ -1,20 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Input, Form, Button, InputNumber, Space, Radio, DatePicker, notification, message } from 'antd';
-import { updateUserDrive } from '@store/reducers/user_reducer';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
-import { SpinnerComp } from 'components/helpers';
+import { connect } from 'react-redux';
+import { updateUserDrive } from '@store/reducers/user_reducer';
 import { ImageProfile } from 'components/UploadImages';
 import PasswordModal from 'components/PasswordModal';
 import axios from 'axios';
 import { withRouter } from 'next/router';
 import AddressInputs from 'components/AddressInput';
+import moment from 'moment';
 import { WrapperSection } from 'components/helpers';
+import { activeLoading } from '@store/reducers/landing_reducer'
+
+function mapStateToProps(state) {
+  const { user } = state;
+  return {}
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    activeLoading: (f) => dispatch(activeLoading(f)),
+    fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser)),
+    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
+  }
+}
 
 const NewDriverUser = (props) => {
   const { router } = props;
   const [form] = Form.useForm();
   const [visibleModalPassword, setVisiblePassword] = useState(false);
-  const [loading, setLoader] = useState(true);
   const [fields, setFields] = useState([]);
   const [newImage, setNewImage] = useState(null);
   const [configPsw, setPsw] = useState({
@@ -23,7 +37,6 @@ const NewDriverUser = (props) => {
   });
 
   const token = router.query.token;
-  console.log('token', token);
   useEffect(() => {
     if (token) {
       fetchUserData(token)
@@ -45,8 +58,23 @@ const NewDriverUser = (props) => {
             }
             fields.push(inputs);
           }
+          for (let key in user.driver) {
+            if (key === 'birthDate') {
+              let inputs = {
+                name: [key],
+                value: moment(user.driver[key])
+              }
+              fields.push(inputs);
+            } else {
+              let inputs = {
+                name: [key],
+                value: user.driver[key]
+              }
+              fields.push(inputs);
+            }
+          }
           setFields(fields);
-          setLoader(false);
+          props.activeLoading(false);
         });
     } catch (err) {
       console.log(err);
@@ -65,10 +93,7 @@ const NewDriverUser = (props) => {
             user
           }
           props.handleNewDriverProps(data);
-          if (props.isJobs) {
-            saveApply();
-          }
-          setLoader(false);
+          router.push('/userProfile/driver/profile');
           notification['success']({
             message: 'Success',
             description:
@@ -76,7 +101,6 @@ const NewDriverUser = (props) => {
           });
         })
     } catch (err) {
-      setLoader(false);
       notification['error']({
         message: 'error',
         description:
@@ -87,9 +111,7 @@ const NewDriverUser = (props) => {
   };
 
   const beforeToCreateProfile = async (fields) => {
-    console.log('files', fields);
     passwordValidator();
-    setLoader(true);
     try {
       const { name, dln, lastname, zipCode, email, state, sex, phoneNumber, city, birthDate, areaCode, address2, address } = fields;
 
@@ -303,7 +325,7 @@ const NewDriverUser = (props) => {
                   </Form.Item>
                 </Col>
               </Row>
-              <AddressInputs stateId={props.user} />
+              <AddressInputs stateId={null} />
               <Row gutter={[24]} justify='center' align='middle'>
                 <Col span={12}>
                   <Button
@@ -318,10 +340,14 @@ const NewDriverUser = (props) => {
             </Form>
           </Col>
         </Row>
-        <SpinnerComp active={loading} />
       </div >
     </WrapperSection>
   )
 }
 
-export default withRouter(NewDriverUser); 
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(NewDriverUser)
+);
+
+
+
