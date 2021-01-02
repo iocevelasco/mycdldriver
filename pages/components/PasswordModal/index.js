@@ -104,7 +104,7 @@ const PasswordModal = ({ visible, setPsw, handleModal }) => {
                 shape="round"
                 htmlType="submit"
                 block
-                size='large'> Change password </Button>
+                size='large'> Confirm </Button>
             </Col>
           </Row>
         </Form>

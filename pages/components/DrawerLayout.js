@@ -22,13 +22,13 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    logoutUser: () => dispatch(logoutUser()),
+    logoutUser: (router) => dispatch(logoutUser(router)),
     fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser))
   }
 };
 
+
 const DrawerLayout = ({ setVisible, visible, typeUser, logoutUser, router }) => {
-  console.log('userType', typeUser)
   let accountUrl = typeUser === 1 ? '/userProfile/driver/profile' : '/userProfile/company/profile';
   return (<>
     <Drawer
@@ -45,24 +45,21 @@ const DrawerLayout = ({ setVisible, visible, typeUser, logoutUser, router }) => 
           mode="inline"
           theme="dark"
         >
-          <Menu.Item key="1" icon={<HomeOutlined />}>
+          <Menu.Item onClick={() => setVisible(false)} key="1" icon={<HomeOutlined />}>
             <Link href='/'>
               <a>
                 Home
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<UserOutlined />}>
+          <Menu.Item onClick={() => setVisible(false)} key="2" icon={<UserOutlined />}>
             <Link href={accountUrl}>
               <a>
                 My Account
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<LogoutOutlined />} onClick={() => {
-            logoutUser();
-            router.push('/logout')
-          }} >
+          <Menu.Item onClick={() => setVisible(false)} key="3" icon={<LogoutOutlined />} onClick={() => logoutUser(router)} >
             Logout
           </Menu.Item>
         </Menu>

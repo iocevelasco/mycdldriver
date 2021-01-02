@@ -110,6 +110,7 @@ const CompanyProfileView = ({ user, ...props }) => {
   }
 
   const newCompany = async (fields) => {
+    passwordValidator();
     const { base, company } = await beforeToCreateProfile(fields, 'create');
     const fullCompany = { base: base, ...company };
     try {
@@ -180,6 +181,20 @@ const CompanyProfileView = ({ user, ...props }) => {
       }
     }
   }
+
+  const passwordValidator = () => {
+    if (user.isUserRegistry) {
+      if (!configPsw.isPassword) {
+        notification['error']({
+          message: 'Error',
+          description:
+            'Please config your password'
+        });
+        return
+      }
+    }
+  }
+
 
   return (
     <>

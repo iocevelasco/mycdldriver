@@ -1,6 +1,6 @@
 import moment from "moment";
 import axios from 'axios';
-
+import { activeLoading } from './landing_reducer';
 const types = {
   USER_DATA: "USER_DATA",
   UPDATE_USER_COMPANY: "UPDATE_USER_COMPANY",
@@ -57,7 +57,6 @@ const initialState = {
     state: '',
     city: '',
   },
-  experience: {},
 };
 
 function fetchUserData(token, typeUser) {
@@ -70,7 +69,7 @@ function fetchUserData(token, typeUser) {
             type: types.RELOAD_PROPS_DRIVER,
             payload: {
               company: null,
-              isLogin: true,
+              isLogin: false,
               token: token,
               typeUser: 1,
               date, driver, lastname, name, _id, photo, email
@@ -84,14 +83,14 @@ function fetchUserData(token, typeUser) {
             type: types.RELOAD_PROPS_COMPANY,
             payload: {
               driver: null,
-              isLogin: true,
+              isLogin: false,
               typeUser: 2,
               token: token,
               date, company, lastname, name, _id, photo, email
             }
           }));
         }
-
+        activeLoading(false);
       }).catch((error) => {
         console.log(error);
       });
@@ -122,7 +121,7 @@ function updateUserDrive(props) {
   };
 }
 
-const logoutUser = () => {
+const logoutUser = (router) => {
   const state = {
     _id: "",
     name: "",
@@ -161,10 +160,18 @@ const logoutUser = () => {
     },
     deviceType: "desktop",
   };
-  return {
-    type: types.LOGOUT_USER,
-    payload: state,
-  };
+  window.localStorage.removeItem('token');
+  window.localStorage.removeItem('typeUser');
+  router.push('/logout');
+  return async (dispatch) => {
+    await axios.get(`/logout`)
+      .then(() => {
+        return dispatch({
+          type: types.LOGOUT_USER,
+          payload: state,
+        });
+      })
+  }
 };
 
 const getInitialPropsUser = (props) => {

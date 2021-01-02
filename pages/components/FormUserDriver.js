@@ -4,6 +4,7 @@ import { updateUserDrive } from '@store/reducers/user_reducer';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 import { ImageProfile } from 'components/UploadImages';
+import { fetchUserData } from '@store/reducers/user_reducer';
 import PasswordModal from 'components/PasswordModal';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -26,6 +27,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
+    fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser))
   }
 }
 
@@ -41,15 +43,12 @@ const DriverUser = ({ user, ...props }) => {
     isPassword: false
   });
 
-
   const header = {
     headers: { Authorization: `Bearer ${props.token}` }
   };
 
   useEffect(() => {
-
     let fields = [];
-
     for (let key in user) {
       let inputs = {
         name: [key],
@@ -57,7 +56,6 @@ const DriverUser = ({ user, ...props }) => {
       }
       fields.push(inputs);
     }
-
     for (let key in user.driver) {
       if (key === 'birthDate') {
         let inputs = {
@@ -90,6 +88,7 @@ const DriverUser = ({ user, ...props }) => {
   }
 
   const newDrivers = async (fields) => {
+    passwordValidator();
     const { driver, base } = await beforeToCreateProfile(fields, 'create');
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
@@ -150,7 +149,6 @@ const DriverUser = ({ user, ...props }) => {
   };
 
   const beforeToCreateProfile = async (fields, type) => {
-    passwordValidator();
     setLoader(true);
     try {
       const { google_id, facebook_id, photo, email } = user;
