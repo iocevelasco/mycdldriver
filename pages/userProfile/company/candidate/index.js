@@ -282,6 +282,7 @@ const CandidateView = ({ user, ...props }) => {
               <Divider />
               <Row>
                 <Col span={12}>
+                  <Title level={2}>DLN</Title>
                   <Image
                     width={250}
                     src={detail.driver.imageDln}
@@ -289,6 +290,7 @@ const CandidateView = ({ user, ...props }) => {
                   />
                 </Col>
                 <Col span={12}>
+                <Title level={2}>Medic Card</Title>
                   <Image
                     width={250}
                     src={detail.driver.medicCardImage}

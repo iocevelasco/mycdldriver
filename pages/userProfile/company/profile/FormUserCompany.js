@@ -48,10 +48,10 @@ const FormUserCompany = (props) => {
     setPsw
   } = props;
 
-  const resolveImageProfile = (newImage, photoProfile) => {
+  const resolveImageProfile = () => {
     try {
       return {
-        avatar: newImage ? newImage : photoProfile
+        avatar: newImage ? newImage : props.photoProfile
       }
     } catch (err) {
       return {
@@ -60,7 +60,9 @@ const FormUserCompany = (props) => {
     }
   }
 
-  const { avatar } = resolveImageProfile(newImage, props.photoProfile)
+  const { avatar } = resolveImageProfile();
+
+  console.log('avatar', avatar);
   return (
     <div className='profile-driver'>
       <Form
