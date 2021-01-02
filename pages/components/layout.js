@@ -56,7 +56,9 @@ const MainLayout = ({
         const tokenLS = localStorage.getItem('token');
         const userTypeLS = localStorage.getItem('typeUser');
         if (tokenLS) {
-            props.fetchUserData(tokenLS, userTypeLS);
+            if (router.pathname !== "/new_user") {
+                props.fetchUserData(tokenLS, userTypeLS);
+            }
         }
         if (user) {
             if (user.token !== null) {
@@ -74,7 +76,6 @@ const MainLayout = ({
             background: `#fff`,
             backgroundSize: 'contain',
         }
-    console.log('isLogin', isLogin);
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
