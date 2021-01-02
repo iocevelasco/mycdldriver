@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { SpinnerComp } from 'components/helpers';
 import DrawerLayout from 'components/DrawerLayout';
 import { connect } from 'react-redux';
-import { logoutUser, getCurrentLocation, fetchUserData } from '@store/reducers/user_reducer';
+import { getCurrentLocation, fetchUserData } from '@store/reducers/user_reducer';
 import { handlerModalLogin, deviceType } from '@store/reducers/landing_reducer';
 import ModalLogin from 'components/login';
 import { Layout, Row, Col, Button, Avatar, Typography, Space } from 'antd';
@@ -24,13 +24,12 @@ function mapStateToProps(state) {
         user: user,
         token: user.token,
         isLoading: landing.isLoading,
-        isAuthenticated: landing.isLogin
+        isLogin: user.isLogin
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        logoutUser: () => dispatch(logoutUser()),
         handleModal: (prop) => dispatch(handlerModalLogin(prop)),
         handleLocation: (location) => dispatch(getCurrentLocation(location)),
         handleDeviceType: (props) => dispatch(deviceType(props)),
@@ -48,7 +47,7 @@ const MainLayout = ({
     bgActive,
     deviceType,
     token,
-    isAuthenticated,
+    isLogin,
     ...props }) => {
     const [visible, setVisible] = useState(false);
 
@@ -57,9 +56,7 @@ const MainLayout = ({
         const tokenLS = localStorage.getItem('token');
         const userTypeLS = localStorage.getItem('typeUser');
         if (tokenLS) {
-            if (router.pathname !== "/new_user") {
-                props.fetchUserData(tokenLS, userTypeLS);
-            }
+            props.fetchUserData(tokenLS, userTypeLS);
         }
         if (user) {
             if (user.token !== null) {
@@ -77,7 +74,7 @@ const MainLayout = ({
             background: `#fff`,
             backgroundSize: 'contain',
         }
-    console.log('isLoading', isLoading)
+    console.log('isLogin', isLogin);
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
@@ -86,20 +83,20 @@ const MainLayout = ({
             {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
             <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKQYTSNDNE" />
             <script
-            dangerouslySetInnerHTML={{
-                __html: `
+                dangerouslySetInnerHTML={{
+                    __html: `
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
                 gtag('config', 'G-TKQYTSNDNE', {
                 page_path: window.location.pathname,
                 }); `,
-            }}
+                }}
             />
         </Head>
         <Layout>
             <Header className='header-component'>
-                {/* <SpinnerComp active={isLoading} /> */}
+                <SpinnerComp active={isLoading} />
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
@@ -117,7 +114,7 @@ const MainLayout = ({
                     </Col>
                     <Col span={10}>
                         {
-                            user.typeUser || user.isLoading ?
+                            user.isLogin ?
                                 <Row justify='end' align='middle'>
                                     <Space size='large'>
                                         <Button
