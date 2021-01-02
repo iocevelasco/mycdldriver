@@ -16,7 +16,7 @@ function mapStateToProps(state) {
     token: user.token,
     isLoading: landing.isLoading,
     isAuthenticated: landing.isLogin,
-    userType: user.userType
+    typeUser: user.typeUser
   }
 }
 
@@ -27,8 +27,9 @@ function mapDispatchToProps(dispatch) {
   }
 };
 
-const DrawerLayout = ({ setVisible, visible, userType, logoutUser, router }) => {
-  let accountUrl = userType === 1 ? '/userProfile/driver/profile' : '/userProfile/company/profile';
+const DrawerLayout = ({ setVisible, visible, typeUser, logoutUser, router }) => {
+  console.log('userType', typeUser)
+  let accountUrl = typeUser === 1 ? '/userProfile/driver/profile' : '/userProfile/company/profile';
   return (<>
     <Drawer
       bodyStyle={{ padding: 0, background: '#001628' }}
