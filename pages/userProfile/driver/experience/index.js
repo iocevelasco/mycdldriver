@@ -4,7 +4,7 @@ import FormExperience from "./FormExperience";
 import SideNav from "../../components/SideNavAdmin";
 import { WrapperSection } from "components/helpers";
 import { connect } from "react-redux";
-import moment from 'moment';
+import moment from "moment";
 import axios from "axios";
 import { withRouter } from "next/router";
 import { addExperience, fetchUserData } from "@store/reducers/user_reducer";
@@ -15,7 +15,7 @@ function mapStateToProps(state) {
   return {
     token: user.token || null,
     header: state.user.header,
-    user: state.user
+    user: state.user,
   };
 }
 
@@ -23,12 +23,12 @@ function mapDispatchToProps(dispatch) {
   return {
     handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
     addExperience: (experience) => dispatch(addExperience(experience)),
-    fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser))
+    fetchUserData: (token, typeUser) =>
+      dispatch(fetchUserData(token, typeUser)),
   };
 }
 
 const DriverExperience = ({ header, token, user, ...props }) => {
-
   const [fields, setFields] = useState([]);
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
@@ -43,33 +43,34 @@ const DriverExperience = ({ header, token, user, ...props }) => {
     for (let key in user) {
       let inputs = {
         name: [key],
-        value: user[key]
-      }
+        value: user[key],
+      };
       fields.push(inputs);
     }
 
     for (let key in user.driver) {
-      if (key === 'expDateDln') {
+      if (key === "expDateDln") {
         let inputs = {
           name: [key],
-          value: moment(user.driver[key])
-        }
+          value: moment(user.driver[key]),
+        };
         fields.push(inputs);
       } else {
         let inputs = {
           name: [key],
-          value: user.driver[key]
-        }
+          value: user.driver[key],
+        };
         fields.push(inputs);
       }
     }
     setFields(fields);
   }, []);
 
-
-
   const onSubmitExperience = async (body) => {
-    await axios.patch("/api/driver/experience", body, { headers: { Authorization: `Bearer ${token}` } })
+    await axios
+      .patch("/api/driver/experience", body, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then(() => {
         props.fetchUserData(token, user.typeUser);
         notification["success"]({
@@ -77,11 +78,13 @@ const DriverExperience = ({ header, token, user, ...props }) => {
           description:
             "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!",
         });
-      }).catch((err) => {
-        console.log('err', err)
+      })
+      .catch((err) => {
+        console.log("err", err);
         notification["error"]({
           message: "error",
-          description: "Sorry! We couldn't create this user, please try again. ",
+          description:
+            "Sorry! We couldn't create this user, please try again. ",
         });
       });
   };

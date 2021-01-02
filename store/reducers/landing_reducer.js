@@ -17,7 +17,7 @@ const initialState = {
     companies: [],
     visible_modal_login: false,
     deviceType: 'desktop',
-    isLoading: false
+    isLoading: true
 }
 
 function fetchJobPositionData(qs) {
@@ -102,7 +102,8 @@ const landingReducer = (state = initialState, action) => {
             return {
                 ...state,
                 jobs: action.payload.jobs,
-                citys_available: action.payload.citys_available
+                citys_available: action.payload.citys_available,
+                isLoading: false
             }
         case types.FETCH_DRIVERS:
             return {
