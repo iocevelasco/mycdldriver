@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { SpinnerComp } from 'components/helpers';
 import DrawerLayout from 'components/DrawerLayout';
 import { connect } from 'react-redux';
-import { logoutUser, getCurrentLocation, fetchUserData } from '@store/reducers/user_reducer';
+import { getCurrentLocation, fetchUserData } from '@store/reducers/user_reducer';
 import { handlerModalLogin, deviceType } from '@store/reducers/landing_reducer';
 import ModalLogin from 'components/login';
 import { Layout, Row, Col, Button, Avatar, Typography, Space } from 'antd';
@@ -24,13 +24,13 @@ function mapStateToProps(state) {
         user: user,
         token: user.token,
         isLoading: landing.isLoading,
-        isAuthenticated: landing.isLogin
+        isAuthenticated: landing.isLogin,
+
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        logoutUser: () => dispatch(logoutUser()),
         handleModal: (prop) => dispatch(handlerModalLogin(prop)),
         handleLocation: (location) => dispatch(getCurrentLocation(location)),
         handleDeviceType: (props) => dispatch(deviceType(props)),
@@ -77,7 +77,7 @@ const MainLayout = ({
             background: `#fff`,
             backgroundSize: 'contain',
         }
-    console.log('isLoading', isLoading)
+
     return (<>
         <Head>
             <title>{`My CDL Driver | ${title}`}</title>
@@ -101,7 +101,7 @@ const MainLayout = ({
         </Head>
         <Layout>
             <Header className='header-component'>
-                {/* <SpinnerComp active={isLoading} /> */}
+                <SpinnerComp active={isLoading} />
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
