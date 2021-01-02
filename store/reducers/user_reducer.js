@@ -69,7 +69,7 @@ function fetchUserData(token, typeUser) {
             type: types.RELOAD_PROPS_DRIVER,
             payload: {
               company: null,
-              isLogin: false,
+              isLogin: true,
               token: token,
               typeUser: 1,
               date, driver, lastname, name, _id, photo, email
@@ -77,13 +77,13 @@ function fetchUserData(token, typeUser) {
           }));
         }
 
-        if (typeUser === 2) {
+        if (typeUser == 2) {
           let { date, company, lastname, name, _id, photo, email } = response.data.data;
           return dispatch(({
             type: types.RELOAD_PROPS_COMPANY,
             payload: {
               driver: null,
-              isLogin: false,
+              isLogin: true,
               typeUser: 2,
               token: token,
               date, company, lastname, name, _id, photo, email
