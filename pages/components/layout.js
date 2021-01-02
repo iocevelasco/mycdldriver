@@ -97,7 +97,7 @@ const MainLayout = ({
         </Head>
         <Layout>
             <Header className='header-component'>
-                <SpinnerComp active={isLoading} />
+
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
