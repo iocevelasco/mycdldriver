@@ -1,6 +1,6 @@
 import moment from "moment";
 import axios from 'axios';
-
+import { activeLoading } from './landing_reducer';
 const types = {
   USER_DATA: "USER_DATA",
   UPDATE_USER_COMPANY: "UPDATE_USER_COMPANY",
@@ -91,7 +91,7 @@ function fetchUserData(token, typeUser) {
             }
           }));
         }
-
+        activeLoading(false);
       }).catch((error) => {
         console.log(error);
       });

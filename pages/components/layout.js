@@ -84,7 +84,7 @@ const MainLayout = ({
                 dangerouslySetInnerHTML={{
                     __html: `
             <!-- Global site tag (gtag.js) - Google Analytics -->
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKQYTSNDNE"></script>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKQYTSNDNE"</script>
             <script>
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
