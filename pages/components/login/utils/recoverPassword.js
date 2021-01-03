@@ -49,8 +49,8 @@ const RecoverPassword = (props) => {
   }
 
   return (
-    <div className='login--new-user'>
-      <Title level={4}> Enter your email to recover password </Title>
+    <div className='login--recover-password'>
+      <Title level={4}> Enter your email to recover your password </Title>
       <div className='form'>
         <Form
           fields={fields}

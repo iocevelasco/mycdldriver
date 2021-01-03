@@ -54,27 +54,27 @@ const ModalLogin = ({ visible_modal_login, router, ...props }) => {
           <img src='/static/images/logo.svg' />
         </div>
         {
-          newUser ? 
+          newUser ?
             <NewUserForm setNewUser={setNewUser} /> :
-          recoverPass ? 
-            <RecoverPassword setRecoverPass={setRecoverPass} /> :
-          <>
-            <div className='login--title'>
-              <Title level={3}>Welcome!</Title>
-            </div>
-            <UserPassword
+            recoverPass ?
+              <RecoverPassword setRecoverPass={setRecoverPass} /> :
+              <>
+                <div className='login--title'>
+                  <Title level={3}>Welcome!</Title>
+                </div>
+                <UserPassword
 
-              setNewUser={setNewUser} />
-            <div className='login--divider'>
-              <span> </span><p> or </p><span> </span>
-            </div>
-            <SocialNetworkButtons />
-            <div className="login--registry-box">
-              <p> Are you driver or company and you don't have account?</p>
-              <Button type='link' onClick={() => setNewUser(true)}>Create Account</Button> <br />
-              <Button type='link' onClick={() => setRecoverPass(true)}>Recover Password</Button>
-            </div>
-          </>
+                  setNewUser={setNewUser} />
+                <div className='login--divider'>
+                  <span> </span><p> or </p><span> </span>
+                </div>
+                <SocialNetworkButtons />
+                <div className="login--registry-box">
+                  <p> Are you driver or company and you don't have account?</p>
+                  <Button type='link' onClick={() => setNewUser(true)}>Create Account</Button>
+                  <Button type='link' onClick={() => setRecoverPass(true)}>Recover Password</Button>
+                </div>
+              </>
         }
       </div>
     </Modal>
