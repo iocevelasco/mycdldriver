@@ -403,4 +403,20 @@ router.post('/logoutall', auth(), async(req, res) => {
     });
  });
 
+ router.post('/recover_password', function (req, res) {
+    controller.checkMail(req.body.email)
+    .then((resp) => {
+        switch(resp.status){
+            case 200:
+                response.success(req, res, resp.message, resp.status);
+                break;
+            default:
+                response.error(req, res, resp.message, resp.status, resp.detail);
+                break;
+        }
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
+ });
+
 module.exports = router;

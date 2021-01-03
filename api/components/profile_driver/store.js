@@ -231,7 +231,6 @@ async function checkDriver(mail){
     }catch(e){
         return e;
     }
-    
 }
 
 async function addStaff(user){

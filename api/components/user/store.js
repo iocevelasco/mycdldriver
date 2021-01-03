@@ -283,6 +283,32 @@ async function changePassword(user, oldPass, newPass){
     }
 }
 
+async function checkMail(mail){
+    try{
+        const user = await User.findOne({
+            email: mail
+        });
+        const token = await user.generateAuthToken();
+        if(user){
+            return {
+                status: 200,
+                message: {user, token}
+            };
+        }else{
+            return {
+                status: 404,
+                message: 'User not found'
+            }
+        }
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        };
+    }
+}
+
 module.exports = {
     list: getUser,
     oneUser: getOneUser,
@@ -295,5 +321,6 @@ module.exports = {
     setPrelogin,
     getPrelogin,
     updatePhoto,
-    changePassword
+    changePassword,
+    checkMail
 }
