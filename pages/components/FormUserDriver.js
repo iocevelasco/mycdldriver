@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Input, Form, Button, InputNumber, Space, Radio, DatePicker, notification, message } from 'antd';
+import { Row, Col, Input, Form, Button, InputNumber, Radio, DatePicker, notification, message } from 'antd';
 import { updateUserDrive } from '@store/reducers/user_reducer';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
@@ -11,8 +11,6 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { withRouter } from 'next/router';
 import AddressInputs from './AddressInput';
-
-const { TextArea } = Input;
 
 function mapStateToProps(state) {
   const { user } = state;
