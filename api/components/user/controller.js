@@ -182,7 +182,7 @@ async function checkMail(mail){
     }
 
     try{
-        respuesta = store.checkMail(mail);
+        respuesta = await store.checkMail(mail);
         switch(respuesta.status){
             case 200:
                 const port = config.port ? ':' + config.port : '';

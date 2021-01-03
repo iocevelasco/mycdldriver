@@ -11,7 +11,6 @@ const { Title } = Typography;
 import { LeftOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
-import { setPropsUserReg } from '@store/reducers/user_reducer';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
 import { SpinnerComp } from 'components/helpers';
 
@@ -23,9 +22,6 @@ const mapStateToProps = (state) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setPropsUserReg: (newProps) => {
-      dispatch(setPropsUserReg(newProps))
-    },
     handleModal: (props) => dispatch(handlerModalLogin(props))
   }
 }
@@ -38,6 +34,18 @@ const RecoverPassword = (props) => {
 
   const makeReg = async (values) => {
     setLoader(true);
+    await axios.post('/api/user/recover_password', {email: values.email}).then((response) => {
+
+    }).catch((err) => {
+      setLoader(false);
+      console.log('err', err);
+      notification['error']({
+        message: 'error',
+        description:
+          "Sorry! email incorrect. "
+      });
+    });
+    props.handleModal(false);
   }
 
   return (
