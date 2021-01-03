@@ -161,9 +161,9 @@ function getPrelogin(ip){
     });
 }
 
-async function changePassword(user, oldPass, newPass){
+async function changePassword(user, newPass){
     try{
-        return store.changePassword(user, oldPass, newPass);
+        return store.changePassword(user, newPass);
     }catch(e){
         return {
             status: 500,

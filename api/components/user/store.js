@@ -265,9 +265,11 @@ async function logoutAll(id){
     await foundUser.save();
 }
 
-async function changePassword(user, oldPass, newPass){
+async function changePassword(user, newPass){
     try{
-        const foundUser = await User.findByCredentials(user.email, oldPass);
+        const foundUser = await User.findOne({
+            email: user.email
+        });
         foundUser.password = newPass;
         foundUser.save();
         return {

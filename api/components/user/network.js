@@ -388,7 +388,7 @@ router.post('/logoutall', auth(), async(req, res) => {
  });
 
  router.post('/change_password', auth(), function (req, res) {
-    controller.changePassword(req.user, req.body.oldPass, req.body.newPass)
+    controller.changePassword(req.user, req.body.password)
     .then((resp) => {
         switch(resp.status){
             case 200:
