@@ -101,6 +101,8 @@ const AddressInputs = (props) => {
               rules={[{ required: true, message: 'Province is required' }]}
             >
               <Select
+                showSearch
+                optionFilterProp="children"
                 placeholder="Select province"
                 onChange={onChangeState}>
                 {
@@ -118,6 +120,8 @@ const AddressInputs = (props) => {
               rules={[{ required: true, message: 'City is required' }]}
             >
               <Select
+                showSearch
+                optionFilterProp="children"
                 disabled={cityOptions.disabled}
                 placeholder="Select city">
                 {
