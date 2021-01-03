@@ -195,7 +195,10 @@ async function checkMail(mail){
                     To generate a new password, just follow the link below and access the password change screen.<br />
                     <a href='${url}'>${url}</a>
                     <p>Have a great at day , My CDL Driver Team.</p>`);
-                return respuesta;
+                return {
+                    status: 200,
+                    message: 'Mail sent successfully'
+                };
                 break;
             default:
                 return respuesta;
