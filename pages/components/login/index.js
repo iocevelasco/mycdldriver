@@ -35,6 +35,7 @@ const ModalLogin = ({ visible_modal_login, router, ...props }) => {
   const handleModal = () => {
     props.handleModal(false);
     setNewUser(false);
+    setRecoverPass(false);
   }
 
   const style = {
