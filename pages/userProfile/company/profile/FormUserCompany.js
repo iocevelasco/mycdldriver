@@ -1,14 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
-import {
-  Row,
-  Col,
-  Input,
-  Form,
-  Button,
-  Typography,
-  Select
-} from 'antd';
+import { Row, Col, Input, Form, Button, Typography, Select } from 'antd';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
@@ -62,7 +53,6 @@ const FormUserCompany = (props) => {
 
   const { avatar } = resolveImageProfile();
 
-  console.log('avatar', avatar);
   return (
     <div className='profile-driver'>
       <Form

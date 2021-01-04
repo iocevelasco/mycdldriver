@@ -95,7 +95,6 @@ const Home = ({
   }
 
   const handlerSearch = (e, key) => {
-    console.log(e, key);
     let value = "";
     if (key == 'input') value = e;
     else if (key == 'city') value = e;

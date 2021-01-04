@@ -14,14 +14,12 @@ const PasswordModal = ({ visible, setPsw, handleModal }) => {
   }
 
   const onFinish = (fields) => {
-    const { password, confirm } = fields;
-    if (password === confirm) {
-      setPsw({
-        password,
-        isPassword: true
-      });
-      handleModal(false);
-    }
+    const { password } = fields;
+    setPsw({
+      password: password,
+      isPassword: true
+    });
+    handleModal(false);
   }
 
   return (
