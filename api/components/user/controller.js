@@ -1,5 +1,6 @@
 const store = require('./store');
 const config = require('../../config');
+const mailer = require('../../middelware/mailer');
 
 async function getUsers(filterUsers){
     try{
@@ -160,9 +161,49 @@ function getPrelogin(ip){
     });
 }
 
-async function changePassword(user, oldPass, newPass){
+async function changePassword(user, newPass){
     try{
-        return store.changePassword(user, oldPass, newPass);
+        return store.changePassword(user, newPass);
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
+}
+
+async function checkMail(mail){
+    if(!mail){
+        return {
+            status: 400,
+            message: 'No email recived'
+        }
+    }
+
+    try{
+        respuesta = await store.checkMail(mail);
+        switch(respuesta.status){
+            case 200:
+                const port = config.port ? ':' + config.port : '';
+                const url = config.host + port + '/recover_password?token=' + respuesta.message.token;
+                mailer(
+                    mail, 
+                    'Password recovery in MYCDL Driver',
+                    'Recover forgotten password', 
+                    `This email has been sent because I request a forgotten password recovery, if you have not requested this email just ignore the message.<br />
+                    To generate a new password, just follow the link below and access the password change screen.<br />
+                    <a href='${url}'>${url}</a>
+                    <p>Have a great at day , My CDL Driver Team.</p>`);
+                return {
+                    status: 200,
+                    message: 'Mail sent successfully'
+                };
+                break;
+            default:
+                return respuesta;
+                break;
+        }
     }catch(e){
         return {
             status: 500,
@@ -185,5 +226,6 @@ module.exports = {
     setPrelogin,
     getPrelogin,
     setPhoto,
-    changePassword
+    changePassword,
+    checkMail
 }

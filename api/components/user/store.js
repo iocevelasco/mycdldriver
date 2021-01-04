@@ -265,15 +265,43 @@ async function logoutAll(id){
     await foundUser.save();
 }
 
-async function changePassword(user, oldPass, newPass){
+async function changePassword(user, newPass){
     try{
-        const foundUser = await User.findByCredentials(user.email, oldPass);
+        const foundUser = await User.findOne({
+            email: user.email
+        });
         foundUser.password = newPass;
         foundUser.save();
         return {
             status: 200,
             message: 'Password changed successfully'
         };
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        };
+    }
+}
+
+async function checkMail(mail){
+    try{
+        const user = await User.findOne({
+            email: mail
+        });
+        const token = await user.generateAuthToken();
+        if(user){
+            return {
+                status: 200,
+                message: {user, token}
+            };
+        }else{
+            return {
+                status: 404,
+                message: 'User not found'
+            }
+        }
     }catch(e){
         return {
             status: 500,
@@ -295,5 +323,6 @@ module.exports = {
     setPrelogin,
     getPrelogin,
     updatePhoto,
-    changePassword
+    changePassword,
+    checkMail
 }

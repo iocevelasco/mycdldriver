@@ -388,7 +388,23 @@ router.post('/logoutall', auth(), async(req, res) => {
  });
 
  router.post('/change_password', auth(), function (req, res) {
-    controller.changePassword(req.user, req.body.oldPass, req.body.newPass)
+    controller.changePassword(req.user, req.body.password)
+    .then((resp) => {
+        switch(resp.status){
+            case 200:
+                response.success(req, res, resp.message, resp.status);
+                break;
+            default:
+                response.error(req, res, resp.message, resp.status, resp.detail);
+                break;
+        }
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
+ });
+
+ router.post('/recover_password', function (req, res) {
+    controller.checkMail(req.body.email)
     .then((resp) => {
         switch(resp.status){
             case 200:

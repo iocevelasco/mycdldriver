@@ -10,6 +10,7 @@ import {
 import SocialNetworkButtons from './utils/SocialNetwork';
 import UserPassword from './utils/loginWithUserPassword';
 import NewUserForm from './utils/NewUser';
+import RecoverPassword from './utils/RecoverPassword';
 const { Text, Title } = Typography;
 import "./styles.less";
 
@@ -29,6 +30,7 @@ function mapDispatchToProps(dispatch) {
 
 const ModalLogin = ({ visible_modal_login, router, ...props }) => {
   const [newUser, setNewUser] = useState(false);
+  const [recoverPass, setRecoverPass] = useState(false);
 
   const handleModal = () => {
     props.handleModal(false);
@@ -52,22 +54,27 @@ const ModalLogin = ({ visible_modal_login, router, ...props }) => {
           <img src='/static/images/logo.svg' />
         </div>
         {
-          !newUser ? <>
-            <div className='login--title'>
-              <Title level={3}>Welcome!</Title>
-            </div>
-            <UserPassword
+          newUser ?
+            <NewUserForm setNewUser={setNewUser} /> :
+            recoverPass ?
+              <RecoverPassword setRecoverPass={setRecoverPass} /> :
+              <>
+                <div className='login--title'>
+                  <Title level={3}>Welcome!</Title>
+                </div>
+                <UserPassword
 
-              setNewUser={setNewUser} />
-            <div className='login--divider'>
-              <span> </span><p> or </p><span> </span>
-            </div>
-            <SocialNetworkButtons />
-            <div className="login--registry-box">
-              <p> Are you driver or company and you don't have account?</p>
-              <Button type='link' onClick={() => setNewUser(true)}>Create Account</Button>
-            </div>
-          </> : <NewUserForm setNewUser={setNewUser} />
+                  setNewUser={setNewUser} />
+                <div className='login--divider'>
+                  <span> </span><p> or </p><span> </span>
+                </div>
+                <SocialNetworkButtons />
+                <div className="login--registry-box">
+                  <p> Are you driver or company and you don't have account?</p>
+                  <Button type='link' onClick={() => setNewUser(true)}>Create Account</Button>
+                  <Button type='link' onClick={() => setRecoverPass(true)}>Recover Password</Button>
+                </div>
+              </>
         }
       </div>
     </Modal>
