@@ -149,8 +149,8 @@ const DriverUser = ({ user, ...props }) => {
   const beforeToCreateProfile = async (fields, type) => {
     setLoader(true);
     try {
-      const { google_id, facebook_id, photo, email } = user;
-      const { name, dln, lastname, zipCode, state, sex, phoneNumber, password, confirm, city, birthDate, areaCode, address2, address } = fields;
+      const { google_id, facebook_id, photo } = user;
+      const { name, dln, lastname, zipCode, state, sex, phoneNumber, email, confirm, city, birthDate, areaCode, address2, address } = fields;
 
       let base = {}
       let driver = {}
@@ -165,7 +165,7 @@ const DriverUser = ({ user, ...props }) => {
         base.name = name;
         base.lastname = lastname;
         base.typeUser = 1;
-        base.photo = newImage ? newImage : photo;
+        base.photo = newImage !== null ? newImage : photo;
         base.email = email;
         base.google_id = google_id;
         base.facebook_id = facebook_id;

@@ -17,36 +17,39 @@ const mapStateToProps = (state) => {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    handleModal: (props) => dispatch(handlerModalLogin(props))
-  }
-}
-
-const onFinish = async (values) => {
-  setLoader(true);
-  await axios.post('/api/user/change_password', { password: values.password }).then((response) => {
-    notification['success']({
-      message: 'Success',
-      description:
-        "Success! Your Password has been changed!"
-    });
-  }).catch((err) => {
-    setLoader(false);
-    console.log('err', err);
-    notification['error']({
-      message: 'error',
-      description:
-        "Sorry! incorred password"
-    });
-  });
-  props.handleModal(false);
+  return {}
 }
 
 const RecoverPassword = (props) => {
   const [form] = Form.useForm();
-  const [fields, setFields] = useState([]);
   const [loading, setLoader] = useState(false);
   const { router } = props;
+
+
+  const onFinish = async (values) => {
+    setLoader(true);
+    await axios.post('/api/user/change_password', { password: values.password }).then((response) => {
+      notification['success']({
+        message: 'Success',
+        description:
+          "Success! Your Password has been changed!"
+      });
+      setLoader(false);
+    }).catch((err) => {
+      setLoader(false);
+      console.log('err', err);
+      notification['error']({
+        message: 'error',
+        description:
+          "Sorry! incorred password"
+      });
+    });
+  }
+
+  useEffect(() => {
+    setLoader(false);
+  }, [])
+
   const styles = {
     content: {
       height: '65vh',
@@ -59,10 +62,9 @@ const RecoverPassword = (props) => {
   return (
     <WrapperSection row={6}>
       <div style={styles.content}>
-        <Title level={4}> Enter your email to recover your password </Title>
+        <Title level={4}> Enter your new password </Title>
         <div className='form'>
           <Form
-            fields={fields}
             form={form}
             onFinish={onFinish}
             name="global_state"
