@@ -64,8 +64,8 @@ const CompanyProfileView = ({ user, ...props }) => {
 
   const beforeToCreateProfile = async (fields, type) => {
     try {
-      const { google_id, facebook_id, photo, email, name, lastname } = user;
-      const { phoneNumber, tradename, legalNumber, address, address2, areaCode, zipCode, state, city } = fields;
+      const { google_id, facebook_id, photo } = user;
+      const { phoneNumber, lastname, email, name, tradename, legalNumber, address, address2, areaCode, zipCode, state, city } = fields;
 
       let base = {}
       let company = {}
@@ -144,7 +144,6 @@ const CompanyProfileView = ({ user, ...props }) => {
     try {
       await axios.patch('/api/company/' + props._id, fullCompany, header)
         .then((response) => {
-          console.log('response', response);
           let update = {
             user: response.data.data.user,
             company: response.data.data.company
