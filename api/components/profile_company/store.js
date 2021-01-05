@@ -86,10 +86,12 @@ async function updateCompany(id, user){
         foundCompany.tradename = company.tradename;
     }
     if(user.photo){
-        try {
-            fs.unlinkSync("." + foundUser.photo);
-        } catch(err) {}
-        foundUser.photo = user.photo;
+        if(user.photo != foundUser.photo){
+            try {
+                fs.unlinkSync("." + foundUser.photo);
+            } catch(err) {}
+            foundUser.photo = user.photo;
+        }
     }
     if(company.legalNumber){
         foundCompany.legalNumber = company.legalNumber;

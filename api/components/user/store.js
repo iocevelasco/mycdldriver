@@ -146,12 +146,14 @@ async function updatePhoto(id, photo){
         _id: id
     });
     if(photo){
-        try {
-            fs.unlinkSync("." + foundUser.photo);
-        } catch(err) {
-            console.error(err);
+        if(photo != foundUser.photo){
+            try {
+                fs.unlinkSync("." + foundUser.photo);
+            } catch(err) {
+                console.error(err);
+            }
+            foundUser.photo = photo;
         }
-        foundUser.photo = photo;
     }
     
     await foundUser.save();

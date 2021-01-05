@@ -429,7 +429,6 @@ async function applyJob(job) {
 }
 
 async function updateJob(id, job, company) {
-    console.log('[STORE]', job);
     const foundJob = await JobsModel.findOne({
         _id: id
     });
@@ -473,12 +472,14 @@ async function updateJob(id, job, company) {
         foundJob.email = job.email;
     }
     if (job.logo) {
-        try {
-            fs.unlinkSync("." + foundJob.logo);
-        } catch (err) {
-            console.error(err);
+        if(job.logo != foundJob.logo){
+            try {
+                fs.unlinkSync("." + foundJob.logo);
+            } catch (err) {
+                console.error(err);
+            }
+            foundJob.logo = job.logo;
         }
-        foundJob.logo = job.logo;
     }
     foundJob.active = job.active;
     /*if(job.tags.length > 0){
@@ -488,7 +489,6 @@ async function updateJob(id, job, company) {
         }
     }*/
 
-    console.log('[STORE SAVED]', foundJob);
     await foundJob.save();
     return {
         status: 200,
