@@ -31,6 +31,10 @@ const RecoverPassword = (props) => {
   const { router } = props;
   const token = router.query.token;
 
+  useEffect(() => {
+    if (!token) router.push('/');
+  }, [token])
+
   const onFinish = async (values) => {
     setLoader(true);
     await axios.post('/api/user/change_password', { password: values.password }, { headers: { Authorization: `Bearer ${token}` } }
@@ -38,7 +42,7 @@ const RecoverPassword = (props) => {
       await axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
           const typeUser = response.data.data.typeUser;
-          localStorage.setItem("token", response.data.data.token);
+          localStorage.setItem("token", token);
           localStorage.setItem("typeUser", response.data.data.typeUser);
           if (typeUser == 1) {
             let { date, driver, lastname, name, _id, photo, email } = response.data.data;
@@ -69,6 +73,12 @@ const RecoverPassword = (props) => {
             description:
               "Success! Your Password has been changed!"
           });
+          if (typeUser == 2) {
+            router.push('/userProfile/company/profile')
+          }
+          if (typeUser == 1) {
+            router.push('/userProfile/driver/profile')
+          }
           setLoader(false);
         })
     }).catch((err) => {
