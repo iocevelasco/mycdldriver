@@ -7,6 +7,15 @@ const transporter = nodemailer.createTransport({
         pass: '7mm>4=CL'
     }
 });
+/*const transporter = nodemailer.createTransport({
+    service: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: 'mycdldriver411@gmail.com',
+        pass: '7mm>4=CL'
+    }
+});*/
 module.exports = (para, asunto, titulo, mensaje)=>{
 
     var mailOptions = {
@@ -65,7 +74,7 @@ module.exports = (para, asunto, titulo, mensaje)=>{
         </body>
         </html>`
     };
-    console.log('[ EMAIL RECIVED ]', para, asunto, titulo, mensaje);
+    //console.log('[ EMAIL RECIVED ]', para, asunto, titulo, mensaje);
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log('[ ERROR MAILER ]', error);
