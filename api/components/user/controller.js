@@ -186,7 +186,7 @@ async function checkMail(mail){
         switch(respuesta.status){
             case 200:
                 const port = config.port ? ':' + config.port : '';
-                const url = config.host + port + '/recover_password?token=' + respuesta.message.token;
+                const url = config.host + port + '/recovery_password?token=' + respuesta.message.token;
                 mailer(
                     mail, 
                     'Password recovery in MYCDL Driver',
