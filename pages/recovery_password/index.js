@@ -38,6 +38,8 @@ const RecoverPassword = (props) => {
       await axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
           const typeUser = response.data.data.typeUser;
+          localStorage.setItem("token", response.data.data.token);
+          localStorage.setItem("typeUser", response.data.data.typeUser);
           if (typeUser == 1) {
             let { date, driver, lastname, name, _id, photo, email } = response.data.data;
             let driverProps = {

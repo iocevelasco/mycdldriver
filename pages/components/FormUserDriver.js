@@ -91,6 +91,9 @@ const DriverUser = ({ user, ...props }) => {
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
       .then((response) => {
+        const data = response.data.data
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("typeUser", data.typeUser);
         props.handleNewDriverProps(response.data.data);
         if (props.isJobs) {
           saveApply();
