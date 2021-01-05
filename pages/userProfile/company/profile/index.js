@@ -64,8 +64,8 @@ const CompanyProfileView = ({ user, ...props }) => {
 
   const beforeToCreateProfile = async (fields, type) => {
     try {
-      const { google_id, facebook_id, photo, email, name, lastname } = user;
-      const { phoneNumber, tradename, legalNumber, address, address2, areaCode, zipCode, state, city } = fields;
+      const { google_id, facebook_id, photo } = user;
+      const { phoneNumber, lastname, email, name, tradename, legalNumber, address, address2, areaCode, zipCode, state, city } = fields;
 
       let base = {}
       let company = {}
@@ -114,18 +114,23 @@ const CompanyProfileView = ({ user, ...props }) => {
     const fullCompany = { base: base, ...company };
     setLoader(true);
     try {
-      const { data } = await axios.post('/api/company', fullCompany);
-      setLoader(false);
-      let create = {
-        user: data.data.user,
-        company: data.data.company
-      };
-      props.handlreNewUserProps(create);
-      notification['success']({
-        message: 'Success',
-        description:
-          "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
-      });
+      await axios.post('/api/company', fullCompany)
+        .then((response) => {
+          const data = response.data.data
+          localStorage.setItem("token", data.user.token);
+          localStorage.setItem("typeUser", data.user.typeUser);
+          let create = {
+            user: data.user,
+            company: data.company
+          };
+          props.handlreNewUserProps(create);
+          setLoader(false);
+          notification['success']({
+            message: 'Success',
+            description:
+              "it's done!. You can now start browsing our page. If you need to edit you profile you can do it here!"
+          });
+        })
     } catch (err) {
       setLoader(false);
       console.log(err);
@@ -144,7 +149,6 @@ const CompanyProfileView = ({ user, ...props }) => {
     try {
       await axios.patch('/api/company/' + props._id, fullCompany, header)
         .then((response) => {
-          console.log('response', response);
           let update = {
             user: response.data.data.user,
             company: response.data.data.company

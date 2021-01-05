@@ -59,6 +59,21 @@ const initialState = {
   },
 };
 
+
+const updatePropsCompany = (props) => {
+  return {
+    type: types.RELOAD_PROPS_COMPANY,
+    payload: props
+  };
+}
+
+const updatePropsDriver = (props) => {
+  return {
+    type: types.RELOAD_PROPS_DRIVER,
+    payload: props
+  };
+}
+
 function fetchUserData(token, typeUser) {
   return (dispatch) => {
     return axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
@@ -243,5 +258,7 @@ export {
   getCurrentLocation,
   setPropsUserReg,
   addExperience,
-  fetchUserData
+  fetchUserData,
+  updatePropsCompany,
+  updatePropsDriver
 };

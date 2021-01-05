@@ -49,7 +49,7 @@ async function getOneUser(id){
     }
     try{
         const list = await User.findOne(filter)
-        .select('name lastname photo date email')
+        .select('name lastname photo date email typeUser')
         .populate('driver')
         .populate('company');
         return {
