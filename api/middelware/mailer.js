@@ -8,12 +8,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 /*const transporter = nodemailer.createTransport({
-    service: 'smtp.gmail.com',
+    host: 'mail.ligafutbol.com.ve',
     port: 465,
     secure: true,
     auth: {
-        user: 'mycdldriver411@gmail.com',
-        pass: '7mm>4=CL'
+        user: 'envios@ligafutbol.com.ve',
+        pass: 'sgEHvu+GrD83'
     }
 });*/
 module.exports = (para, asunto, titulo, mensaje)=>{
