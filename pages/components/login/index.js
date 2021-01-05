@@ -10,7 +10,7 @@ import {
 import SocialNetworkButtons from './utils/SocialNetwork';
 import UserPassword from './utils/loginWithUserPassword';
 import NewUserForm from './utils/NewUser';
-import RecoverPassword from './utils/RecoverPassword';
+import RecoverPassword from './utils/recoverPassword';
 const { Text, Title } = Typography;
 import "./styles.less";
 
