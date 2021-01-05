@@ -1,18 +1,25 @@
 import React from 'react';
 import { useEffect } from 'react';
-import {
-  Row,
-  Col,
-  Image,
-  Typography,
-  Spin
-} from 'antd';
+import { Typography } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import { withRouter } from 'next/router';
+import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 const { Title } = Typography;
 const antIcon = <LoadingOutlined style={{ fontSize: 60, color: '#FF2A39' }} spin />;
 
-const LoadingUser = ({ active }) => {
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+  }
+}
+
+const LoadingUser = ({ user, active }) => {
   const styles = {
     wrapper: {
       position: 'absolute',
@@ -39,18 +46,24 @@ const LoadingUser = ({ active }) => {
     if (active) {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
-      document.body.style.overflowY = "hidden"
+      document.body.style.overflowY = "hidden";
     } else {
-      document.body.style.overflowY = "auto"
+      document.body.style.overflowY = "auto";
     }
   }, [active]);
 
   const closeWindow = () => {
     if (typeof window !== "undefined") {
+      console.log(user);
       const params = window.location.search;
       if (window.opener) {
         window.opener.postMessage(params);
-        window.opener.location.reload();
+        if(user.typeUser == 0){
+          window.opener.location.href = "/userProfile";
+        }else{
+          window.opener.location.reload();
+        }
+        
         window.close();
       }
     }
@@ -66,4 +79,4 @@ const LoadingUser = ({ active }) => {
   )
 }
 
-export default LoadingUser;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoadingUser));
