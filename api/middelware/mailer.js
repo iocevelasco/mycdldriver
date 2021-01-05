@@ -32,11 +32,11 @@ module.exports = (para, asunto, titulo, mensaje)=>{
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         </head>
 
-        <body style="margin: 0; padding: 0; background-image: url('https://www.mycdldriver411.com/static/images/bg-routes.jpg');">
+        <body style="margin: 0; padding: 0; background-image: url('https://mycdldriver411.herokuapp.com/static/images/bg-routes.jpg');">
             <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; border:1px solid #f0f0f0;">
                 <tr>
                     <td align="center" bgcolor="#001529" style="padding: 40px 0 30px 0;">
-                        <img src="https://www.mycdldriver411.com/static/images/logo-white.png" width="300" style="display: block;" />
+                        <img src="https://mycdldriver411.herokuapp.com/static/images/logo-white.png" width="300" style="display: block;" />
                     </td>
                 </tr>
                 <tr>
