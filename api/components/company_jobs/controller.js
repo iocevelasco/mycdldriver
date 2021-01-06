@@ -97,6 +97,7 @@ function setStatus(id, status) {
         switch (result.status) {
             case 200:
                 try{
+                    console.log('[ STATUS APPLY ]', status);
                     if(status == 1){
                         mailer(
                             result.user.email, 
@@ -118,11 +119,8 @@ function setStatus(id, status) {
                 
                 resolve(result);
                 break;
-            case 500:
-                reject(result);
-                break;
             default:
-                resolve(result);
+                reject(result);
                 break;
         }
     });
@@ -199,7 +197,6 @@ function addJob(job, company) {
 function applyJob(jobApply) {
     return new Promise((resolve, reject) => {
         if (!jobApply) {
-            console.error('[companyJobsController.applyJob] Invalid data');
             reject({ status: 400, message: 'Invalid Job Apply data' });
             return false;
         }
@@ -208,6 +205,7 @@ function applyJob(jobApply) {
         switch (result.status) {
             case 200:
                 try{
+                    console.log('[ APPLY JOB MAILER ]');
                     const url_job_detail = `${config.baseurl}/job-offert?id=${jobApply.job}`;
                     const url_candidate = `${config.baseurl}/userProfile/company/candidate`;
                     mailer(
