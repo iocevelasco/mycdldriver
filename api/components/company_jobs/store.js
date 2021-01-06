@@ -159,12 +159,16 @@ async function setStatus(id, status) {
         if (!id) {
             throw new Error();
         }
-        const apply = await JobsApplysModel.findOne(filter);
+        const apply = await JobsApplysModel.findOne(filter)
+        .populate('driver')
+        .populate('company');
         apply.status = status;
         await apply.save();
         return {
             status: 200,
-            message: 'Ok'
+            message: 'Ok',
+            user: apply.driver,
+            company: apply.company
         };
     } catch (e) {
         console.log(e);
@@ -406,12 +410,14 @@ async function applyJob(job) {
     try {
         const foundJob = await JobsModel.findOne({ _id: job.job });
         job.company = foundJob.company;
+        const foundCompanyUser = await User.findOne({ company: foundJob.company }).populate('company');
         const newApply = new JobsApplysModel(job);
         const resp = await newApply.save();
         if (resp) {
             return {
                 status: 200,
-                message: 'Ok'
+                message: 'Ok',
+                userCompany: foundCompanyUser
             };
         }else{
             return {
@@ -429,7 +435,6 @@ async function applyJob(job) {
 }
 
 async function updateJob(id, job, company) {
-    console.log('[STORE]', job);
     const foundJob = await JobsModel.findOne({
         _id: id
     });
@@ -473,12 +478,14 @@ async function updateJob(id, job, company) {
         foundJob.email = job.email;
     }
     if (job.logo) {
-        try {
-            fs.unlinkSync("." + foundJob.logo);
-        } catch (err) {
-            console.error(err);
+        if(job.logo != foundJob.logo){
+            try {
+                fs.unlinkSync("." + foundJob.logo);
+            } catch (err) {
+                console.error(err);
+            }
+            foundJob.logo = job.logo;
         }
-        foundJob.logo = job.logo;
     }
     foundJob.active = job.active;
     /*if(job.tags.length > 0){
@@ -488,7 +495,6 @@ async function updateJob(id, job, company) {
         }
     }*/
 
-    console.log('[STORE SAVED]', foundJob);
     await foundJob.save();
     return {
         status: 200,

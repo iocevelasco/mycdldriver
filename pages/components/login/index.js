@@ -8,7 +8,7 @@ import {
   Button,
 } from 'antd';
 import SocialNetworkButtons from './utils/SocialNetwork';
-import UserPassword from './utils/loginWithUserPassword';
+import UserPassword from './utils/LoginWithUserPassword';
 import NewUserForm from './utils/NewUser';
 import RecoverPassword from './utils/RecoverPassword';
 const { Text, Title } = Typography;
@@ -16,7 +16,6 @@ import "./styles.less";
 
 function mapStateToProps(state) {
   return {
-
     visible_modal_login: state.landing.visible_modal_login
   }
 }
@@ -35,6 +34,7 @@ const ModalLogin = ({ visible_modal_login, router, ...props }) => {
   const handleModal = () => {
     props.handleModal(false);
     setNewUser(false);
+    setRecoverPass(false);
   }
 
   const style = {

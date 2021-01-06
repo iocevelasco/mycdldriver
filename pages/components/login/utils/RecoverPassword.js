@@ -4,7 +4,8 @@ import {
   Input,
   Space,
   Form,
-  Typography
+  Typography,
+  notification
 } from 'antd';
 import axios from 'axios';
 const { Title } = Typography;
@@ -32,10 +33,15 @@ const RecoverPassword = (props) => {
   const [loading, setLoader] = useState(false);
   const { router } = props;
 
-  const makeReg = async (values) => {
+  const onFinish = async (values) => {
     setLoader(true);
-    await axios.post('/api/user/recover_password', {email: values.email}).then((response) => {
-
+    await axios.post('/api/user/recover_password', { email: values.email }).then((response) => {
+      notification['success']({
+        message: 'Success',
+        description:
+          "Please check your email we send the link to reset the password"
+      });
+      setLoader(false);
     }).catch((err) => {
       setLoader(false);
       console.log('err', err);
@@ -55,7 +61,7 @@ const RecoverPassword = (props) => {
         <Form
           fields={fields}
           form={form}
-          onFinish={makeReg}
+          onFinish={onFinish}
           name="global_state"
           layout='vertical'>
           <Space direction="vertical">

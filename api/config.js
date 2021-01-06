@@ -13,6 +13,7 @@ const config = {
     monDebug: process.env.MONGO_DEBUG || false,
     port: process.env.PORT || 3000,
     host: process.env.HOST || 'http://localhost',
+    baseurl: process.env.BASE_URL || 'http://localhost:3000',
     JWT_KEY: process.env.JWT_KEY || key,
     publicRoute: process.env.PUBLIC_ROUTE || '/public',
     filesRoute: process.env.FILES_ROUTE || '/files',

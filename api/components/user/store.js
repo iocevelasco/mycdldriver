@@ -49,7 +49,7 @@ async function getOneUser(id){
     }
     try{
         const list = await User.findOne(filter)
-        .select('name lastname photo date email')
+        .select('name lastname photo date email typeUser')
         .populate('driver')
         .populate('company');
         return {
@@ -146,12 +146,14 @@ async function updatePhoto(id, photo){
         _id: id
     });
     if(photo){
-        try {
-            fs.unlinkSync("." + foundUser.photo);
-        } catch(err) {
-            console.error(err);
+        if(photo != foundUser.photo){
+            try {
+                fs.unlinkSync("." + foundUser.photo);
+            } catch(err) {
+                console.error(err);
+            }
+            foundUser.photo = photo;
         }
-        foundUser.photo = photo;
     }
     
     await foundUser.save();

@@ -88,12 +88,14 @@ async function updateDriver(id, user){
         foundUser.password = user.password;
     }
     if(user.photo){
-        try {
-            fs.unlinkSync("." + foundUser.photo);
-        } catch(err) {
-            console.error(err);
+        if(user.photo != foundUser.photo){
+            try {
+                fs.unlinkSync("." + foundUser.photo);
+            } catch(err) {
+                console.error(err);
+            }
+            foundUser.photo = user.photo;
         }
-        foundUser.photo = user.photo;
     }
     if(driver.birthDate){
         foundDriver.birthDate = driver.birthDate;
@@ -161,20 +163,24 @@ async function updateExperience(id, driver){
         foundDriver.expDateDln = driver.expDateDln;
     }
     if(driver.imageDln){
-        try {
-            fs.unlinkSync("." + foundDriver.imageDln);
-        } catch(err) {
-            console.error(err);
+        if(driver.imageDln != foundDriver.imageDln){
+            try {
+                fs.unlinkSync("." + foundDriver.imageDln);
+            } catch(err) {
+                console.error(err);
+            }
+            foundDriver.imageDln = driver.imageDln;
         }
-        foundDriver.imageDln = driver.imageDln;
     }
     if(driver.medicCardImage){
-        try {
-            fs.unlinkSync("." + foundDriver.medicCardImage);
-        } catch(err) {
-            console.error(err);
+        if(driver.medicCardImage != foundDriver.medicCardImage){
+            try {
+                fs.unlinkSync("." + foundDriver.medicCardImage);
+            } catch(err) {
+                console.error(err);
+            }
+            foundDriver.medicCardImage = driver.medicCardImage;
         }
-        foundDriver.medicCardImage = driver.medicCardImage;
     }
     if(driver.description){
         foundDriver.description = driver.description;

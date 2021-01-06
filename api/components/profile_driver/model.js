@@ -23,10 +23,12 @@ const profileDriverSchema = Schema({
         trim: true
     },
     areaCode: {
-        type: Number
+        type: String,
+        trim: true
     },
     phoneNumber: {
-        type: String
+        type: String,
+        trim: true
     },
     sex: {
         type: Number
