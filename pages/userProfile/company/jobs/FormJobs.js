@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Input, Select, Form, Radio, Upload, message, Switch } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { PictureOutlined } from '@ant-design/icons';
 import useListState from '@hooks/useListState';
+import { beforeUpload } from 'components/UploadImages';
 import axios from 'axios';
 const { TextArea } = Input;
 const { Option } = Select;
@@ -17,6 +18,27 @@ const FormJobs = (props) => {
     options: [],
     all: [],
   });
+
+  const onRemove = (file) => {
+    props.setImage([]);
+  }
+
+  const uploadImage = async options => {
+    const { onSuccess, onError, file } = options;
+
+    const fmData = new FormData();
+    fmData.append("logo", file);
+    try {
+      const res = await axios.post(
+        '/api/files',
+        fmData,
+      );
+      onSuccess(res.data.data.file);
+    } catch (err) {
+      console.log("Error: ", err);
+      onError({ err });
+    }
+  };
 
   let fields = [];
   if (props.fields) {
@@ -103,29 +125,6 @@ const FormJobs = (props) => {
           ]}>
           <TextArea />
         </Form.Item>
-        <Form.Item
-          name="photo"
-          valuePropName="fileList"
-          getValueFromEvent={(e) => {
-            if (Array.isArray(e)) {
-              return e;
-            }
-            return e && e.fileList;
-          }}
-          rules={[
-            {
-              required: props.formType === 'create' ? true : false,
-              message: 'Photo is required!',
-            },
-          ]}
-        >
-          <Upload {...props.propsUpload}
-            fileList={props.newPhoto}
-            beforeUpload={props.beforeUpload}
-          >
-            <Button icon={<UploadOutlined />}>Click to Upload</Button>
-          </Upload>
-        </Form.Item>
         <Row gutter={[16, 16]} justify='space-between' >
           <Col span={4}>
             <Form.Item
@@ -160,7 +159,8 @@ const FormJobs = (props) => {
               rules={[
                 {
                   required: true,
-                  message: 'Email is required!',
+                  type: "email",
+                  message: 'Enter a valid email address',
                 },
               ]}>
               <Input />
@@ -225,8 +225,44 @@ const FormJobs = (props) => {
               </Form.Item>
             </Col>
           </Row>
+          <Row gutter={[16, 16]} justify='center' >
+            <Col span={12}>
+              <Form.Item
+                name="photo"
+                valuePropName="fileList"
+                getValueFromEvent={(e) => {
+                  if (Array.isArray(e)) {
+                    return e;
+                  }
+                  return e && e.fileList;
+                }}
+                rules={[
+                  {
+                    required: props.formType === 'create' ? true : false,
+                    message: 'Photo is required!',
+                  },
+                ]}
+              >
+                <Upload {...props.propsUpload}
+                  fileList={props.newPhoto}
+                  onChange={props.handleOnChangeImage}
+                  customRequest={uploadImage}
+                  beforeUpload={beforeUpload}
+                  onRemove={onRemove}
+                >
+                  <Button
+                    style={{ width: '300px' }}
+                    type='secondary'
+                    shape="round"
+                    size="large"
+                    block
+                    icon={<PictureOutlined />}>Click to Upload Image</Button>
+                </Upload>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form.Item>
-        <Row gutter={[16, 16]} justify='center' >
+        <Row justify='center' >
           <Col span={16}>
             <Button
               htmlType="submit"

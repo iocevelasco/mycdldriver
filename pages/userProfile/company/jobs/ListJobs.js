@@ -12,14 +12,14 @@ const ListJobs = ({ header, isFetching, jobsByCompany, openDrawer, ...props }) =
   const deleteJob = async (id) => {
     try {
       await axios.delete(`/api/company/jobs/${id}`, header);
-      props.setReload(true);
+      props.fetchJobList();
       notification['success']({
         message: 'Success',
         description:
           "Done! the position has been deleted."
       });
     } catch (err) {
-      props.setReload(true);
+      props.fetchJobList();
       console.log(err);
       notification['error']({
         message: 'error',

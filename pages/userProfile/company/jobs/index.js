@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import axios from 'axios';
 import { WrapperSection } from 'components/helpers';
-import useJobsByCompany from '@hooks/useJobsByCompany';
 import SideNav from '../../components/SideNavAdmin';
 import JobsList from './ListJobs';
 import FormJobs from './FormJobs';
@@ -71,84 +70,40 @@ function mapStateToProps(state) {
 
 const CompanyJobView = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [reload, setReload] = useState(false)
+  const [jobsByCompany, setOptions] = useState([]);
+  const [image, setImage] = useState([]);
+  const [isFetching, setIsFetching] = useState(true);
   const { user } = props;
-
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
-  const [jobsByCompany, isFetching] = useJobsByCompany(header, reload, setReload);
+
+  const fetchJobList = async () => {
+    setIsFetching(true);
+    await axios
+      .get('/api/company/jobs/private', header)
+      .then((response) => {
+        let options = response.data.data;
+        setOptions(options);
+        setIsFetching(false);
+      })
+      .catch((err) => {
+        setOptions([]);
+        console.log(err)
+      })
+  }
 
   useEffect(() => {
-    if (!isFetching) setReload(reload);
-  }, [isFetching])
+    fetchJobList()
+  }, []);
 
-  const propsUpload = {
-    name: 'logo',
-    action: '/api/files',
-    headers: {
-      authorization: 'authorization-text'
-    },
-    async onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-      let fileList = [...info.fileList];
-      fileList = fileList.slice(-1);
-      fileList = fileList.map(file => {
-        if (file.response) {
-          file.url = file.response.url;
-        }
-        return file;
-      });
-      if (state.editing) {
-        if (state.editPhoto.length > 0) {
-          try {
-            const file = {
-              foto: state.editPhoto[0].response.data.file
-            };
-            await axios.post(`/api/files/delete`, file);
-          } catch (e) {
-            console.log(e);
-          }
-        }
-        dispatch({ type: types.EDIT_PHOTO, payload: fileList });
-      } else {
-        if (state.newPhoto.length > 0) {
-          try {
-            const file = {
-              foto: state.newPhoto[0].response.data.file
-            };
-            await axios.post(`/api/files/delete`, file);
-          } catch (e) {
-            console.log(e);
-          }
-        }
-        dispatch({ type: types.NEW_PHOTO, payload: fileList });
-      }
-    }
+
+  const handleOnChangeImage = ({ file }) => {
+    setImage(file.response);
   };
 
-  function beforeUpload(file) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-      dispatch({ type: types.NEW_PHOTO, payload: [''] });
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-      dispatch({ type: types.NEW_PHOTO, payload: [''] });
-    }
-    return isJpgOrPng && isLt2M;
-  }
   const createSuccess = () => {
-    setReload(true);
+    fetchJobList();
     dispatch({ type: types.CREATE_JOB_SUCCESS });
     notification['success']({
       message: 'Success',
@@ -160,10 +115,7 @@ const CompanyJobView = (props) => {
   const onFinisCreateJobs = async (fields) => {
     fields.tags = [];
     delete fields['photo'];
-
-    if (state.newPhoto.length > 0) {
-      fields.logo = state.newPhoto[0].response.data.file;
-    }
+    fields.logo = image;
 
     dispatch({ type: types.LOADING, payload: true });
     await axios.post('/api/company/jobs', fields, header)
@@ -172,7 +124,7 @@ const CompanyJobView = (props) => {
       })
       .catch((err) => {
         console.log(err);
-        setReload(true);
+        fetchJobList();
         notification['error']({
           message: 'error',
           description:
@@ -182,19 +134,17 @@ const CompanyJobView = (props) => {
   };
 
   const handlerEditJob = async (fields) => {
-    if (state.editPhoto.length > 0) {
-      fields.logo = state.editPhoto[0].response.data.file;
-    }
+    fields.logo = image;
     try {
       await axios.patch('/api/company/jobs/' + fields._id, fields, header);
-      setReload(!reload);
+      fetchJobList();
       notification['success']({
         message: 'Success',
         description:
           "Success ! Your position has been edited correctly"
       });
     } catch (err) {
-      setReload(true);
+      fetchJobList();
       console.log(err);
       notification['error']({
         message: 'error',
@@ -265,7 +215,7 @@ const CompanyJobView = (props) => {
           <WrapperSection row={24} styles={styleWrapper}>
             <JobsList
               header={header}
-              setReload={setReload}
+              fetchJobList={fetchJobList}
               isFetching={isFetching}
               openDrawer={openDrawer}
               jobsByCompany={jobsByCompany}
@@ -282,9 +232,9 @@ const CompanyJobView = (props) => {
         visible={state.visible_create}>
         {
           state.visible_create && <FormJobs
-            beforeUpload={beforeUpload}
-            propsUpload={propsUpload}
+            handleOnChangeImage={handleOnChangeImage}
             formType='create'
+            setImage={setImage}
             onFinisCreateJobs={onFinisCreateJobs}
           />
         }
@@ -296,13 +246,16 @@ const CompanyJobView = (props) => {
         width={680}
         onClose={onCloseDrawer}
         visible={state.visible}>
-        <FormJobs
-          beforeUpload={beforeUpload}
-          fields={state.fields}
-          propsUpload={propsUpload}
-          formType='edit'
-          ediJob={handlerEditJob}
-        />
+        {
+          state.visible &&
+          <FormJobs
+            setImage={setImage}
+            handleOnChangeImage={handleOnChangeImage}
+            fields={state.fields}
+            formType='edit'
+            ediJob={handlerEditJob}
+          />
+        }
       </Drawer>
     </>
   )
