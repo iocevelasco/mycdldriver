@@ -17,6 +17,7 @@ const FormJobs = (props) => {
     options: [],
     all: [],
   });
+
   let fields = [];
   if (props.fields) {
     fields = props.fields.map((field) => {

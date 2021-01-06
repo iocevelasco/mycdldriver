@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useReducer } from 'react';
-import { Row, Col, Typography, message, Drawer, notification, Divider } from 'antd';
+import { Row, Col, Typography, message, Drawer, Button, notification, Divider } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import useJobsByCompany from '@hooks/useJobsByCompany';
 import SideNav from '../../components/SideNavAdmin';
 import JobsList from './ListJobs';
 import FormJobs from './FormJobs';
-
+import "./styles.less";
 const { Text, Title } = Typography
 const initialState = {
   loading: true,
@@ -17,7 +17,8 @@ const initialState = {
   fieldsEdit: [],
   newPhoto: [],
   editPhoto: [],
-  visible: false
+  visible: false,
+  visible_create: false,
 }
 
 const types = {
@@ -27,7 +28,9 @@ const types = {
   EDIT_PHOTO: 'EDIT_PHOTO',
   EDITING: 'EDITING',
   NEW_FIELDS: 'NEW_FIELDS',
-  EDIT_FIELDS: 'EDIT_FIELDS'
+  EDIT_FIELDS: 'EDIT_FIELDS',
+  OPEN_DRAWER_CREATE: 'OPEN_DRAWER_CREATE',
+  CREATE_JOB_SUCCESS: 'CREATE_JOB_SUCCESS',
 }
 
 const reducer = (state, action) => {
@@ -46,6 +49,14 @@ const reducer = (state, action) => {
       return { ...state, editPhoto: action.payload }
     case types.EDITING:
       return { ...state, editing: !state.editing }
+    case types.OPEN_DRAWER_CREATE:
+      return { ...state, visible_create: !state.visible_create }
+    case types.CREATE_JOB_SUCCESS:
+      return {
+        ...state,
+        visible_create: false,
+        fields: [],
+      }
     default:
       throw new Error('Unexpected action');
   }
@@ -136,29 +147,28 @@ const CompanyJobView = (props) => {
     }
     return isJpgOrPng && isLt2M;
   }
-
+  const createSuccess = () => {
+    setReload(true);
+    dispatch({ type: types.CREATE_JOB_SUCCESS });
+    notification['success']({
+      message: 'Success',
+      description:
+        "Success ! Your position has been created"
+    });
+  }
 
   const onFinisCreateJobs = async (fields) => {
-    let newJob = fields;
-    newJob.tags = [];
-    delete newJob['photo'];
+    fields.tags = [];
+    delete fields['photo'];
 
-    if (!newJob) return;
     if (state.newPhoto.length > 0) {
-      newJob.logo = state.newPhoto[0].response.data.file;
+      fields.logo = state.newPhoto[0].response.data.file;
     }
 
     dispatch({ type: types.LOADING, payload: true });
-    await axios.post('/api/company/jobs', newJob, header)
-      .then((response) => {
-        setReload(true);
-        console.log('response', response);
-        jobsByCompany
-        notification['success']({
-          message: 'Success',
-          description:
-            "Success ! Your position has been created"
-        });
+    await axios.post('/api/company/jobs', fields, header)
+      .then(() => {
+        createSuccess();
       })
       .catch((err) => {
         console.log(err);
@@ -195,6 +205,14 @@ const CompanyJobView = (props) => {
   };
 
 
+  const openDrawerCreate = () => {
+    dispatch({ type: types.OPEN_DRAWER_CREATE });
+  };
+
+  const closeDrawerCreate = () => {
+    dispatch({ type: types.OPEN_DRAWER_CREATE });
+  };
+
 
   const openDrawer = (propsFields) => {
     let fields = [];
@@ -224,18 +242,24 @@ const CompanyJobView = (props) => {
         <SideNav currentLocation="1" />
         <Col span={18} className="profile-company__jobs">
           {/* // CRUM JOBS */}
-          <WrapperSection row={16} styles={styleWrapper}>
-            <div className="title" >
-              <Title level={3}> Create and edit your position </Title>
-              <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
-            </div>
+          <WrapperSection row={24} styles={styleWrapper}>
+            <Row justify='space-between' align='middle' className='add-new-driver--header'>
+              <Col span={8}>
+                <Title level={3}> Create and edit your position </Title>
+                <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
+              </Col>
+              <Col span={4}>
+                <Button
+                  type='primary'
+                  shape="round"
+                  size="large"
+                  block
+                  onClick={openDrawerCreate}>
+                  Create Job
+                </Button>
+              </Col>
+            </Row>
             <Divider />
-            <FormJobs
-              beforeUpload={beforeUpload}
-              propsUpload={propsUpload}
-              formType='create'
-              onFinisCreateJobs={onFinisCreateJobs}
-            />
           </WrapperSection>
           {/* listado de jobs */}
           <WrapperSection row={24} styles={styleWrapper}>
@@ -249,6 +273,22 @@ const CompanyJobView = (props) => {
           </WrapperSection>
         </Col>
       </Row>
+      <Drawer
+        title='Create Job'
+        placement="right"
+        closable={true}
+        width={680}
+        onClose={closeDrawerCreate}
+        visible={state.visible_create}>
+        {
+          state.visible_create && <FormJobs
+            beforeUpload={beforeUpload}
+            propsUpload={propsUpload}
+            formType='create'
+            onFinisCreateJobs={onFinisCreateJobs}
+          />
+        }
+      </Drawer>
       <Drawer
         title='Edit Job'
         placement="right"
