@@ -97,6 +97,7 @@ router.post('/', auth(2), function (req, res) {
 
 router.post('/apply', auth(1), function (req, res) {
     req.body.driver = req.user._id;
+    req.body.user = req.user;
     controller.applyJob(req.body)
     .then((Job) => {
         switch(Job.status){

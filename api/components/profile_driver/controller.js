@@ -92,7 +92,7 @@ function addDriver(driver) {
                     user.email, 
                     'Welcome to MyCDL Driver!', 
                     `Your profile has been created , you can now start searching for your next job.`,
-                    `Tip: For a better experience , remember to maintain your profile up to date. You can edit your profile here! [url] 
+                    `Tip: For a better experience , remember to maintain your profile up to date. You can edit your profile here! 
                     <p>Have a great at day , My CDL Driver Team.</p>`);
                 resolve(driverResolve);
                 break;

@@ -159,12 +159,16 @@ async function setStatus(id, status) {
         if (!id) {
             throw new Error();
         }
-        const apply = await JobsApplysModel.findOne(filter);
+        const apply = await JobsApplysModel.findOne(filter)
+        .populate('driver')
+        .populate('company');
         apply.status = status;
         await apply.save();
         return {
             status: 200,
-            message: 'Ok'
+            message: 'Ok',
+            user: apply.driver,
+            company: apply.company
         };
     } catch (e) {
         console.log(e);
@@ -406,12 +410,14 @@ async function applyJob(job) {
     try {
         const foundJob = await JobsModel.findOne({ _id: job.job });
         job.company = foundJob.company;
+        const foundCompanyUser = await User.findOne({ company: foundJob.company }).populate('company');
         const newApply = new JobsApplysModel(job);
         const resp = await newApply.save();
         if (resp) {
             return {
                 status: 200,
-                message: 'Ok'
+                message: 'Ok',
+                userCompany: foundCompanyUser
             };
         }else{
             return {
