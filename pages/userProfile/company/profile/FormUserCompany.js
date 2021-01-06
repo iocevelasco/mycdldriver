@@ -136,6 +136,7 @@ const FormUserCompany = (props) => {
                   rules={[
                     {
                       required: true,
+                      type: "email",
                       message: 'Email is required!',
                     },
                   ]}>
