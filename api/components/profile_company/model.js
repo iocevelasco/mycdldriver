@@ -15,10 +15,12 @@ const profileCompanySchema = mongoose.Schema({
         required: true
     },
     areaCode: {
-        type: Number
+        type: String,
+        trim: true
     },
     phoneNumber: {
-        type: String
+        type: String,
+        trim: true
     },
     address: {
         type: String,

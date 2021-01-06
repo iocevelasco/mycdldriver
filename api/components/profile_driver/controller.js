@@ -92,7 +92,7 @@ function addDriver(driver) {
                     user.email, 
                     'Welcome to MyCDL Driver!', 
                     `Your profile has been created , you can now start searching for your next job.`,
-                    `Tip: For a better experience , remember to maintain your profile up to date. You can edit your profile here! [url] 
+                    `Tip: For a better experience , remember to maintain your profile up to date. You can edit your profile here! 
                     <p>Have a great at day , My CDL Driver Team.</p>`);
                 resolve(driverResolve);
                 break;
@@ -352,16 +352,21 @@ async function addStaff(user, company) {
         
             try {
                 const newStaff = await store.addStaff(newUser);
-                if(newStaff.status == 201){
-                    const url = config.baseurl + '/new_user?token=' + newStaff.message.user.token;
-                    mailer(
-                        user.email, 
-                        'Invitation to MYCDL Driver', 
-                        `Hello ${user.name} ${user.lastname}! We welcome you to MyCDL Driver.`,
-                        `${company.tradename} wants you to be part of their Drivers Staff, all you need to do is complete you information.
-                        Here <a href='${url}'>${url}</a> you can do it in two simple steps. 
-                        <p>Have a great at day , My CDL Driver Team.</p>`);
+                try{
+                    if(newStaff.status == 201){
+                        const url = config.baseurl + '/new_user?token=' + newStaff.message.user.token;
+                        mailer(
+                            user.email, 
+                            'Invitation to MYCDL Driver', 
+                            `Hello ${user.name} ${user.lastname}! We welcome you to MyCDL Driver.`,
+                            `${company.tradename} wants you to be part of their Drivers Staff, all you need to do is complete you information.
+                            Here <a href='${url}'>${url}</a> you can do it in two simple steps. 
+                            <p>Have a great at day , My CDL Driver Team.</p>`);
+                    }
+                }catch(e){
+                    console.log(e);
                 }
+                
                 return newStaff;
             } catch (e) {
                 return {
