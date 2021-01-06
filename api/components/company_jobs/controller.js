@@ -96,20 +96,24 @@ function setStatus(id, status) {
         const result = store.setStatus(id, status);
         switch (result.status) {
             case 200:
-                if(status == 1){
-                    mailer(
-                        result.user.email, 
-                        'Has been accepted', 
-                        `Good news ${result.user.name} ${result.user.lastname}!`,
-                        `${result.company.tradename} accepted your application, you will be hearing from them in the next days.    
-                        <p>Go tell the good new to everyone! </p>`);
-                }else if(status == 2){
-                    mailer(
-                        result.user.email, 
-                        'Has been rejected', 
-                        ``,
-                        `Hello ${result.user.name} ${result.user.lastname}, we regret to inform that you application was rejected! Don¿t lose hope, there are more companies looking for you, here <a href="${config.baseurl}">${config.baseurl}</a> you can send more applications.
-                        <p>Good luck, MyCDL Driver Team </p>`);
+                try{
+                    if(status == 1){
+                        mailer(
+                            result.user.email, 
+                            'Has been accepted', 
+                            `Good news ${result.user.name} ${result.user.lastname}!`,
+                            `${result.company.tradename} accepted your application, you will be hearing from them in the next days.    
+                            <p>Go tell the good new to everyone! </p>`);
+                    }else if(status == 2){
+                        mailer(
+                            result.user.email, 
+                            'Has been rejected', 
+                            ``,
+                            `Hello ${result.user.name} ${result.user.lastname}, we regret to inform that you application was rejected! Don¿t lose hope, there are more companies looking for you, here <a href="${config.baseurl}">${config.baseurl}</a> you can send more applications.
+                            <p>Good luck, MyCDL Driver Team </p>`);
+                    }
+                }catch(e){
+                    console.log(e);
                 }
                 
                 resolve(result);
@@ -203,20 +207,25 @@ function applyJob(jobApply) {
 
         switch (result.status) {
             case 200:
-                const url_job_detail = `${config.baseurl}/job-offert?id=${jobApply.job}`;
-                const url_candidate = `${config.baseurl}/userProfile/company/candidate`;
-                mailer(
-                    jobApply.user.email, 
-                    'Job Application', 
-                    `Your job application`,
-                    `Hello ${jobApply.user.name} ${jobApply.user.lastname}, you applied for this <a href="${url_job_detail}">${url_job_detail}</a> job! Now we have to wait, in the meantime , you can send more applications here <a href="${config.baseurl}">${config.baseurl}</a>.  
-                    <p>Good Luck, MyCDL Driver Team.</p>`);
-                mailer(
-                    result.userCompany.email, 
-                    'Job Application', 
-                    ``,
-                    `Hello ${result.userCompany.company.tradename}, you have a new driver application, here <a href="${url_candidate}">${url_candidate}</a> you can read the full profile.  
-                    <p>Good Luck, MyCDL Driver Team.</p>`);
+                try{
+                    const url_job_detail = `${config.baseurl}/job-offert?id=${jobApply.job}`;
+                    const url_candidate = `${config.baseurl}/userProfile/company/candidate`;
+                    mailer(
+                        jobApply.user.email, 
+                        'Job Application', 
+                        `Your job application`,
+                        `Hello ${jobApply.user.name} ${jobApply.user.lastname}, you applied for this <a href="${url_job_detail}">${url_job_detail}</a> job! Now we have to wait, in the meantime , you can send more applications here <a href="${config.baseurl}">${config.baseurl}</a>.  
+                        <p>Good Luck, MyCDL Driver Team.</p>`);
+                    mailer(
+                        result.userCompany.email, 
+                        'Job Application', 
+                        ``,
+                        `Hello ${result.userCompany.company.tradename}, you have a new driver application, here <a href="${url_candidate}">${url_candidate}</a> you can read the full profile.  
+                        <p>Good Luck, MyCDL Driver Team.</p>`);
+                }catch(e){
+                    console.log(e);
+                }
+                
                 resolve(result);
                 break;
             case 500:

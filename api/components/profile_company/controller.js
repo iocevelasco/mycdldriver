@@ -31,14 +31,19 @@ async function addCompany(company){
 
     try{
         const companyResolve = await store.add(user); 
-        if(companyResolve.status == 201){
-            mailer(
-                user.email, 
-                'Welcome to MyCDL Driver!', 
-                `Your profile has been created , you can now start searching for your next driver.`,
-                `Tip: For a better experience , remember to maintain your profile up to date. 
-                <p>Have a great at day , My CDL Driver Team.</p>`);
+        try{
+            if(companyResolve.status == 201){
+                mailer(
+                    user.email, 
+                    'Welcome to MyCDL Driver!', 
+                    `Your profile has been created , you can now start searching for your next driver.`,
+                    `Tip: For a better experience , remember to maintain your profile up to date. 
+                    <p>Have a great at day , My CDL Driver Team.</p>`);
+            }
+        }catch(e){
+            console.log(e);
         }
+        
         return companyResolve;
     }catch(e){
         return {
