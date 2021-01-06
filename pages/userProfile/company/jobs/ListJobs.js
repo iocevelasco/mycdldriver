@@ -48,7 +48,7 @@ const ListJobs = ({ header, isFetching, jobsByCompany, openDrawer, ...props }) =
             actions={[
               <Button style={{ borderRadius: 50 }} onClick={() => deleteJob(item._id)} icon={<DeleteOutlined />}>Delete</Button>,
               <Button style={{ borderRadius: 50 }} onClick={() => openDrawer(item)} icon={<EditOutlined />}>Edit</Button>,
-              <Switch onChange={props.inactiveJob} checkedChildren="Inactive" unCheckedChildren="Active" />,
+              // <Switch onChange={props.inactiveJob} checkedChildren="Inactive" unCheckedChildren="Active" />,
               <Link href={{
                 pathname: '/userProfile/company/candidate',
                 query: { id: item._id },
