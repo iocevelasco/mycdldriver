@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const profileDriverSchema = Schema({
     dln: {
-        type: Number,
+        type: String,
+        trim: true,
         required: true,
         unique: true
     },
