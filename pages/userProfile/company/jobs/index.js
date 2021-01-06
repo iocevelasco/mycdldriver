@@ -137,13 +137,15 @@ const CompanyJobView = (props) => {
     fields.logo = image;
     delete fields['photo'];
     try {
-      await axios.patch('/api/company/jobs/' + fields._id, fields, header);
-      fetchJobList();
-      notification['success']({
-        message: 'Success',
-        description:
-          "Success ! Your position has been edited correctly"
-      });
+      await axios.patch('/api/company/jobs/' + fields._id, fields, header)
+        .then(() => {
+          fetchJobList();
+          notification['success']({
+            message: 'Success',
+            description:
+              "Success ! Your position has been edited correctly"
+          });
+        });
     } catch (err) {
       fetchJobList();
       console.log(err);
