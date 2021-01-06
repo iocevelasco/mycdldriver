@@ -135,6 +135,7 @@ const CompanyJobView = (props) => {
 
   const handlerEditJob = async (fields) => {
     fields.logo = image;
+    delete fields['photo'];
     try {
       await axios.patch('/api/company/jobs/' + fields._id, fields, header);
       fetchJobList();
