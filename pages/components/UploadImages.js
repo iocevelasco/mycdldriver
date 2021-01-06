@@ -120,5 +120,6 @@ const DraggerUpload = ({ defaultFileList, setDefaultFileList, label }) => {
 
 export {
   ImageProfile,
-  DraggerUpload
+  DraggerUpload,
+  beforeUpload
 }

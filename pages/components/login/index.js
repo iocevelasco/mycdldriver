@@ -16,7 +16,6 @@ import "./styles.less";
 
 function mapStateToProps(state) {
   return {
-
     visible_modal_login: state.landing.visible_modal_login
   }
 }
