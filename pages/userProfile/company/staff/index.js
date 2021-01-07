@@ -227,10 +227,10 @@ const StaffCompanyView = ({ user }) => {
       render: (driver) => {
         return (
           <Space >
-            {(driver.rating == 0) ? 
-            <StarFilled style={{ fontSize: '24px', color: '#d3d3d3' }} /> :
-            <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />}
-            
+            {(driver.rating == 0) ?
+              <StarFilled style={{ fontSize: '24px', color: '#d3d3d3' }} /> :
+              <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />}
+
             <span> {driver.rating} </span>
           </Space>
         )
@@ -257,7 +257,7 @@ const StaffCompanyView = ({ user }) => {
       key: 'dln',
       render: (driver) => {
         return (
-          <Space >            
+          <Space >
             <span> {driver.dln} </span>
           </Space>
         )
@@ -275,7 +275,6 @@ const StaffCompanyView = ({ user }) => {
       align: 'center',
       key: 'completeProfile',
       render: (n, item) => {
-        console.log('item', item);
         return <Progress percent={item.completeProfile} />
       }
     },

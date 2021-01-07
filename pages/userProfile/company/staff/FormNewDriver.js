@@ -101,18 +101,15 @@ const NewDriverForm = ({ addNewDriver, header, loader, ...props }) => {
               </Col>
               <Col span={22}>
                 <Form.Item
-                  label='Dln'
+                  label='DlN'
                   name="dln"
                   rules={[
                     {
                       required: true,
-                      message: 'dln is required!',
+                      message: 'DLN is required!',
                     },
                   ]}>
-                  <InputNumber
-                    min={0}
-                    max={900000000000000}
-                    style={{ width: '100%' }} />
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>

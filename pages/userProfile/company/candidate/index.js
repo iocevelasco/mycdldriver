@@ -267,22 +267,22 @@ const CandidateView = ({ user, ...props }) => {
                 </Col>
 
               </Row>
-              { Array.isArray(detail.driver.experience) &&
-              <span><Divider />
-              <p className="site-description-item-profile-p">Experience</p>
-              {detail.driver.experience.map((i) => {
-              return <Row>
-                <Col span={12}>
-                  {i.have ? <DescriptionItem title={i.name} content={`${i.years} years`} /> : <DescriptionItem title={i.name} content='Does not have' />}
-                </Col>
-              </Row>
-              })}
-              </span>
+              {Array.isArray(detail.driver.experience) &&
+                <span><Divider />
+                  <p className="site-description-item-profile-p">Experience</p>
+                  {detail.driver.experience.map((i) => {
+                    return <Row>
+                      <Col span={12}>
+                        {i.have ? <DescriptionItem title={i.name} content={`${i.years} years`} /> : <DescriptionItem title={i.name} content='Does not have' />}
+                      </Col>
+                    </Row>
+                  })}
+                </span>
               }
               <Divider />
               <Row>
                 <Col span={12}>
-                  <Title level={2}>DLN</Title>
+                  <Title level={5}>DLN</Title>
                   <Image
                     width={250}
                     src={detail.driver.imageDln}
@@ -290,7 +290,7 @@ const CandidateView = ({ user, ...props }) => {
                   />
                 </Col>
                 <Col span={12}>
-                <Title level={2}>Medic Card</Title>
+                  <Title level={5}>Medic Card</Title>
                   <Image
                     width={250}
                     src={detail.driver.medicCardImage}
