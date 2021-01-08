@@ -196,24 +196,6 @@ if (!dev && cluster.isMaster) {
         failureRedirect: '/error'
       }),
         async function (req, res) {
-          /*const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-          let prelogin = {
-            ruta: '',
-            abspath: ''
-          };
-          const respuesta = await userController.getPrelogin(ip);
-          prelogin.ruta = respuesta.ruta;
-          prelogin.abspath = respuesta.abspath;
-          if (prelogin.ruta == "/job-offert") {
-            res.redirect(prelogin.abspath);
-          }
-          if (req.session.passport.user.typeUser === 1) {
-            res.redirect('/userProfile/driver/profile');
-          } else if (req.session.passport.user.typeUser === 2) {
-            res.redirect('/userProfile/company/profile');
-          } else {
-            res.redirect('/userProfile');
-          }*/
           res.redirect('/loading_user');
         });
 
@@ -228,19 +210,6 @@ if (!dev && cluster.isMaster) {
             ruta: '',
             abspath: ''
           };
-          /*const respuesta = await userController.getPrelogin(ip);
-          prelogin.ruta = respuesta.ruta;
-          prelogin.abspath = respuesta.abspath;
-          if (prelogin.ruta == "/job-offert") {
-            res.redirect(prelogin.abspath);
-          }
-          if (req.session.passport.user.typeUser === 1) {
-            res.redirect('/userProfile/driver/profile');
-          } else if (req.session.passport.user.typeUser === 2) {
-            res.redirect('/userProfile/company/profile');
-          } else {
-            res.redirect('/userProfile');
-          }*/
           res.redirect('/loading_user');
         });
 

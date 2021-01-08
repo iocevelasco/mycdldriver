@@ -31,6 +31,12 @@ const config = {
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '50eeb472813974f76e27e299ab859de4',
             callbackURL: process.env.FACEBOOK_CALLBACK || 'http://localhost:3000/auth/facebook/callback'
         }
+    },
+    s3: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        bucketName: process.env.S3_BUCKET_NAME,
+        region: process.env.S3_REGION
     }
 };
 
