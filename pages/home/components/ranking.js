@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Row, Col, Card, Avatar, Typography, Button } from "antd";
+import { Row, Col, Card, Typography, Rate } from "antd";
 import { connect } from "react-redux";
 import { fetchDriversData } from "@store/reducers/landing_reducer";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
@@ -51,18 +51,7 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
                 className={"cardCarousel"}
               >
                 <div className="star-container">
-                  {e.rating}
-                  {e.driver.rating == 0 ? (
-                    <StarOutlined key={key} style={{ color: "#FFE206" }} />
-                  ) : (
-                      stars.map((p, key) => {
-                        {
-                          if (p <= e.driver.rating) {
-                            <StarFilled key={key} style={{ color: "#FFE206" }} />;
-                          }
-                        }
-                      })
-                    )}
+                  <Rate defaultValue={e.driver.rating} />
                 </div>
                 <Meta
                   title={`${e.name} ${e.lastname}`}
