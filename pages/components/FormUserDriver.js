@@ -295,10 +295,7 @@ const DriverUser = ({ user, ...props }) => {
                         message: 'dln is required!',
                       },
                     ]}>
-                    <InputNumber
-                      min={0}
-                      max={900000000000000}
-                      style={{ width: '100%' }} />
+                    <Input />
                   </Form.Item>
                 </Col>}
             </Row>

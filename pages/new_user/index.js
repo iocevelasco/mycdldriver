@@ -46,39 +46,38 @@ const NewDriverUser = (props) => {
   }, [])
 
   const fetchUserData = async (token) => {
-    try {
-      await axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
-        .then((response) => {
-          let user = response.data.data;
-          let fields = [];
-          for (let key in user) {
+    await axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
+      .then((response) => {
+        let user = response.data.data;
+        let fields = [];
+        for (let key in user) {
+          let inputs = {
+            name: [key],
+            value: user[key]
+          }
+          fields.push(inputs);
+        }
+        for (let key in user.driver) {
+          if (key === 'birthDate') {
             let inputs = {
               name: [key],
-              value: user[key]
+              value: moment(user.driver[key])
+            }
+            fields.push(inputs);
+          } else {
+            let inputs = {
+              name: [key],
+              value: user.driver[key]
             }
             fields.push(inputs);
           }
-          for (let key in user.driver) {
-            if (key === 'birthDate') {
-              let inputs = {
-                name: [key],
-                value: moment(user.driver[key])
-              }
-              fields.push(inputs);
-            } else {
-              let inputs = {
-                name: [key],
-                value: user.driver[key]
-              }
-              fields.push(inputs);
-            }
-          }
-          setFields(fields);
-          props.activeLoading(false);
-        });
-    } catch (err) {
-      console.log(err);
-    }
+        }
+        setFields(fields);
+        props.activeLoading(false);
+      })
+      .catch((res) => {
+        //router.push('/')
+      });
   }
 
   const updateDriver = async (fields) => {
@@ -230,6 +229,7 @@ const NewDriverUser = (props) => {
                     rules={[
                       {
                         required: true,
+                        type: "email",
                         message: 'Email is required!',
                       },
                     ]}>
@@ -239,7 +239,7 @@ const NewDriverUser = (props) => {
                 {props.isUserRegistry ? '' :
                   <Col span={12}>
                     <Form.Item
-                      label='Dln'
+                      label='DlN'
                       name="dln"
                       rules={[
                         {
@@ -247,10 +247,7 @@ const NewDriverUser = (props) => {
                           message: 'dln is required!',
                         },
                       ]}>
-                      <InputNumber
-                        min={0}
-                        max={900000000000000}
-                        style={{ width: '100%' }} />
+                      <Input />
                     </Form.Item>
                   </Col>}
               </Row>
