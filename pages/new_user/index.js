@@ -76,7 +76,7 @@ const NewDriverUser = (props) => {
         props.activeLoading(false);
       })
       .catch((res) => {
-        //router.push('/')
+        router.push('/');
       });
   }
 

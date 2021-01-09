@@ -78,7 +78,7 @@ const MainLayout = ({
         }
     return (<>
         <Head>
-            <title>{`My CDL Driver | ${title}`}</title>
+            <title> My CDL Driver </title>
             <link rel="shortcut icon" href="../static/images/favicon.ico" />
 
             {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
