@@ -3,6 +3,7 @@ import { Row, Col, Input, Form, Button, InputNumber, Select } from 'antd';
 import { updateUserDrive } from '@store/reducers/user_reducer';
 import { SpinnerComp } from 'components/helpers';
 import useJobsByCompany from '@hooks/useJobsByCompany';
+import { DLNinput } from 'components/inputs';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
@@ -93,6 +94,7 @@ const NewDriverForm = ({ addNewDriver, header, loader, ...props }) => {
                   rules={[
                     {
                       required: true,
+                      type: 'email',
                       message: 'Email is required!',
                     },
                   ]}>
@@ -100,17 +102,7 @@ const NewDriverForm = ({ addNewDriver, header, loader, ...props }) => {
                 </Form.Item>
               </Col>
               <Col span={22}>
-                <Form.Item
-                  label='DlN'
-                  name="dln"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'DLN is required!',
-                    },
-                  ]}>
-                  <Input />
-                </Form.Item>
+                <DLNinput />
               </Col>
               <Col span={12}>
                 <Button
