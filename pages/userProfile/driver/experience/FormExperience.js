@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Input, Form, Button, InputNumber, Switch, DatePicker, } from "antd";
 import { SpinnerComp } from "components/helpers";
-
+import { DLNinput } from 'components/inputs';
 import { DraggerUpload } from "components/UploadImages";
 import { connect } from "react-redux";
 
@@ -116,27 +116,16 @@ const FormExperience = ({ experience, ...props }) => {
               <Col span={10}>
                 <Row gutter={[12]} justify="space-between" align="middle">
                   <Col span={24}>
-                    <Form.Item
-                      label="Dln"
-                      name="dln"
-                      rules={[
-                        {
-                          required: true,
-                          message: "dln is required!",
-                        },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
+                    <DLNinput />
                   </Col>
                   <Col span={24}>
                     <Form.Item
-                      label="Dln expiration"
+                      label="DLN expiration"
                       name="expDateDln"
                       rules={[
                         {
                           required: true,
-                          message: "Dln expiration date is required!",
+                          message: "DLN expiration date is required!",
                         },
                       ]}
                     >

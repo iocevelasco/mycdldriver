@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Input, Form, Button, InputNumber, Space, Radio, DatePicker, notification, message } from 'antd';
+import { Row, Col, Input, Form, Button, Typography, Spinner, InputNumber, Space, Radio, DatePicker, notification, message } from 'antd';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
+import { DLNinput } from 'components/inputs';
 import { updateUserDrive } from '@store/reducers/user_reducer';
 import { ImageProfile } from 'components/UploadImages';
+import { SpinnerComp } from 'components/helpers';
 import PasswordModal from 'components/PasswordModal';
 import axios from 'axios';
 import { withRouter } from 'next/router';
@@ -11,7 +13,7 @@ import AddressInputs from 'components/AddressInput';
 import moment from 'moment';
 import { WrapperSection } from 'components/helpers';
 import { activeLoading } from '@store/reducers/landing_reducer'
-
+const { Title } = Typography;
 function mapStateToProps(state) {
   const { user } = state;
   return {}
@@ -30,7 +32,9 @@ const NewDriverUser = (props) => {
   const [form] = Form.useForm();
   const [visibleModalPassword, setVisiblePassword] = useState(false);
   const [fields, setFields] = useState([]);
+  const [userName, setUserName] = useState('')
   const [newImage, setNewImage] = useState(null);
+  const [loading, setLoadin] = useState(true);
   const [configPsw, setPsw] = useState({
     password: null,
     isPassword: false
@@ -49,6 +53,7 @@ const NewDriverUser = (props) => {
     await axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
         let user = response.data.data;
+        setUserName(user.name);
         let fields = [];
         for (let key in user) {
           let inputs = {
@@ -72,11 +77,12 @@ const NewDriverUser = (props) => {
             fields.push(inputs);
           }
         }
+        setLoadin(false);
         setFields(fields);
         props.activeLoading(false);
       })
       .catch((res) => {
-        //router.push('/')
+        router.push('/');
       });
   }
 
@@ -174,6 +180,12 @@ const NewDriverUser = (props) => {
 
   return (
     <WrapperSection row={18}>
+      <Row justify='center'>
+        <Col>
+          <Title level={3}> {`Welcome! ${userName} please complete all fields`}
+          </Title>
+        </Col>
+      </Row>
       <div className='profile-driver'>
         <Row justify='center'>
           <Col className='profile-driver__form' span={24}>
@@ -236,20 +248,9 @@ const NewDriverUser = (props) => {
                     <Input />
                   </Form.Item>
                 </Col>
-                {props.isUserRegistry ? '' :
-                  <Col span={12}>
-                    <Form.Item
-                      label='DlN'
-                      name="dln"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'dln is required!',
-                        },
-                      ]}>
-                      <Input />
-                    </Form.Item>
-                  </Col>}
+                <Col span={12}>
+                  <DLNinput />
+                </Col>
               </Row>
               <Row gutter={[24]} justify='space-between' align='middle'>
                 <Col span={12}>
@@ -340,6 +341,7 @@ const NewDriverUser = (props) => {
           </Col>
         </Row>
       </div >
+      <SpinnerComp active={loading} />
     </WrapperSection>
   )
 }

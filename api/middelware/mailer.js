@@ -1,12 +1,40 @@
 const nodemailer = require('nodemailer');
+const {google} = require ("googleapis"); 
+const config = require("../config");
+const OAuth2 = google.auth.OAuth2; 
+
+const oauth2Client =  new  OAuth2 ( 
+    config.oauth.clientID, // ClientID 
+    config.oauth.clientSecret, // Secreto de cliente 
+    "https://developers.google.com/oauthplayground"// URL de redireccionamiento 
+);
+oauth2Client.setCredentials ({ 
+    refresh_token: config.oauth.refreshToken 
+}); 
+const accessToken = oauth2Client.getAccessToken ();
 
 const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        type: "OAuth2",
+        user: "mycdldriver411@gmail.com", 
+        clientId: config.oauth.clientID,
+        clientSecret: config.oauth.clientSecret,
+        refreshToken: config.oauth.refreshToken,
+        accessToken: accessToken
+    },
+    tls: { 
+        rechazarUnauthorized: false 
+    }
+});
+
+/*const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'mycdldriver411@gmail.com',
         pass: '7mm>4=CL'
     }
-});
+});*/
 /*const transporter = nodemailer.createTransport({
     host: 'mail.ligafutbol.com.ve',
     port: 465,

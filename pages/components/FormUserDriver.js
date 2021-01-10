@@ -4,6 +4,7 @@ import { updateUserDrive } from '@store/reducers/user_reducer';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { SpinnerComp } from 'components/helpers';
 import { ImageProfile } from 'components/UploadImages';
+import { DLNinput } from 'components/inputs';
 import { fetchUserData } from '@store/reducers/user_reducer';
 import PasswordModal from 'components/PasswordModal';
 import moment from 'moment';
@@ -286,17 +287,7 @@ const DriverUser = ({ user, ...props }) => {
               </Col>
               {props.isUserRegistry ? '' :
                 <Col span={12}>
-                  <Form.Item
-                    label='Dln'
-                    name="dln"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'dln is required!',
-                      },
-                    ]}>
-                    <Input />
-                  </Form.Item>
+                  <DLNinput />
                 </Col>}
             </Row>
             <Row gutter={[24]} justify='space-between' align='middle'>

@@ -20,6 +20,9 @@ const config = {
     dev: process.env.NODE_ENV !== 'production',
     memcached: process.env.MEMCACHIER_SERVERS !== 'mc4.dev.ec2.memcachier.com:11211',
     oauth:  {
+        clientID: process.env.ID_CLIENT_OAUTH,
+        clientSecret: process.env.SECRECT_OAUTH,
+        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
         google: {
             clientID: process.env.GOOGLE_CLIENT_ID || '762087274564-vhbjmlqm5vc8qmc9slkd8tjtkh447dut.apps.googleusercontent.com',
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || '2EjAZAVFLJFjLLBxBS2Z0d5y',
