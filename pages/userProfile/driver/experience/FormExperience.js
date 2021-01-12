@@ -230,7 +230,7 @@ const FormExperience = ({ experience, ...props }) => {
                               ? "collapse"
                               : "visible",
                           }}
-                          label="Years of experience"
+                          label="Experience years"
                           rules={[
                             {
                               required: false,
