@@ -326,7 +326,7 @@ const StaffCompanyView = ({ user }) => {
                           key={item._d}
                           actions={[
                             <a onClick={() => showRate(item, record)}>
-                              Rate this job
+                              Rate this driver
                         </a>,
                           ]}>
                           <div style={{ width: '100%' }}>
