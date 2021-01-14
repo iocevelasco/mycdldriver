@@ -48,13 +48,13 @@ const CandidateView = ({ user, ...props }) => {
       sex: 0,
       zipCode: ''
     },
-    jobsComments: {
+    jobsComments: [{
       comment: '',
       ranking: 0,
       company: {
         tradename: ''
       }
-    }
+    }]A
   });
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
