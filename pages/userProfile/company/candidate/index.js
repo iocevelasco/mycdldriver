@@ -54,7 +54,7 @@ const CandidateView = ({ user, ...props }) => {
       company: {
         tradename: ''
       }
-    }]A
+    }]
   });
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
