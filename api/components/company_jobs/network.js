@@ -52,7 +52,14 @@ router.get('/staff', auth(2), function (req, res) {
     let query = {company: req.user.company._id};
     controller.getCompanyStaffApply(query)
     .then((list) => {
-        response.success(req, res, list, 200);
+        switch(list.status){
+            case 200:
+                response.success(req, res, list.message, list.status);
+                break;
+            case 500:
+                response.error(req, res, list.message, list.status);
+                break;
+        }
     }).catch(e => {
         response.error(req, res, 'Unexpected Error', 500, e);
     });

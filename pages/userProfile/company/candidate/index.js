@@ -10,10 +10,12 @@ import {
   Button,
   Table,
   Divider,
-  Image
+  Image,
+  Space
 } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
+import { StarFilled } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -45,6 +47,13 @@ const CandidateView = ({ user, ...props }) => {
       phoneNumber: null,
       sex: 0,
       zipCode: ''
+    },
+    jobsComments: {
+      comment: '',
+      ranking: 0,
+      company: {
+        tradename: ''
+      }
     }
   });
   const header = {
@@ -308,6 +317,23 @@ const CandidateView = ({ user, ...props }) => {
                   <DescriptionItem title="Phone Number" content={`${detail.driver.phoneNumber}`} />
                 </Col>
               </Row>
+              {detail.jobsComments.length > 0 && <>
+              <Divider />
+              <p className="site-description-item-profile-p">Comments and rating</p>
+              {detail.jobsComments.map((i) => {
+                return <Row>
+                <Col span={24}>
+                  <Card title={i.company.tradename} extra={ <Space> 
+                    <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />
+                    <span> {i.ranking} </span>
+                  </Space>}>
+                    <p>{i.comment}</p>
+                  </Card>
+                </Col>
+              </Row>
+              })}
+              </>
+              }
               <Row justify='center' gutter={[16]} align='middle'>
                 <Col span={8}>
                   <Button

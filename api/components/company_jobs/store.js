@@ -230,8 +230,7 @@ async function getApplyCompanyJobs(query) {
         filter = { company: id };
     }
     filter.deleted = false;
-    const jobs = await JobsModel.find(filter)
-        .populate('city');
+    const jobs = await JobsModel.find(filter).populate('city');
     result = await Promise.all(jobs.map(async (job) => {
         let item = {
             id: job._id,
@@ -257,10 +256,16 @@ async function getApplyCompanyJobs(query) {
             const id = apply._id;
             let users = await User.findOne(filterDriver)
                 .populate('driver');
+            const filterComment = {
+                driver: apply.driver,
+                status: 1,
+                ranking: {$gt : 0}
+            };
+            let jobsComments = await JobsApplysModel.find(filterComment).populate('company');
 
             if (users) {
                 const { name, lastname, photo, email, driver } = users;
-                return { id, name, lastname, photo, email, driver };
+                return { id, name, lastname, photo, email, driver, jobsComments };
             }
         }));
         driversApply = driversApply.filter(Boolean);
@@ -282,67 +287,76 @@ async function getStaffCompanyJobs(query) {
             company: id,
             status: 1
         };
+    }else{
+        return {
+            status: 400,
+            message: "No valid company"
+        }
     }
-    const drivers = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
+    try{
+        const drivers = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
 
-    result = await Promise.all(drivers.map(async (response) => {
-        const userDriver = await User.findOne({ _id: response })
-            .select('name lastname photo date email')
-            .populate('driver');
-        let resDriver = null;
-        let completeFelds = 5;
-        let totalFelds = 16;
-        if (userDriver) {
-            resDriver = {
-                id: userDriver._id,
-                name: userDriver.name,
-                lastname: userDriver.lastname,
-                photo: userDriver.photo,
-                email: userDriver.email,
-                date: userDriver.date,
-                driver: userDriver.driver
-            };
-            if(userDriver.driver.expDateDln){
-                completeFelds ++;
+        result = await Promise.all(drivers.map(async (response) => {
+            console.log('RESPONSE', response);
+            const userDriver = await User.findOne({ _id: response })
+                .select('name lastname photo date email')
+                .populate('driver');
+            let resDriver = null;
+            let completeFelds = 5;
+            let totalFelds = 16;
+            if (userDriver) {
+                resDriver = {
+                    id: userDriver._id,
+                    name: userDriver.name,
+                    lastname: userDriver.lastname,
+                    photo: userDriver.photo,
+                    email: userDriver.email,
+                    date: userDriver.date,
+                    driver: userDriver.driver
+                };
+                if(userDriver.driver.expDateDln){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.birthDate){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.imageDln){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.areaCode){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.phoneNumber){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.sex){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.rating){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.zipCode){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.description){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.address){
+                    completeFelds ++;
+                }
+                if(userDriver.driver.address2){
+                    completeFelds ++;
+                }
+                const completeProfile = completeFelds * 100 / totalFelds;
+                resDriver.completeProfile = completeProfile;
             }
-            if(userDriver.driver.birthDate){
-                completeFelds ++;
-            }
-            if(userDriver.driver.imageDln){
-                completeFelds ++;
-            }
-            if(userDriver.driver.areaCode){
-                completeFelds ++;
-            }
-            if(userDriver.driver.phoneNumber){
-                completeFelds ++;
-            }
-            if(userDriver.driver.sex){
-                completeFelds ++;
-            }
-            if(userDriver.driver.rating){
-                completeFelds ++;
-            }
-            if(userDriver.driver.zipCode){
-                completeFelds ++;
-            }
-            if(userDriver.driver.description){
-                completeFelds ++;
-            }
-            if(userDriver.driver.address){
-                completeFelds ++;
-            }
-            if(userDriver.driver.address2){
-                completeFelds ++;
-            }
-            const completeProfile = completeFelds * 100 / totalFelds;
-            resDriver.completeProfile = completeProfile;
             const filterJob = {
                 driver: response,
                 company: id,
                 status: 1
             };
             const jobsDriver = await JobsApplysModel.find(filterJob).populate('job');
+            console.log('Jobs de Driver', jobsDriver);
             resDriver.jobs = await Promise.all(jobsDriver.map(async (resp) => {
                 if (resp.job) {
                     let response = {
@@ -365,11 +379,29 @@ async function getStaffCompanyJobs(query) {
                     return response;
                 }
             }));
+            resDriver.jobs = resDriver.jobs.filter(Boolean);
+            return resDriver;
+        }));
+        try{
+            const retorno = result.filter(Boolean);
+            return {
+                status: 200,
+                message: retorno
+            }
+        }catch(e){
+            return {
+                status: 500,
+                message: 'Unexpected error',
+                detail: e
+            }
         }
-        resDriver.jobs = resDriver.jobs.filter(Boolean);
-        return resDriver;
-    }));
-    return result.filter(Boolean);
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
 }
 
 async function getCustomList() {
