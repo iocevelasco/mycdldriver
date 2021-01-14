@@ -37,7 +37,10 @@ const JobsApplysSchema = mongoose.Schema({
         type: String,
         trim: true
     },
-
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 JobsApplysSchema.index({ company: 1, driver: 1, job: 1 }, { unique: true });
 

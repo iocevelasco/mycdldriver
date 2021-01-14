@@ -261,7 +261,11 @@ async function getApplyCompanyJobs(query) {
                 status: 1,
                 ranking: {$gt : 0}
             };
-            let jobsComments = await JobsApplysModel.find(filterComment).populate('company');
+            let jobsComments = await JobsApplysModel
+                .find(filterComment)
+                .populate('company')
+                .sort({'date': -1})
+                .limit(5);
 
             if (users) {
                 const { name, lastname, photo, email, driver } = users;
