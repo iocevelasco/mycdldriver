@@ -117,7 +117,7 @@ const MainLayout = ({
                         {
                             user.isLogin ?
                                 <Row justify='end' align='middle'>
-                                    <Space size='large'>
+                                    {/*<Space size='large'>
                                         <Button
                                             style={{ color: '#FF2A39' }}
                                             icon={<MenuFoldOutlined />}
@@ -126,7 +126,21 @@ const MainLayout = ({
                                         </Button>
                                         <Text strong>{user.name + " " + user.lastname}</Text>
                                         <Avatar icon={<UserOutlined />} src={user.photo} />
-                                    </Space>
+                        </Space>*/}
+                                    <Col xs={0} xl={16}>
+                                        <Text strong style={{float: 'right', marginRight: 10}}>{user.name + " " + user.lastname}</Text>
+                                    </Col>
+                                    <Col  xs={6} xl={2}>
+                                        <Avatar icon={<UserOutlined />} src={user.photo} />
+                                    </Col>
+                                    <Col  xs={18} xl={6}>
+                                        <Button
+                                            style={{ color: '#FF2A39' }}
+                                            icon={<MenuFoldOutlined />}
+                                            onClick={() => setVisible(true)} >
+                                            Account
+                                        </Button>
+                                    </Col>
                                 </Row>
                                 :
                                 <Row justify='end' align='middle'>
