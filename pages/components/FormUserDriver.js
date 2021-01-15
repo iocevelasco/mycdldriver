@@ -242,7 +242,7 @@ const DriverUser = ({ user, ...props }) => {
             layout='vertical'>
 
             <Row gutter={[24]} justify='space-between' >
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Form.Item
                   name="name"
                   label="Name"
@@ -255,7 +255,7 @@ const DriverUser = ({ user, ...props }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Form.Item
                   name="lastname"
                   label="Last Name"
@@ -271,7 +271,7 @@ const DriverUser = ({ user, ...props }) => {
             </Row>
 
             <Row gutter={[24]} justify='space-between' align='middle'>
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Form.Item
                   name="email"
                   label="Email"
@@ -286,12 +286,12 @@ const DriverUser = ({ user, ...props }) => {
                 </Form.Item>
               </Col>
               {props.isUserRegistry ? '' :
-                <Col span={12}>
+                <Col xs={24} xl={12}>
                   <DLNinput />
                 </Col>}
             </Row>
             <Row gutter={[24]} justify='space-between' align='middle'>
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Form.Item
                   label='Birth date'
                   name="birthDate"
@@ -304,7 +304,7 @@ const DriverUser = ({ user, ...props }) => {
                   <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col xs={24} xl={6}>
                 <Form.Item
                   label='Sex'
                   name="sex"
@@ -321,7 +321,7 @@ const DriverUser = ({ user, ...props }) => {
                   </Radio.Group>
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col xs={24} xl={6}>
                 <PasswordModal
                   setPsw={setPsw}
                   visible={visibleModalPassword}
@@ -336,7 +336,7 @@ const DriverUser = ({ user, ...props }) => {
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={6}>
+              <Col xs={24} xl={6}>
                 <Form.Item
                   label='Area code'
                   name="areaCode"
@@ -349,7 +349,7 @@ const DriverUser = ({ user, ...props }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={18}>
+              <Col xs={24} xl={18}>
                 <Form.Item
                   label='Phone Number'
                   name="phoneNumber"
@@ -365,7 +365,7 @@ const DriverUser = ({ user, ...props }) => {
             </Row>
             <AddressInputs stateId={user.driver.state} />
             <Row gutter={[24]} justify='center' align='middle'>
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Button
                   style={{ marginTop: 24 }}
                   type='primary'

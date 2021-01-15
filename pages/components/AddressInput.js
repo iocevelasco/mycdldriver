@@ -65,7 +65,7 @@ const AddressInputs = (props) => {
   return (
     <>
       <Row gutter={[24]} justify='space-between' >
-        <Col span={12}>
+        <Col xs={24} xl={12}>
           <Form.Item
             name='address'
             label="Address line 1"
@@ -78,7 +78,7 @@ const AddressInputs = (props) => {
             <Input />
           </Form.Item>
         </Col>
-        <Col span={12}>
+        <Col xs={24} xl={12}>
           <Form.Item
             name='address2'
             label="Address line 2"
@@ -93,7 +93,7 @@ const AddressInputs = (props) => {
         </Col>
       </Row>
       <Row gutter={[24]} justify='space-between' >
-        <Col span={8}>
+        <Col xs={24} xl={8}>
           <Form.Item label="State / Province / Reagion">
             <Form.Item
               name='state'
@@ -112,7 +112,7 @@ const AddressInputs = (props) => {
             </Form.Item>
           </Form.Item>
         </Col>
-        <Col span={10}>
+        <Col xs={24} xl={10}>
           <Form.Item label="City">
             <Form.Item
               name='city'
@@ -131,7 +131,7 @@ const AddressInputs = (props) => {
             </Form.Item>
           </Form.Item>
         </Col>
-        <Col span={6}>
+        <Col xs={24} xl={6}>
           <Form.Item
             name='zipCode'
             label="Zip / Postal Code"
