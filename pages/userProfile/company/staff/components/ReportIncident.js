@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { Row, Col, Input, Form, Button } from 'antd';
 import { SpinnerComp } from 'components/helpers';
+import { UploadMultiple } from 'components/UploadImages';
+import axios from 'axios';
+
 const { TextArea } = Input;
 
 const ReportIncident = (props) => {
   const [form] = Form.useForm();
   const [isFetching, setIsFetching] = useState(false);
-
+  const [fileList, setFileList] = useState([]);
   const reportIncident = (fields) => {
     console.log(fields);
   }
+
   return (
     <div className='add-driver'>
       <Row justify='center'>
@@ -20,7 +24,12 @@ const ReportIncident = (props) => {
             name="report_incident"
             layout='vertical'>
 
-            <Row gutter={[24]} justify='center'  >
+            <Row gutter={[24]} justify='center'>
+              <Col span={22}>
+                <UploadMultiple
+                  fileList={fileList}
+                  setFileList={setFileList} />
+              </Col>
               <Col span={22}>
                 <Form.Item
                   name="description"
@@ -28,7 +37,6 @@ const ReportIncident = (props) => {
                   rules={[
                     {
                       required: true,
-                      type: 'description',
                       message: 'Description is required!',
                     },
                   ]}>

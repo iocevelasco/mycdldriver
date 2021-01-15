@@ -19,6 +19,7 @@ const initialState = {
   loadingModal: false,
   drawerVisible: false,
   formSelected: 'new-driver',
+  drawerTitle: 'Add new driver',
   jobs: [],
   staffList: [],
   ranking: {
@@ -86,7 +87,8 @@ const reducer = (state, action) => {
       return {
         ...state,
         drawerVisible: !state.drawerVisible,
-        formSelected: action.payload
+        formSelected: action.payload.formSelected,
+        drawerTitle: action.payload.drawerTitle
       }
     default:
       throw new Error('Unexpected action');
@@ -200,14 +202,28 @@ const StaffCompanyView = ({ user }) => {
   }
 
   const openDrawer = (formTypeSelect) => {
-    dispatch({ type: types.DRAWER_VISIBLE, payload: formTypeSelect });
+    let drawerTitle = formTypeSelect === 'new-driver' ? 'Add new driver' : 'Report incident'
+    dispatch({
+      type: types.DRAWER_VISIBLE,
+      payload: {
+        formTypeSelect,
+        drawerTitle
+      }
+    });
   };
 
   const onCloseDrawer = () => {
-    dispatch({ type: types.DRAWER_VISIBLE });
+    dispatch({
+      type: types.DRAWER_VISIBLE,
+      payload: {
+        formTypeSelect: '',
+        drawerTitle: ''
+      }
+    });
   }
 
   const selectForm = (type) => {
+
     const formSelected = type == 'new-driver' ? <NewDriverForm
       addNewDriver={addNewDriver}
       loader={state.loading}
@@ -327,7 +343,7 @@ const StaffCompanyView = ({ user }) => {
                 expandable={{
                   expandedRowRender: record => {
                     return <List
-                      header={<Title level={4}>Positions</Title>}
+                      header={<Title level={4}>Current Jobs</Title>}
                       itemLayout="horizontal"
                       bordered
                       dataSource={record.jobs}
@@ -406,7 +422,7 @@ const StaffCompanyView = ({ user }) => {
         </Row>
       </Modal>
       <Drawer
-        title='Add new driver'
+        title={state.drawerTitle}
         placement="right"
         closable={true}
         width={480}

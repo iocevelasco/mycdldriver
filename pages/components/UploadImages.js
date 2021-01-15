@@ -84,7 +84,6 @@ const DraggerUpload = ({ defaultFileList, setDefaultFileList, label }) => {
     setDefaultFileList(file.response);
   };
 
-
   return (
     <Form.Item
       label={label}>
@@ -114,8 +113,54 @@ const DraggerUpload = ({ defaultFileList, setDefaultFileList, label }) => {
   )
 }
 
+const UploadMultiple = ({ fileList, setFileList }) => {
+
+  const uploadImage = async options => {
+    const { onSuccess, onError, file } = options;
+
+    const fmData = new FormData();
+    fmData.append("logo", file);
+    try {
+      const res = await axios.post(
+        '/api/files',
+        fmData,
+      );
+      onSuccess(res.data.data.file);
+    } catch (err) {
+      console.log("Error: ", err);
+      onError({ err });
+    }
+  };
+
+  const handleOnChange = ({ file, fileList }) => {
+    setFileList(fileList);
+  };
+
+  return (
+    <Form.Item
+      label='Upload images'>
+      <div className='dragger'>
+        <Dragger
+          customRequest={uploadImage}
+          onChange={handleOnChange}
+          listType="picture-card"
+          fileList={fileList}
+          multiple={true}
+          beforeUpload={beforeUpload}
+        >
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <p className="ant-upload-text">Click or drag file to this area to upload</p>
+        </Dragger>
+      </div>
+    </Form.Item>
+  )
+}
+
 export {
   ImageProfile,
   DraggerUpload,
-  beforeUpload
+  beforeUpload,
+  UploadMultiple
 }
