@@ -94,10 +94,23 @@ const MainLayout = ({
                 }); `,
                 }}
             />
+            <script
+                dangerouslySetInnerHTML={{
+                    __html: `
+                    var _smartsupp = _smartsupp || {};
+                    _smartsupp.key = '4d2506c540fb4374b23fd72bad60c42be37284df';
+                    window.smartsupp||(function(d) {
+                        var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+                        s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+                        c.type='text/javascript';c.charset='utf-8';c.async=true;
+                        c.src='//www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+                    })(document);`,
+                }}
+            />
         </Head>
         <Layout>
             <Header className='header-component'>
-                <SpinnerComp />
+                <SpinnerComp active={isLoading} />
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">
@@ -117,7 +130,7 @@ const MainLayout = ({
                         {
                             user.isLogin ?
                                 <Row justify='end' align='middle'>
-                                    <Space size='large'>
+                                    {/*<Space size='large'>
                                         <Button
                                             style={{ color: '#FF2A39' }}
                                             icon={<MenuFoldOutlined />}
@@ -126,7 +139,21 @@ const MainLayout = ({
                                         </Button>
                                         <Text strong>{user.name + " " + user.lastname}</Text>
                                         <Avatar icon={<UserOutlined />} src={user.photo} />
-                                    </Space>
+                        </Space>*/}
+                                    <Col xs={0} xl={16}>
+                                        <Text strong style={{ float: 'right', marginRight: 10 }}>{user.name + " " + user.lastname}</Text>
+                                    </Col>
+                                    <Col xs={6} xl={2}>
+                                        <Avatar icon={<UserOutlined />} src={user.photo} />
+                                    </Col>
+                                    <Col xs={18} xl={6}>
+                                        <Button
+                                            style={{ color: '#FF2A39' }}
+                                            icon={<MenuFoldOutlined />}
+                                            onClick={() => setVisible(true)} >
+                                            Account
+                                        </Button>
+                                    </Col>
                                 </Row>
                                 :
                                 <Row justify='end' align='middle'>
@@ -161,7 +188,6 @@ const MainLayout = ({
 
 MainLayout.propTypes = {
     children: propTypes.oneOfType([arrayOf(node), node]).isRequired,
-    title: propTypes.string.isRequired,
     user: propTypes.object,
     loading: propTypes.bool,
     router: propTypes.object

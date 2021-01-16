@@ -87,11 +87,11 @@ const controller = require('./controller');
  *    HTTP/1.1 500 Internal Server Error
  */
 router.get('/', function (req, res) {
-    controller.getDriver()
+  controller.getDriver()
     .then((driverList) => {
-        response.success(req, res, driverList.message, driverList.status);
+      response.success(req, res, driverList.message, driverList.status);
     }).catch(e => {
-        response.error(req, res, e.message, e.status, e.detail);
+      response.error(req, res, e.message, e.status, e.detail);
     });
 });
 
@@ -193,18 +193,18 @@ router.get('/', function (req, res) {
  *    HTTP/1.1 500 Internal Server Error
  */
 router.post('/', function (req, res) {
-    controller.addDriver(req.body, req.user)
+  controller.addDriver(req.body, req.user)
     .then((fullDriver) => {
-      switch (fullDriver.status){
+      switch (fullDriver.status) {
         case 201:
           response.success(req, res, fullDriver.message, 201);
           break;
         default:
           response.error(req, res, fullDriver.message, fullDriver.status, fullDriver.detail);
           break;
-    }
+      }
     }).catch(e => {
-        response.error(req, res, 'Unexpected Error', 500, e);
+      response.error(req, res, 'Unexpected Error', 500, e);
     });
 });
 
@@ -333,24 +333,24 @@ router.post('/', function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.patch('/', auth(1), function (req, res){
-  const id= req.user._id || null;
+router.patch('/', auth(1), function (req, res) {
+  const id = req.user._id || null;
   controller.updateDriver(id, req.body)
-      .then((data) => {
-        switch(data.status){
-          case 200: 
-            response.success(req, res, data.message, data.status);
-            break;
-          default:
-            response.error(req, res, data.message, data.status, data.detail);
-            break;
+    .then((data) => {
+      switch (data.status) {
+        case 200:
+          response.success(req, res, data.message, data.status);
+          break;
+        default:
+          response.error(req, res, data.message, data.status, data.detail);
+          break;
 
-        }
-        
-      })
-      .catch(e => {
-        response.error(req, res, e.message, e.status, e.detail);
-      });
+      }
+
+    })
+    .catch(e => {
+      response.error(req, res, e.message, e.status, e.detail);
+    });
 });
 
 
@@ -414,11 +414,11 @@ router.patch('/', auth(1), function (req, res){
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.patch('/experience', auth(1), function (req, res){
-  const id= req.user.driver._id || null;
+router.patch('/experience', auth(1), function (req, res) {
+  const id = req.user.driver._id || null;
   controller.updateExperience(id, req.body)
     .then((data) => {
-      switch(data.status){
+      switch (data.status) {
         case 200:
           response.success(req, res, data.message, 200);
           break;
@@ -431,9 +431,9 @@ router.patch('/experience', auth(1), function (req, res){
     });
 });
 
-router.post('/check', auth(2), function (req, res){
+router.post('/check', auth(2), function (req, res) {
   controller.checkDriver(req.body.mail).then((data) => {
-    switch(data.status){
+    switch (data.status) {
       case 200:
         response.success(req, res, data.message, 200);
         break;
@@ -441,14 +441,14 @@ router.post('/check', auth(2), function (req, res){
         response.error(req, res, data.message, data.status, data.detail);
     }
   })
-  .catch(e => {
-    response.error(req, res, e.message, e.status, e.detail);
-  });
+    .catch(e => {
+      response.error(req, res, e.message, e.status, e.detail);
+    });
 });
 
-router.post('/staff/new', auth(2), function (req, res){
+router.post('/staff/new', auth(2), function (req, res) {
   controller.addStaff(req.body, req.user.company).then((data) => {
-    switch(data.status){
+    switch (data.status) {
       case 201:
         response.success(req, res, data.message, data.status);
         break;
@@ -456,13 +456,14 @@ router.post('/staff/new', auth(2), function (req, res){
         response.error(req, res, data.message, data.status, data.detail);
     }
   })
-  .catch(e => {
-    response.error(req, res, 'Unexpected error', 500, e);
-  });
+    .catch(e => {
+      response.error(req, res, 'Unexpected error', 500, e);
+    });
 });
 
-router.post('/staff/get', auth(1), function (req, res){
+router.post('/staff/get', auth(1), function (req, res) {
   response.success(req, res, req.user, 200);
 });
+
 
 module.exports = router;

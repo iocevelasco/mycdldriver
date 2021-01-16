@@ -73,7 +73,7 @@ const FormUserCompany = (props) => {
               />
             </Row>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Form.Item
                   name='tradename'
                   label="Trade Name"
@@ -86,7 +86,7 @@ const FormUserCompany = (props) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Form.Item
                   name='legalNumber'
                   label="Tax id"
@@ -101,7 +101,7 @@ const FormUserCompany = (props) => {
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Form.Item
                   name="name"
                   label="Name"
@@ -114,7 +114,7 @@ const FormUserCompany = (props) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Form.Item
                   name="lastname"
                   label="Last Name"
@@ -129,7 +129,7 @@ const FormUserCompany = (props) => {
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Form.Item
                   name="email"
                   label="Email"
@@ -143,7 +143,7 @@ const FormUserCompany = (props) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <span style={{ paddingTop: 39, display: 'block' }}>
                   <PasswordModal
                     setPsw={setPsw}
@@ -160,7 +160,7 @@ const FormUserCompany = (props) => {
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >
-              <Col span={6}>
+              <Col xs={24} xl={6}>
                 <Form.Item
                   label='Area code'
                   name="areaCode"
@@ -173,7 +173,7 @@ const FormUserCompany = (props) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={18}>
+              <Col xs={24} xl={18}>
                 <Form.Item
                   label='Phone Number'
                   name="phoneNumber"
@@ -189,7 +189,7 @@ const FormUserCompany = (props) => {
             </Row>
             <AddressInputs stateId={company.state} />
             <Row gutter={[24]} justify='center' align='middle'>
-              <Col span={12}>
+              <Col xs={24} xl={12}>
                 <Button
                   htmlType="submit"
                   type='primary'

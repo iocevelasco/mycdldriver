@@ -5,10 +5,11 @@ const company = require('../components/profile_company/network');
 const companyJobs = require('../components/company_jobs/network');
 const files = require('../components/files/network');
 const cities = require('../components/cities/network');
+const incident = require('../components/incident/network');
 const config = require('../config');
 const url_api = "/api";
 
-const routes = function(server){
+const routes = function (server) {
     server.get(url_api + '/', function (req, res) {
         res.send({
             "data": "Prueba",
@@ -16,6 +17,7 @@ const routes = function(server){
         });
     });
     server.use(url_api + '/user', user);
+    server.use(url_api + '/incident', incident);
     server.use(url_api + '/driver', driver);
     server.use(url_api + '/company', company);
     server.use(url_api + '/company/jobs', companyJobs);

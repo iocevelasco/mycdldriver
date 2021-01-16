@@ -3,9 +3,11 @@ import { Row, Col, Progress, List, Space, Avatar, notification, Image, Card, For
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
 import { StarFilled } from '@ant-design/icons';
-import NewDriverForm from './FormNewDriver';
+import NewDriverForm from './components/FormNewDriver';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
+import ItemListPosition from './components/ItemListPosition';
+import ReportIncident from './components/ReportIncident';
 import axios from 'axios';
 import "./styles.less";
 const { Title, Text } = Typography;
@@ -16,6 +18,8 @@ const initialState = {
   modalVisible: false,
   loadingModal: false,
   drawerVisible: false,
+  formSelected: 'new-driver',
+  drawerTitle: 'Add new driver',
   jobs: [],
   staffList: [],
   ranking: {
@@ -82,7 +86,9 @@ const reducer = (state, action) => {
     case types.DRAWER_VISIBLE:
       return {
         ...state,
-        drawerVisible: !state.drawerVisible
+        drawerVisible: !state.drawerVisible,
+        formSelected: action.payload.formSelected,
+        drawerTitle: action.payload.drawerTitle
       }
     default:
       throw new Error('Unexpected action');
@@ -156,7 +162,7 @@ const StaffCompanyView = ({ user }) => {
   }
 
   const showRate = (job, user) => {
-    const { title, _id, apply } = job;
+    const { title, apply } = job;
     const { name, lastname, photo } = user;
 
     const modalProps = {
@@ -195,12 +201,39 @@ const StaffCompanyView = ({ user }) => {
       })
   }
 
-  const openDrawer = () => {
-    dispatch({ type: types.DRAWER_VISIBLE });
+  const openDrawer = (formTypeSelect) => {
+    let drawerTitle = formTypeSelect === 'new-driver' ? 'Add new driver' : 'Report incident'
+    dispatch({
+      type: types.DRAWER_VISIBLE,
+      payload: {
+        formTypeSelect,
+        drawerTitle
+      }
+    });
   };
 
   const onCloseDrawer = () => {
-    dispatch({ type: types.DRAWER_VISIBLE });
+    dispatch({
+      type: types.DRAWER_VISIBLE,
+      payload: {
+        formTypeSelect: '',
+        drawerTitle: ''
+      }
+    });
+  }
+
+  const selectForm = (type) => {
+
+    const formSelected = type == 'new-driver' ? <NewDriverForm
+      addNewDriver={addNewDriver}
+      loader={state.loading}
+      header={header}
+    /> : <ReportIncident
+        addNewDriver={addNewDriver}
+        loader={state.loading}
+        header={header}
+      />
+    return formSelected;
   }
 
   const columns = [
@@ -230,7 +263,6 @@ const StaffCompanyView = ({ user }) => {
             {(driver.rating == 0) ?
               <StarFilled style={{ fontSize: '24px', color: '#d3d3d3' }} /> :
               <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />}
-
             <span> {driver.rating} </span>
           </Space>
         )
@@ -280,12 +312,6 @@ const StaffCompanyView = ({ user }) => {
     },
   ];
 
-  const styles = {
-    listJObs: {
-      display: 'flex',
-      flexDirection: 'column',
-    }
-  }
 
   return (
     <>
@@ -303,7 +329,7 @@ const StaffCompanyView = ({ user }) => {
                   type='primary'
                   shape="round"
                   size="large"
-                  onClick={openDrawer}>
+                  onClick={() => openDrawer('new-driver')}>
                   Create invitation
                 </Button>
               </Col>
@@ -317,38 +343,17 @@ const StaffCompanyView = ({ user }) => {
                 expandable={{
                   expandedRowRender: record => {
                     return <List
-                      header={<Title level={4}>Positions</Title>}
+                      header={<Title level={4}>Current jobs</Title>}
                       itemLayout="horizontal"
                       bordered
                       dataSource={record.jobs}
                       renderItem={item => (
-                        <List.Item
-                          key={item._d}
-                          actions={[
-                            <a onClick={() => showRate(item, record)}>
-                              Rate this driver
-                        </a>,
-                          ]}>
-                          <div style={{ width: '100%' }}>
-                            <Row gutter={[24]} justify='space-between' align='middle'>
-                              <Col span={2}>
-                                <Avatar shape="square" size={80} src={item.logo} />
-                              </Col>
-                              <Col span={1}>
-                                <Space>
-                                  <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />
-                                  <span> {item.apply.ranking} </span>
-                                </Space>
-                              </Col>
-                              <Col span={18}>
-                                <div style={styles.listJObs}>
-                                  <p>{item.title} </p>
-                                </div>
-                              </Col>
-                            </Row>
-                          </div>
-                        </List.Item>
-                      )}
+                        <ItemListPosition
+                          openDrawer={openDrawer}
+                          showRate={showRate}
+                          item={item}
+                          record={record}
+                        />)}
                     />
                   }
                 }}
@@ -417,17 +422,13 @@ const StaffCompanyView = ({ user }) => {
         </Row>
       </Modal>
       <Drawer
-        title='Add new driver'
+        title={state.drawerTitle}
         placement="right"
         closable={true}
         width={480}
         onClose={onCloseDrawer}
         visible={state.drawerVisible}>
-        <NewDriverForm
-          addNewDriver={addNewDriver}
-          loader={state.loading}
-          header={header}
-        />
+        {selectForm(state.formSelected)}
       </Drawer>
     </>
   )
