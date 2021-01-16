@@ -343,7 +343,7 @@ const StaffCompanyView = ({ user }) => {
                 expandable={{
                   expandedRowRender: record => {
                     return <List
-                      header={<Title level={4}>Current Jobs</Title>}
+                      header={<Title level={4}>Current jobs</Title>}
                       itemLayout="horizontal"
                       bordered
                       dataSource={record.jobs}

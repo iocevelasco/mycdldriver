@@ -94,6 +94,7 @@ const MessageError = ({ title, subTitle, extra }) => {
 }
 
 const SpinnerComp = ({ active }) => {
+  console.log(active)
   const styles = {
     wrapper: {
       position: 'absolute',
