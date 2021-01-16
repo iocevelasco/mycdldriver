@@ -147,7 +147,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
         <WrapperSection row={22} mt={0}>
           <div className='job-offert'>
             <Row>
-              <Col className='job-offert__detaill' span={13}>
+              <Col className='job-offert__detaill' xs={24} xl={13}>
                 <div className="header"
                   style={{
                     backgroundImage: `url('/static/images/truck3.jpg')`
@@ -220,7 +220,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                       </Button>
                 }
               </Col>
-              <Col className='job-offert__list' span={10}>
+              <Col className='job-offert__list' xs={24} xl={10}>
                 <Row justify='center' align='middle'>
                   <Title level={3}>Related searches</Title>
                 </Row>

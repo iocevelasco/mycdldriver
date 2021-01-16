@@ -26,6 +26,7 @@ router.post('/', storage.single('logo'), function (req, res) {
         Body: fs.createReadStream(req.file.path),
         Key: `${req.file.filename}`
     };
+    console.log('s3 params', params);
 
     s3.upload(params, (err, data) => {
         if (err) {
