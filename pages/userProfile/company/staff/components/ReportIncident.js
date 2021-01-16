@@ -10,8 +10,20 @@ const ReportIncident = (props) => {
   const [form] = Form.useForm();
   const [isFetching, setIsFetching] = useState(false);
   const [fileList, setFileList] = useState([]);
-  const reportIncident = (fields) => {
-    console.log(fields);
+
+  const reportIncident = async (fields) => {
+    const { description } = fields;
+    let newReport = {
+      fileList: fileList,
+      description: description,
+    };
+    await axios.post('api/driver/reports', { newReport: JSON.stringify(newReport) }, props.header)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   return (
