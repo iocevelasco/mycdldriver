@@ -8,7 +8,9 @@ import {
   Avatar,
   Typography,
   Button,
-  Image
+  Image,
+  Row, 
+  Col
 } from 'antd';
 import Link from 'next/link';
 import moment from 'moment';
@@ -155,38 +157,63 @@ const DescriptionDesktop = ({ item, small }) => {
 }
 
 const DescriptionMobile = ({ item }) => {
+  let espacio = {marginTop: 20};
   return (<Card
     bodyStyle={{
-      padding: 0
+      padding: 10
     }}
     style={{ width: '100%', marginTop: 24, }}>
-    <div className='home--job-offert'>
-      <div className='thumbnails'>
-        <Avatar size={80} src={item.company.photo} />
-        <Avatar size={80} src={item.logo} />
-      </div>
-      <div className='job-offert__description'>
-        <div>
+      <Row>
+        <Col span={24}>
           <Title level={3}> {item.title} </Title>
-          <div>
-            <Text> Address </Text>
-            <Text strong> {item.city.cityName} </Text> <Text strong > | </Text>
-          </div>
-          <div>
-          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24} style={{position: 'relative'}}>
+        <div className='thumbnails' style={{
+          height: 200,
+          backgroundImage: "url(" + item.logo + ")",
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover',
+          textAlign: 'center',
+          paddingTop: 60 }}>
+          <Avatar size={80} src={item.company.photo} /> 
         </div>
-      </div>
-      <div className='action'>
-        <Link
-          href={{
-            pathname: '/job-offert',
-            query: { id: item._id },
-          }}
-        >
-          <Button shape="round" type='secondary'> VIEW MORE </Button>
-        </Link>
-      </div>
-    </div>
+        </Col>
+      </Row>
+      <Row style={espacio}>
+        <Col span={24}>
+          <Text> Address </Text>
+          <Text strong> {item.city.cityName} </Text> <Text strong > | </Text>
+          <Text> Date </Text>
+          <Text strong> {moment(item.date).format('YYYY-MM-DD')} </Text>
+        </Col>
+        <Col span={24}>
+          <Text> Phone </Text>
+          <Text strong> {item.areaCode} - {item.phoneNumber} </Text> <Text strong > | </Text>
+          <Text> Email </Text>
+          <Text strong> {item.email} </Text>
+        </Col>
+      </Row>
+      <Row style={espacio}>
+        <Col span={24}>
+          <Text> {item.description} </Text>
+        </Col>
+      </Row>
+      <Row style={espacio}>
+        <Col span={24} style={{textAlign: 'center'}}>
+          <Link
+            href={{
+              pathname: '/job-offert',
+              query: { id: item._id },
+            }}
+          >
+            <Button shape="round" type='secondary'> VIEW MORE </Button>
+          </Link>
+        </Col>
+      </Row>
   </Card>)
 }
 
