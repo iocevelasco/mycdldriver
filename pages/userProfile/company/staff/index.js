@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { Row, Col, Progress, List, Space, Avatar, notification, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon, Drawer } from 'antd';
+import { Row, Col, Progress, List, Space, Avatar, notification, Tabs, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon, Drawer } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
 import { StarFilled } from '@ant-design/icons';
@@ -8,9 +8,12 @@ import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import ItemListPosition from './components/ItemListPosition';
 import ReportIncident from './components/ReportIncident';
+import DriverDetailProps from 'components/DriverDetail';
+import RateDriver from './components/RateDriver';
 import axios from 'axios';
 import "./styles.less";
 const { Title, Text } = Typography;
+const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 const initialState = {
@@ -178,7 +181,7 @@ const StaffCompanyView = ({ user }) => {
     dispatch({ type: types.CLOSE_MODAL })
   };
 
-  const changeRanking = async (fiels) => {
+  const updateDriverRanking = async (fiels) => {
     const { ranking, comment } = fiels;
     const { modalProps } = state;
     const data = {
@@ -223,7 +226,6 @@ const StaffCompanyView = ({ user }) => {
   }
 
   const selectForm = (type) => {
-
     const formSelected = type == 'new-driver' ? <NewDriverForm
       addNewDriver={addNewDriver}
       loader={state.loading}
@@ -241,13 +243,11 @@ const StaffCompanyView = ({ user }) => {
       title: 'Name',
       dataIndex: 'photo',
       key: 'photo',
-      width: '10%',
       render: url => <Avatar size={60} src={url} />
     },
     {
       dataIndex: 'name',
       key: 'name',
-      width: '10%',
       render: ((n, item) => {
         const { name, lastname } = item
         return <span> {`${name} ${lastname}`} </span>
@@ -269,49 +269,12 @@ const StaffCompanyView = ({ user }) => {
       }
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Phone',
-      dataIndex: 'driver',
-      key: 'rate',
-      width: '15%',
-      render: (driver) => {
-        return <span> {driver.areaCode}-{driver.phoneNumber} </span>
-      },
-    },
-    {
-      title: 'dln',
-      dataIndex: 'driver',
-      align: 'center',
-      key: 'dln',
-      render: (driver) => {
-        return (
-          <Space >
-            <span> {driver.dln} </span>
-          </Space>
-        )
-      }
-    },
-    {
       title: 'Status',
       dataIndex: 'status',
       align: 'center',
       key: 'status',
-    },
-    {
-      title: 'Percentage complete',
-      dataIndex: 'completeProfile',
-      align: 'center',
-      key: 'completeProfile',
-      render: (n, item) => {
-        return <Progress percent={item.completeProfile} />
-      }
-    },
+    }
   ];
-
 
   return (
     <>
@@ -334,93 +297,37 @@ const StaffCompanyView = ({ user }) => {
                 </Button>
               </Col>
             </Row>
-            <Card>
-              <Table
-                rowKey='id'
-                dataSource={state.staffList}
-                loading={state.loading}
-                columns={columns}
-                expandable={{
-                  expandedRowRender: record => {
-                    return <List
-                      header={<Title level={4}>Current jobs</Title>}
-                      itemLayout="horizontal"
-                      bordered
-                      dataSource={record.jobs}
-                      renderItem={item => (
-                        <ItemListPosition
-                          openDrawer={openDrawer}
-                          showRate={showRate}
-                          item={item}
-                          record={record}
-                        />)}
-                    />
-                  }
-                }}
-              />
-            </Card>
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="Drivers" key="1">
+                <Table
+                  rowKey='id'
+                  dataSource={state.staffList}
+                  loading={state.loading}
+                  columns={columns}
+                  expandable={{
+                    expandedRowRender: driver => {
+                      return <DriverDetailProps driverDetail={driver} />
+                    }
+                  }}
+                />
+
+              </TabPane>
+              <TabPane tab="Incident" key="2">
+                <p>pepe</p>
+              </TabPane>
+              <TabPane tab="Tab 1" key="3">
+                <p>pepe</p>
+              </TabPane>
+            </Tabs>
           </WrapperSection>
         </Col>
       </Row>
-      <Modal
+      <RateDriver
         visible={state.modalVisible}
-        title={state.modalProps.title}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Row>
-          <Form
-            form={form}
-            onFinish={changeRanking}
-            name="form_ranking"
-            layout='vertical'>
-            <Row gutter={[24]} justify='center'>
-              <Col span={24}>
-                <Title level={3}> How was your experience with {state.modalProps.fullname}?</Title>
-              </Col>
-              <Col span={8}>
-                <Form.Item
-                  name='ranking'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Ranking is required!',
-                    },
-                  ]}>
-                  <Rate
-                    allowHalf
-                    allowClear={false} />
-                </Form.Item>
-              </Col>
-              <Col span={24}>
-                <Form.Item
-                  name='comment'
-                  rules={[
-                    {
-                      required: false,
-                    },
-                  ]}>
-                  <TextArea
-                    rows={4}
-                    placeholder="Describe your experience working with this driver"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={[24]} justify='center' align='middle'>
-              <Col span={12}>
-                <Button
-                  htmlType="submit"
-                  type='primary'
-                  style={{ marginTop: 40 }}
-                  shape="round"
-                  block
-                  size='large'>Send</Button>
-              </Col>
-            </Row>
-          </Form>
-        </Row>
-      </Modal>
+        modalProps={state.modalProps}
+        handleCancel={handleCancel}
+        onFinish={updateDriverRanking}
+      />
       <Drawer
         title={state.drawerTitle}
         placement="right"
