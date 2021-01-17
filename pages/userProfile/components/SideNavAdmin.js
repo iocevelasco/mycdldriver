@@ -43,6 +43,11 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser
 
   const companyOption = [
     {
+      path: '/userProfile/company/staff',
+      section_name: 'Staff',
+      icon: <TeamOutlined />
+    },
+    {
       path: '/userProfile/company/profile',
       section_name: 'Profile',
       icon: <HomeOutlined />
@@ -56,11 +61,6 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser
       path: '/userProfile/company/candidate',
       section_name: 'Candidate',
       icon: <UserSwitchOutlined />
-    },
-    {
-      path: '/userProfile/company/staff',
-      section_name: 'Staff',
-      icon: <TeamOutlined />
     }
   ]
 
