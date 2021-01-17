@@ -3,13 +3,12 @@ const { Title } = Typography;
 const { TextArea } = Input;
 
 
-const RateDriver = ({ modalVisible, onFinish, modalProps, handleCancel }) => {
+const RateDriver = ({ visible, onFinish, modalProps, handleCancel }) => {
   const [form] = Form.useForm();
-
   return (
     <>
       <Modal
-        visible={modalVisible}
+        visible={visible}
         title={modalProps.jobTitle}
         onCancel={handleCancel}
         footer={null}

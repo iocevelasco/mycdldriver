@@ -1,16 +1,16 @@
-import React, { useEffect, useReducer, useState } from 'react';
-import { Row, Col, Progress, List, Space, Avatar, notification, Tabs, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon, Drawer } from 'antd';
+import React, { useEffect, useReducer } from 'react';
+import { Row, Col, List, Space, Avatar, notification, Tabs, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon, Drawer } from 'antd';
 import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
-import { StarFilled } from '@ant-design/icons';
 import NewDriverForm from './components/FormNewDriver';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
-import ItemListPosition from './components/ItemListPosition';
 import ReportIncident from './components/ReportIncident';
-import DriverDetailProps from 'components/DriverDetail';
 import RateDriver from './components/RateDriver';
+import DriverList from './components/DriversList';
+import JobList from './components/JobList';
 import axios from 'axios';
+import { UserOutlined, CarOutlined, WarningOutlined } from '@ant-design/icons';
 import "./styles.less";
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -163,8 +163,11 @@ const StaffCompanyView = ({ user }) => {
     minHeight: '90vh',
     backgroundSize: 'contain',
   }
+  console.log('modalVisible', state.modalVisible);
 
   const showRate = (job, user) => {
+    console.log('job, user', job, user);
+
     const { title, apply } = job;
     const { name, lastname, photo } = user;
 
@@ -238,44 +241,6 @@ const StaffCompanyView = ({ user }) => {
     return formSelected;
   }
 
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'photo',
-      key: 'photo',
-      render: url => <Avatar size={60} src={url} />
-    },
-    {
-      dataIndex: 'name',
-      key: 'name',
-      render: ((n, item) => {
-        const { name, lastname } = item
-        return <span> {`${name} ${lastname}`} </span>
-      })
-    },
-    {
-      title: 'Rating',
-      dataIndex: 'driver',
-      key: 'rate',
-      render: (driver) => {
-        return (
-          <Space >
-            {(driver.rating == 0) ?
-              <StarFilled style={{ fontSize: '24px', color: '#d3d3d3' }} /> :
-              <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />}
-            <span> {driver.rating} </span>
-          </Space>
-        )
-      }
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      align: 'center',
-      key: 'status',
-    }
-  ];
-
   return (
     <>
       <Row>
@@ -298,24 +263,35 @@ const StaffCompanyView = ({ user }) => {
               </Col>
             </Row>
             <Tabs defaultActiveKey="1">
-              <TabPane tab="Drivers" key="1">
-                <Table
-                  rowKey='id'
-                  dataSource={state.staffList}
+              <TabPane tab={
+                <span>
+                  <UserOutlined />
+                  Drivers
+                </span>
+              } key="1">
+                <DriverList
+                  staffList={state.staffList}
                   loading={state.loading}
-                  columns={columns}
-                  expandable={{
-                    expandedRowRender: driver => {
-                      return <DriverDetailProps driverDetail={driver} />
-                    }
-                  }}
                 />
-
               </TabPane>
-              <TabPane tab="Incident" key="2">
-                <p>pepe</p>
+              <TabPane tab={
+                <span>
+                  <CarOutlined />
+                  Jobs List
+                </span>
+              } key="2">
+                <JobList
+                  staffList={state.staffList}
+                  loading={state.loading}
+                  showRate={showRate}
+                  openDrawer={openDrawer} />
               </TabPane>
-              <TabPane tab="Tab 1" key="3">
+              <TabPane tab={
+                <span>
+                  <WarningOutlined />
+                  Drivers
+                </span>
+              } key="3">
                 <p>pepe</p>
               </TabPane>
             </Tabs>
