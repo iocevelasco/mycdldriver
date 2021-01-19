@@ -2,6 +2,7 @@ const { TagsModel, JobsModel, JobsApplysModel } = require('./model');
 const { User } = require('../user/model');
 const ProfileCompany = require('../profile_company/model');
 const ProfileDriver = require('../profile_driver/model');
+const Incident = require('../incident/model');
 const {CitiesModel} = require('../cities/model');
 const mongoose = require('mongoose');
 const fs = require('fs');
@@ -298,10 +299,10 @@ async function getStaffCompanyJobs(query) {
         }
     }
     try{
+        const userCompany = await User.findOne({ company: id }).populate('company');
         const drivers = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
 
         result = await Promise.all(drivers.map(async (response) => {
-            console.log('RESPONSE', response);
             const userDriver = await User.findOne({ _id: response })
                 .select('name lastname photo date email')
                 .populate('driver');
@@ -359,8 +360,13 @@ async function getStaffCompanyJobs(query) {
                 company: id,
                 status: 1
             };
+            const condition = {
+                driver: userDriver._id,
+                company: userCompany._id
+            };
+            const incidents = await Incident.find(condition);
+            resDriver.incidents = incidents;
             const jobsDriver = await JobsApplysModel.find(filterJob).populate('job');
-            console.log('Jobs de Driver', jobsDriver);
             resDriver.jobs = await Promise.all(jobsDriver.map(async (resp) => {
                 if (resp.job) {
                     let response = {

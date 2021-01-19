@@ -9,6 +9,7 @@ import ReportIncident from './components/ReportIncident';
 import RateDriver from './components/RateDriver';
 import DriverList from './components/DriversList';
 import JobList from './components/JobList';
+import IncidentList from './components/IncidentList';
 import axios from 'axios';
 import { UserOutlined, CarOutlined, WarningOutlined } from '@ant-design/icons';
 import "./styles.less";
@@ -24,6 +25,7 @@ const initialState = {
   formSelected: 'new-driver',
   drawerTitle: 'Add new driver',
   jobs: [],
+  userSelected: {},
   staffList: [],
   ranking: {
     id: '',
@@ -91,7 +93,8 @@ const reducer = (state, action) => {
         ...state,
         drawerVisible: !state.drawerVisible,
         formSelected: action.payload.formSelected,
-        drawerTitle: action.payload.drawerTitle
+        drawerTitle: action.payload.drawerTitle,
+        userSelected: action.payload.user
       }
     default:
       throw new Error('Unexpected action');
@@ -163,10 +166,8 @@ const StaffCompanyView = ({ user }) => {
     minHeight: '90vh',
     backgroundSize: 'contain',
   }
-  console.log('modalVisible', state.modalVisible);
 
   const showRate = (job, user) => {
-    console.log('job, user', job, user);
 
     const { title, apply } = job;
     const { name, lastname, photo } = user;
@@ -207,13 +208,14 @@ const StaffCompanyView = ({ user }) => {
       })
   }
 
-  const openDrawer = (formTypeSelect) => {
-    let drawerTitle = formTypeSelect === 'new-driver' ? 'Add new driver' : 'Report incident'
+  const openDrawer = (formTypeSelect, user) => {
+    let drawerTitle = formTypeSelect === 'new-driver' ? 'Add new driver' : 'Report incident';
     dispatch({
       type: types.DRAWER_VISIBLE,
       payload: {
         formTypeSelect,
-        drawerTitle
+        drawerTitle,
+        user
       }
     });
   };
@@ -237,6 +239,8 @@ const StaffCompanyView = ({ user }) => {
         addNewDriver={addNewDriver}
         loader={state.loading}
         header={header}
+        user={state.userSelected}
+        closeDrawer= {onCloseDrawer}
       />
     return formSelected;
   }
@@ -289,10 +293,14 @@ const StaffCompanyView = ({ user }) => {
               <TabPane tab={
                 <span>
                   <WarningOutlined />
-                  Drivers
+                  Incident List
                 </span>
               } key="3">
-                <p>pepe</p>
+                <IncidentList
+                  header={header}
+                  fetchStaffList = {fetchStaffList}
+                  staffList={state.staffList}
+                  loading={state.loading} />
               </TabPane>
             </Tabs>
           </WrapperSection>

@@ -7,11 +7,8 @@ function getIncident() {
       case 200:
         resolve(result);
         break;
-      case 400:
-        reject(result);
-        break;
       default:
-        resolve(result);
+        reject(result);
         break;
     }
   });
@@ -24,18 +21,30 @@ function setIncident(incident, company) {
       case 201:
         resolve(result);
         break;
-      case 400:
-        reject(result);
-        break;
       default:
-        resolve(result);
+        reject(result);
         break;
     }
   });
 }
 
+async function deleteIncident(id){
+  try{
+    const result = await store.deleteIncident(id);
+    return result;
+  }catch(e){
+    return {
+      status: 500,
+      message: 'Unexpected error',
+      detail: e
+    };
+  }
+  
+  
+}
 
 module.exports = {
   getIncident,
-  setIncident
+  setIncident,
+  deleteIncident
 }

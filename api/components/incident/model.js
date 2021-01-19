@@ -21,6 +21,11 @@ const incidentSchema = Schema({
     ref: 'User',
     required: true,
   },
+  job: {
+    type: Schema.ObjectId,
+    ref: 'CompanyJobs',
+    required: true,
+  },
   images: [{
     url: {
       type: String,

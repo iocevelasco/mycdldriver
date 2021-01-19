@@ -21,7 +21,7 @@ router.post('/', auth(2), function (req, res) {
 });
 
 router.get('/:id', auth(2), function (req, res) {
-  controller.getIncident(req.query.id)
+  controller.getIncident(req.params.id)
     .then((incident) => {
       switch (incident.status) {
         case 200:
@@ -29,6 +29,22 @@ router.get('/:id', auth(2), function (req, res) {
           break;
         default:
           response.error(req, res, incident.message, incident.status);
+      }
+    }).catch(e => {
+      response.error(req, res, 'Unexpected Error', 500, e);
+    });
+});
+
+router.delete('/:id', auth(2), function (req, res) {
+  controller.deleteIncident(req.params.id)
+    .then((incident) => {
+      switch (incident.status) {
+        case 200:
+          response.success(req, res, incident.message, 200);
+          break;
+        default:
+          response.error(req, res, incident.message, incident.status);
+          break;
       }
     }).catch(e => {
       response.error(req, res, 'Unexpected Error', 500, e);

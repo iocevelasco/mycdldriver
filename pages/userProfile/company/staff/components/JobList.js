@@ -41,7 +41,6 @@ const JobsList = ({ staffList, ...props }) => {
             bordered
             dataSource={record.jobs}
             renderItem={item => {
-              console.log('item', item);
               return <List.Item
                 key={item._d}
                 actions={[
@@ -56,7 +55,7 @@ const JobsList = ({ staffList, ...props }) => {
                   <Button
                     icon={<WarningOutlined />}
                     type='link'
-                    onClick={() => props.openDrawer('create-incident')}>
+                    onClick={() => props.openDrawer('create-incident', record)}>
                     Report incident
                   </Button>
                 ]}>

@@ -2,7 +2,6 @@ const Incident = require('./model');
 
 async function setIncident(incident, company) {
 
-  console.log(incident, company)
   try {
     if (!incident) {
       return {
@@ -53,7 +52,28 @@ async function getIncident(driverId) {
   }
 }
 
+async function deleteIncident(id) {
+  if(!id){
+    return {
+      status: 400,
+      message: 'No incident id recived'
+    };
+  }
+
+  try{
+    await Incident.findOneAndDelete({_id: id});
+    return { status: 200, message: 'The incident has been deleted correctly' }
+  }catch(e){S
+    return {
+      status: 500,
+      message: 'Unexpected error',
+      detail: e
+    };
+  }
+}
+
 module.exports = {
   getIncident,
-  setIncident
+  setIncident,
+  deleteIncident
 }

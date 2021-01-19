@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Input, Form, Button } from 'antd';
+import { Row, Col, Input, Form, Button, notification } from 'antd';
 import { SpinnerComp } from 'components/helpers';
 import { UploadMultiple } from 'components/UploadImages';
 import axios from 'axios';
@@ -7,22 +7,40 @@ import axios from 'axios';
 const { TextArea } = Input;
 
 const ReportIncident = (props) => {
+  console.log('PROPS', props);
   const [form] = Form.useForm();
   const [isFetching, setIsFetching] = useState(false);
   const [fileList, setFileList] = useState([]);
 
   const reportIncident = async (fields) => {
     const { description } = fields;
+    let files = fileList.map((item) => {
+      return {url: item.response};
+    });
     let newReport = {
-      fileList: fileList,
-      description: description,
+      images: files,
+      driver: props.user.id,
+      description: description
     };
-    await axios.post('api/driver/reports', { newReport: JSON.stringify(newReport) }, props.header)
+    await axios.post('/api/incident', newReport, props.header)
       .then((response) => {
         console.log(response);
+        notification['success']({
+          message: 'Success',
+          description:
+            "Congratulation! Incident created successfully"
+        });
+        setFileList([]);
+        form.resetFields();
+        props.closeDrawer();
       })
       .catch((err) => {
         console.log(err);
+        notification['error']({
+          message: 'Error',
+          description:
+            "An error occurred while creating the incident, please try again"
+        });
       })
   }
 
