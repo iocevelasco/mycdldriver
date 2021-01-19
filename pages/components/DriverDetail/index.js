@@ -68,16 +68,16 @@ const DriverDetailProps = (props) => {
   return (
     <>
       <Row>
-        <Col span={4}>
+        <Col xs={24} xl={4}>
           <Avatar shape="square" size={120} src={detail.photo} icon={<UserOutlined />} />
         </Col>
-        <Col span={10}>
+        <Col xs={24} xl={10}>
           <DescriptionItem title="Full Name" content={`${detail.name} ${detail.lastname}`} />
           <DescriptionItem title="Birthday" content={`${moment(detail.driver.birthDate).format('YYYY-MM-DD')}`} />
           <DescriptionItem title="Phone Number" content={`${detail.driver.phoneNumber}`} />
           <DescriptionItem title="Email" content={`${detail.email}`} />
         </Col>
-        <Col span={10}>
+        <Col xs={24} xl={10}>
           <DescriptionItem title="Sex" content={resoltSexType(detail.driver.sex)} />
           <DescriptionItem title="Address" content={detail.driver.address} />
           <DescriptionItem title="DLN numbers" content={detail.driver.dln} />
@@ -86,7 +86,7 @@ const DriverDetailProps = (props) => {
       </Row>
       <Divider />
       <Row>
-        <Col span={12}>
+        <Col xs={24} xl={12}>
           {Array.isArray(detail.driver.experience) &&
             <span>
               <p className="site-description-item-profile-p">Experience</p>
@@ -98,7 +98,7 @@ const DriverDetailProps = (props) => {
             </span>
           }
         </Col>
-        <Col span={12}>
+        <Col xs={24} xl={12}>
           <Row>
             <Col span={24}>
               <Title level={5}>DLN</Title>

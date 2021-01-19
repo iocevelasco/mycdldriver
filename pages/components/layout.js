@@ -130,16 +130,6 @@ const MainLayout = ({
                         {
                             user.isLogin ?
                                 <Row justify='end' align='middle'>
-                                    {/*<Space size='large'>
-                                        <Button
-                                            style={{ color: '#FF2A39' }}
-                                            icon={<MenuFoldOutlined />}
-                                            onClick={() => setVisible(true)} >
-                                            Account
-                                        </Button>
-                                        <Text strong>{user.name + " " + user.lastname}</Text>
-                                        <Avatar icon={<UserOutlined />} src={user.photo} />
-                        </Space>*/}
                                     <Col xs={0} xl={16}>
                                         <Text strong style={{ float: 'right', marginRight: 10 }}>{user.name + " " + user.lastname}</Text>
                                     </Col>

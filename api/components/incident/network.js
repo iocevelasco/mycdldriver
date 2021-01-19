@@ -16,7 +16,7 @@ router.post('/', auth(2), function (req, res) {
       }
 
     }).catch(e => {
-      response.error(req, res, 'Unexpected Error', 500, e);
+      response.error(req, res, 'Unexpected network Error', 500, e);
     });
 });
 

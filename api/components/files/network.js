@@ -48,7 +48,7 @@ router.post('/', storage.single('logo'), function (req, res) {
                     });
                 }
             }catch(e){
-                console.log(e);
+                
             }
             response.success(req, res, {'file': locationUrl}, 201);
         }

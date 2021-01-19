@@ -43,28 +43,33 @@ const JobsList = ({ staffList, ...props }) => {
             renderItem={item => {
               return <List.Item
                 key={item._d}
-                actions={[
-                  <Button
-                    icon={<CheckCircleOutlined />}
-                    shape="round"
-                    size="large"
-                    type='primary'
-                    onClick={() => props.showRate(item, record)}>
-                    Rate this driver
-                    </Button>,
-                  <Button
-                    icon={<WarningOutlined />}
-                    type='link'
-                    onClick={() => props.openDrawer('create-incident', record)}>
-                    Report incident
-                  </Button>
+                actions={[<Row>
+                  <Col xs={24} xl={12}>
+                    <Button
+                      icon={<CheckCircleOutlined />}
+                      shape="round"
+                      size="large"
+                      type='primary'
+                      onClick={() => props.showRate(item, record)}>
+                      Rate this driver
+                      </Button>
+                    </Col>
+                    <Col xs={24} xl={12}>
+                      <Button
+                        icon={<WarningOutlined />}
+                        type='link'
+                        onClick={() => props.openDrawer('create-incident', record, item)}>
+                        Report incident
+                      </Button>
+                    </Col>
+                </Row>
                 ]}>
                 <div style={{ width: '100%' }}>
                   <Row gutter={[24]} justify='space-between' align='middle'>
-                    <Col span={2}>
+                    <Col xs={6} xl={2}>
                       <Avatar shape="square" size={80} src={item.logo} />
                     </Col>
-                    <Col span={18}>
+                    <Col xs={16} xl={18}>
                       <div style={styles.listJObs}>
                         <p>{item.title} </p>
                       </div>

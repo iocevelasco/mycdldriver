@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Row, Col, List, Table, Image, Button, Typography, notification, Modal } from 'antd';
 import { DeleteOutlined, ExclamationCircleOutlined  } from '@ant-design/icons';
 import axios from 'axios';
+import moment from 'moment';
 const { Title } = Typography;
 const { confirm } = Modal;
 
@@ -12,7 +13,7 @@ const ListIncident = ({ staffList, ...props }) => {
         }
     });
     if(insidentList.length == 1){
-        if(!insidentList.incidents){
+        if(!insidentList[0].incidents){
             insidentList = [];
         }
     }
@@ -102,11 +103,15 @@ const ListIncident = ({ staffList, ...props }) => {
                   <div style={{ width: '100%' }}>
                     <Row gutter={[24]} justify='space-between' align='middle'>
                       <Col span={24}>
+                        <p><Title level={4}>Job: {item.job.title}</Title></p>
+                      </Col>
+                      <Col span={24}>
+                        <p>Date: {moment(item.date).format('YYYY-MM-DD')}</p>
                         <p>{item.description}</p>
                       </Col>
                     </Row>
-                    <Row gutter={[24]}>
-                      {item.images.map((image) => { return <Col span={8}>
+                    <Row gutter={[16, 24]}>
+                      {item.images.map((image) => { return <Col xs={24} xl={8}>
                             <Image
                                 width={200}
                                 src={image.url}

@@ -23,7 +23,7 @@ async function setIncident(incident, company) {
   } catch (e) {
     return {
       status: 500,
-      message: 'Unexpected error',
+      message: 'Unexpected store error',
       detail: e
     };
   }
@@ -63,7 +63,7 @@ async function deleteIncident(id) {
   try{
     await Incident.findOneAndDelete({_id: id});
     return { status: 200, message: 'The incident has been deleted correctly' }
-  }catch(e){S
+  }catch(e){
     return {
       status: 500,
       message: 'Unexpected error',

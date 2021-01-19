@@ -7,6 +7,7 @@ import axios from 'axios';
 const { TextArea } = Input;
 
 const ReportIncident = (props) => {
+  console.log('PROPS', props);
   const [form] = Form.useForm();
   const [isFetching, setIsFetching] = useState(false);
   const [fileList, setFileList] = useState([]);
@@ -19,6 +20,7 @@ const ReportIncident = (props) => {
     let newReport = {
       images: files,
       driver: props.user.id,
+      job: props.job._id,
       description: description
     };
     await axios.post('/api/incident', newReport, props.header)

@@ -14,18 +14,17 @@ function getIncident() {
   });
 }
 
-function setIncident(incident, company) {
-  return new Promise((resolve, reject) => {
-    const result = store.setIncident(incident, company);
-    switch (result.status) {
-      case 201:
-        resolve(result);
-        break;
-      default:
-        reject(result);
-        break;
-    }
-  });
+async function setIncident(incident, company) {
+  try{
+    const result = await store.setIncident(incident, company);
+    return result;
+  }catch(e){
+    return {
+      status: 500,
+      message: 'Unexpected controller error',
+      detail: e
+    };
+  }
 }
 
 async function deleteIncident(id){
@@ -39,8 +38,6 @@ async function deleteIncident(id){
       detail: e
     };
   }
-  
-  
 }
 
 module.exports = {

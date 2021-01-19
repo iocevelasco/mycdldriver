@@ -364,7 +364,7 @@ async function getStaffCompanyJobs(query) {
                 driver: userDriver._id,
                 company: userCompany._id
             };
-            const incidents = await Incident.find(condition);
+            const incidents = await Incident.find(condition).populate('job');
             resDriver.incidents = incidents;
             const jobsDriver = await JobsApplysModel.find(filterJob).populate('job');
             resDriver.jobs = await Promise.all(jobsDriver.map(async (resp) => {

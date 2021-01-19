@@ -25,6 +25,7 @@ const initialState = {
   formSelected: 'new-driver',
   drawerTitle: 'Add new driver',
   jobs: [],
+  jobSelected: {},
   userSelected: {},
   staffList: [],
   ranking: {
@@ -94,7 +95,8 @@ const reducer = (state, action) => {
         drawerVisible: !state.drawerVisible,
         formSelected: action.payload.formSelected,
         drawerTitle: action.payload.drawerTitle,
-        userSelected: action.payload.user
+        userSelected: action.payload.user,
+        jobSelected: action.payload.job
       }
     default:
       throw new Error('Unexpected action');
@@ -208,14 +210,15 @@ const StaffCompanyView = ({ user }) => {
       })
   }
 
-  const openDrawer = (formSelected, user) => {
+  const openDrawer = (formSelected, user, job) => {
     let drawerTitle = formSelected === 'new-driver' ? 'Add new driver' : 'Report incident';
     dispatch({
       type: types.DRAWER_VISIBLE,
       payload: {
         formSelected,
         drawerTitle,
-        user
+        user,
+        job
       }
     });
   };
@@ -226,7 +229,8 @@ const StaffCompanyView = ({ user }) => {
       payload: {
         formSelected: '',
         drawerTitle: '',
-        user: {}
+        user: {},
+        job: {}
       }
     });
   }
@@ -241,6 +245,7 @@ const StaffCompanyView = ({ user }) => {
         loader={state.loading}
         header={header}
         user={state.userSelected}
+        job={state.jobSelected}
         closeDrawer= {onCloseDrawer}
       />
     return formSelected;
@@ -254,17 +259,17 @@ const StaffCompanyView = ({ user }) => {
         <Col span={20}>
           <WrapperSection row={23} styles={stylesWrapper}>
             <Row justify='space-between' align='middle' className='add-new-driver--header'>
-              <Col span={8}>
+              <Col xs={24} xl={8}>
                 <Title level={4}> Driver's status </Title>
               </Col>
-              <Col span={4}>
+              <Col xs={24} xl={4}><center>
                 <Button
                   type='primary'
                   shape="round"
                   size="large"
                   onClick={() => openDrawer('new-driver', {})}>
                   Create invitation
-                </Button>
+                </Button></center>
               </Col>
             </Row>
             <Tabs defaultActiveKey="1">

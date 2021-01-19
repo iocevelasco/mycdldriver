@@ -60,6 +60,8 @@ const LoadingUser = ({ user, active }) => {
         window.opener.postMessage(params);
         if(user.typeUser == 0){
           window.opener.location.href = "/userProfile";
+        }else if(user.typeUser == 2){
+          window.opener.location.href = "/userProfile/company/staff";
         }else{
           window.opener.location.reload();
         }
