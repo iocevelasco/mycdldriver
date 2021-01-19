@@ -7,7 +7,6 @@ import axios from 'axios';
 const { TextArea } = Input;
 
 const ReportIncident = (props) => {
-  console.log('PROPS', props);
   const [form] = Form.useForm();
   const [isFetching, setIsFetching] = useState(false);
   const [fileList, setFileList] = useState([]);

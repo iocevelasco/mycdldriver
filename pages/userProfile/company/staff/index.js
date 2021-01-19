@@ -208,12 +208,12 @@ const StaffCompanyView = ({ user }) => {
       })
   }
 
-  const openDrawer = (formTypeSelect, user) => {
-    let drawerTitle = formTypeSelect === 'new-driver' ? 'Add new driver' : 'Report incident';
+  const openDrawer = (formSelected, user) => {
+    let drawerTitle = formSelected === 'new-driver' ? 'Add new driver' : 'Report incident';
     dispatch({
       type: types.DRAWER_VISIBLE,
       payload: {
-        formTypeSelect,
+        formSelected,
         drawerTitle,
         user
       }
@@ -224,8 +224,9 @@ const StaffCompanyView = ({ user }) => {
     dispatch({
       type: types.DRAWER_VISIBLE,
       payload: {
-        formTypeSelect: '',
-        drawerTitle: ''
+        formSelected: '',
+        drawerTitle: '',
+        user: {}
       }
     });
   }
@@ -261,7 +262,7 @@ const StaffCompanyView = ({ user }) => {
                   type='primary'
                   shape="round"
                   size="large"
-                  onClick={() => openDrawer('new-driver')}>
+                  onClick={() => openDrawer('new-driver', {})}>
                   Create invitation
                 </Button>
               </Col>

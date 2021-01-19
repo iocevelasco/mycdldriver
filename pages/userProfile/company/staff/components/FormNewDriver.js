@@ -55,7 +55,7 @@ const NewDriverForm = ({ addNewDriver, header, loader, ...props }) => {
                   >
                     {
                       jobsByCompany.map(e => {
-                        return <Option value={e._id}>{e.title}</Option>
+                        return <Option key={e._id} value={e._id}>{e.title}</Option>
                       })
                     }
                   </Select>

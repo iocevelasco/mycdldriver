@@ -5,9 +5,10 @@ const useJobsByCompany = (header, reload, setReload) => {
     const [isFetching, setIsFetching] = useState(true);
     const [jobsByCompany, setOptions] = useState([])
 
-    useEffect(async () => {
+    useEffect(() => {
         setIsFetching(true);
-        await axios
+        async function fetchData() {
+            await axios
             .get('/api/company/jobs/private', header)
             .then((response) => {
                 let options = response.data.data;
@@ -18,6 +19,9 @@ const useJobsByCompany = (header, reload, setReload) => {
                 setOptions([]);
                 console.log(err)
             })
+        }
+        fetchData();
+        
     }, [reload]);
 
     return [jobsByCompany, isFetching];
