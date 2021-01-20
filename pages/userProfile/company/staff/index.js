@@ -255,7 +255,7 @@ const StaffCompanyView = ({ user }) => {
   return (
     <>
       <Row>
-        <Col span={22} className="profile-company__jobs">
+        <Col span={24} className="profile-company__jobs">
           <WrapperSection row={23} styles={stylesWrapper}>
             <Row justify='space-between' align='middle' className='add-new-driver--header'>
               <Col xs={24} xl={8}>

@@ -68,9 +68,7 @@ const JobsDriverView = ({ user, ...props }) => {
   return (
     <>
       <Row>
-        <SideNav
-          currentLocation='1' />
-        <Col span={20}>
+        <Col span={24} className="profile-company__jobs">
           <WrapperSection row={18} styles={stylesWrapper}>
             <Card>
               <List

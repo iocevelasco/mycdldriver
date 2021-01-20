@@ -113,7 +113,7 @@ const FormExperience = ({ experience, ...props }) => {
             onFieldsChange={props.onChangeProps}
           >
             <Row gutter={[42]} >
-              <Col span={10}>
+              <Col xs={24} xl={10}>
                 <Row gutter={[12]} justify="space-between" align="middle">
                   <Col span={24}>
                     <DLNinput />
@@ -161,7 +161,7 @@ const FormExperience = ({ experience, ...props }) => {
                   </Col>
                 </Row>
               </Col>
-              <Col className="driver-experience--form-switch" span={14}>
+              <Col className="driver-experience--form-switch" xs={24} xl={14}>
                 <Row gutter={24} className="selectTitle">
                   {" "}
                   <h4>What kind of experience do you have</h4>

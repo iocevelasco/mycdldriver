@@ -30,8 +30,7 @@ const DriverProfileView = (props) => {
     <>
       <Row display='flex' justify='center'>
         {closeWindow()}
-        <SideNav currentLocation='0' />
-        <Col span={20}>
+        <Col span={24} className="profile-company__jobs">
           <WrapperSection styles={stylesWrapper} row={20} mt={0}>
             <FormUserDriver />
           </WrapperSection>
