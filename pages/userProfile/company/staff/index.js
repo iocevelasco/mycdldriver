@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
 import { Row, Col, List, Space, Avatar, notification, Tabs, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon, Drawer } from 'antd';
-import SideNav from '../../components/SideNavAdmin';
 import { WrapperSection } from 'components/helpers';
 import NewDriverForm from './components/FormNewDriver';
 import { withRouter } from 'next/router';
@@ -10,6 +9,7 @@ import RateDriver from './components/RateDriver';
 import DriverList from './components/DriversList';
 import JobList from './components/JobList';
 import IncidentList from './components/IncidentList';
+import useMobileDetect from 'use-mobile-detect-hook';
 import axios from 'axios';
 import { UserOutlined, CarOutlined, WarningOutlined } from '@ant-design/icons';
 import "./styles.less";
@@ -105,6 +105,7 @@ const reducer = (state, action) => {
 
 const StaffCompanyView = ({ user }) => {
   const [form] = Form.useForm();
+  const detectMobile = useMobileDetect();
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
@@ -254,9 +255,7 @@ const StaffCompanyView = ({ user }) => {
   return (
     <>
       <Row>
-        <SideNav
-          currentLocation='3' />
-        <Col span={20}>
+        <Col span={22} className="profile-company__jobs">
           <WrapperSection row={23} styles={stylesWrapper}>
             <Row justify='space-between' align='middle' className='add-new-driver--header'>
               <Col xs={24} xl={8}>
@@ -322,7 +321,7 @@ const StaffCompanyView = ({ user }) => {
         title={state.drawerTitle}
         placement="right"
         closable={true}
-        width={480}
+        width={detectMobile.isMobile() ? 400 : 480}
         onClose={onCloseDrawer}
         visible={state.drawerVisible}>
         {selectForm(state.formSelected)}

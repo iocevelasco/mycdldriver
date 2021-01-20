@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import axios from 'axios';
 import { WrapperSection } from 'components/helpers';
-import SideNav from '../../components/SideNavAdmin';
 import JobsList from './ListJobs';
 import FormJobs from './FormJobs';
+import useMobileDetect from 'use-mobile-detect-hook';
 import "./styles.less";
-const { Text, Title } = Typography
+const { Text, Title } = Typography;
 const initialState = {
   loading: true,
   loadingJobsList: true,
@@ -74,6 +74,7 @@ const CompanyJobView = (props) => {
   const [image, setImage] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const { user } = props;
+  const detectMobile = useMobileDetect();
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
   };
@@ -187,21 +188,21 @@ const CompanyJobView = (props) => {
   const styleWrapper = {
     paddingTop: 20,
     paddingBottom: 20,
+    paddingLeft: 20
   }
 
   return (
     <>
       <Row>
-        <SideNav currentLocation="1" />
-        <Col span={18} className="profile-company__jobs">
+        <Col span={22} className="profile-company__jobs">
           {/* // CRUM JOBS */}
           <WrapperSection row={24} styles={styleWrapper}>
             <Row justify='space-between' align='middle' className='add-new-driver--header'>
-              <Col span={8}>
+              <Col xs={22} xl={8}>
                 <Title level={3}> Create and edit your position </Title>
                 <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
               </Col>
-              <Col span={4}>
+              <Col xs={22} xl={4}>
                 <Button
                   type='primary'
                   shape="round"
@@ -212,7 +213,6 @@ const CompanyJobView = (props) => {
                 </Button>
               </Col>
             </Row>
-            <Divider />
           </WrapperSection>
           {/* listado de jobs */}
           <WrapperSection row={24} styles={styleWrapper}>
@@ -230,7 +230,7 @@ const CompanyJobView = (props) => {
         title='Create Job'
         placement="right"
         closable={true}
-        width={680}
+        width={detectMobile.isMobile() ? 400 : 680}
         onClose={closeDrawerCreate}
         visible={state.visible_create}>
         {
@@ -246,7 +246,7 @@ const CompanyJobView = (props) => {
         title='Edit Job'
         placement="right"
         closable={true}
-        width={680}
+        width={detectMobile.isMobile() ? 400 : 680}
         onClose={onCloseDrawer}
         visible={state.visible}>
         {
