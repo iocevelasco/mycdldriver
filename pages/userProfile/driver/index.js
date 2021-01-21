@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from 'components/layout';
 import {
   Row,
   Col,
