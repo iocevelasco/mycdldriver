@@ -133,7 +133,7 @@ const reducer = (state, action) => {
   }
 }
 
-const StaffCompanyView = ({ user }) => {
+const StaffCompanyView = ({ user, ...props }) => {
   const [form] = Form.useForm();
   const detectMobile = useMobileDetect();
   const header = {
