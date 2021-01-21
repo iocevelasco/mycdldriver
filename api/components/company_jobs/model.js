@@ -25,7 +25,8 @@ STATUS: {
     0: "Creado, esperando aprobacion o rechazo",
     1: "Aprobado y activo",
     2: "Rechazado, nunca trabajo en la empresa",
-    3: "Desvinculado"
+    3: "Desvinculado del Job",
+    4: "Desvinculado del company"
 }
 */
 const JobsApplysSchema = mongoose.Schema({
