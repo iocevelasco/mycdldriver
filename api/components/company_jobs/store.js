@@ -417,16 +417,13 @@ async function getStaffCompanyJobs(query) {
 }
 
 async function setHistory(id, history){
-    console.log('STORE', {id: id, body: history});
     try{
         const applyJob = await JobsApplysModel.findOne({_id: id});
-        console.log('APPLY JOB', applyJob);
         if(!applyJob.historical){
             applyJob.historical = [];
         }
         applyJob.historical = applyJob.historical.concat(history);
         applyJob.status = 3;
-        console.log('APPLY JOB', applyJob);
         await applyJob.save();
         return {
             status: 200,

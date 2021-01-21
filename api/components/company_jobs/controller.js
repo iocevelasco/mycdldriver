@@ -98,12 +98,11 @@ async function setHistory(id, history){
             message: 'No history Apply Job recived'
         }
     }
-    console.log('CONTROLLER', {id: id, body: history});
+    
     try{
         const result = await store.setHistory(id, history);
         return result;
     }catch(e){
-        console.log(e);
         return {
             status: 500,
             message: 'Unexpected error in controller',
