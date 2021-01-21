@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Avatar, Card, Typography, Divider, Image, Space } from 'antd';
-
-
-import { StarFilled, UserOutlined } from '@ant-design/icons';
+import { Row, Col, Avatar, Card, Typography, Divider, Image, Space, Button, Modal, notification } from 'antd';
+import { StarFilled, UserOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import moment from 'moment';
 const { Title, Text } = Typography;
+const { confirm } = Modal;
 
 function mapStateToProps(state) {
   return {
@@ -15,7 +15,8 @@ function mapStateToProps(state) {
 }
 
 const DriverDetailProps = (props) => {
-  console.log(props)
+  console.log(props);
+  const {isDeletable} = props;
   const [loading, setLoadin] = useState(true);
   const [detail, setDetail] = useState({
     email: '',
@@ -52,6 +53,40 @@ const DriverDetailProps = (props) => {
       {content}
     </div>
   );
+
+  function showConfirm(id) {
+    confirm({
+      title: 'Do you Want to unlink these driver?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'This action can not be undone',
+      onOk() {
+        unlinkDriver(id);
+      },
+      onCancel() {
+      },
+    });
+  }
+
+  const unlinkDriver = async (id) => {
+    console.log('HEADER', props.header);
+    await axios.patch('/api/company/jobs/unlink/' + id, {}, props.header)
+      .then((response) => {
+        notification['success']({
+          message: 'Success',
+          description:
+            "Congratulation! Driver successfully disengaged"
+        });
+        props.fetchStaffList();
+      })
+      .catch((err) => {
+        console.log(err);
+        notification['error']({
+          message: 'Error',
+          description:
+            "An error occurred unlinking the driver, please try again"
+        });
+      })
+  }
 
   const resoltSexType = (props) => {
     let sexType
@@ -136,6 +171,20 @@ const DriverDetailProps = (props) => {
           </Row>
         })}
       </>
+      }
+      {isDeletable &&
+      <Row>
+        <Col span={24} style={{textAlign:"center"}}>
+          <Button
+            icon={<DeleteOutlined />}
+            shape="round"
+            size="large"
+            type='primary'
+            onClick={() => showConfirm(detail.id)}>
+            Unlink Driver
+          </Button>
+        </Col>
+      </Row>
       }
     </>
   )

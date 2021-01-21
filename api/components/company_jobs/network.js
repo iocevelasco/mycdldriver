@@ -196,4 +196,15 @@ router.patch('/history/:id', auth(2), function (req, res){
         });
 });
 
+router.patch('/unlink/:id', auth(2), function (req, res){
+    controller.unlinkDriver(req.params.id, req.user.company._id)
+        .then((data) => {
+            response.success(req, res, data.message, data.status);
+        })
+        .catch(e => {
+            console.log(e);
+            response.error(req, res, e.message, e.status);
+        });
+});
+
 module.exports = router;

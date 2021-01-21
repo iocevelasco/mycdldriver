@@ -111,6 +111,26 @@ async function setHistory(id, history){
     }
 }
 
+async function unlinkDriver(driver, company){
+    if(!driver){
+        return {
+            status: 400,
+            message: 'No driver recived'
+        }
+    }
+    
+    try{
+        const result = await store.unlinkDriver(driver, company);
+        return result;
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error in controller',
+            detail: e
+        }
+    }
+}
+
 function getCustomList() {
     return new Promise((resolve, reject) => {
         resolve(store.getCustomList());
@@ -324,5 +344,6 @@ module.exports = {
     setStatus,
     setRating,
     getCompanyStaffApply,
-    setHistory
+    setHistory,
+    unlinkDriver
 }
