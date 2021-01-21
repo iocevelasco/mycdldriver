@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import MainLayout from 'components/layout';
 import { Row, Col } from 'antd';
 import { WrapperSection, WrapperDashboard, BuildSection } from 'components/helpers';
 import { withRouter } from 'next/router';
