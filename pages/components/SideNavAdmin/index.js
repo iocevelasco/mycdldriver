@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, Col, Button, Tooltip } from 'antd';
+import { Menu, Col, Button, Tooltip, Row } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import propTypes from 'prop-types';
@@ -32,7 +32,7 @@ function mapDispatchToProps(dispatch) {
 };
 
 
-const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser }) => {
+const SideNavAdmin = ({ user, section, isUserSuccess, router, logoutUser }) => {
   const [menuOptions, setOptions] = useState([]);
   const { typeUser } = user;
 
@@ -87,7 +87,7 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser
     <Col span={1} style={{ borderRight: '1px solid #f0f0f0' }}>
       <Menu
         style={{ width: '100%', borderRight: 'none' }}
-        defaultSelectedKeys={[currentLocation]}
+        defaultSelectedKeys={[section]}
         mode='vertical'
         theme='light'>
         {
@@ -104,38 +104,35 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser
           })
         }
       </Menu>
-      {
-        !isUserSuccess ? <Link href="/userProfile">
-          <Button
-            shape="round"
-            size="large"
-            icon={<LeftOutlined />}
-            type='primary'
-            style={{
-              marginTop: 16,
-              width: '90%',
-              marginLeft: 12,
-            }}
-          > Go Back </Button>
-        </Link> : null
-      }
-      <Tooltip placement="right" title={'Logout'}>
-        <Button
-          shape="round"
-          size="large"
-          onClick={() => {
-            router.push('/logout')
-            logoutUser(router);
-            window.localStorage.removeItem('token');
-          }}
-          icon={<LogoutOutlined />}
-          type='link'
-          style={{
-            width: '90%',
-            paddingLeft: 16
-          }}
-        />
-      </Tooltip>
+      <Row style={{ paddingTop: 16 }} justify='center' gutter={[16, 16]}>
+        <Col span={16}>
+          {
+            !isUserSuccess ? <Link href="/userProfile">
+              <Tooltip placement="right" title={'Go back'}>
+                <Button
+                  icon={<LeftOutlined />}
+                  type="primary"
+                  shape="circle"
+                  size='large' />
+              </Tooltip>
+            </Link> : null
+          }
+        </Col>
+        <Col span={16}>
+          <Tooltip placement="right" title={'Logout'}>
+            <Button
+              type="primary"
+              shape="circle"
+              size='large'
+              onClick={() => {
+                router.push('/logout')
+                logoutUser(router);
+                window.localStorage.removeItem('token');
+              }}
+              icon={<LogoutOutlined />} />
+          </Tooltip>
+        </Col>
+      </Row>
     </Col>
   )
 }

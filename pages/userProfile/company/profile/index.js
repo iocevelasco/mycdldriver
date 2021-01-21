@@ -6,7 +6,7 @@ import FormUserCompany from './FormUserCompany';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { updateUserCompany } from '@store/reducers/user_reducer';
-import { WrapperDashboard } from 'components/helpers';
+import { WrapperDashboard, WrapperSection } from 'components/helpers';
 
 function mapStateToProps(state) {
   const { user } = state;
@@ -202,11 +202,11 @@ const CompanyProfileView = ({ user, ...props }) => {
 
 
   return (
-    <>
+    <WrapperDashboard section={1} >
       <Row display='flex' justify='center'>
         {closeWindow()}
         <Col span={24}>
-          <WrapperDashboard row={24} >
+          <WrapperSection row={24} >
             <FormUserCompany
               newImage={newImage}
               setNewImage={setNewImage}
@@ -219,10 +219,10 @@ const CompanyProfileView = ({ user, ...props }) => {
               fields={fields}
               configPsw={configPsw}
             />
-          </WrapperDashboard>
+          </WrapperSection>
         </Col>
       </Row>
-    </>
+    </WrapperDashboard>
   )
 };
 

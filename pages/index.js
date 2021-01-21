@@ -157,11 +157,11 @@ const Home = ({
           <RankingComp rankingDriver={state.ranking} />
         </Row>
       </WrapperSection>
-      {/* <div className='delete-user' style={{ display: 'block' }}>
+      <div className='delete-user' style={{ display: 'block' }}>
         <Tooltip title=" Borrar usuario">
           <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined />} />
         </Tooltip>
-      </div> */}
+      </div>
     </>
   )
 }

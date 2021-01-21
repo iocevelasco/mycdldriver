@@ -13,7 +13,7 @@ import {
   Image,
   Space
 } from 'antd';
-import { Wrapperdashboard } from 'components/helpers';
+import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import useMobileDetect from 'use-mobile-detect-hook';
 import { StarFilled } from '@ant-design/icons';
 import { withRouter } from 'next/router';
@@ -193,7 +193,7 @@ const CandidateView = ({ user, ...props }) => {
   }
 
   return (
-    <>
+    <WrapperDashboard section={3} >
       <Row>
         <Col span={22} className="profile-company__jobs">
           <WrapperSection row={24} styles={{ paddingTop: 20, paddingBottom: 20 }}>
@@ -361,7 +361,7 @@ const CandidateView = ({ user, ...props }) => {
           </WrapperSection>
         </Col>
       </Row>
-    </>
+    </WrapperDashboard>
   )
 };
 

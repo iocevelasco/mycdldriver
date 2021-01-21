@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, notification, message } from "antd";
 import FormExperience from "./FormExperience";
-import { WrapperSection } from "components/helpers";
+import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import { connect } from "react-redux";
 import moment from "moment";
 import axios from "axios";
@@ -89,19 +89,21 @@ const DriverExperience = ({ header, token, user, ...props }) => {
   };
 
   return (
-    <Row display="flex" justify="center">
-      <Col span={24} className="profile-company__jobs">
-        <WrapperSection styles={stylesWrapper} row={22} mt={0}>
-          <FormExperience
-            fields={fields}
-            loading={false}
-            onSubmitExperience={onSubmitExperience}
-            token={token}
-            user={user}
-          />
-        </WrapperSection>
-      </Col>
-    </Row>
+    <WrapperDashboard section={2}>
+      <Row display="flex" justify="center">
+        <Col span={24} className="profile-company__jobs">
+          <WrapperSection styles={stylesWrapper} row={22} mt={0}>
+            <FormExperience
+              fields={fields}
+              loading={false}
+              onSubmitExperience={onSubmitExperience}
+              token={token}
+              user={user}
+            />
+          </WrapperSection>
+        </Col>
+      </Row>
+    </WrapperDashboard>
   );
 };
 

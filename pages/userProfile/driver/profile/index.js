@@ -1,12 +1,29 @@
-import React from 'react';
-import {
-  Row,
-  Col,
-} from 'antd';
+import React, { useEffect } from 'react';
+import { Row, Col } from 'antd';
+import { connect } from 'react-redux';
+import { withRouter } from 'next/router';
 import FormUserDriver from 'components/FormUserDriver';
-import { WrapperDashboard } from 'components/helpers';
+import { WrapperDashboard, WrapperSection } from 'components/helpers';
+import { activeLoading } from '@store/reducers/landing_reducer';
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    activeLoading: (e) => dispatch(activeLoading(e)),
+  }
+}
 
 const DriverProfileView = (props) => {
+
+  useEffect(() => {
+    props.activeLoading(false)
+  }, [])
+
   const stylesWrapper = {
     background: `url('/static/images/bg-routes.jpg')`,
     paddingTop: 24,
@@ -26,17 +43,19 @@ const DriverProfileView = (props) => {
   }
 
   return (
-    <>
+    <WrapperDashboard section={0}>
       <Row display='flex' justify='center'>
         {closeWindow()}
         <Col span={24} className="profile-company__jobs">
-          <WrapperDashboard styles={stylesWrapper} row={20} mt={0}>
+          <WrapperSection styles={stylesWrapper} row={20} mt={0}>
             <FormUserDriver />
-          </WrapperDashboard>
+          </WrapperSection>
         </Col>
       </Row>
-    </>
+    </WrapperDashboard>
   )
 };
 
-export default DriverProfileView;
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)
+    (DriverProfileView));

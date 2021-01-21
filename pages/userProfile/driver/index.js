@@ -4,7 +4,7 @@ import {
   Row,
   Col,
 } from 'antd';
-import { WrapperSection, BuildSection } from 'components/helpers';
+import { WrapperSection, WrapperDashboard, BuildSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 
@@ -55,17 +55,9 @@ const ServiceDriverView = ({ user, ...props }) => {
   }
 
   return (
-    <MainLayout title='Team' user={user} loading={state.loading}>
-      <Row>
-        <SideNav
-          currentLocation='0' />
-        <Col span={20}>
-          <WrapperSection style={stylesWrapper} row={24}>
-            <BuildSection />
-          </WrapperSection>
-        </Col>
-      </Row>
-    </MainLayout>
+    <WrapperSection style={stylesWrapper} row={24}>
+      <BuildSection />
+    </WrapperSection>
   )
 };
 

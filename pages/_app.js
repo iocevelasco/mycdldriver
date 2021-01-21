@@ -1,6 +1,6 @@
 import React from "react";
 import App, { Container as NextContainer } from "next/app";
-import MainLayout from 'components/layout'
+import MainLayout from 'components/Layout'
 import withReduxStore from '../lib/with-redux-store';
 import Head from 'next/head'
 import { Provider } from 'react-redux';

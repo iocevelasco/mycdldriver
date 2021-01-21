@@ -19,11 +19,11 @@ const WrapperSection = ({ children, xs, row, styles }) => {
   )
 }
 
-const WrapperDashboard = ({ children, xs, row }) => {
+const WrapperDashboard = ({ children, section }) => {
   return (
     <Row justify='start' style={{ minHeight: '90vh' }}>
-      <SideNav />
-      <Col xs={xs} lg={row} md={row}>
+      <SideNav page={section} />
+      <Col xs={23} lg={23} md={23}>
         <div style={{ padding: 40 }}>
           {children}
         </div>

@@ -1,14 +1,8 @@
 import React from 'react';
 import { useEffect } from 'react';
-import MainLayout from '../';
-import { Wrapperdashboard } from 'components/helpers';
-
-import {
-  Row,
-  Col,
-  Typography,
-  Card
-} from 'antd';
+import { activeLoading } from '@store/reducers/landing_reducer';
+import { WrapperSection } from 'components/helpers';
+import { Typography, Card } from 'antd';
 import Link from 'next/link';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
@@ -21,10 +15,16 @@ function mapStateToProps(state) {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    activeLoading: (e) => dispatch(activeLoading(e)),
+  }
+}
 
 const UserProfile = ({ user, ...props }) => {
 
   useEffect(() => {
+    props.activeLoading(false)
     switch (user.typeUser) {
       case 1:
         props.router.push('/userProfile/driver/profile');
@@ -45,37 +45,37 @@ const UserProfile = ({ user, ...props }) => {
   }
 
   return (
-    <>
-      <WrapperSection styles={stylesWrapper}>
-        <div className="profile-driver__route">
-          <div className="title">
-            <Title level={4}>  Let's do this!  </Title>
-            <Title level={3}>Are you a driver or a company?</Title>
-          </div>
-          <div className="card-container">
-            <Link href="/userProfile/driver/profile">
-              <a>
-                <Card
-                  hoverable={true}>
-                  <img src='/static/images/driver.svg' />
-                  <Text > Drivers </Text>
-                </Card>
-              </a>
-            </Link>
-            <Link href="/userProfile/company/profile">
-              <a>
-                <Card
-                  hoverable={true}>
-                  <img src='/static/images/truck.svg' />
-                  <Text > Company </Text>
-                </Card>
-              </a>
-            </Link>
-          </div>
+    <WrapperSection styles={stylesWrapper}>
+      <div className="profile-driver__route">
+        <div className="title">
+          <Title level={4}>  Let's do this!  </Title>
+          <Title level={3}>Are you a driver or a company?</Title>
         </div>
-      </WrapperSection>
-    </>
+        <div className="card-container">
+          <Link href="/userProfile/driver/profile">
+            <a>
+              <Card
+                hoverable={true}>
+                <img src='/static/images/driver.svg' />
+                <Text > Drivers </Text>
+              </Card>
+            </a>
+          </Link>
+          <Link href="/userProfile/company/profile">
+            <a>
+              <Card
+                hoverable={true}>
+                <img src='/static/images/truck.svg' />
+                <Text > Company </Text>
+              </Card>
+            </a>
+          </Link>
+        </div>
+      </div>
+    </WrapperSection>
   )
 };
 
-export default withRouter(connect(mapStateToProps)(UserProfile));
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)
+    (UserProfile));

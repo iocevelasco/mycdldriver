@@ -14,6 +14,7 @@ import { Layout, Row, Col, Button, Avatar, Typography, Space } from 'antd';
 import { UserOutlined, MenuFoldOutlined } from '@ant-design/icons';
 
 import '@styles/index.less';
+import './styles.less';
 
 const { Text } = Typography;
 const { Content, Header } = Layout;
@@ -76,6 +77,7 @@ const MainLayout = ({
             background: `#fff`,
             backgroundSize: 'contain',
         }
+    console.log('isLoading', isLoading)
     return (<>
         <Head>
             <title> My CDL Driver </title>
@@ -116,13 +118,6 @@ const MainLayout = ({
                         <Link href="/">
                             <a >
                                 <img src='/static/images/logo.svg' />
-                            </a>
-                        </Link>
-                    </Col>
-                    <Col span={10}>
-                        <Link href="/">
-                            <a >
-                                Home
                             </a>
                         </Link>
                     </Col>
