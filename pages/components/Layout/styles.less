@@ -1,4 +1,29 @@
-@import '../settings/media-query.less';
+@wide-screen-down: ~'(max-width: 1199px)';
+@desktop-down: ~'(max-width: 991px)';
+@tablet-down: ~'(max-width: 767px)';
+@phone-down: ~'(max-width: 480px)';
+@small-phone-down: ~'(max-width: 320px)';
+
+.header-component{
+  background:white;
+  border-bottom: 1px solid rgb(240, 240, 240);
+  img{
+    height: 50px;
+  }
+  @media @small-phone-down {    
+    padding: 0 8px;
+    img{
+      height: 40px;
+    }
+  }
+  @media @phone-down {    
+    padding: 0 8px;
+    img{
+      height: 40px;
+    }
+  }
+}
+
 
 .footer-component{
   background:@primary-color;

@@ -1,14 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
 import MainLayout from 'components/layout';
-import {
-  Row,
-  Col,
-} from 'antd';
-import SideNav from '../components/SideNavAdmin';
-import { WrapperSection, BuildSection } from 'components/helpers';
+import { Row, Col } from 'antd';
+import { WrapperSection, WrapperDashboard, BuildSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
-
+import { activeLoading } from '@store/reducers/landing_reducer';
 const initialState = {
   loading: false,
 }
@@ -32,6 +28,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    activeLoading: (e) => dispatch(activeLoading(e)),
     handlerUserProps: data => {
       dispatch({ type: 'USER_DATA', payload: data });
     },
@@ -56,15 +53,13 @@ const ServiceCompanyView = ({ user, ...props }) => {
   }
 
   return (
-    <Row display='flex' justify='center'>
-      <SideNav
-        currentLocation='0' />
+    <WrapperDashboard>
       <Col span={props.userCreated ? 24 : 20}>
         <WrapperSection style={stylesWrapper} row={24}>
           <BuildSection />
         </WrapperSection>
       </Col>
-    </Row>
+    </WrapperDashboard>
   )
 };
 

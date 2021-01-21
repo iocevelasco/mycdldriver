@@ -3,11 +3,10 @@ import { Row, Col, notification, message } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import FormUserCompany from './FormUserCompany';
-import SideNav from '../../components/SideNavAdmin';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { updateUserCompany } from '@store/reducers/user_reducer';
-import { WrapperSection } from 'components/helpers';
+import { WrapperDashboard, WrapperSection } from 'components/helpers';
 
 function mapStateToProps(state) {
   const { user } = state;
@@ -203,11 +202,11 @@ const CompanyProfileView = ({ user, ...props }) => {
 
 
   return (
-    <>
+    <WrapperDashboard section={1} >
       <Row display='flex' justify='center'>
         {closeWindow()}
         <Col span={24}>
-          <WrapperSection row={24} styles={styleWrapper}>
+          <WrapperSection row={24} >
             <FormUserCompany
               newImage={newImage}
               setNewImage={setNewImage}
@@ -223,7 +222,7 @@ const CompanyProfileView = ({ user, ...props }) => {
           </WrapperSection>
         </Col>
       </Row>
-    </>
+    </WrapperDashboard>
   )
 };
 

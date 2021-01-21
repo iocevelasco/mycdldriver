@@ -19,7 +19,8 @@ function mapStateToProps(state) {
     user: user,
     photoProfile: user.photo || '',
     token: user.token || null,
-    isUserRegistry: state.user._id || null,
+    isUserRegistry: user._id || null,
+    isUserSuccess: user.typeUser
   }
 }
 

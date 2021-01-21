@@ -1,9 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
-import { Row, Col, List, Space, Avatar, notification, Tabs, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon, Drawer } from 'antd';
-import { WrapperSection } from 'components/helpers';
+import { Row, Col, notification, Tabs, Form, Typography, Button, Input, Drawer } from 'antd';
+import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import NewDriverForm from './components/FormNewDriver';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
+import { activeLoading } from '@store/reducers/landing_reducer';
 import ReportIncident from './components/ReportIncident';
 import RateDriver from './components/RateDriver';
 import UnlinkDriver from './components/unlinkDriverJob';
@@ -59,6 +60,12 @@ const types = {
 function mapStateToProps(state) {
   return {
     user: state.user,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    activeLoading: (e) => dispatch(activeLoading(e)),
   }
 }
 
@@ -135,6 +142,7 @@ const StaffCompanyView = ({ user }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    props.activeLoading(false)
     fetchStaffList();
   }, []);
 
@@ -314,13 +322,13 @@ const StaffCompanyView = ({ user }) => {
         header={header}
         user={state.userSelected}
         job={state.jobSelected}
-        closeDrawer= {onCloseDrawer}
+        closeDrawer={onCloseDrawer}
       />
     return formSelected;
   }
 
   return (
-    <>
+    <WrapperDashboard section={0}>
       <Row>
         <Col span={24} className="profile-company__jobs">
           <WrapperSection row={23} styles={stylesWrapper}>
@@ -349,7 +357,7 @@ const StaffCompanyView = ({ user }) => {
                   staffList={state.staffList}
                   loading={state.loading}
                   header={header}
-                  fetchStaffList = {fetchStaffList}
+                  fetchStaffList={fetchStaffList}
                 />
               </TabPane>
               <TabPane tab={
@@ -373,7 +381,7 @@ const StaffCompanyView = ({ user }) => {
               } key="3">
                 <IncidentList
                   header={header}
-                  fetchStaffList = {fetchStaffList}
+                  fetchStaffList={fetchStaffList}
                   staffList={state.staffList}
                   loading={state.loading} />
               </TabPane>
@@ -402,8 +410,10 @@ const StaffCompanyView = ({ user }) => {
         visible={state.drawerVisible}>
         {selectForm(state.formSelected)}
       </Drawer>
-    </>
+    </WrapperDashboard>
   )
 };
 
-export default withRouter(connect(mapStateToProps)(StaffCompanyView));
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)
+    (StaffCompanyView));
