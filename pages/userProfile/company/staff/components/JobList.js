@@ -1,9 +1,30 @@
+import React, { useState, useEffect } from 'react';
 import { Row, Col, List, Table, Avatar, Button, Typography } from 'antd';
 import { DeleteOutlined, WarningOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
 const JobsList = ({ staffList, ...props }) => {
+  const [jobList, setJobList] = useState([]);
+
+  useEffect(() => {
+    let list = [];
+    staffList.forEach(e => {
+      let item = [];
+      e.jobs.forEach(j => {
+        if(j.status == 1){
+          item.push(j);
+        }
+      });
+      if(item.length > 0){
+        e.jobs = item;
+        list.push(e);
+      }
+    });
+
+    setJobList(list)
+  }, [staffList]);
+
   const styles = {
     listJObs: {
       display: 'flex',
@@ -30,7 +51,7 @@ const JobsList = ({ staffList, ...props }) => {
   return (
     <Table
       rowKey='id'
-      dataSource={staffList}
+      dataSource={jobList}
       loading={props.loading}
       columns={columns}
       expandable={{

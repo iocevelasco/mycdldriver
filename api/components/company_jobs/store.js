@@ -290,7 +290,7 @@ async function getStaffCompanyJobs(query) {
     if (id) {
         filter = {
             company: id,
-            $or: [{ status: 1 }, { status: 2 }]
+            $or: [{ status: 1 }, { status: 3 }]
         };
     }else{
         return {
@@ -358,7 +358,7 @@ async function getStaffCompanyJobs(query) {
             const filterJob = {
                 driver: response,
                 company: id,
-                $or: [{ status: 1 }, { status: 2 }]
+                $or: [{ status: 1 }, { status: 3 }]
             };
             const condition = {
                 driver: userDriver._id,

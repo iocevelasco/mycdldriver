@@ -7,9 +7,7 @@ const { Title } = Typography;
 const { confirm } = Modal;
 
 const ListIncident = ({ staffList, ...props }) => {
-  const [incidentList, setIncident] = useState([])
-
-  console.log('staffList', staffList);
+  const [incidentList, setIncident] = useState([]);
 
   useEffect(() => {
     let list = []

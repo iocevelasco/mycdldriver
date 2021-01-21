@@ -1,7 +1,27 @@
+import React, { useState, useEffect } from 'react';
 import DriverDetailProps from 'components/DriverDetail';
 import { Progress, Table, Space } from 'antd';
 import { StarFilled } from '@ant-design/icons';
+
 const DriverList = (props) => {
+  const [driverList, setDriverList] = useState([]);
+
+  useEffect(() => {
+    let list = [];
+    props.staffList.forEach(e => {
+      e.status = 'Inactive';
+      e.jobs.forEach(j => {
+        if(j.status == 1){
+          e.status = 'Active';
+        }
+      });
+        
+      list.push(e);
+    });
+
+    setDriverList(list)
+  }, [props.staffList]);
+
   const columns = [
     {
       dataIndex: 'name',
@@ -48,7 +68,7 @@ const DriverList = (props) => {
   ];
   return <Table
     rowKey='id'
-    dataSource={props.staffList}
+    dataSource={driverList}
     loading={props.loading}
     columns={columns}
     expandable={{
