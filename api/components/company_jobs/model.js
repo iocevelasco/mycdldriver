@@ -9,6 +9,25 @@ const tagSchema = mongoose.Schema({
     }
 });
 
+const historicalSchema = mongoose.Schema({
+    description: {
+        type: String,
+        trim: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    }
+}); 
+
+/*
+STATUS: {
+    0: "Creado, esperando aprobacion o rechazo",
+    1: "Aprobado y activo",
+    2: "Rechazado, nunca trabajo en la empresa",
+    3: "Desvinculado"
+}
+*/
 const JobsApplysSchema = mongoose.Schema({
     company: {
         type: Schema.ObjectId,
@@ -37,6 +56,16 @@ const JobsApplysSchema = mongoose.Schema({
         type: String,
         trim: true
     },
+    historical: [{
+        description: {
+            type: String,
+            trim: true
+        },
+        date: {
+            type: Date,
+            default: Date.now
+        }
+    }],
     date: {
         type: Date,
         default: Date.now

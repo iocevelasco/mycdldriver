@@ -1,5 +1,5 @@
 import { Row, Col, List, Table, Avatar, Button, Typography } from 'antd';
-import { StarFilled, WarningOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, WarningOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -44,24 +44,32 @@ const JobsList = ({ staffList, ...props }) => {
               return <List.Item
                 key={item._d}
                 actions={[<Row>
-                  <Col xs={24} xl={12}>
+                  <Col xs={24} xl={24} style={{paddingBottom: 20}}>
                     <Button
                       icon={<CheckCircleOutlined />}
                       shape="round"
-                      size="large"
+                      size="middle"
                       type='primary'
                       onClick={() => props.showRate(item, record)}>
                       Rate this driver
-                      </Button>
-                    </Col>
-                    <Col xs={24} xl={12}>
-                      <Button
-                        icon={<WarningOutlined />}
-                        type='link'
-                        onClick={() => props.openDrawer('create-incident', record, item)}>
-                        Report incident
-                      </Button>
-                    </Col>
+                    </Button>
+                  </Col>
+                  <Col xs={24} xl={12}>
+                    <Button
+                      icon={<DeleteOutlined />}
+                      type='link'
+                      onClick={() => props.showUnlink(item, record)}>
+                      Unlink
+                    </Button>
+                  </Col>
+                  <Col xs={24} xl={12}>
+                    <Button
+                      icon={<WarningOutlined />}
+                      type='link'
+                      onClick={() => props.openDrawer('create-incident', record, item)}>
+                      Report incident
+                    </Button>
+                  </Col>
                 </Row>
                 ]}>
                 <div style={{ width: '100%' }}>

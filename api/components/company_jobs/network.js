@@ -185,4 +185,16 @@ router.delete('/:id', auth(2), function (req, res) {
         });
 });
 
+router.patch('/history/:id', auth(2), function (req, res){
+    console.log('NETWORK', {id: req.params.id, body: req.body});
+    controller.setHistory(req.params.id, req.body)
+        .then((data) => {
+            response.success(req, res, data.message, data.status);
+        })
+        .catch(e => {
+            console.log(e);
+            response.error(req, res, e.message, e.status);
+        });
+});
+
 module.exports = router;

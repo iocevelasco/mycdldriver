@@ -6,6 +6,7 @@ import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import ReportIncident from './components/ReportIncident';
 import RateDriver from './components/RateDriver';
+import UnlinkDriver from './components/unlinkDriverJob';
 import DriverList from './components/DriversList';
 import JobList from './components/JobList';
 import IncidentList from './components/IncidentList';
@@ -20,6 +21,7 @@ const { TextArea } = Input;
 const initialState = {
   loading: true,
   modalVisible: false,
+  modalUnlinkVisible: false,
   loadingModal: false,
   drawerVisible: false,
   formSelected: 'new-driver',
@@ -38,13 +40,19 @@ const initialState = {
     fullname: '',
     photo: ''
   },
+  modalUnlinkProps: {
+    jobTitle: '',
+    fullname: ''
+  },
 }
 const types = {
   STAFF_DATA: 'staff_data',
   ACTIVE_LOADING: 'active_loading',
   SHOW_MODAL: 'show_modal',
+  SHOW_MODAL_UNLINK: 'show_modal_unlink',
   SET_RANKING: 'set_ranking',
   CLOSE_MODAL: 'close_modal',
+  CLOSE_MODAL_UNLINK: 'close_modal_unlink',
   DRAWER_VISIBLE: 'drawer_visible'
 }
 
@@ -67,6 +75,12 @@ const reducer = (state, action) => {
         modalVisible: true,
         modalProps: action.payload,
       }
+    case types.SHOW_MODAL_UNLINK:
+      return {
+        ...state,
+        modalUnlinkVisible: true,
+        modalUnlinkProps: action.payload,
+      }
     case types.CLOSE_MODAL:
       return {
         ...state,
@@ -75,6 +89,15 @@ const reducer = (state, action) => {
           jobTitle: '',
           fullname: '',
           photo: ''
+        },
+      }
+    case types.CLOSE_MODAL_UNLINK:
+      return {
+        ...state,
+        modalUnlinkVisible: false,
+        modalUnlinkProps: {
+          jobTitle: '',
+          fullname: ''
         },
       }
     case types.STAFF_DATA:
@@ -184,8 +207,25 @@ const StaffCompanyView = ({ user }) => {
     dispatch({ type: types.SHOW_MODAL, payload: modalProps })
   };
 
+  const showUnlink = (job, user) => {
+
+    const { title, apply } = job;
+    const { name, lastname } = user;
+
+    const modalProps = {
+      title,
+      _id: apply._id,
+      fullname: `${name} ${lastname}`,
+    }
+    dispatch({ type: types.SHOW_MODAL_UNLINK, payload: modalProps })
+  };
+
   const handleCancel = () => {
     dispatch({ type: types.CLOSE_MODAL })
+  };
+
+  const handleUnlinkCancel = () => {
+    dispatch({ type: types.CLOSE_MODAL_UNLINK })
   };
 
   const updateDriverRanking = async (fiels) => {
@@ -208,6 +248,33 @@ const StaffCompanyView = ({ user }) => {
       })
       .catch((err) => {
         console.log(err)
+      })
+  }
+
+  const unlinkDriver = async (fields) => {
+    const { description } = fields;
+    const { modalUnlinkProps } = state;
+    const data = {
+      description: description
+    };
+
+    await axios.patch(`/api/company/jobs/history/${modalUnlinkProps._id}`, data, header)
+      .then((response) => {
+        fetchStaffList();
+        dispatch({ type: types.CLOSE_MODAL_UNLINK })
+        notification['success']({
+          message: 'Success',
+          description:
+            "Congratulation! the driver has been successfully unlinked"
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        notification['error']({
+          message: 'Error',
+          description:
+            "An error occurred while unlinking the driver, please try again"
+        });
       })
   }
 
@@ -293,6 +360,7 @@ const StaffCompanyView = ({ user }) => {
                   staffList={state.staffList}
                   loading={state.loading}
                   showRate={showRate}
+                  showUnlink={showUnlink}
                   openDrawer={openDrawer} />
               </TabPane>
               <TabPane tab={
@@ -316,6 +384,12 @@ const StaffCompanyView = ({ user }) => {
         modalProps={state.modalProps}
         handleCancel={handleCancel}
         onFinish={updateDriverRanking}
+      />
+      <UnlinkDriver
+        visible={state.modalUnlinkVisible}
+        modalProps={state.modalUnlinkProps}
+        handleCancel={handleUnlinkCancel}
+        onFinish={unlinkDriver}
       />
       <Drawer
         title={state.drawerTitle}
