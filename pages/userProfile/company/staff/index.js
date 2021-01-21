@@ -348,6 +348,8 @@ const StaffCompanyView = ({ user }) => {
                 <DriverList
                   staffList={state.staffList}
                   loading={state.loading}
+                  header={header}
+                  fetchStaffList = {fetchStaffList}
                 />
               </TabPane>
               <TabPane tab={

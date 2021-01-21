@@ -430,7 +430,26 @@ async function setHistory(id, history){
             message: "Created"
         }
     }catch(e){
-        console.log('STORE CATCH ERROR', e);
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
+}
+
+async function unlinkDriver(driver, company){
+    try{
+        const applyJob = await JobsApplysModel.find({driver: driver, company:company});
+        applyJob.forEach(e => {
+            e.status = 4;
+            e.save();
+        });
+        return {
+            status: 200,
+            message: "Unlinked"
+        }
+    }catch(e){
         return {
             status: 500,
             message: 'Unexpected error',
@@ -620,5 +639,6 @@ module.exports = {
     setStatus,
     setRanking,
     getStaffCompanyJobs,
-    setHistory
+    setHistory,
+    unlinkDriver
 }

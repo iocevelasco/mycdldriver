@@ -73,7 +73,11 @@ const DriverList = (props) => {
     columns={columns}
     expandable={{
       expandedRowRender: driver => {
-        return <DriverDetailProps driverDetail={driver} />
+        return <DriverDetailProps 
+        driverDetail={driver} 
+        isDeletable={true}
+        header={props.header}
+        fetchStaffList = {props.fetchStaffList} />
       }
     }}
   />
