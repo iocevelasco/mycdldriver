@@ -85,6 +85,32 @@ function getCompanyStaffApply(filter) {
     });
 }
 
+async function setHistory(id, history){
+    if(!id){
+        return {
+            status: 400,
+            message: 'No Id Apply Job recived'
+        }
+    }
+    if(!history){
+        return {
+            status: 400,
+            message: 'No history Apply Job recived'
+        }
+    }
+    
+    try{
+        const result = await store.setHistory(id, history);
+        return result;
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error in controller',
+            detail: e
+        }
+    }
+}
+
 function getCustomList() {
     return new Promise((resolve, reject) => {
         resolve(store.getCustomList());
@@ -297,5 +323,6 @@ module.exports = {
     getCompanyJobsApply,
     setStatus,
     setRating,
-    getCompanyStaffApply
+    getCompanyStaffApply,
+    setHistory
 }

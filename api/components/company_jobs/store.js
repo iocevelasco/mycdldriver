@@ -290,7 +290,7 @@ async function getStaffCompanyJobs(query) {
     if (id) {
         filter = {
             company: id,
-            status: 1
+            $or: [{ status: 1 }, { status: 3 }]
         };
     }else{
         return {
@@ -358,7 +358,7 @@ async function getStaffCompanyJobs(query) {
             const filterJob = {
                 driver: response,
                 company: id,
-                status: 1
+                $or: [{ status: 1 }, { status: 3 }]
             };
             const condition = {
                 driver: userDriver._id,
@@ -373,6 +373,8 @@ async function getStaffCompanyJobs(query) {
                         _id: resp.job._id,
                         tags: resp.job.tags,
                         title: resp.job.title,
+                        status: resp.status,
+                        historical: resp.historical,
                         description: resp.job.description,
                         areaCode: resp.job.areaCode,
                         phoneNumber: resp.job.phoneNumber,
@@ -406,6 +408,29 @@ async function getStaffCompanyJobs(query) {
             }
         }
     }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
+}
+
+async function setHistory(id, history){
+    try{
+        const applyJob = await JobsApplysModel.findOne({_id: id});
+        if(!applyJob.historical){
+            applyJob.historical = [];
+        }
+        applyJob.historical = applyJob.historical.concat(history);
+        applyJob.status = 3;
+        await applyJob.save();
+        return {
+            status: 200,
+            message: "Created"
+        }
+    }catch(e){
+        console.log('STORE CATCH ERROR', e);
         return {
             status: 500,
             message: 'Unexpected error',
@@ -594,5 +619,6 @@ module.exports = {
     getApplyCompanyJobs,
     setStatus,
     setRanking,
-    getStaffCompanyJobs
+    getStaffCompanyJobs,
+    setHistory
 }

@@ -206,8 +206,7 @@ const CompanyProfileView = ({ user, ...props }) => {
     <>
       <Row display='flex' justify='center'>
         {closeWindow()}
-        <SideNav currentLocation='0' />
-        <Col span={20}>
+        <Col span={24}>
           <WrapperSection row={24} styles={styleWrapper}>
             <FormUserCompany
               newImage={newImage}

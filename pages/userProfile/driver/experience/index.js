@@ -91,8 +91,7 @@ const DriverExperience = ({ header, token, user, ...props }) => {
 
   return (
     <Row display="flex" justify="center">
-      <SideNav currentLocation="2" />
-      <Col span={20}>
+      <Col span={24} className="profile-company__jobs">
         <WrapperSection styles={stylesWrapper} row={22} mt={0}>
           <FormExperience
             fields={fields}
