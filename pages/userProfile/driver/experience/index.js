@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, notification, message } from "antd";
 import FormExperience from "./FormExperience";
-import SideNav from "../../components/SideNavAdmin";
 import { WrapperSection } from "components/helpers";
 import { connect } from "react-redux";
 import moment from "moment";

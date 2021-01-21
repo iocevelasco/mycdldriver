@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, Col, Button, } from 'antd';
+import { Menu, Col, Button, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import propTypes from 'prop-types';
@@ -17,7 +17,7 @@ import {
 } from '@ant-design/icons';
 import Link from 'next/link';
 
-// CONNECT WITH REDUX
+
 function mapStateToProps(state) {
   return {
     user: state.user,
@@ -84,23 +84,23 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser
   ]
 
   return (
-    <Col span={4}
-      style={{ background: '#001529' }}>
+    <Col span={1} style={{ borderRight: '1px solid #f0f0f0' }}>
       <Menu
-        style={{ width: '100%' }}
+        style={{ width: '100%', borderRight: 'none' }}
         defaultSelectedKeys={[currentLocation]}
         mode='vertical'
-        theme='dark'>
+        theme='light'>
         {
           menuOptions.map((e, i) => {
             return (
-              <Menu.Item key={i} icon={e.icon}>
+              <Menu.Item key={i} >
                 <Link href={e.path}>
-                  <a>
-                    {e.section_name}
-                  </a>
+                  <Tooltip placement="right" title={e.section_name}>
+                    {e.icon}
+                  </Tooltip>
                 </Link>
-              </Menu.Item>)
+              </Menu.Item>
+            )
           })
         }
       </Menu>
@@ -119,22 +119,23 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser
           > Go Back </Button>
         </Link> : null
       }
-      <Button
-        shape="round"
-        size="large"
-        onClick={() => {
-          router.push('/logout')
-          logoutUser(router);
-          window.localStorage.removeItem('token');
-        }}
-        icon={<LogoutOutlined />}
-        type='link'
-        style={{
-          marginTop: 16,
-          width: '90%',
-          marginLeft: 12,
-        }}
-      > Logout </Button>
+      <Tooltip placement="right" title={'Logout'}>
+        <Button
+          shape="round"
+          size="large"
+          onClick={() => {
+            router.push('/logout')
+            logoutUser(router);
+            window.localStorage.removeItem('token');
+          }}
+          icon={<LogoutOutlined />}
+          type='link'
+          style={{
+            width: '90%',
+            paddingLeft: 16
+          }}
+        />
+      </Tooltip>
     </Col>
   )
 }

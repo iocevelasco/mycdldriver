@@ -4,8 +4,7 @@ import {
   Col,
 } from 'antd';
 import FormUserDriver from 'components/FormUserDriver';
-import SideNav from '../../components/SideNavAdmin';
-import { WrapperSection } from 'components/helpers';
+import { WrapperDashboard } from 'components/helpers';
 
 const DriverProfileView = (props) => {
   const stylesWrapper = {
@@ -31,9 +30,9 @@ const DriverProfileView = (props) => {
       <Row display='flex' justify='center'>
         {closeWindow()}
         <Col span={24} className="profile-company__jobs">
-          <WrapperSection styles={stylesWrapper} row={20} mt={0}>
+          <WrapperDashboard styles={stylesWrapper} row={20} mt={0}>
             <FormUserDriver />
-          </WrapperSection>
+          </WrapperDashboard>
         </Col>
       </Row>
     </>

@@ -13,7 +13,7 @@ import {
   Image,
   Space
 } from 'antd';
-import { WrapperSection } from 'components/helpers';
+import { Wrapperdashboard } from 'components/helpers';
 import useMobileDetect from 'use-mobile-detect-hook';
 import { StarFilled } from '@ant-design/icons';
 import { withRouter } from 'next/router';
@@ -196,7 +196,7 @@ const CandidateView = ({ user, ...props }) => {
     <>
       <Row>
         <Col span={22} className="profile-company__jobs">
-        <WrapperSection row={24} styles={{paddingTop: 20, paddingBottom: 20}}>
+          <WrapperSection row={24} styles={{ paddingTop: 20, paddingBottom: 20 }}>
             <Row justify='space-between' align='middle' className='add-new-driver--header'>
               <Col xs={24} xl={8}>
                 <Title level={3}> Review driver applications </Title>
@@ -323,23 +323,23 @@ const CandidateView = ({ user, ...props }) => {
                   <DescriptionItem title="Phone Number" content={`${detail.driver.phoneNumber}`} />
                 </Col>
               </Row>
-              {detail.jobsComments && 
-              detail.jobsComments.length > 0 && <>
-              <Divider />
-              <p className="site-description-item-profile-p">Comments and rating</p>
-              {detail.jobsComments.map((i) => {
-                return <Row>
-                <Col span={24}>
-                  <Card title={i.company.tradename} extra={ <Space> 
-                    <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />
-                    <span> {i.ranking} </span>
-                  </Space>}>
-                    <p>{i.comment}</p>
-                  </Card>
-                </Col>
-              </Row>
-              })}
-              </>
+              {detail.jobsComments &&
+                detail.jobsComments.length > 0 && <>
+                  <Divider />
+                  <p className="site-description-item-profile-p">Comments and rating</p>
+                  {detail.jobsComments.map((i) => {
+                    return <Row>
+                      <Col span={24}>
+                        <Card title={i.company.tradename} extra={<Space>
+                          <StarFilled style={{ fontSize: '24px', color: '#ffce00' }} />
+                          <span> {i.ranking} </span>
+                        </Space>}>
+                          <p>{i.comment}</p>
+                        </Card>
+                      </Col>
+                    </Row>
+                  })}
+                </>
               }
               <Row justify='center' gutter={[16]} align='middle'>
                 <Col span={8}>

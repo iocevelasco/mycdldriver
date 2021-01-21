@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import { Row, Col, List, Space, Avatar, notification, Tabs, Image, Card, Form, Table, Typography, Modal, Button, Rate, Input, Icon, Drawer } from 'antd';
-import { WrapperSection } from 'components/helpers';
+import { WrapperDashboard } from 'components/helpers';
 import NewDriverForm from './components/FormNewDriver';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
@@ -314,7 +314,7 @@ const StaffCompanyView = ({ user }) => {
         header={header}
         user={state.userSelected}
         job={state.jobSelected}
-        closeDrawer= {onCloseDrawer}
+        closeDrawer={onCloseDrawer}
       />
     return formSelected;
   }
@@ -323,7 +323,7 @@ const StaffCompanyView = ({ user }) => {
     <>
       <Row>
         <Col span={24} className="profile-company__jobs">
-          <WrapperSection row={23} styles={stylesWrapper}>
+          <WrapperDashboard row={23} styles={stylesWrapper}>
             <Row justify='space-between' align='middle' className='add-new-driver--header'>
               <Col xs={24} xl={8}>
                 <Title level={4}> Driver's status </Title>
@@ -371,12 +371,12 @@ const StaffCompanyView = ({ user }) => {
               } key="3">
                 <IncidentList
                   header={header}
-                  fetchStaffList = {fetchStaffList}
+                  fetchStaffList={fetchStaffList}
                   staffList={state.staffList}
                   loading={state.loading} />
               </TabPane>
             </Tabs>
-          </WrapperSection>
+          </WrapperDashboard>
         </Col>
       </Row>
       <RateDriver

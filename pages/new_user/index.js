@@ -11,7 +11,7 @@ import axios from 'axios';
 import { withRouter } from 'next/router';
 import AddressInputs from 'components/AddressInput';
 import moment from 'moment';
-import { WrapperSection } from 'components/helpers';
+import { Wrapperdashboard } from 'components/helpers';
 import { activeLoading } from '@store/reducers/landing_reducer'
 const { Title } = Typography;
 function mapStateToProps(state) {

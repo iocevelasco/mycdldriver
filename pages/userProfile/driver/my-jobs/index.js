@@ -7,8 +7,7 @@ import {
   Card,
   Typography
 } from 'antd';
-import SideNav from '../../components/SideNavAdmin';
-import { WrapperSection } from 'components/helpers';
+import { Wrapperdashboard } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import moment from 'moment';

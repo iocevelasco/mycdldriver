@@ -3,7 +3,7 @@ import { Row, Col, Typography, message, Drawer, Button, notification, Divider } 
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import axios from 'axios';
-import { WrapperSection } from 'components/helpers';
+import { WrapperDashboard } from 'components/helpers';
 import JobsList from './ListJobs';
 import FormJobs from './FormJobs';
 import useMobileDetect from 'use-mobile-detect-hook';
@@ -196,7 +196,7 @@ const CompanyJobView = (props) => {
       <Row>
         <Col span={22} className="profile-company__jobs">
           {/* // CRUM JOBS */}
-          <WrapperSection row={24} styles={styleWrapper}>
+          <WrapperDashboard row={22} currentLocation='3'>
             <Row justify='space-between' align='middle' className='add-new-driver--header'>
               <Col xs={22} xl={8}>
                 <Title level={3}> Create and edit your position </Title>
@@ -213,9 +213,6 @@ const CompanyJobView = (props) => {
                 </Button>
               </Col>
             </Row>
-          </WrapperSection>
-          {/* listado de jobs */}
-          <WrapperSection row={24} styles={styleWrapper}>
             <JobsList
               header={header}
               fetchJobList={fetchJobList}
@@ -223,7 +220,7 @@ const CompanyJobView = (props) => {
               openDrawer={openDrawer}
               jobsByCompany={jobsByCompany}
             />
-          </WrapperSection>
+          </WrapperDashboard>
         </Col>
       </Row>
       <Drawer
