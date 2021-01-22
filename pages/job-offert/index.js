@@ -36,6 +36,7 @@ const initialState = {
   expire_date: '',
   company_name: '',
   tradename: '',
+  photo: ''
 }
 
 const types = {
@@ -116,6 +117,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
           date: moment(date).format('MM DD YYYY') || '',
           company_name: company_name || '',
           tradename: company ? company.tradename : '',
+          photo: company ? company.photo : '',
           phoneNumber: phoneNumber,
           email: email
         };
@@ -140,7 +142,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
       console.log(e);
     }
   }
-
+console.log();
 
   return (
     <>
@@ -150,9 +152,9 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
               <Col className='job-offert__detaill' xs={24} xl={13}>
                 <div className="header"
                   style={{
-                    backgroundImage: `url('/static/images/truck3.jpg')`
+                    backgroundImage: `url('${state.logo}')`
                   }}>
-                  <Avatar size={130} src={state.logo} alt='image' />
+                  <Avatar size={130} src={state.photo} alt='image' />
                 </div>
                 <div>
                   <Title> {state.title} </Title>
