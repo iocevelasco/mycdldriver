@@ -1,13 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
-import {
-  Row,
-  Col,
-  Image,
-  Typography,
-  Result,
-  Spin
-} from 'antd';
+import { Row, Col, Image, Typography, Result, Spin } from 'antd';
+import SideNav from './SideNavAdmin';
 import { LoadingOutlined } from '@ant-design/icons';
 import propTypes from 'prop-types';
 const { Title } = Typography;
@@ -22,6 +16,19 @@ const WrapperSection = ({ children, xs, row, styles }) => {
         </Col>
       </Row>
     </div>
+  )
+}
+
+const WrapperDashboard = ({ children, section }) => {
+  return (
+    <Row justify='start' style={{ minHeight: '90vh' }}>
+      <SideNav page={section} />
+      <Col xs={23} lg={23} md={23}>
+        <div style={{ padding: 40 }}>
+          {children}
+        </div>
+      </Col>
+    </Row>
   )
 }
 
@@ -140,5 +147,6 @@ export {
   BuildSection,
   MessageSuccess,
   SpinnerComp,
-  MessageError
+  MessageError,
+  WrapperDashboard
 };

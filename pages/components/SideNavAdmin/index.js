@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, Col, Button, } from 'antd';
+import { Menu, Col, Button, Tooltip, Row } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import propTypes from 'prop-types';
@@ -17,7 +17,7 @@ import {
 } from '@ant-design/icons';
 import Link from 'next/link';
 
-// CONNECT WITH REDUX
+
 function mapStateToProps(state) {
   return {
     user: state.user,
@@ -32,7 +32,7 @@ function mapDispatchToProps(dispatch) {
 };
 
 
-const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser }) => {
+const SideNavAdmin = ({ user, section, isUserSuccess, router, logoutUser }) => {
   const [menuOptions, setOptions] = useState([]);
   const { typeUser } = user;
 
@@ -84,57 +84,55 @@ const SideNavAdmin = ({ user, currentLocation, isUserSuccess, router, logoutUser
   ]
 
   return (
-    <Col span={4}
-      style={{ background: '#001529' }}>
+    <Col span={1} style={{ borderRight: '1px solid #f0f0f0' }}>
       <Menu
-        style={{ width: '100%' }}
-        defaultSelectedKeys={[currentLocation]}
+        style={{ width: '100%', borderRight: 'none' }}
+        defaultSelectedKeys={[section]}
         mode='vertical'
-        theme='dark'>
+        theme='light'>
         {
           menuOptions.map((e, i) => {
             return (
-              <Menu.Item key={i} icon={e.icon}>
+              <Menu.Item key={i} >
                 <Link href={e.path}>
-                  <a>
-                    {e.section_name}
-                  </a>
+                  <Tooltip placement="right" title={e.section_name}>
+                    {e.icon}
+                  </Tooltip>
                 </Link>
-              </Menu.Item>)
+              </Menu.Item>
+            )
           })
         }
       </Menu>
-      {
-        !isUserSuccess ? <Link href="/userProfile">
-          <Button
-            shape="round"
-            size="large"
-            icon={<LeftOutlined />}
-            type='primary'
-            style={{
-              marginTop: 16,
-              width: '90%',
-              marginLeft: 12,
-            }}
-          > Go Back </Button>
-        </Link> : null
-      }
-      <Button
-        shape="round"
-        size="large"
-        onClick={() => {
-          router.push('/logout')
-          logoutUser(router);
-          window.localStorage.removeItem('token');
-        }}
-        icon={<LogoutOutlined />}
-        type='link'
-        style={{
-          marginTop: 16,
-          width: '90%',
-          marginLeft: 12,
-        }}
-      > Logout </Button>
+      <Row style={{ paddingTop: 16 }} justify='center' gutter={[16, 16]}>
+        <Col span={16}>
+          {
+            !isUserSuccess ? <Link href="/userProfile">
+              <Tooltip placement="right" title={'Go back'}>
+                <Button
+                  icon={<LeftOutlined />}
+                  type="primary"
+                  shape="circle"
+                  size='large' />
+              </Tooltip>
+            </Link> : null
+          }
+        </Col>
+        <Col span={16}>
+          <Tooltip placement="right" title={'Logout'}>
+            <Button
+              type="primary"
+              shape="circle"
+              size='large'
+              onClick={() => {
+                router.push('/logout')
+                logoutUser(router);
+                window.localStorage.removeItem('token');
+              }}
+              icon={<LogoutOutlined />} />
+          </Tooltip>
+        </Col>
+      </Row>
     </Col>
   )
 }

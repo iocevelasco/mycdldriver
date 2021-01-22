@@ -7,8 +7,7 @@ import {
   Card,
   Typography
 } from 'antd';
-import SideNav from '../../components/SideNavAdmin';
-import { WrapperSection } from 'components/helpers';
+import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -66,7 +65,7 @@ const JobsDriverView = ({ user, ...props }) => {
   }
 
   return (
-    <>
+    <WrapperDashboard section={1}>
       <Row>
         <Col span={24} className="profile-company__jobs">
           <WrapperSection row={18} styles={stylesWrapper}>
@@ -107,7 +106,7 @@ const JobsDriverView = ({ user, ...props }) => {
           </WrapperSection>
         </Col>
       </Row>
-    </>
+    </WrapperDashboard>
   )
 };
 
