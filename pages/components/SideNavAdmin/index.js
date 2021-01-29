@@ -13,7 +13,8 @@ import {
   UserAddOutlined,
   LogoutOutlined,
   HomeOutlined,
-  UserSwitchOutlined
+  UserSwitchOutlined,
+  ControlOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -56,6 +57,11 @@ const SideNavAdmin = ({ user, section, isUserSuccess, router, logoutUser }) => {
       path: '/userProfile/company/jobs',
       section_name: 'Create jobs',
       icon: <CarOutlined />
+    },
+    {
+      path: '/userProfile/company/services',
+      section_name: 'Services',
+      icon: <ControlOutlined />
     },
     {
       path: '/userProfile/company/candidate',
@@ -121,9 +127,8 @@ const SideNavAdmin = ({ user, section, isUserSuccess, router, logoutUser }) => {
         <Col span={16}>
           <Tooltip placement="right" title={'Logout'}>
             <Button
-              type="primary"
+              type="link"
               shape="circle"
-              size='large'
               onClick={() => {
                 router.push('/logout')
                 logoutUser(router);

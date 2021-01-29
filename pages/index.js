@@ -144,6 +144,12 @@ const Home = ({
         <CarouselComp carousel_data={state.carousel_data} />
       </WrapperSection>
       <WrapperSection xs={24} row={18}>
+        <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
+          <Col span={14}>
+            <Title style={{ textAlign: 'center' }}> Featured Jobs</Title>
+            <Text style={{ textAlign: 'center', display: 'flex', marginBottom: 32 }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
+          </Col>
+        </Row>
         <OffertJobComp type='large' />
       </WrapperSection>
       <WrapperSection xs={24} row={18} style={wrapperStyle} >

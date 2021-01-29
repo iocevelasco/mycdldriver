@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import propTypes, { arrayOf, node } from 'prop-types';
 import { withRouter } from 'next/router';
 import Link from 'next/link';
 import { connect } from 'react-redux';
-import { logoutUser, getCurrentLocation, fetchUserData } from '@store/reducers/user_reducer';
-import { handlerModalLogin, deviceType } from '@store/reducers/landing_reducer';
+import { logoutUser, fetchUserData } from '@store/reducers/user_reducer';
 import { Menu, Row, Drawer, } from 'antd';
-import { 
-  HomeOutlined, 
-  LogoutOutlined, 
+import {
+  HomeOutlined,
+  LogoutOutlined,
   UserOutlined,
   TeamOutlined,
   CarOutlined,
   DashboardOutlined,
-  UserSwitchOutlined } from '@ant-design/icons';
+  UserSwitchOutlined,
+  ControlOutlined
+} from '@ant-design/icons';
 
 import '@styles/index.less';
 
@@ -35,7 +35,7 @@ function mapDispatchToProps(dispatch) {
 };
 
 
-const DrawerLayout = ({ setVisible, visible, typeUser, logoutUser, router }) => {
+const SideMenu = ({ setVisible, visible, typeUser, logoutUser, router }) => {
   let accountUrl = typeUser === 1 ? '/userProfile/driver/profile' : '/userProfile/company/profile';
   const [menuOptions, setOptions] = useState([]);
 
@@ -59,6 +59,11 @@ const DrawerLayout = ({ setVisible, visible, typeUser, logoutUser, router }) => 
       path: '/userProfile/company/jobs',
       section_name: 'Create jobs',
       icon: <CarOutlined />
+    },
+    {
+      path: '/userProfile/company/services',
+      section_name: 'Services',
+      icon: <ControlOutlined />
     },
     {
       path: '/userProfile/company/candidate',
@@ -129,4 +134,4 @@ const DrawerLayout = ({ setVisible, visible, typeUser, logoutUser, router }) => 
   )
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DrawerLayout));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SideMenu));
