@@ -1,20 +1,28 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
 const profileDriverSchema = mongoose.Schema({
-    cdl: {
+    dln: {
         type: Number,
         required: true,
         unique: true
+    },
+    expDateDln: {
+        type: Date,
+        required: true
     },
     birthDate: {
         type: Date,
         required: true
     },
-    imageCdl: {
+    imageDln: {
         type: String,
-        required: true,
         trim: true
+    },
+    areaCode: {
+        type: Number
+    },
+    phoneNumber: {
+        type: Number
     },
     sex: {
         type: Number,
@@ -24,7 +32,11 @@ const profileDriverSchema = mongoose.Schema({
         type: Number,
         trim: true
     },
-    habilities: {
+    experience : {
+        type: Number,
+        trim: true
+    },
+    zipCode: {
         type: String,
         trim: true
     },
@@ -35,10 +47,6 @@ const profileDriverSchema = mongoose.Schema({
     address: {
         type: String,
         trim: true
-    },
-    user: {
-        type: Schema.ObjectId,
-        ref: 'User',
     }
 });
 

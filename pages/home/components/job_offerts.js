@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React from 'react';
 import {
   Row,
@@ -7,15 +8,21 @@ import {
   Typography,
   Button
 } from 'antd';
+import Link from 'next/link';
 
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography
 const { Meta } = Card;
 
-const OffertJobComp = ({ title, image, description, address, date }) => {
+const JobListComp = ({ title, image, description, address, date, postion_id }) => {
   return (
     <>
+   <Link href={{
+     pathname: '/jobs',
+     query:{
+       id: postion_id
+     }}}>
       <Card
         bodyStyle={{
           padding: 0
@@ -40,12 +47,20 @@ const OffertJobComp = ({ title, image, description, address, date }) => {
             </div>
           </div>
           <div className='action'>
-            <Button type='primary'> Apply </Button>
+          <Link
+            href={{
+              pathname: '/jobOffert',
+              query: { id: postion_id },
+              }}
+              >
+               <Button type='primary'> Apply </Button>
+            </Link>
           </div>
         </div>
       </Card>
+      </Link>
     </>
   );
 }
 
-export default OffertJobComp;
+export default JobListComp;

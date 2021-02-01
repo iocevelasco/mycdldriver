@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config  = require('../../config');
+const Schema = mongoose.Schema;
 
 const userSchema = mongoose.Schema({
    name: {
@@ -15,7 +16,15 @@ const userSchema = mongoose.Schema({
       required: true,
       trim: true
    },
-   photo: String,
+   typeUser: {
+      type: Number,
+      required: true
+   },
+   photo: {
+      type: String,
+      required: true,
+      trim: true
+   },
    date: {
       type: Date,
       default: Date.now
@@ -31,15 +40,32 @@ const userSchema = mongoose.Schema({
          }
       }
    },
+   google_id : {
+      type: String
+   },
+   facebook_id : {
+      type: String
+   },
    password: {
       type: String,
-      required: true,
       minLength: 7
+   },
+   driver: {
+       type: Schema.ObjectId,
+       ref: 'ProfileDriver',
+   },
+   company: {
+       type: Schema.ObjectId,
+       ref: 'ProfileCompany',
    },
    tokens: [{
       token: {
          type: String,
          required: true
+      },
+      date: {
+         type: Date,
+         default: Date.now
       }
    }]
  })
@@ -68,6 +94,10 @@ const userSchema = mongoose.Schema({
       throw new Error({ error: 'Invalid login credentials' });
     }
     const user = await User.findOne({ email} )
+      .select("-__v")
+      .populate('driver', "-_id -__v")
+      .populate('company', "-_id -__v");
+
     if (!user) {
        throw new Error({ error: 'Invalid login credentials' });
     }
@@ -75,8 +105,20 @@ const userSchema = mongoose.Schema({
     if (!isPasswordMatch) {
        throw new Error({ error: 'Invalid login credentials' });
     }
-    return user
+    return user;
  }
+
+   userSchema.methods.findByProvider = async (provider_id) => {
+      if (!provider_id) {
+         throw new Error({ error: 'Invalid provider credentials' });
+      }
+      const user = await User.findOne({provider_id} );
+      if (!user) {
+         throw new Error({ error: 'Invalid login credentials' });
+      }
+      
+      return user;
+   }
  
  const User = mongoose.model('User', userSchema);
  module.exports = User;

@@ -1,7 +1,77 @@
-.profile{
-  height: 64vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
+.profile-driver{
+  padding:32px
+}
+
+.profile-driver__form{
+  padding: 24px;
+  padding-top: 100px;
+  border: 1px solid #cecec3;
+  border-radius: 2.5px;
+  margin-top: 80px;
+  background-color: #fff;
+  .avatar{
+    margin-bottom: 32px;
+    position: absolute;
+    top: -65px;
+    .ant-avatar{
+      box-shadow: 0px 0px 0px 30px #fdfdfd;
+    }
+  }
+}
+
+.profile-driver__form-small{
+  padding: 24px;
+  background-color: #fff;
+  border: 1px solid #cecec3;
+  border-radius: 2.5px;
+  margin-top:24px;
+}
+
+
+.profile-driver__route{
+  height: 80vh;
+  display:flex;
+  justify-content:center;
+  flex-direction: column;
+  align-items:center;
+  .title{
+    display:flex;
+    margin-bottom: 32px;
+    justify-content:center;
+    flex-direction: column;
+    align-items:center;
+  }
+  img{
+    height: 90px;
+    width: 90px;
+    margin-bottom: 24px;
+  }
+  .card-container{
+    height: 40vh;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 50px;
+    grid-row-gap: 0px;
+    .ant-typography{
+      font-size: 16px;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      
+    }
+     .ant-card{
+       height: 230px;
+       display: flex;
+     }
+     .ant-card-body{
+      background:#fff;
+      display:flex;
+      justify-content: center;
+      flex-direction: column;
+      min-width:200px;
+      align-items: center;
+      border-radius: 5px;
+     }
+  }
 }

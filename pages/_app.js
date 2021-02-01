@@ -11,13 +11,15 @@ class MyApp extends App {
     if (ctx.req && ctx.req.session.passport) {
       pageProps.user = ctx.req.session.passport.user;
     }
+    pageProps.loading = false;
     return { pageProps };
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      user: props.pageProps.user
+      user: props.pageProps.user,
+      loading: false
     };
   }
 
@@ -27,14 +29,12 @@ class MyApp extends App {
     const props = {
       ...pageProps,
       user: this.state.user,
+      loading: false
     };
 
     return (
       <NextContainer>
-        <Head>
-          <title>Thoughts!</title>
-        </Head>
-            <Component {...props} />
+        <Component {...props} />
       </NextContainer>
     );
   }

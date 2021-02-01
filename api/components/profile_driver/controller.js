@@ -7,39 +7,106 @@ function getDriver(filter){
     });
 }
 
-function addDriver(driver, user, imageCdl){
+function addDriver(driver, imageDln){
     return new Promise((resolve, reject) => {
         if(!driver){
-            console.error('[driverController] No driver data');
-            reject('[driverController] No driver data');
+            console.error('[driverController.addDriver] No driver data');
+            reject('[driverController.addDriver] No driver data');
             return false;
         }
-        if(!user){
-            console.error('[driverController] No user data');
-            reject('[driverController] No user data');
-            return false;
-        }
-        const fileUrl = imageCdl ? config.publicRoute + config.filesRoute + '/' + imageCdl.filename : '';
+
+        const fileUrl = imageDln ? config.publicRoute + config.filesRoute + '/' + imageDln.filename : '';
 
         const fullDriver = {
-            cdl: driver.cdl,
+            dln: driver.dln,
+            imageDln: fileUrl,
+            expDateDln: driver.expDateDln,
             birthDate: driver.birthDate,
-            imageCdl: fileUrl,
+            areaCode: driver.areaCode,
+            phoneNumber: driver.phoneNumber,
             sex: driver.sex,
-            rating: driver.rating,
+            experience: driver.experience,
             address: driver.address,
-            habilities: driver.habilities,
-            description: driver.description,
-            user: user
+            zipCode: driver.zipCode,
+            description: driver.description
         };
 
-        const driverResolve = store.add(fullDriver); 
+        const user = {
+            name: driver.base.name,
+            lastname: driver.base.lastname,
+            typeUser: driver.base.typeUser,
+            photo: driver.base.photo,
+            email: driver.base.email,
+            google_id: driver.base.google_id,
+            facebook_id: driver.base.facebook_id,
+            driver: fullDriver
+        };
+
+        const driverResolve = store.add(user); 
         resolve(driverResolve);
     });
     
 }
 
+function updateDriver(id, driver, imageDln){
+    return new Promise(async (resolve, reject) => {
+        if(!id){
+            reject('[driverController.updateDriver] No user ID');
+            return false;
+        }
+        if(!driver){
+            reject('[driverController.updateDriver] No user data');
+            return false;
+        }
+
+        const fullDriver = {
+            dln: driver.dln,
+            expDateDln: driver.expDateDln,
+            birthDate: driver.birthDate,
+            areaCode: driver.areaCode,
+            phoneNumber: driver.phoneNumber,
+            sex: driver.sex,
+            experience: driver.experience,
+            address: driver.address,
+            zipCode: driver.zipCode,
+            description: driver.description
+        };
+        if(imageDln){
+            const fileUrl = imageDln ? config.publicRoute + config.filesRoute + '/' + imageDln.filename : '';
+            fullDriver.imageDln = fileUrl;
+        }
+
+        const user = {
+            name: driver.base.name,
+            lastname: driver.base.lastname,
+            photo: driver.base.photo,
+            driver: fullDriver
+        };
+        
+        const result = await store.update(id, user);
+        resolve(result);
+    });
+}
+
+function deleteDriver(id){
+    return new Promise(async (resolve, reject) => {
+        if(!id){
+            reject('Invalid data');
+            return false;
+        }
+        store.delete(id)
+            .then(() => {
+                resolve();
+            })
+            .catch(e => {
+                reject(e); 
+            });
+    });
+}
+
 module.exports = {
     getDriver,
-    addDriver
+    addDriver,
+    updateDriver,
+    deleteDriver
 }

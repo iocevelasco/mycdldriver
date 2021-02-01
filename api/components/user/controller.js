@@ -7,41 +7,19 @@ function getUsers(filterUsers){
     });
 }
 
-function addUser(user, photo){
+function addUserDirect(user){
     return new Promise((resolve, reject) => {
         if(!user){
             console.error('[userController] No hay usuario');
             reject('Los datos son incorrectos');
             return false;
         }
-        const fileUrl = photo ? config.publicRoute + config.filesRoute + '/' + photo.filename : '';
-        user.photo = fileUrl;
 
         const fullUser = store.add(user); 
         resolve(fullUser);
         
     });
     
-}
-
-function updateUser(id, user, photo){
-    return new Promise(async (resolve, reject) => {
-        if(!id){
-            reject('No user ID');
-            return false;
-        }
-        if(!user){
-            reject('No user data');
-            return false;
-        }
-        if(photo){
-            const fileUrl = photo ? config.publicRoute + config.filesRoute + '/' + photo.filename : '';
-            user.photo = fileUrl;
-        }
-        
-        const result = await store.update(id, user);
-        resolve(result);
-    });
 }
 
 function deleteUser(id){
@@ -76,6 +54,25 @@ function loginUser(user){
     });
 }
 
+function loginProviderUser(provider_id, email, type){
+    return new Promise(async (resolve, reject) => {
+        if(!provider_id){
+            reject('Invalid data');
+            return false;
+        }
+        if(!email){
+            reject('Invalid data');
+            return false;
+        }
+        const result = await store.loginProviderUser(provider_id, email, type);
+        if(result){
+            resolve(result);
+        }else{
+            reject('[ USER CONTROLLER ] Usuario no registrado');
+        }
+    });
+}
+
 function logoutUser(id, token){
     return new Promise(async (resolve, reject) => {
         if(!token){
@@ -100,10 +97,10 @@ function logoutAll(id){
 
 module.exports = {
     getUsers,
-    addUser,
-    updateUser,
     deleteUser,
     loginUser,
     logoutUser,
-    logoutAll
+    logoutAll,
+    addUserDirect,
+    loginProviderUser
 }
