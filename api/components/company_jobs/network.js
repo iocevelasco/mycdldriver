@@ -61,7 +61,7 @@ router.get('/staff', auth(2), function (req, res) {
                 break;
         }
     }).catch(e => {
-        response.error(req, res, 'Unexpected Error', 500, e);
+        response.error(req, res, 'Unexpected Network Error', 500, e);
     });
 });
 

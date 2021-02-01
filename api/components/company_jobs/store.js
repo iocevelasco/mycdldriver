@@ -401,16 +401,18 @@ async function getStaffCompanyJobs(query) {
                 message: retorno
             }
         }catch(e){
+            console.log(e);
             return {
                 status: 500,
-                message: 'Unexpected error',
+                message: 'Unexpected Store error',
                 detail: e
             }
         }
     }catch(e){
+        console.log(e);
         return {
             status: 500,
-            message: 'Unexpected error',
+            message: 'Unexpected Store error',
             detail: e
         }
     }
