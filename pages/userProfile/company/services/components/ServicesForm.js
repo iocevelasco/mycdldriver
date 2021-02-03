@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
-import { Row, Col, Button, Input, Select, Form, Radio, Upload, message, Switch } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Button, Input, Select, Form, Radio, Upload, Typography } from 'antd';
 import { PictureOutlined } from '@ant-design/icons';
 import useListState from '@hooks/useListState';
 import { beforeUpload } from 'components/UploadImages';
-import { EmailInput } from 'components/inputs';
+import { EmailInput, SelectStateInput } from 'components/inputs';
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import AddressInputs from 'components/AddressInput';
+const { Text } = Typography;
 import axios from 'axios';
 const { TextArea } = Input;
 const { Option } = Select;
 
 
-const FormJobs = (props) => {
+const ServicesForm = (props) => {
   const { fields } = props;
-  const handlerInput = props.formType === 'create' ? props.onFinisCreateJobs : props.ediJob;
+  const onFinish = props.createService;
+  const [contactList, setContactList] = useState([{ number: '' }]);
+  const [serviceList, setServiceList] = useState([{ description: '' }]);
   const TextButton = props.formType === 'create' ? 'Create Job' : 'Save Changes';
   const [form] = Form.useForm();
   const [stateOptions, isFetchingState] = useListState();
@@ -20,6 +25,34 @@ const FormJobs = (props) => {
     options: [],
     all: [],
   });
+
+  const fetchCities = async (stateId) => {
+    await axios
+      .get(`/api/address/cities/${stateId}`)
+      .then((response) => {
+        let options = response.data.data
+          .sort((a, b) => {
+            if (a.cityName < b.cityName) { return -1; }
+            if (a.cityName > b.cityName) { return 1; }
+            return 0;
+          })
+          .map((e) => { return { value: e.cityName, id: e._id } })
+        let all = response.data.data
+        setCities({
+          options,
+          all,
+          disabled: false
+        })
+      })
+      .catch((err) => {
+        setCities({
+          options: [],
+          all: [],
+          disabled: true
+        })
+        console.log(err)
+      })
+  };
 
   const onRemove = (file) => {
     props.setImage([]);
@@ -49,11 +82,56 @@ const FormJobs = (props) => {
     };
   };
 
+  const addNewValue = (type, value) => {
+    let newValues = []
+    if (type == 'contact') {
+      let newValues = [...contactList];
+      newValues.push({ number: value });
+      setContactList(newValues);
+    }
+    if (type == 'service') {
+      let newValues = [...serviceList];
+      newValues.push({ description: value });
+      setServiceList(newValues);
+    }
+  }
+
+  const removeValue = (type, i) => {
+    if (type == 'contact') {
+      const filtered = contactList.filter((value, index) => {
+        return index !== i;
+      });
+      console.log('filtered', filtered)
+      setContactList(filtered);
+    }
+    if (type == 'service') {
+      console.log('filtered', filtered)
+      const filtered = contactList.filter((value, index) => {
+        return index !== i;
+      });
+      setServiceList(filtered)
+    }
+  }
+
+  const handlerCustomInput = (value, index, type) => {
+    console.log('index, value, type', index, value, type)
+    if (type == 'contact') {
+      serviceList.forEach((e, i) => {
+        if (index == i) serviceList[i] = { number: value };
+      })
+    }
+    if (type == 'service') {
+      serviceList.forEach((e, i) => {
+        if (index == i) serviceList[i] = { description: value };
+      })
+    }
+  }
+  console.log(serviceList, contactList);
   return (
     <>
       <Form
         form={form}
-        onFinish={handlerInput}
+        onFinish={onFinish}
         fields={fields}
         name={props.formType === 'create' ? "new-job" : "edit-job"}
         initialValues={{ remember: true }}
@@ -61,7 +139,7 @@ const FormJobs = (props) => {
         layout='vertical'>
         <Form.Item
           name="title"
-          label="Services Name"
+          label="Name"
           rules={[
             {
               required: true,
@@ -71,35 +149,25 @@ const FormJobs = (props) => {
           <Input />
         </Form.Item>
         <Form.Item
-          name="description"
-          label="Job Description"
-          rows={4}
+          name="detail"
+          label="Detail"
+          rows={2}
           rules={[
             {
               required: true,
-              message: 'Description is required!',
+              message: 'Detail is required!',
             },
           ]}>
           <TextArea />
         </Form.Item>
         <Row gutter={[16, 16]} justify='space-between' >
-          <Col span={4}>
-            <Form.Item
-              name="areaCode"
-              label="Area Code"
-              rules={[
-                {
-                  required: true,
-                  message: 'Area code is required!',
-                },
-              ]}>
-              <Input />
-            </Form.Item>
+          <Col span={12}>
+            <EmailInput />
           </Col>
-          <Col span={10}>
+          <Col span={12}>
             <Form.Item
-              name="phoneNumber"
-              label="Phone Number"
+              name="whatsapp"
+              label="Contact Number"
               rules={[
                 {
                   required: true,
@@ -109,45 +177,43 @@ const FormJobs = (props) => {
               <Input />
             </Form.Item>
           </Col>
-          <Col span={10}>
-            <EmailInput />
-          </Col>
         </Row>
         <Row gutter={[16, 16]} justify='space-between' >
-          <Col span={12}>
-            <Form.Item
-              name="time"
-              rules={[
-                {
-                  required: true,
-                  message: 'Time is required!',
-                },
-              ]}>
-              <Radio.Group>
-                <Radio value={0}>Part-time</Radio>
-                <Radio value={1} >Full-time</Radio>
-                <Radio value={2}>Eventual</Radio>
-              </Radio.Group>
+          <Col span={12} className="profile-company__services__header__add-new">
+            <Form.Item label="Add servises included">
+              {
+                serviceList.map((e, i) => {
+                  return <AddNewProps
+                    index={i}
+                    value={e.description}
+                    addNewValue={addNewValue}
+                    handlerCustomInput={handlerCustomInput}
+                    type='service'
+                    removeValue={props.removeValue} />
+                })
+              }
+            </Form.Item>
+          </Col>
+          <Col span={12} className="profile-company__services__header__add-new">
+            <Form.Item label="Add other contacs">
+              {
+                contactList.map((e, i) => {
+                  return <AddNewProps
+                    value={e.number}
+                    index={i}
+                    handlerCustomInput={props.handlerCustomInput}
+                    addNewValue={addNewValue}
+                    type='contact'
+                    removeValue={removeValue} />
+                })
+              }
             </Form.Item>
           </Col>
         </Row>
         <Form.Item>
           <Row gutter={[16, 16]} justify='space-between' >
             <Col span={12}>
-              <Form.Item label="State / Province / Reagion">
-                <Form.Item
-                  name={'state'}
-                  noStyle
-                  rules={[{ required: true, message: 'Province is required' }]}
-                >
-                  <Select
-                    placeholder="Select province">
-                    {
-                      stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id} val>{e.value}</Option>))
-                    }
-                  </Select>
-                </Form.Item>
-              </Form.Item>
+              <SelectStateInput />
             </Col>
             <Col span={12}>
               <Form.Item label="City">
@@ -222,8 +288,32 @@ const FormJobs = (props) => {
         </Form.Item>
       </Form>
     </>
+  )
+}
+const AddNewProps = (props) => {
+  const { type, index, addNewValue, value, removeValue, handlerCustomInput } = props;
 
+  const handlerInput = (ev, index, type) => {
+    console.log(ev, index, type)
+  }
+
+  return (
+    <Row gutter={[16]}>
+      <Col span={4} style={{ paddingLeft: 16 }}>
+        {
+          index > 0 ?
+            <Button shape="circle" onClick={() => removeValue(type, index)} type="primary" icon={< MinusOutlined />} />
+            :
+            <Button shape="circle" onClick={() => addNewValue(type)} type="primary" icon={<PlusOutlined />} />
+        }
+      </Col>
+      <Col span={20}>
+        <Form.Item>
+          <Input value={value} onChange={(ev) => handlerInput(ev.target.value, index, type)} />
+        </Form.Item>
+      </Col>
+    </Row>
   )
 }
 
-export default FormJobs;
+export default ServicesForm;
