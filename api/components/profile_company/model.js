@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { CitiesModel, StatesModel } = require('../cities/model')
+const { CitiesModel, StatesModel } = require('../cities/model');
 const Schema = mongoose.Schema;
 
 const profileCompanySchema = mongoose.Schema({
