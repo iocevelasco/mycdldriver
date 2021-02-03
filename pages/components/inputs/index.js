@@ -1,7 +1,6 @@
 import { Input, Form } from "antd";
 
 const DLNinput = (props) => {
-
   return (
     <Form.Item
       label='DLN Number'
@@ -18,7 +17,6 @@ const DLNinput = (props) => {
             if (res) {
               return Promise.resolve();
             }
-
             return Promise.reject("Please enter only numbers and letters");
           },
         }),
@@ -28,6 +26,24 @@ const DLNinput = (props) => {
   )
 }
 
+const EmailInput = () => {
+  return (
+    <Form.Item
+      name="email"
+      label="Email"
+      rules={[
+        {
+          required: true,
+          type: "email",
+          message: 'Enter a valid email address',
+        },
+      ]}>
+      <Input />
+    </Form.Item>
+  )
+}
+
 export {
-  DLNinput
+  DLNinput,
+  EmailInput
 } 

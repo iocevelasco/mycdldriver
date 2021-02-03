@@ -387,6 +387,22 @@ router.post('/logoutall', auth(), async(req, res) => {
     });
  });
 
+ router.post('/driver/:id', auth(2), function (req, res) {
+    controller.getUser(req.params.id)
+    .then((userList) => {
+        switch(userList.status){
+            case 200:
+                response.success(req, res, userList.message, userList.status);
+                break;
+            default:
+                response.error(req, res, userList.message, userList.status, userList.detail);
+                break;
+        }
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
+ });
+
  router.post('/change_password', auth(), function (req, res) {
     controller.changePassword(req.user, req.body.password)
     .then((resp) => {

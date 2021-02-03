@@ -32,8 +32,8 @@ const HeaderLandingComp = ({ handlerSearch, cleanFilter, filter_selected, jobs_n
         <Row justify='center' align='middle'>
           <Col xs={24} lg={18} md={18}>
             <div className="home-header__input-container">
-              <Title> TEAMWORK & LOYALTY <br />
-                      DRIVING OUR SUCCESS
+              <Title> Teamwork & loyalty <br />
+                      Driving our success
                     </Title>
               <Row gutter={[16]}>
                 <Col xs={24} lg={clearFilters ? 10 : 12} md={clearFilters ? 10 : 12}>
