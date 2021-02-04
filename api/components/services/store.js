@@ -2,14 +2,11 @@ const Services = require('./model');
 
 async function getServices(companyId) {
     try {
-      if (!companyId) {
-        return {
-          status: 400,
-          message: 'No company id recived'
-        };
-      }
-      const query = {
-        company: companyId
+      const query = {};
+      if (companyId) {
+        query = {
+          company: companyId
+        }
       }
   
       const result = await Services.find(query).populate("company");

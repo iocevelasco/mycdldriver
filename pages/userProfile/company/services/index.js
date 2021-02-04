@@ -64,7 +64,9 @@ const CompanyJobView = (props) => {
   }
 
   const createService = async (fields) => {
-    const data = beforeToCreate(fields)
+    console.log('[FORM BEFORE]', fields);
+    const data = beforeToCreate(fields);
+    console.log('[FORM AFTER]', data);
     await axios.post('/api/services', data, header)
       .then(() => createSuccess())
       .catch((err) => {

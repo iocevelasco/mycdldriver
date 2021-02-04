@@ -15,7 +15,7 @@ const { Option } = Select;
 const ServicesForm = (props) => {
   const { fields } = props;
   const onFinish = props.createService;
-  const [contactList, setContactList] = useState([{ number: '' }]);
+  const [contactList, setContactList] = useState([]);
   const [serviceList, setServiceList] = useState([{ description: '' }]);
   const TextButton = props.formType === 'create' ? 'Create Job' : 'Save Changes';
   const [form] = Form.useForm();
@@ -25,6 +25,11 @@ const ServicesForm = (props) => {
     options: [],
     all: [],
   });
+
+  useEffect(() => {
+    addNewValue('contact', '');
+  }, []);
+  
 
   const fetchCities = async (stateId) => {
     await axios
@@ -83,7 +88,6 @@ const ServicesForm = (props) => {
   };
 
   const addNewValue = (type, value) => {
-    let newValues = []
     if (type == 'contact') {
       let newValues = [...contactList];
       newValues.push({ number: value });
@@ -116,8 +120,8 @@ const ServicesForm = (props) => {
   const handlerCustomInput = (value, index, type) => {
     console.log('index, value, type', index, value, type)
     if (type == 'contact') {
-      serviceList.forEach((e, i) => {
-        if (index == i) serviceList[i] = { number: value };
+      contactList.forEach((e, i) => {
+        if (index == i) contactList[i] = { number: value };
       })
     }
     if (type == 'service') {
@@ -126,7 +130,7 @@ const ServicesForm = (props) => {
       })
     }
   }
-  console.log(serviceList, contactList);
+  console.log('[SERVICE LIST]', serviceList, '[CONTACT LIST]', contactList);
   return (
     <>
       <Form
@@ -189,7 +193,7 @@ const ServicesForm = (props) => {
                     addNewValue={addNewValue}
                     handlerCustomInput={handlerCustomInput}
                     type='service'
-                    removeValue={props.removeValue} />
+                    removeValue={removeValue} />  
                 })
               }
             </Form.Item>
@@ -201,7 +205,7 @@ const ServicesForm = (props) => {
                   return <AddNewProps
                     value={e.number}
                     index={i}
-                    handlerCustomInput={props.handlerCustomInput}
+                    handlerCustomInput={handlerCustomInput}
                     addNewValue={addNewValue}
                     type='contact'
                     removeValue={removeValue} />
@@ -293,10 +297,8 @@ const ServicesForm = (props) => {
 const AddNewProps = (props) => {
   const { type, index, addNewValue, value, removeValue, handlerCustomInput } = props;
 
-  const handlerInput = (ev, index, type) => {
-    console.log(ev, index, type)
+  const handlerInput = (value, index, type) => {
   }
-
   return (
     <Row gutter={[16]}>
       <Col span={4} style={{ paddingLeft: 16 }}>
@@ -309,7 +311,7 @@ const AddNewProps = (props) => {
       </Col>
       <Col span={20}>
         <Form.Item>
-          <Input value={value} onChange={(ev) => handlerInput(ev.target.value, index, type)} />
+          <Input value={value} onChange={(ev) => handlerCustomInput(ev.target.value, index, type)} />
         </Form.Item>
       </Col>
     </Row>

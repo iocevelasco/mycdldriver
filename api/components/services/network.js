@@ -37,6 +37,22 @@ router.get('/:id', function (req, res) {
       });
 });
 
+router.get('/home', function (req, res) {
+    controller.getServices()
+      .then((service) => {
+        switch (service.status) {
+          case 200:
+            response.success(req, res, service.message, 200);
+            break;
+          default:
+            response.error(req, res, service.message, service.status);
+        }
+  
+      }).catch(e => {
+        response.error(req, res, 'Unexpected network Error', 500, e);
+      });
+});
+
 router.get('/find/:id', function (req, res) {
     controller.getService(req.params.id)
       .then((service) => {
