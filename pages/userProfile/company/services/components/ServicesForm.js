@@ -13,9 +13,7 @@ const { Option } = Select;
 
 
 const ServicesForm = (props) => {
-  const { fields, createService } = props;
-  const [contactList, setContactList] = useState([{number: ''}]);
-  const [serviceList, setServiceList] = useState([{ description: '' }]);
+  const { fields, createService, setServiceList, setContactList, serviceList, contactList } = props;
   const TextButton = props.formType === 'create' ? 'Create Job' : 'Save Changes';
   const [form] = Form.useForm();
   const [stateOptions, isFetchingState] = useListState();
@@ -24,8 +22,8 @@ const ServicesForm = (props) => {
     options: [],
     all: [],
   });
-  
-  const onFinish = (fields)=>{
+
+  const onFinish = (fields) => {
     fields.phone = contactList;
     fields.includeService = serviceList;
     createService(fields);
@@ -87,15 +85,15 @@ const ServicesForm = (props) => {
     };
   };
 
-  const addNewValue = (type, value) => {
+  const addNewValue = (type) => {
     if (type == 'contact') {
       let newValues = [...contactList];
-      newValues.push({ number: value });
+      newValues.push({ number: '' });
       setContactList(newValues);
     }
     if (type == 'service') {
       let newValues = [...serviceList];
-      newValues.push({ description: value });
+      newValues.push({ description: '' });
       setServiceList(newValues);
     }
   }
@@ -118,19 +116,14 @@ const ServicesForm = (props) => {
   }
 
   const handlerCustomInput = (value, index, type) => {
-    console.log('index, value, type', index, value, type)
     if (type == 'contact') {
-      contactList.forEach((e, i) => {
-        if (index == i) contactList[i] = { number: value };
-      })
+      contactList[index] = { number: value }
     }
     if (type == 'service') {
-      serviceList.forEach((e, i) => {
-        if (index == i) serviceList[i] = { description: value };
-      })
+      serviceList[index] = { description: value }
     }
   }
-  console.log('[SERVICE LIST]', serviceList, '[CONTACT LIST]', contactList);
+
   return (
     <>
       <Form
@@ -193,7 +186,7 @@ const ServicesForm = (props) => {
                     addNewValue={addNewValue}
                     handlerCustomInput={handlerCustomInput}
                     type='service'
-                    removeValue={removeValue} />  
+                    removeValue={removeValue} />
                 })
               }
             </Form.Item>
@@ -311,7 +304,7 @@ const AddNewProps = (props) => {
       </Col>
       <Col span={20}>
         <Form.Item>
-          <Input value={value} onChange={(ev) => handlerCustomInput(ev.target.value, index, type)} />
+          <Input onChange={(ev) => handlerCustomInput(ev.target.value, index, type)} />
         </Form.Item>
       </Col>
     </Row>

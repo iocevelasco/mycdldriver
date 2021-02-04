@@ -22,8 +22,8 @@ function mapStateToProps(state) {
 const CompanyJobView = (props) => {
   const { companyId, token } = props;
 
-  const [contactList, setContactList] = useState([]);
-  const [serviceList, setServiceList] = useState([]);
+  const [contactList, setContactList] = useState([{ number: '' }]);
+  const [serviceList, setServiceList] = useState([{ description: '' }]);
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [imageThumbnails, setImage] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -31,11 +31,12 @@ const CompanyJobView = (props) => {
   const header = {
     headers: { Authorization: `Bearer ${token}` }
   };
+  console.log(contactList, serviceList);
 
   const fetchServiceList = async () => {
     setIsFetching(true);
     await axios
-      .get('/api/services', header)
+      .get(`/api/services/${companyId}`, header)
       .then((response) => {
         let options = response.data.data;
         setIsFetching(false);
@@ -64,10 +65,9 @@ const CompanyJobView = (props) => {
   }
 
   const createService = async (fields) => {
-    console.log('[FORM BEFORE]', fields);
-    /*const data = beforeToCreate(fields);
-    console.log('[FORM AFTER]', data);*/
-    await axios.post('/api/services', fields, header)
+    const data = beforeToCreate(fields);
+    console.log('[FORM AFTER]', data);
+    await axios.post('/api/services', data, header)
       .then(() => createSuccess())
       .catch((err) => {
         console.log(err);
@@ -89,8 +89,8 @@ const CompanyJobView = (props) => {
       company: companyId,
       whatsapp: whatsapp,
       image: imageThumbnails,
-      phone: phone,
-      includeService: includeService,
+      phone: contactList,
+      includeService: serviceList,
       state: state,
       city: city
     }
@@ -137,6 +137,9 @@ const CompanyJobView = (props) => {
             createService={createService}
             setServiceList={setServiceList}
             setContactList={setContactList}
+            contactList={contactList}
+            serviceList={serviceList}
+
           />
         }
       </Drawer>
