@@ -65,9 +65,9 @@ const CompanyJobView = (props) => {
 
   const createService = async (fields) => {
     console.log('[FORM BEFORE]', fields);
-    const data = beforeToCreate(fields);
-    console.log('[FORM AFTER]', data);
-    await axios.post('/api/services', data, header)
+    /*const data = beforeToCreate(fields);
+    console.log('[FORM AFTER]', data);*/
+    await axios.post('/api/services', fields, header)
       .then(() => createSuccess())
       .catch((err) => {
         console.log(err);
@@ -89,8 +89,8 @@ const CompanyJobView = (props) => {
       company: companyId,
       whatsapp: whatsapp,
       image: imageThumbnails,
-      phone: contactList,
-      includeService: serviceList,
+      phone: phone,
+      includeService: includeService,
       state: state,
       city: city
     }

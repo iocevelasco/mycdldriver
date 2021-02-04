@@ -13,9 +13,8 @@ const { Option } = Select;
 
 
 const ServicesForm = (props) => {
-  const { fields } = props;
-  const onFinish = props.createService;
-  const [contactList, setContactList] = useState([]);
+  const { fields, createService } = props;
+  const [contactList, setContactList] = useState([{number: ''}]);
   const [serviceList, setServiceList] = useState([{ description: '' }]);
   const TextButton = props.formType === 'create' ? 'Create Job' : 'Save Changes';
   const [form] = Form.useForm();
@@ -25,11 +24,12 @@ const ServicesForm = (props) => {
     options: [],
     all: [],
   });
-
-  useEffect(() => {
-    addNewValue('contact', '');
-  }, []);
   
+  const onFinish = (fields)=>{
+    fields.phone = contactList;
+    fields.includeService = serviceList;
+    createService(fields);
+  };
 
   const fetchCities = async (stateId) => {
     await axios
