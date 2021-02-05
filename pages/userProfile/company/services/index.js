@@ -14,13 +14,14 @@ const { Text, Title } = Typography;
 function mapStateToProps(state) {
   const { user } = state;
   return {
-    companyId: user.company._id,
+    companyId: user._id,
     token: user.token
   }
 }
 
 const CompanyJobView = (props) => {
   const { companyId, token } = props;
+  console.log('PROPS', props);
 
   const [contactList, setContactList] = useState([{ number: '' }]);
   const [serviceList, setServiceList] = useState([{ description: '' }]);
@@ -31,7 +32,6 @@ const CompanyJobView = (props) => {
   const header = {
     headers: { Authorization: `Bearer ${token}` }
   };
-  console.log(contactList, serviceList);
 
   const fetchServiceList = async () => {
     setIsFetching(true);
@@ -66,7 +66,6 @@ const CompanyJobView = (props) => {
 
   const createService = async (fields) => {
     const data = beforeToCreate(fields);
-    console.log('[FORM AFTER]', data);
     await axios.post('/api/services', data, header)
       .then(() => createSuccess())
       .catch((err) => {

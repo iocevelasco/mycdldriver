@@ -2,7 +2,7 @@ const Services = require('./model');
 
 async function getServices(companyId) {
     try {
-      const query = {};
+      let query = {};
       if (companyId) {
         query = {
           company: companyId
@@ -12,6 +12,7 @@ async function getServices(companyId) {
       const result = await Services.find(query).populate("company");
       return { status: 200, message: result }
     } catch (e) {
+      console.log(e);
       return {
         status: 500,
         message: 'Unexpected store error',
