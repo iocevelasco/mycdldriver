@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Col, Typography, Input, Select, Button, AutoComplete } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Typography, Input, Select, Button, AutoComplete, Form } from 'antd';
 import { fetchJobPositionData } from '@store/reducers/landing_reducer';
 import { connect } from 'react-redux';
 
@@ -21,14 +21,29 @@ function mapDispatchToProps(dispatch) {
 }
 
 const HeaderLandingComp = ({ handlerSearch, cleanFilter, filter_selected, jobs_name, citys, query, fetchJobs }) => {
-
+  const [value, setValue] = useState('');
+  const [form] = Form.useForm();
   const clearFilters = query.length ? true : false;
+
+  const resetForm = () => {
+    form.resetFields();
+    setValue('');
+    cleanFilter();
+  }
+
+  const onChange = (e) => {
+    handlerSearch(e, 'input');
+    setValue(e);
+  }
+
   return (
     <>
       <div className="home-header"
         style={{
           background: `url('/static/images/truck11.jpg')`
         }}>
+        <Form
+          form={form}>
         <Row justify='center' align='middle'>
           <Col xs={24} lg={18} md={18}>
             <div className="home-header__input-container">
@@ -40,9 +55,11 @@ const HeaderLandingComp = ({ handlerSearch, cleanFilter, filter_selected, jobs_n
                   <AutoComplete
                     options={jobs_name}
                     size='large'
+                    allowClear={true}
+                    value={value}
                     style={{ width: '100%' }}
                     placeholder="Search your new job"
-                    onChange={e => handlerSearch(e, 'input')} />
+                    onChange={e => onChange(e)} />
                 </Col>
                 <Col xs={24} lg={8} md={8}>
                   <Select
@@ -74,7 +91,7 @@ const HeaderLandingComp = ({ handlerSearch, cleanFilter, filter_selected, jobs_n
                   clearFilters &&
                   <Col xs={24} lg={3} md={3}>
                     <Button
-                      onClick={() => cleanFilter()}
+                      onClick={() => resetForm()}
                       size="large"
                       style={{ width: '100%' }}
                       type="secondary">Clean Filters </Button>
@@ -84,6 +101,7 @@ const HeaderLandingComp = ({ handlerSearch, cleanFilter, filter_selected, jobs_n
             </div>
           </Col>
         </Row>
+        </Form>
       </div>
     </>
   )
