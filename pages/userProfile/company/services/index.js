@@ -14,7 +14,7 @@ const { Text, Title } = Typography;
 function mapStateToProps(state) {
   const { user } = state;
   return {
-    companyId: user._id,
+    userId: user._id,
     token: user.token
   }
 }
@@ -36,7 +36,7 @@ const CompanyJobView = (props) => {
   const fetchServiceList = async () => {
     setIsFetching(true);
     await axios
-      .get(`/api/services/${companyId}`, header)
+      .get(`/api/services/${userId}`, header)
       .then((response) => {
         let options = response.data.data;
         setIsFetching(false);
