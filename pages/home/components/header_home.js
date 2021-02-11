@@ -22,18 +22,25 @@ function mapDispatchToProps(dispatch) {
 
 const HeaderLandingComp = ({ handlerSearch, cleanFilter, filter_selected, jobs_name, citys, query, fetchJobs }) => {
   const [value, setValue] = useState('');
+  const [selectValue, setSelectValue] = useState('');
   const [form] = Form.useForm();
   const clearFilters = query.length ? true : false;
 
   const resetForm = () => {
     form.resetFields();
     setValue('');
+    setSelectValue(null);
     cleanFilter();
   }
 
-  const onChange = (e) => {
+  const onChangeAutocomplete = (e) => {
     handlerSearch(e, 'input');
     setValue(e);
+  }
+
+  const onChangeSelect = (e) => {
+    handlerSearch(e, 'city')
+    setSelectValue(e);
   }
 
   return (
@@ -59,15 +66,17 @@ const HeaderLandingComp = ({ handlerSearch, cleanFilter, filter_selected, jobs_n
                     value={value}
                     style={{ width: '100%' }}
                     placeholder="Search your new job"
-                    onChange={e => onChange(e)} />
+                    onChange={e => onChangeAutocomplete(e)} />
                 </Col>
                 <Col xs={24} lg={8} md={8}>
                   <Select
                     size="large"
                     style={{ width: '100%' }}
+                    allowClear
+                    value={selectValue}
                     value={filter_selected.city}
                     placeholder="Search by city"
-                    onChange={e => handlerSearch(e, 'city')}>
+                    onChange={e => onChangeSelect(e)}>
                     {
                       citys.map((e, i) => (
                         <Option key={i} value={e.id}>{e.name}</Option>
