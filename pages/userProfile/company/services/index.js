@@ -14,14 +14,13 @@ const { Text, Title } = Typography;
 function mapStateToProps(state) {
   const { user } = state;
   return {
-    companyId: user._id,
+    userId: user._id,
     token: user.token
   }
 }
 
 const CompanyJobView = (props) => {
-  const { companyId, token } = props;
-  console.log('PROPS', props);
+  const { companyId, token, userId } = props;
 
   const [contactList, setContactList] = useState([{ number: '' }]);
   const [serviceList, setServiceList] = useState([{ description: '' }]);
@@ -36,7 +35,7 @@ const CompanyJobView = (props) => {
   const fetchServiceList = async () => {
     setIsFetching(true);
     await axios
-      .get(`/api/services/${companyId}`, header)
+      .get(`/api/services/${userId}`, header)
       .then((response) => {
         let options = response.data.data;
         setIsFetching(false);
@@ -119,6 +118,9 @@ const CompanyJobView = (props) => {
               </Col>
             </Row>
           </WrapperSection>
+          <WrapperSection row={24}>
+            <ServicesList />
+          </WrapperSection>
         </Col>
       </Row>
       <Drawer
@@ -138,7 +140,6 @@ const CompanyJobView = (props) => {
             setContactList={setContactList}
             contactList={contactList}
             serviceList={serviceList}
-
           />
         }
       </Drawer>
