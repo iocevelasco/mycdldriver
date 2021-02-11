@@ -20,8 +20,7 @@ function mapStateToProps(state) {
 }
 
 const CompanyJobView = (props) => {
-  const { companyId, token } = props;
-  console.log('PROPS', props);
+  const { companyId, token, userId } = props;
 
   const [contactList, setContactList] = useState([{ number: '' }]);
   const [serviceList, setServiceList] = useState([{ description: '' }]);
@@ -119,6 +118,9 @@ const CompanyJobView = (props) => {
               </Col>
             </Row>
           </WrapperSection>
+          <WrapperSection row={24}>
+            <ServicesList />
+          </WrapperSection>
         </Col>
       </Row>
       <Drawer
@@ -138,7 +140,6 @@ const CompanyJobView = (props) => {
             setContactList={setContactList}
             contactList={contactList}
             serviceList={serviceList}
-
           />
         }
       </Drawer>
