@@ -13,7 +13,7 @@ const { Option } = Select;
 
 
 const ServicesForm = (props) => {
-  const { fields, createService, setServiceList, setContactList, serviceList, contactList } = props;
+  const { fields, createService, includeServices, setIncludeServices } = props;
   const TextButton = props.formType === 'create' ? 'Create Job' : 'Save Changes';
   const [form] = Form.useForm();
   const [stateOptions, isFetchingState] = useListState();
@@ -24,8 +24,7 @@ const ServicesForm = (props) => {
   });
 
   const onFinish = (fields) => {
-    fields.phone = contactList;
-    fields.includeService = serviceList;
+    fields.includeService = includeServices || [];
     createService(fields);
   };
 
@@ -92,9 +91,9 @@ const ServicesForm = (props) => {
       setContactList(newValues);
     }
     if (type == 'service') {
-      let newValues = [...serviceList];
+      let newValues = [...includeServices];
       newValues.push({ description: '' });
-      setServiceList(newValues);
+      setIncludeServices(newValues);
     }
   }
 
@@ -107,11 +106,10 @@ const ServicesForm = (props) => {
       setContactList(filtered);
     }
     if (type == 'service') {
-      console.log('filtered', filtered)
-      const filtered = contactList.filter((value, index) => {
+      const filtered = includeServices.filter((value, index) => {
         return index !== i;
       });
-      setServiceList(filtered)
+      setIncludeServices(filtered)
     }
   }
 
@@ -120,7 +118,7 @@ const ServicesForm = (props) => {
       contactList[index] = { number: value }
     }
     if (type == 'service') {
-      serviceList[index] = { description: value }
+      includeServices[index] = { description: value }
     }
   }
 
@@ -176,31 +174,16 @@ const ServicesForm = (props) => {
           </Col>
         </Row>
         <Row gutter={[16, 16]} justify='space-between' >
-          <Col span={12} className="profile-company__services__header__add-new">
+          <Col span={24} className="profile-company__services__header__add-new">
             <Form.Item label="Add servises included">
               {
-                serviceList.map((e, i) => {
+                includeServices.map((e, i) => {
                   return <AddNewProps
                     index={i}
                     value={e.description}
                     addNewValue={addNewValue}
                     handlerCustomInput={handlerCustomInput}
                     type='service'
-                    removeValue={removeValue} />
-                })
-              }
-            </Form.Item>
-          </Col>
-          <Col span={12} className="profile-company__services__header__add-new">
-            <Form.Item label="Add other contacs">
-              {
-                contactList.map((e, i) => {
-                  return <AddNewProps
-                    value={e.number}
-                    index={i}
-                    handlerCustomInput={handlerCustomInput}
-                    addNewValue={addNewValue}
-                    type='contact'
                     removeValue={removeValue} />
                 })
               }
@@ -288,21 +271,20 @@ const ServicesForm = (props) => {
   )
 }
 const AddNewProps = (props) => {
-  const { type, index, addNewValue, value, removeValue, handlerCustomInput } = props;
-
-  const handlerInput = (value, index, type) => {
+  const { type, index, addNewValue, removeValue, handlerCustomInput } = props;
+  const addBottom = (position) => {
+    if (position == 0) {
+      return <Button shape="circle" onClick={() => addNewValue(type)} type="primary" icon={<PlusOutlined />} />
+    } else {
+      return <Button shape="circle" onClick={() => removeValue(type, index)} type="primary" icon={< MinusOutlined />} />
+    }
   }
   return (
     <Row gutter={[16]}>
-      <Col span={4} style={{ paddingLeft: 16 }}>
-        {
-          index > 0 ?
-            <Button shape="circle" onClick={() => removeValue(type, index)} type="primary" icon={< MinusOutlined />} />
-            :
-            <Button shape="circle" onClick={() => addNewValue(type)} type="primary" icon={<PlusOutlined />} />
-        }
+      <Col span={3} style={{ paddingLeft: 16 }}>
+        {addBottom(index)}
       </Col>
-      <Col span={20}>
+      <Col span={21}>
         <Form.Item>
           <Input onChange={(ev) => handlerCustomInput(ev.target.value, index, type)} />
         </Form.Item>

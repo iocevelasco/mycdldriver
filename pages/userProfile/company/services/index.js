@@ -23,7 +23,8 @@ const CompanyJobView = (props) => {
   const { companyId, token, userId } = props;
 
   const [contactList, setContactList] = useState([{ number: '' }]);
-  const [serviceList, setServiceList] = useState([{ description: '' }]);
+  const [includeServices, setIncludeServices] = useState([{ description: '' }]);
+  const [serviceList, setServiceList] = useState([]);
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [imageThumbnails, setImage] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -37,7 +38,7 @@ const CompanyJobView = (props) => {
     await axios
       .get(`/api/services/${userId}`, header)
       .then((response) => {
-        let options = response.data.data;
+        setServiceList(response.data.data)
         setIsFetching(false);
       })
       .catch((err) => {
@@ -56,6 +57,8 @@ const CompanyJobView = (props) => {
 
   const createSuccess = () => {
     fetchServiceList();
+    setVisibleAdd(false);
+    setIncludeServices([{ description: '' }]);
     notification['success']({
       message: 'Success',
       description:
@@ -87,8 +90,8 @@ const CompanyJobView = (props) => {
       company: companyId,
       whatsapp: whatsapp,
       image: imageThumbnails,
-      phone: contactList,
-      includeService: serviceList,
+      phone: [],
+      includeService: includeServices,
       state: state,
       city: city
     }
@@ -119,7 +122,7 @@ const CompanyJobView = (props) => {
             </Row>
           </WrapperSection>
           <WrapperSection row={24}>
-            <ServicesList />
+            <ServicesList serviceList={serviceList} />
           </WrapperSection>
         </Col>
       </Row>
@@ -127,7 +130,7 @@ const CompanyJobView = (props) => {
         title='Create Job'
         placement="right"
         closable={true}
-        width={detectMobile.isMobile() ? 400 : 780}
+        width={detectMobile.isMobile() ? 400 : 580}
         onClose={() => setVisibleAdd(false)}
         visible={visibleAdd}>
         {
@@ -136,10 +139,8 @@ const CompanyJobView = (props) => {
             formType='create'
             setImage={setImage}
             createService={createService}
-            setServiceList={setServiceList}
-            setContactList={setContactList}
-            contactList={contactList}
-            serviceList={serviceList}
+            includeServices={includeServices}
+            setIncludeServices={setIncludeServices}
           />
         }
       </Drawer>
