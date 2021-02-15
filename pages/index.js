@@ -15,7 +15,7 @@ import mock_ranking from '../mock/ranking.json';
 import "./home/styles.less";
 //View components
 import HeaderLandingComp from './home/components/header_home';
-import OffertJobComp from './home/components/job_offerts';
+import JobsListComp from './home/components/job_offerts';
 import RankingComp from './home/components/ranking';
 
 const { Title, Text } = Typography;
@@ -150,7 +150,7 @@ const Home = ({
             <Text style={{ textAlign: 'center', display: 'flex', marginBottom: 32 }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
           </Col>
         </Row>
-        <OffertJobComp type='large' />
+        <JobsListComp type='large' />
       </WrapperSection>
       <WrapperSection xs={24} row={18} style={wrapperStyle} >
         <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>

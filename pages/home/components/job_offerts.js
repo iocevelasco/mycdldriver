@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchJobPositionData } from '@store/reducers/landing_reducer';
 import { withRouter } from 'next/router';
-import { List, Card, Avatar, Typography, Button, Image, Row, Col } from 'antd';
-import Link from 'next/link';
-import moment from 'moment';
+import { List, Card, Avatar, Typography } from 'antd';
 import JobCardComponent from 'components/JobCard';
 
 const { Title } = Typography
@@ -27,22 +25,9 @@ const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
     fetchJobs('');
   }, [])
 
-  const handlerTypeComponent = (type, item) => {
-    let components;
-    switch (type) {
-      case 'small':
-        components = <DescriptionSmall item={item} />
-        break;
-      case 'large':
-        if (deviceType === 'desktop') components = <DescriptionDesktop item={item} />
-        else components = <DescriptionMobile item={item} />
-        break;
-    }
-    return components
-  }
 
   return (
-    <>
+    <div className="home__jobs-list">
       <List
         bordered={false}
         style={{ width: '100%' }}
@@ -56,7 +41,7 @@ const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
           </List.Item>
         )}
       />
-    </>
+    </div>
   );
 }
 
