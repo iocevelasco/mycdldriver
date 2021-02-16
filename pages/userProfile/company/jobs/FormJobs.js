@@ -98,7 +98,7 @@ const FormJobs = (props) => {
         name={props.formType === 'create' ? "new-job" : "edit-job"}
         initialValues={{ remember: true }}
         onFieldsChange={onChangeProps}
-        layout='vertical'>
+        layout='vertical'>{console.log(fields)}
         <Form.Item name="_id" noStyle>
           <Input type="hidden" />
         </Form.Item>

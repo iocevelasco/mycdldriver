@@ -15,7 +15,11 @@ async function getService(serviceId) {
 
 async function getServices(companyId) {
     try{
-        const result = await store.getServices(companyId);
+        let id = 0;
+        if (companyId) {
+            id = companyId;
+        }
+        const result = await store.getServices(id);
         return(result);
     }catch(e){
         return {

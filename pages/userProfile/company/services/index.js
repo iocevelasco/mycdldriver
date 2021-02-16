@@ -25,8 +25,10 @@ const CompanyJobView = (props) => {
   const [contactList, setContactList] = useState([{ number: '' }]);
   const [includeServices, setIncludeServices] = useState([{ description: '' }]);
   const [serviceList, setServiceList] = useState([]);
+  const [typeForm, setTypeForm] = useState('create');
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [imageThumbnails, setImage] = useState([]);
+  const [fields, setFields] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const detectMobile = useMobileDetect();
   const header = {
@@ -66,9 +68,49 @@ const CompanyJobView = (props) => {
     });
   }
 
+  const setEditService = (service)=>{
+    setVisibleAdd(true);
+    let fields = [];
+    for (let key in service) {
+      let inputs = {
+        name: [key],
+        value: service[key]
+      }
+      fields.push(inputs);
+    }
+    setFields(fields);
+
+    let include = service.includeService.map((k) => {
+      return {description: k.description}
+    });
+    setIncludeServices(include);
+    setTypeForm('edit');
+  }
+
+  const setNewServide = ()=>{
+    setVisibleAdd(true);
+  }
+
   const createService = async (fields) => {
     const data = beforeToCreate(fields);
     await axios.post('/api/services', data, header)
+      .then(() => createSuccess())
+      .catch((err) => {
+        console.log(err);
+        fetchServiceList();
+        notification['error']({
+          message: 'error',
+          description:
+            "Sorry! We couldn't create this position, please try again. "
+        });
+      })
+  };
+
+  const editService = async (id, fields) => {
+    const data = beforeToCreate(fields);
+    data.id = id;
+    console.log(data);
+    await axios.patch('/api/services', data, header)
       .then(() => createSuccess())
       .catch((err) => {
         console.log(err);
@@ -115,14 +157,16 @@ const CompanyJobView = (props) => {
                   shape="round"
                   size="large"
                   block
-                  onClick={() => setVisibleAdd(true)}>
+                  onClick={() => setNewServide()}>
                   Add new services
                 </Button>
               </Col>
             </Row>
           </WrapperSection>
           <WrapperSection row={24}>
-            <ServicesList serviceList={serviceList} />
+            <ServicesList 
+            serviceList={serviceList}
+            setEditService={setEditService}  />
           </WrapperSection>
         </Col>
       </Row>
@@ -136,9 +180,11 @@ const CompanyJobView = (props) => {
         {
           visibleAdd && <ServicesForm
             handleOnChangeImage={handleOnChangeImage}
-            formType='create'
+            fields={fields}
+            formType={typeForm}
             setImage={setImage}
             createService={createService}
+            editService={editService}
             includeServices={includeServices}
             setIncludeServices={setIncludeServices}
           />
