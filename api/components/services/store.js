@@ -11,8 +11,8 @@ async function getServices(companyId) {
   
       const result = await Services.find(query)
         .populate("company", "_id name lastname typeUser photo email company")
-        .populate("city")
-        .populate("state");
+        .populate("city", "_id cityName")
+        .populate("state", "_id stateName");
       return { status: 200, message: result }
     } catch (e) {
       console.log(e);
