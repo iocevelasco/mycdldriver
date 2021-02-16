@@ -1,12 +1,9 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
-import { Typography, Card, Image, Button } from 'antd';
-import propTypes, { arrayOf, node } from 'prop-types';
+import { Typography, Carousel } from 'antd';
 import { fetchServices } from '@store/reducers/landing_reducer';
-import { DeleteOutlined, EditOutlined, CheckCircleOutlined, PhoneOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
+import CardServices from 'components/CardServices';
 import Link from 'next/link';
-import axios from 'axios';
 
 const { Text, Title } = Typography
 
@@ -25,88 +22,63 @@ function mapDispatchToProps(dispatch) {
 
 const ServicesList = (props) => {
   const { servicesArray } = props;
-
+  const slider = useRef();
   useEffect(() => {
     props.fetchServices();
   }, [])
 
-  const ItemProps = ({ text, icon, customClass }) => (
-    <div className={`services-card__item`}>
-      {icon}
-      <span>{text}</span>
-    </div>
-  );
 
-  const styles = {
-    body: {
-      padding: 0
-    }
-  }
+  let widthScreen = useWindowSize().width;
 
+  const settings = {
+    dots: true,
+    autoplay: false,
+    position: 'bottom',
+    autoplaySpeed: 5000,
+    infinite: true,
+    slidesToShow: widthScreen > 400 ? 2 : 1,
+    slidesToScroll: widthScreen > 400 ? 2 : 1,
+    initialSlide: 0,
+    arrows: true,
+    adaptiveHeight: true,
+  };
   return (
-    <div className="services-list__container">
-      {
-        servicesArray.map((service, key) => {
-          const { includeService, image, email, detail, city, state, whatsapp, title } = service;
-          return <Card key={key} hoverable={true} bodyStyle={styles.body}>
-            <div className="services-card__body">
-              <div className="services-card__left">
-                <div className="services-card__thumbnails">
-                  <Image height={200} src={image} />
-                </div>
-                <div className="services-card__contact-list">
-                  <ItemProps
-                    className={null}
-                    icon={<PhoneOutlined style={{ color: "#E73540" }} />}
-                    text={`Phone: ${whatsapp}`}
-                  />
-                  <ItemProps
-                    className={null}
-                    icon={<MailOutlined style={{ color: "#E73540" }} />}
-                    text={`Email: ${email} `}
-                  />
-                </div>
-              </div>
-              <div className="services-card__right">
-                <div className="services-card__title">
-                  <Title level={3} >{title} </Title>
-                  <Text>{detail}</Text>
-                </div>
-                <h4 className="services-card__service-include-title">Include </h4>
-
-                <div className="services-card__service-include">
-                  {
-                    includeService.map((include) => {
-                      if (include.description) {
-                        return (
-                          <ItemProps
-                            className={null}
-                            icon={<CheckCircleOutlined style={{ color: "#E73540" }} />}
-                            text={include.description}
-                          />
-                        )
-                      }
-                    })
-                  }
-                </div>
-                <div className="services-card__footer">
-                  <div className="services-card__footer--address">
-                    <p> {state.stateName}  </p>
-                    <p> {city.cityName}  </p>
-                  </div>
-                  <div className="services-card__footer--actions">
-                    <Button type="link" icon={<EditOutlined />} />
-                    <Button type="link" icon={<DeleteOutlined />} />
-                  </div>
-                </div>
-              </div>
+    <div className="home__services">
+      <Carousel {...settings}>
+        {
+          servicesArray.map((service, key) => {
+            return <div key={key}>
+              <CardServices type='home' {...service} />
             </div>
-          </Card>
-        })
+          })
+        }
+      </Carousel>
+    </div >
+  )
+}
+
+function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      function handleResize() {
+        setWindowSize({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
       }
 
-    </div>
-  )
+      window.addEventListener("resize", handleResize);
+      handleResize();
+
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []);
+  return windowSize;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicesList);

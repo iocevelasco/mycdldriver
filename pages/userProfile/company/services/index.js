@@ -68,7 +68,7 @@ const CompanyJobView = (props) => {
     });
   }
 
-  const setEditService = (service)=>{
+  const setEditService = (service) => {
     setVisibleAdd(true);
     let fields = [];
     for (let key in service) {
@@ -81,13 +81,13 @@ const CompanyJobView = (props) => {
     setFields(fields);
 
     let include = service.includeService.map((k) => {
-      return {description: k.description}
+      return { description: k.description }
     });
     setIncludeServices(include);
     setTypeForm('edit');
   }
 
-  const setNewServide = ()=>{
+  const setNewServide = () => {
     setVisibleAdd(true);
   }
 
@@ -178,10 +178,12 @@ const CompanyJobView = (props) => {
             </Row>
           </WrapperSection>
           <WrapperSection row={24}>
-            <ServicesList 
-            serviceList={serviceList}
-            deleteService={deleteService}
-            setEditService={setEditService}  />
+            <div className="services-list__container">
+              <ServicesList
+                serviceList={serviceList}
+                deleteService={deleteService}
+                setEditService={setEditService} />
+            </div>
           </WrapperSection>
         </Col>
       </Row>

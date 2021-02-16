@@ -164,7 +164,7 @@ const Home = ({
           <RankingComp rankingDriver={state.ranking} />
         </Row>
       </WrapperSection>
-      <WrapperSection xs={24} row={18}>
+      <WrapperSection xs={24} row={24}>
         <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
           <Col span={14}>
             <Title style={{ textAlign: 'center' }}> Services </Title>
