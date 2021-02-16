@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import JobListComp from '../home/components/job_offerts';
 import moment from 'moment';
 import axios from 'axios';
-
+import "./styles.less";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -142,149 +142,149 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
       console.log(e);
     }
   }
-console.log();
+  console.log();
 
   return (
     <>
-        <WrapperSection row={22} mt={0}>
-          <div className='job-offert'>
-            <Row>
-              <Col className='job-offert__detaill' xs={24} xl={13}>
-                <div className="header"
-                  style={{
-                    backgroundImage: `url('${state.logo}')`
-                  }}>
-                  <Avatar size={130} src={state.photo} alt='image' />
+      <WrapperSection row={22} mt={0}>
+        <div className='job-offert__detail'>
+          <Row>
+            <Col className='' xs={24} xl={13}>
+              <div className="header"
+                style={{
+                  backgroundImage: `url('${state.logo}')`
+                }}>
+                <Avatar size={130} src={state.photo} alt='image' />
+              </div>
+              <div>
+                <Title> {state.title} </Title>
+                <Title level={5}> {state.tradename} </Title>
+                <div>
+                  <Text> Address </Text>
+                  <Text strong> {state.address} </Text> <Text strong > | </Text>
+                  <Text> Date </Text>
+                  <Text strong> {state.date} </Text>
                 </div>
                 <div>
-                  <Title> {state.title} </Title>
-                  <Title level={5}> {state.tradename} </Title>
-                  <div>
-                    <Text> Address </Text>
-                    <Text strong> {state.address} </Text> <Text strong > | </Text>
-                    <Text> Date </Text>
-                    <Text strong> {state.date} </Text>
-                  </div>
-                  <div>
-                    <Text> Phone </Text>
-                    <Text strong> {state.areaCode} - {state.phoneNumber} </Text> <Text strong > | </Text>
-                    <Text> Email </Text>
-                    <Text strong> {state.email} </Text>
-                  </div>
+                  <Text> Phone </Text>
+                  <Text strong> {state.areaCode} - {state.phoneNumber} </Text> <Text strong > | </Text>
+                  <Text> Email </Text>
+                  <Text strong> {state.email} </Text>
                 </div>
-                <Text className='description'>{state.description}</Text>
-                {
-                  !isUserRegistry ? <Button
-                    shape="round"
-                    size="large"
-                    type='primary'
-                    style={{
-                      marginTop: 16,
-                      width: '90%',
-                      marginLeft: 12,
-                    }}
-                    onClick={() => {
-                      props.handleModal(true);
-                    }}>Complete the login and apply to this position</Button> :
-                    state.can_apply ?
-                      isUserRegistry == 2 ?
-                        <Button
-                          shape="round"
-                          size="large"
-                          type='primary'
-                          style={{
-                            marginTop: 16,
-                            width: '90%',
-                            marginLeft: 12,
-                          }}
-                          disabled>Available only for drivers</Button> :
-                        <Button
-                          shape="round"
-                          size="large"
-                          type='primary'
-                          style={{
-                            marginTop: 16,
-                            width: '90%',
-                            marginLeft: 12,
-                          }}
-                          onClick={saveApply}>Apply</Button> :
+              </div>
+              <Text className='description'>{state.description}</Text>
+              {
+                !isUserRegistry ? <Button
+                  shape="round"
+                  size="large"
+                  type='primary'
+                  style={{
+                    marginTop: 16,
+                    width: '90%',
+                    marginLeft: 12,
+                  }}
+                  onClick={() => {
+                    props.handleModal(true);
+                  }}>Complete the login and apply to this position</Button> :
+                  state.can_apply ?
+                    isUserRegistry == 2 ?
                       <Button
                         shape="round"
                         size="large"
-                        type="primary"
+                        type='primary'
                         style={{
                           marginTop: 16,
                           width: '90%',
                           marginLeft: 12,
                         }}
-                        disabled>
-                        You already applied for this job
+                        disabled>Available only for drivers</Button> :
+                      <Button
+                        shape="round"
+                        size="large"
+                        type='primary'
+                        style={{
+                          marginTop: 16,
+                          width: '90%',
+                          marginLeft: 12,
+                        }}
+                        onClick={saveApply}>Apply</Button> :
+                    <Button
+                      shape="round"
+                      size="large"
+                      type="primary"
+                      style={{
+                        marginTop: 16,
+                        width: '90%',
+                        marginLeft: 12,
+                      }}
+                      disabled>
+                      You already applied for this job
                       </Button>
-                }
-              </Col>
-              <Col className='job-offert__list' xs={24} xl={10}>
-                <Row justify='center' align='middle'>
-                  <Title level={3}>Related searches</Title>
-                </Row>
-                <Row justify='center' align='middle'>
-                  <JobListComp type='small' />
-                </Row>
-              </Col>
-            </Row>
-          </div>
-          <Drawer
-            title='Success apply'
-            placement="right"
-            closable={true}
-            width={720}
-            visible={state.showSuccess}
-            onClose={() => {
-              dispatch({ type: types.SHOW_SUCCESS, payload: false });
-            }}>
-            <MessageSuccess
-              title="You applied successfully"
-              subTitle="Thank you for applying to this vacancy, the company will contact you as soon as possible."
-            />
-          </Drawer>
-          <Drawer
-            title='Error apply'
-            placement="right"
-            closable={true}
-            width={720}
-            visible={state.showError}
-            onClose={() => {
-              dispatch({ type: types.SHOW_ERROR, payload: false });
-            }}>
-            <MessageError
-              title="You applied not successfully"
-              subTitle="Thank you for applying to this vacancy, the company will contact you as soon as possible."
-            />
-          </Drawer>
+              }
+            </Col>
+            <Col className='job-offert__list' xs={24} xl={10}>
+              <Row justify='center' align='middle'>
+                <Title level={3}>Related searches</Title>
+              </Row>
+              <Row justify='center' align='middle'>
+                <JobListComp type='small' />
+              </Row>
+            </Col>
+          </Row>
+        </div>
+        <Drawer
+          title='Success apply'
+          placement="right"
+          closable={true}
+          width={720}
+          visible={state.showSuccess}
+          onClose={() => {
+            dispatch({ type: types.SHOW_SUCCESS, payload: false });
+          }}>
+          <MessageSuccess
+            title="You applied successfully"
+            subTitle="Thank you for applying to this vacancy, the company will contact you as soon as possible."
+          />
+        </Drawer>
+        <Drawer
+          title='Error apply'
+          placement="right"
+          closable={true}
+          width={720}
+          visible={state.showError}
+          onClose={() => {
+            dispatch({ type: types.SHOW_ERROR, payload: false });
+          }}>
+          <MessageError
+            title="You applied not successfully"
+            subTitle="Thank you for applying to this vacancy, the company will contact you as soon as possible."
+          />
+        </Drawer>
 
-          <Drawer
-            title='Complete your profile'
-            placement="right"
-            closable={true}
-            width={680}
-            onClose={() => {
-              dispatch({ type: types.SHOW_DRAWER, payload: false });
-            }}
-            visible={state.visible}>
-            <FormUserDriver
-              action={
-                <Button
-                  shape="round"
-                  size="large"
-                  type='primary'
-                  style={{
-                    width: '100%'
-                  }}
-                  onClick={saveApply}
-                >
-                  Send request
+        <Drawer
+          title='Complete your profile'
+          placement="right"
+          closable={true}
+          width={680}
+          onClose={() => {
+            dispatch({ type: types.SHOW_DRAWER, payload: false });
+          }}
+          visible={state.visible}>
+          <FormUserDriver
+            action={
+              <Button
+                shape="round"
+                size="large"
+                type='primary'
+                style={{
+                  width: '100%'
+                }}
+                onClick={saveApply}
+              >
+                Send request
               </Button>} />
-          </Drawer>
-        </WrapperSection>
+        </Drawer>
+      </WrapperSection>
     </>
   )
 }
