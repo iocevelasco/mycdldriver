@@ -13,7 +13,7 @@ const { Option } = Select;
 
 
 const ServicesForm = (props) => {
-  const { fields, createService, includeServices, setIncludeServices } = props;
+  const { createService, editService, includeServices, setIncludeServices } = props;
   const TextButton = props.formType === 'create' ? 'Create Job' : 'Save Changes';
   const [form] = Form.useForm();
   const [stateOptions, isFetchingState] = useListState();
@@ -22,10 +22,28 @@ const ServicesForm = (props) => {
     options: [],
     all: [],
   });
+  let idEdit = 0;
 
-  const onFinish = (fields) => {
+  useEffect(() => {
+    if(props.fields.length > 0){
+      idEdit= props.fields[0]['value'];
+      console.log(idEdit);
+    }
+  }, []);
+
+  
+
+  const onFinishCreate = (fields) => {
     fields.includeService = includeServices || [];
     createService(fields);
+  };
+
+  const onFinishEdit = (fields) => {
+    fields.includeService = includeServices || [];
+    if(!fields.image){
+      fields.image = "";
+    }
+    editService(idEdit, fields);
   };
 
   const fetchCities = async (stateId) => {
@@ -95,6 +113,7 @@ const ServicesForm = (props) => {
       newValues.push({ description: '' });
       setIncludeServices(newValues);
     }
+
   }
 
   const removeValue = (type, i) => {
@@ -102,7 +121,6 @@ const ServicesForm = (props) => {
       const filtered = contactList.filter((value, index) => {
         return index !== i;
       });
-      console.log('filtered', filtered)
       setContactList(filtered);
     }
     if (type == 'service') {
@@ -121,12 +139,25 @@ const ServicesForm = (props) => {
       includeServices[index] = { description: value }
     }
   }
+console.log(props.fields);
+  let fields = [];
+  if (props.fields) {
+    fields = props.fields.map((field) => {
+      if (field['name'] == "city" || field['name'] == "state") {
+        if (typeof field['value'] === 'object') {
+          let id = field['value']._id;
+          field['value'] = id;
+        }
+      }
+      return field;
+    });
+  }
 
   return (
     <>
       <Form
         form={form}
-        onFinish={onFinish}
+        onFinish={props.formType === 'create' ? onFinishCreate : onFinishEdit}
         fields={fields}
         name={props.formType === 'create' ? "new-job" : "edit-job"}
         initialValues={{ remember: true }}
@@ -271,7 +302,7 @@ const ServicesForm = (props) => {
   )
 }
 const AddNewProps = (props) => {
-  const { type, index, addNewValue, removeValue, handlerCustomInput } = props;
+  const { type, index, addNewValue, removeValue, handlerCustomInput, value } = props;
   const addBottom = (position) => {
     if (position == 0) {
       return <Button shape="circle" onClick={() => addNewValue(type)} type="primary" icon={<PlusOutlined />} />
@@ -280,13 +311,13 @@ const AddNewProps = (props) => {
     }
   }
   return (
-    <Row gutter={[16]}>
+    <Row gutter={[16]} key={index}>
       <Col span={3} style={{ paddingLeft: 16 }}>
         {addBottom(index)}
       </Col>
       <Col span={21}>
         <Form.Item>
-          <Input onChange={(ev) => handlerCustomInput(ev.target.value, index, type)} />
+          <Input value={value} onChange={(ev) => handlerCustomInput(ev.target.value, index, type)} />
         </Form.Item>
       </Col>
     </Row>

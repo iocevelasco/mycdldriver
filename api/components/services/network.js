@@ -21,8 +21,8 @@ router.post('/', auth(2), function (req, res) {
       });
 });
 
-router.get('/:id', function (req, res) {
-    controller.getServices(req.params.id)
+router.get('/home', function (req, res) {
+    controller.getServices()
       .then((service) => {
         switch (service.status) {
           case 200:
@@ -33,12 +33,13 @@ router.get('/:id', function (req, res) {
         }
   
       }).catch(e => {
+        console.log(e);
         response.error(req, res, 'Unexpected network Error', 500, e);
       });
 });
 
-router.get('/home', function (req, res) {
-    controller.getServices()
+router.get('/:id', function (req, res) {
+    controller.getServices(req.params.id)
       .then((service) => {
         switch (service.status) {
           case 200:

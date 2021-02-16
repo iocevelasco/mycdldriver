@@ -9,7 +9,10 @@ async function getServices(companyId) {
         }
       }
   
-      const result = await Services.find(query).populate("company");
+      const result = await Services.find(query)
+        .populate("company", "_id name lastname typeUser photo email company")
+        .populate("city")
+        .populate("state");
       return { status: 200, message: result }
     } catch (e) {
       console.log(e);
@@ -36,6 +39,7 @@ async function getService(serviceId) {
       const result = await Services.findOne(query).populate("company");
       return { status: 200, message: result }
     } catch (e) {
+      console.log(e);
       return {
         status: 500,
         message: 'Unexpected store error',
@@ -108,11 +112,12 @@ async function updateService(service){
         if(service.city){
             foundService.city = service.city;
         }
-
+        console.log('Service Before', foundService);
         const serviceResult = await foundService.save();
         return { status: 200, message: serviceResult };
 
     }catch(e){
+      console.log('Error Update Service', e)
         return {
             status: 500,
             message: 'Unexpected store error',
