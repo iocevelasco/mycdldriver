@@ -1,5 +1,63 @@
 @import "../../styles/settings/media-query.less";
 
+
+.home-header{
+  height: 55vh;
+  background-position-y: -320px!important;
+  background-repeat: no-repeat;
+  background-size:cover;
+  .home-header__input-container{
+    background: #0000008a;
+    padding: 32px;
+    border-radius: 20px;
+    margin-top: 23vh;
+  }
+}
+
+.home-header{
+  .ant-typography{
+    color:white
+  }
+}
+
+
+
+
+.home--ranking{
+  .star-container{
+    margin-bottom: 8px;
+    span{
+      margin-right:4px;
+    }
+  }
+}
+
+
+.delete-user{
+  position:fixed;
+  bottom:20px;
+  right: 20px;
+}
+
+
+@media @phone-down {
+  div.home-header{
+    height: 100vh;
+    background-position: 86% 110%!important;
+    .home-header__input-container{
+      padding: 16px;
+      margin-top: 46vh;
+      border-radius: 0;
+    }
+  }
+  h1.ant-typography{
+    font-size:24px;
+    text-align: left;
+  }
+
+}
+
+
 .home-header {
   .ant-typography {
     color: white;
@@ -31,6 +89,15 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, 1fr);
     grid-column-gap: 24px;
+  }
+  @media @phone-down {
+    .ant-list-items{
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(3, 1fr);
+      grid-column-gap: 24px;
+      padding:16px;
+    }
   }
 }
 
