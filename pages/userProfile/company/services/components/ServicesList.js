@@ -1,15 +1,16 @@
 import React from 'react';
 import { useState } from 'react';
-import { Typography, Card, Image, Button } from 'antd';
+import { Typography, Card, Image, Button, Modal } from 'antd';
 import propTypes, { arrayOf, node } from 'prop-types';
-import { DeleteOutlined, EditOutlined, CheckCircleOutlined, PhoneOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, CheckCircleOutlined, PhoneOutlined, UserOutlined, MailOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import axios from 'axios';
+const { confirm } = Modal;
 
 const { Text, Title } = Typography
 
 const ServicesList = (props) => {
-  const { serviceList, setEditService } = props;
+  const { serviceList, setEditService, deleteService } = props;
 
   const ItemProps = ({ text, icon, customClass }) => (
     <div className={`services-card__item`}>
@@ -24,6 +25,18 @@ const ServicesList = (props) => {
     }
   }
 
+  function showConfirm(id) {
+    confirm({
+      title: 'Do you Want to delete these service?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'This action can not be undone',
+      onOk() {
+        deleteService(id);
+      },
+      onCancel() {
+      },
+    });
+  }
 
   return (
     <div className="services-list__container">
@@ -81,7 +94,7 @@ const ServicesList = (props) => {
                       type="link"
                       icon={<EditOutlined />}
                       onClick={() => setEditService(service)} />
-                    <Button type="link" icon={<DeleteOutlined />} />
+                    <Button type="link" icon={<DeleteOutlined />} onClick={() => showConfirm(service._id)} />
                   </div>
                 </div>
               </div>

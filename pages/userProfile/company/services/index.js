@@ -123,6 +123,20 @@ const CompanyJobView = (props) => {
       })
   };
 
+  const deleteService = async (id) => {
+    await axios.delete('/api/services/' + id, header)
+      .then(() => createSuccess())
+      .catch((err) => {
+        console.log(err);
+        fetchServiceList();
+        notification['error']({
+          message: 'error',
+          description:
+            "Sorry! We couldn't create this service, please try again. "
+        });
+      })
+  };
+
   const beforeToCreate = (fields) => {
     const { title, detail, email, whatsapp, state, city } = fields;
     const newService = {
@@ -166,12 +180,13 @@ const CompanyJobView = (props) => {
           <WrapperSection row={24}>
             <ServicesList 
             serviceList={serviceList}
+            deleteService={deleteService}
             setEditService={setEditService}  />
           </WrapperSection>
         </Col>
       </Row>
       <Drawer
-        title='Create Job'
+        title={typeForm === 'create' ? 'Create Job' : 'Edit Job'}
         placement="right"
         closable={true}
         width={detectMobile.isMobile() ? 400 : 580}

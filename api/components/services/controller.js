@@ -45,6 +45,13 @@ async function setService(service, company) {
 
 async function updateService(service) {
     try{
+
+        if(Array.isArray(service.image)){
+            if(service.image.lenght <= 0){
+                service.image = "";
+            }
+        }
+
         const result = store.updateService(service);
         return(result);
     }catch(e){
