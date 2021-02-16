@@ -91,8 +91,8 @@ const ServicesList = (props) => {
                 </div>
                 <div className="services-card__footer">
                   <div className="services-card__footer--address">
-                    <p> {state}  </p>
-                    <p> {city}  </p>
+                    <p> {state.stateName}  </p>
+                    <p> {city.cityName}  </p>
                   </div>
                   <div className="services-card__footer--actions">
                     <Button type="link" icon={<EditOutlined />} />
