@@ -22,13 +22,21 @@
     }
   }
 
-.card-job__header{
-  display:flex;
-  border-bottom: 1px solid rgb(218, 218, 218);
-  margin-bottom: 8px;
-  padding:24px;
-  justify-content:space-between;
-}
+  .card-job__header{
+    display:flex;
+    border-bottom: 1px solid rgb(218, 218, 218);
+    margin-bottom: 8px;
+    padding:24px;
+    justify-content:space-between;
+  }
+
+  .card-job__footer{
+    width: 100%;
+    display:flex;
+    padding:24px;
+    align-items:center;
+    align-content: center;
+  }
 
 .card-job__header__title{
   h4{
@@ -53,11 +61,12 @@
 
 .card-job__detail{
   display: grid;
-  grid-template-columns: 70% 20%;
+  grid-template-columns: 100%;
   grid-template-rows: 1fr;
   grid-column-gap: 24px;
   grid-row-gap: 24px;
   align-items: center;
+  text-align: justify;
   padding:14px 24px 24px 24px 
 }
 }

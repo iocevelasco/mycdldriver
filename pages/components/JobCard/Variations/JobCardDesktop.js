@@ -31,15 +31,20 @@ const JobCardDesktop = (props) => {
             </div>
             <div className="card-job__header__company">
               <Avatar shape="square" size={60} src={item.company.photo} />
-              <p className="card-job__description__title" level={3}> {item.company.tradename} </p>
+              <p className="card-job__description__title" level={3}>
+                {item.company.tradename} <br />
+                <Text type="secondary" > {moment(item.date, "YYYYMMDD").fromNow()}</Text>
+               </p>
             </div>
           </div>
           <div className="card-job__detail">
             <div>
               <p> {item.description} </p>
-              <Text type="secondary" > {moment(item.date, "YYYYMMDD").fromNow()}</Text>
+              
             </div>
-            <Button type="primary" shape="round">More </Button>
+          </div>
+          <div className="card-job__footer">
+            <center><Button type="primary" shape="round">Apply now </Button></center>
           </div>
         </div>
       </Link>
