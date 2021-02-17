@@ -47,7 +47,7 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
               <Card
                 hoverable={true}
                 cover={<img alt="example" src={e.photo} />}
-                style={{ width: "220px", marginTop: 24 }}
+                style={{ width: "260px", marginTop: 24 }}
                 className={"cardCarousel"}
               >
                 <div className="star-container">

@@ -1,0 +1,117 @@
+
+  .services-card__body{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .services-card__contact{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-row-gap: 8px;
+    padding:16px
+  }
+
+  .services-card__thumbnails{
+    .ant-image-img{
+      object-fit: cover;
+    }
+  }
+
+  .services-card__left{
+    background: #EFEFEF;
+  }
+  
+  .services-card__contact-list{
+    padding:24px;
+    .services-card__item{
+      border: 0.5px solid #d4d4d4;
+      border-radius: 2.5px;
+      padding:8px;
+      margin-bottom: 16px;
+      .anticon{
+        margin-right: 16px;
+      }
+    }
+  }
+
+  .services-card__right{
+    padding:24px;
+    display:flex;
+    flex-direction: column;
+    justify-content:space-between;
+  }
+  .services-card__title{
+    margin-bottom: 16px;
+    h3{
+      color:#E73540
+    }
+    padding-bottom: 24px;
+    border-bottom: 0.5px solid #d4d4d4;
+    min-height: 160px;
+    max-height: 160px;
+    overflow: scroll;
+  }
+
+  .services-card__service-include{
+    max-height: 120px;
+    overflow: scroll;
+    .services-card__item{
+      border-radius: 2.5px;
+      padding:8px;
+      .anticon{
+        margin-right: 16px;
+      }
+    }
+  }
+
+  .services-card__footer{
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-row-gap: 8px;
+    padding:8px 0 8px 8px;
+    align-items: center;
+    .services-card__service-include-title{
+      font-weight: bold;
+    }
+    .services-card__footer--address{
+      display:flex;
+      justify-content:space-between;
+      flex-direction: column;
+      overflow:scroll;
+      p{
+        color:gray;
+        text-overflow: ellipsis;
+        margin-bottom: 0;
+      }
+    }
+    .services-card__footer--actions{
+      display:flex;
+      justify-content:space-between;
+    }
+  }
+
+  .services-card__custom-whatsapp{
+    button{
+    line-height: 1.5715;
+    position: relative;
+    display: flex;
+    font-weight: 400;
+    white-space: nowrap;
+    text-align: center;
+    background-image: none;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    user-select: none;
+    touch-action: manipulation;
+    height: 32px;
+    padding: 4px 15px;
+    font-size: 14px;
+    border-radius: 20px;
+    color: rgba(0, 0, 0, 0.65);
+    background: #01e675;
+    border-color: #d9d9d9;
+    }
+  }

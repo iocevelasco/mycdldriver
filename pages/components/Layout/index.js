@@ -5,7 +5,7 @@ import Head from 'next/head'
 import Footer from './footer';
 import Link from 'next/link';
 import { SpinnerComp } from 'components/helpers';
-import DrawerLayout from 'components/DrawerLayout';
+import SideMenu from './components/SideMenu';
 import { connect } from 'react-redux';
 import { getCurrentLocation, fetchUserData } from '@store/reducers/user_reducer';
 import { handlerModalLogin, deviceType } from '@store/reducers/landing_reducer';
@@ -77,7 +77,7 @@ const MainLayout = ({
             background: `#fff`,
             backgroundSize: 'contain',
         }
-    console.log('isLoading', isLoading)
+
     return (<>
         <Head>
             <title> My CDL Driver </title>
@@ -100,12 +100,12 @@ const MainLayout = ({
                 dangerouslySetInnerHTML={{
                     __html: `
                     var _smartsupp = _smartsupp || {};
-                    _smartsupp.key = '4d2506c540fb4374b23fd72bad60c42be37284df';
+                    _smartsupp.key = 'f27914d1ade5c4723015ae0bcb904eadffdaec6b';
                     window.smartsupp||(function(d) {
-                        var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-                        s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-                        c.type='text/javascript';c.charset='utf-8';c.async=true;
-                        c.src='//www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+                      var s,c,o=smartsupp=function(){ o..push(arguments)};o.=[];
+                      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+                      c.type='text/javascript';c.charset='utf-8';c.async=true;
+                      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
                     })(document);`,
                 }}
             />
@@ -165,7 +165,7 @@ const MainLayout = ({
             </Content>
             <Footer />
             <ModalLogin />
-            <DrawerLayout visible={visible} setVisible={setVisible} />
+            <SideMenu visible={visible} setVisible={setVisible} />
         </Layout>
     </>
     )
