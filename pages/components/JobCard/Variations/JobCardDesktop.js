@@ -45,7 +45,9 @@ const JobCardDesktop = (props) => {
             <div>
               <p> {item.description} </p>
             </div>
-            <Button type="primary" shape="round">More </Button>
+          </div>
+          <div className="card-job__footer">
+            <center><Button type="primary" shape="round">Apply now </Button></center>
           </div>
         </div>
       </Link>
