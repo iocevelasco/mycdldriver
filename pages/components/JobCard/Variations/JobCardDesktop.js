@@ -13,7 +13,15 @@ const JobCardDesktop = (props) => {
   return (
     <Card
       hoverable
-      cover={<img alt="logo" src={item.logo} />}
+      cover={
+        <>
+          <div className="card-job__header__company">
+            <Avatar shape="square" size={120} src={item.company.photo} />
+            <p className="card-job__description__title" level={3}> {item.company.tradename} </p>
+          </div>
+          <img alt="logo" src={item.logo} />
+        </>
+      }
     >
       <Link
         href={{
@@ -25,25 +33,23 @@ const JobCardDesktop = (props) => {
           <div className="card-job__header">
             <div className="card-job__header__title" >
               <Title level={4}> {item.title} </Title>
+            </div>
+            <div className="card-job__header__sub-title">
               <Text>
                 {item.company.address}  |  {item.company.address2}
               </Text>
-            </div>
-            <div className="card-job__header__company">
-              <Avatar shape="square" size={60} src={item.company.photo} />
-              <p className="card-job__description__title" level={3}> {item.company.tradename} </p>
+              <Text type="secondary" > {moment(item.date, "YYYYMMDD").fromNow()}</Text>
             </div>
           </div>
           <div className="card-job__detail">
             <div>
               <p> {item.description} </p>
-              <Text type="secondary" > {moment(item.date, "YYYYMMDD").fromNow()}</Text>
             </div>
             <Button type="primary" shape="round">More </Button>
           </div>
         </div>
       </Link>
-    </Card>
+    </Card >
   )
 }
 

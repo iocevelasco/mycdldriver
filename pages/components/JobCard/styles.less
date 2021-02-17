@@ -11,10 +11,12 @@
   }
   
   .ant-card-body{
+    box-shadow: inset 1px -42px 20px -7px rgba(255,255,255,1);
     padding:0;
   }
 
   .ant-card-cover{
+    position: relative;
     max-height: 200px;
     img{
       object-fit: cover;
@@ -23,11 +25,9 @@
   }
 
 .card-job__header{
-  display:flex;
   border-bottom: 1px solid rgb(218, 218, 218);
   margin-bottom: 8px;
   padding:24px;
-  justify-content:space-between;
 }
 
 .card-job__header__title{
@@ -37,28 +37,52 @@
 }
 
 .card-job__header__company{
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   align-content: center;
+  position: absolute;
+  flex-direction: column;
+  left: 0;
+  width: 39%;
+  background: linear-gradient(90deg, rgba(19, 19,19,5) 0%, rgba(255,255,255,0) 100%);
+  bottom: 0;
+  justify-content: center;
+  top: 0;
   .ant-avatar{
-    background: rgb(218, 218, 218);
-    margin-right: 16px;
-    box-shadow: 0px 0px 14px rgb(210 210 210);
+    background:#fff;
+    box-shadow: 0px 0px 14px rgb(19 19 19);
+    display: flex;
+    align-items: center;
+    align-content: center;
+    img{
+      height:auto;
+    }
   }
   p{
     font-weight: 600;
-    color:  @primary-color;
+    color:  #fff;
+    margin-top:16px;
   }
 }
-
+.card-job__header__sub-title{
+  display: flex;
+  justify-content:space-between;
+  align-items:center;
+  align-content:center;
+}
 .card-job__detail{
   display: grid;
   grid-template-columns: 70% 20%;
-  grid-template-rows: 1fr;
   grid-column-gap: 24px;
   grid-row-gap: 24px;
   align-items: center;
-  padding:14px 24px 24px 24px 
+  padding:14px 24px 24px 24px ;
+  margin-bottom: 24px;
+  max-height: 120px;
+  p{
+    overflow: hidden;
+    max-height: 114px;
+  }
 }
 }
 
@@ -79,6 +103,7 @@
   }
 
   .ant-card-cover{
+    position: relative;
     max-height: 200px;
     img{
       object-fit: cover;
