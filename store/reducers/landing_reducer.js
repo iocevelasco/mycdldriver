@@ -3,6 +3,7 @@ import axios from 'axios';
 const types = {
     FETCH_JOBS: 'FETCH_JOBS',
     FETCH_DRIVERS: 'FETCH_DRIVERS',
+    FETCH_SERVICES: 'FETCH_SERVICES',
     VISIBLE_MODAL_LOGIN: 'VISIBLE_MODAL_LOGIN',
     DEVICETYPE: 'DEVICETYPE',
     IS_LOADING: 'IS_LOADING',
@@ -13,6 +14,7 @@ const initialState = {
     jobs: [],
     drivers: [],
     citys: [],
+    services: [],
     jobs_name: [],
     companies: [],
     visible_modal_login: false,
@@ -30,6 +32,21 @@ function fetchJobPositionData(qs) {
                     payload: {
                         jobs: jobs,
                     }
+                }));
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+}
+
+function fetchServices() {
+    return (dispatch) => {
+        return axios.get(`/api/services/home`)
+            .then(({ data }) => {
+                let services = data.data;
+                dispatch(({
+                    type: types.FETCH_SERVICES,
+                    payload: services
                 }));
             }).catch((error) => {
                 console.log(error);
@@ -105,6 +122,10 @@ const landingReducer = (state = initialState, action) => {
                 citys_available: action.payload.citys_available,
                 isLoading: false
             }
+        case types.FETCH_SERVICES:
+            return {
+                ...state, services: action.payload
+            }
         case types.FETCH_DRIVERS:
             return {
                 ...state, drivers: action.payload
@@ -138,5 +159,6 @@ export {
     deviceType,
     activeLoading,
     fetchCommonData,
-    fetchDriversData
+    fetchDriversData,
+    fetchServices
 };

@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchJobPositionData } from '@store/reducers/landing_reducer';
 import { withRouter } from 'next/router';
-import { List, Card, Avatar, Typography, Button, Image, Row, Col } from 'antd';
-import Link from 'next/link';
-import moment from 'moment';
+import { List, Card, Avatar, Typography } from 'antd';
 import JobCardComponent from 'components/JobCard';
+import classnames from 'classnames';
 
 const { Title } = Typography
 
@@ -22,27 +21,18 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
+const JobListComp = ({ jobs, fetchJobs, type }) => {
   useEffect(() => {
     fetchJobs('');
   }, [])
 
-  const handlerTypeComponent = (type, item) => {
-    let components;
-    switch (type) {
-      case 'small':
-        components = <DescriptionSmall item={item} />
-        break;
-      case 'large':
-        if (deviceType === 'desktop') components = <DescriptionDesktop item={item} />
-        else components = <DescriptionMobile item={item} />
-        break;
-    }
-    return components
-  }
+  var jobListContainer = classnames({
+    'home__jobs-list': type == 'large',
+    'job-offert__jobs-list': type == 'small'
+  });
 
   return (
-    <>
+    <div className={jobListContainer}>
       <List
         bordered={false}
         style={{ width: '100%' }}
@@ -52,11 +42,11 @@ const JobListComp = ({ jobs, deviceType, fetchJobs, type }) => {
         }}
         renderItem={item => (
           <List.Item>
-            <JobCardComponent item={item} />
+            <JobCardComponent type='large' item={item} />
           </List.Item>
         )}
       />
-    </>
+    </div>
   );
 }
 

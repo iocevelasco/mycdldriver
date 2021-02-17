@@ -1,12 +1,12 @@
 import React, { useEffect, useReducer } from 'react';
-import { Row, Col, Typography, Input, Select, Button, Tooltip } from 'antd';
+import { Row, Col, Typography, Button, Tooltip } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import CarouselComp from 'components/carousel';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import queryString from "query-string";
-import { fetchJobPositionData, fetchDriversData, fetchCommonData } from '@store/reducers/landing_reducer';
+import { fetchJobPositionData, fetchDriversData, fetchCommonData, fetchServices } from '@store/reducers/landing_reducer';
 import { logoutUser } from '@store/reducers/user_reducer';
 import axios from 'axios';
 
@@ -15,8 +15,9 @@ import mock_ranking from '../mock/ranking.json';
 import "./home/styles.less";
 //View components
 import HeaderLandingComp from './home/components/header_home';
-import OffertJobComp from './home/components/job_offerts';
+import JobsListComp from './home/components/job_offerts';
 import RankingComp from './home/components/ranking';
+import ServicesList from './home/components/ServicesList';
 
 const { Title, Text } = Typography;
 
@@ -67,6 +68,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query)),
     fetchDrivers: () => dispatch(fetchDriversData()),
+    fetchServices: () => dispatch(fetchServices()),
     fetCommons: () => dispatch(fetchCommonData()),
     handleLogout: () => dispatch(logoutUser()),
   }
@@ -146,11 +148,10 @@ const Home = ({
       <WrapperSection xs={24} row={18}>
         <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
           <Col span={14}>
-            <Title style={{ textAlign: 'center' }}> Featured Jobs</Title>
-            <Text style={{ textAlign: 'center', display: 'flex', marginBottom: 32 }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
+            <Title style={{ textAlign: 'center' }}>Find your new job</Title>
           </Col>
         </Row>
-        <OffertJobComp type='large' />
+        <JobsListComp type='large' />
       </WrapperSection>
       <WrapperSection xs={24} row={18} style={wrapperStyle} >
         <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
@@ -163,11 +164,20 @@ const Home = ({
           <RankingComp rankingDriver={state.ranking} />
         </Row>
       </WrapperSection>
-      <div className='delete-user' style={{ display: 'block' }}>
+      <WrapperSection xs={24} row={24}>
+        <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
+          <Col span={14}>
+            <Title style={{ textAlign: 'center' }}> Services </Title>
+            <Text style={{ textAlign: 'center', display: 'flex', marginBottom: 32 }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
+          </Col>
+        </Row>
+        <ServicesList />
+      </WrapperSection>
+      {/* <div className='delete-user' style={{ display: 'block' }}>
         <Tooltip title=" Borrar usuario">
           <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined />} />
         </Tooltip>
-      </div>
+      </div> */}
     </>
   )
 }

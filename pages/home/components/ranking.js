@@ -31,7 +31,7 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
 
   let widthScreen = useWindowSize().width;
   return (
-    <div style={{ width: "100%" }}>
+    <div className="home__ranking" style={{ width: "100%" }}>
       <Carousel
         dots={true}
         autoplay={true}

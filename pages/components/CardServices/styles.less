@@ -1,40 +1,9 @@
-.profile-company__services{
 
-}
-
-.profile-company__services__header{
-  padding: 16px;
-  border: 1px solid #cecece;
-  margin-bottom: 16px;
-  border-radius: 5px;
-  .ant-typography{
-    margin-bottom: 0;
-  }
-}
-
-.profile-company__services__header__add-new{
-  .ant-typography{
-    margin-bottom: 16px;
-    margin-left: 16px;
-  }
-}
-
-.services-list__container{
-  .ant-card{
-    overflow: hidden;
-  }
-  
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  grid-column-gap: 24px;
-  grid-row-gap: 24px;
-
-  //card
   .services-card__body{
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+
   .services-card__contact{
     display: grid;
     grid-template-columns: 1fr;
@@ -42,11 +11,13 @@
     grid-row-gap: 8px;
     padding:16px
   }
+
   .services-card__thumbnails{
     .ant-image-img{
       object-fit: cover;
     }
   }
+
   .services-card__left{
     background: #EFEFEF;
   }
@@ -63,6 +34,7 @@
       }
     }
   }
+
   .services-card__right{
     padding:24px;
     display:flex;
@@ -118,4 +90,28 @@
       justify-content:space-between;
     }
   }
-}
+
+  .services-card__custom-whatsapp{
+    button{
+    line-height: 1.5715;
+    position: relative;
+    display: flex;
+    font-weight: 400;
+    white-space: nowrap;
+    text-align: center;
+    background-image: none;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    user-select: none;
+    touch-action: manipulation;
+    height: 32px;
+    padding: 4px 15px;
+    font-size: 14px;
+    border-radius: 20px;
+    color: rgba(0, 0, 0, 0.65);
+    background: #01e675;
+    border-color: #d9d9d9;
+    }
+  }

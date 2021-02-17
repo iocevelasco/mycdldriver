@@ -1,8 +1,8 @@
 const store = require('./store');
 
-async function getService(serviceId) {
+async function getArticle(slug) {
     try{
-        const result = await store.getService(serviceId);
+        const result = await store.getArticle(slug);
         return(result);
     }catch(e){
         return {
@@ -13,13 +13,9 @@ async function getService(serviceId) {
     }
 }
 
-async function getServices(companyId) {
+async function getCategory(slug) {
     try{
-        let id = 0;
-        if (companyId) {
-            id = companyId;
-        }
-        const result = await store.getServices(id);
+        const result = await store.getCategory(slug);
         return(result);
     }catch(e){
         return {
@@ -30,9 +26,9 @@ async function getServices(companyId) {
     }
 }
 
-async function setService(service, company) {
+async function setArticle(slug, user) {
     try{
-        const result = await store.setService(service, company);
+        const result = await store.setArticle(slug, user);
         return(result);
     }catch(e){
         return {
@@ -43,16 +39,9 @@ async function setService(service, company) {
     }
 }
 
-async function updateService(service) {
+async function updateArticle(article) {
     try{
-
-        if(Array.isArray(service.image)){
-            if(service.image.lenght <= 0){
-                service.image = "";
-            }
-        }
-
-        const result = store.updateService(service);
+        const result = await store.updateArticle(article);
         return(result);
     }catch(e){
         return {
@@ -63,9 +52,9 @@ async function updateService(service) {
     }
 }
 
-async function deleteService(id) {
+async function deleteArticle(id) {
     try{
-        const result = store.deleteService(id);
+        const result = await store.deleteArticle(id);
         return(result);
     }catch(e){
         return {
@@ -77,9 +66,9 @@ async function deleteService(id) {
 }
 
 module.exports = {
-    getService,
-    getServices,
-    setService,
-    updateService,
-    deleteService
+    getArticle,
+    getCategory,
+    setArticle,
+    updateArticle,
+    deleteArticle
 }

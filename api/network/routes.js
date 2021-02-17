@@ -7,6 +7,7 @@ const files = require('../components/files/network');
 const cities = require('../components/cities/network');
 const incident = require('../components/incident/network');
 const services = require('../components/services/network');
+const blog = require('../components/blog/network');
 const config = require('../config');
 const url_api = "/api";
 

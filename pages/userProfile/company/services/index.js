@@ -4,98 +4,52 @@ import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import axios from 'axios';
 import { WrapperDashboard, WrapperSection } from 'components/helpers';
-import JobsList from './ListJobs';
-import ServicesForm from './ServicesForm';
+import ServicesList from './components/ServicesList';
+import ServicesForm from './components/ServicesForm';
 import useMobileDetect from 'use-mobile-detect-hook';
 import "./styles.less";
 const { Text, Title } = Typography;
-const initialState = {
-  loading: true,
-  loadingJobsList: true,
-  fields: [],
-  fieldsEdit: [],
-  newPhoto: [],
-  editPhoto: [],
-  visible: false,
-  visible_create: false,
-}
-
-const types = {
-  LOADING: 'LOADING',
-  SHOW_DRAWER: 'SHOW_DRAWER',
-  NEW_PHOTO: 'NEW_PHOTO',
-  EDIT_PHOTO: 'EDIT_PHOTO',
-  EDITING: 'EDITING',
-  NEW_FIELDS: 'NEW_FIELDS',
-  EDIT_FIELDS: 'EDIT_FIELDS',
-  OPEN_DRAWER_CREATE: 'OPEN_DRAWER_CREATE',
-  CREATE_JOB_SUCCESS: 'CREATE_JOB_SUCCESS',
-}
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case types.LOADING:
-      return { ...state, loading: action.payload }
-    case types.SHOW_DRAWER:
-      return {
-        ...state,
-        visible: !state.visible,
-        fields: action.payload
-      }
-    case types.NEW_PHOTO:
-      return { ...state, newPhoto: action.payload }
-    case types.EDIT_PHOTO:
-      return { ...state, editPhoto: action.payload }
-    case types.EDITING:
-      return { ...state, editing: !state.editing }
-    case types.OPEN_DRAWER_CREATE:
-      return { ...state, visible_create: !state.visible_create }
-    case types.CREATE_JOB_SUCCESS:
-      return {
-        ...state,
-        visible_create: false,
-        fields: [],
-      }
-    default:
-      throw new Error('Unexpected action');
-  }
-}
 
 // CONNECT WITH REDUX
 function mapStateToProps(state) {
+  const { user } = state;
   return {
-    user: state.user
+    userId: user._id,
+    token: user.token
   }
 }
 
 const CompanyJobView = (props) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [jobsByCompany, setOptions] = useState([]);
-  const [image, setImage] = useState([]);
+  const { companyId, token, userId } = props;
+
+  const [contactList, setContactList] = useState([{ number: '' }]);
+  const [includeServices, setIncludeServices] = useState([{ description: '' }]);
+  const [serviceList, setServiceList] = useState([]);
+  const [typeForm, setTypeForm] = useState('create');
+  const [visibleAdd, setVisibleAdd] = useState(false);
+  const [imageThumbnails, setImage] = useState([]);
+  const [fields, setFields] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
-  const { user } = props;
   const detectMobile = useMobileDetect();
   const header = {
-    headers: { Authorization: `Bearer ${user.token}` }
+    headers: { Authorization: `Bearer ${token}` }
   };
 
-  const fetchJobList = async () => {
+  const fetchServiceList = async () => {
     setIsFetching(true);
     await axios
-      .get('/api/company/jobs/private', header)
+      .get(`/api/services/${userId}`, header)
       .then((response) => {
-        let options = response.data.data;
-        setOptions(options);
+        setServiceList(response.data.data)
         setIsFetching(false);
       })
       .catch((err) => {
-        setOptions([]);
         console.log(err)
       })
   }
 
   useEffect(() => {
-    fetchJobList()
+    fetchServiceList();
   }, []);
 
 
@@ -104,8 +58,9 @@ const CompanyJobView = (props) => {
   };
 
   const createSuccess = () => {
-    fetchJobList();
-    dispatch({ type: types.CREATE_JOB_SUCCESS });
+    fetchServiceList();
+    setVisibleAdd(false);
+    setIncludeServices([{ description: '' }]);
     notification['success']({
       message: 'Success',
       description:
@@ -113,19 +68,36 @@ const CompanyJobView = (props) => {
     });
   }
 
-  const onFinisCreateJobs = async (fields) => {
-    fields.tags = [];
-    delete fields['photo'];
-    fields.logo = image;
+  const setEditService = (service) => {
+    setVisibleAdd(true);
+    let fields = [];
+    for (let key in service) {
+      let inputs = {
+        name: [key],
+        value: service[key]
+      }
+      fields.push(inputs);
+    }
+    setFields(fields);
 
-    dispatch({ type: types.LOADING, payload: true });
-    await axios.post('/api/company/jobs', fields, header)
-      .then(() => {
-        createSuccess();
-      })
+    let include = service.includeService.map((k) => {
+      return { description: k.description }
+    });
+    setIncludeServices(include);
+    setTypeForm('edit');
+  }
+
+  const setNewServide = () => {
+    setVisibleAdd(true);
+  }
+
+  const createService = async (fields) => {
+    const data = beforeToCreate(fields);
+    await axios.post('/api/services', data, header)
+      .then(() => createSuccess())
       .catch((err) => {
         console.log(err);
-        fetchJobList();
+        fetchServiceList();
         notification['error']({
           message: 'error',
           description:
@@ -134,69 +106,61 @@ const CompanyJobView = (props) => {
       })
   };
 
-  const handlerEditJob = async (fields) => {
-    fields.logo = image;
-    delete fields['photo'];
-    try {
-      await axios.patch('/api/company/jobs/' + fields._id, fields, header)
-        .then(() => {
-          fetchJobList();
-          notification['success']({
-            message: 'Success',
-            description:
-              "Success ! Your position has been edited correctly"
-          });
+  const editService = async (id, fields) => {
+    const data = beforeToCreate(fields);
+    data.id = id;
+    console.log(data);
+    await axios.patch('/api/services', data, header)
+      .then(() => createSuccess())
+      .catch((err) => {
+        console.log(err);
+        fetchServiceList();
+        notification['error']({
+          message: 'error',
+          description:
+            "Sorry! We couldn't create this position, please try again. "
         });
-    } catch (err) {
-      fetchJobList();
-      console.log(err);
-      notification['error']({
-        message: 'error',
-        description:
-          "Sorry! We couldn't save changes, please try again"
-      });
+      })
+  };
+
+  const deleteService = async (id) => {
+    await axios.delete('/api/services/' + id, header)
+      .then(() => createSuccess())
+      .catch((err) => {
+        console.log(err);
+        fetchServiceList();
+        notification['error']({
+          message: 'error',
+          description:
+            "Sorry! We couldn't create this service, please try again. "
+        });
+      })
+  };
+
+  const beforeToCreate = (fields) => {
+    const { title, detail, email, whatsapp, state, city } = fields;
+    const newService = {
+      title: title,
+      detail: detail,
+      email: email,
+      company: companyId,
+      whatsapp: whatsapp,
+      image: imageThumbnails,
+      phone: [],
+      includeService: includeServices,
+      state: state,
+      city: city
     }
-  };
 
-
-  const openDrawerCreate = () => {
-    dispatch({ type: types.OPEN_DRAWER_CREATE });
-  };
-
-  const closeDrawerCreate = () => {
-    dispatch({ type: types.OPEN_DRAWER_CREATE });
-  };
-
-
-  const openDrawer = (propsFields) => {
-    let fields = [];
-    for (let key in propsFields) {
-      let inputs = {
-        name: [key],
-        value: propsFields[key]
-      }
-      fields.push(inputs);
-    }
-    dispatch({ type: types.EDITING });
-    dispatch({ type: types.SHOW_DRAWER, payload: fields });
-  };
-
-  const onCloseDrawer = () => {
-    dispatch({ type: types.SHOW_DRAWER, payload: [] });
-  }
-
-  const styleWrapper = {
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 20
+    return newService;
   }
 
   return (
     <WrapperDashboard section={2}>
       <Row>
-        <Col span={24} className="profile-company__jobs">
+        <Col span={24} className="profile-company__services">
           <WrapperSection row={24}>
-            <Row justify='space-between' align='middle' className='add-new-driver--header'>
+            <Row justify='space-between' align='middle' className='profile-company__services__header'>
               <Col xs={22} xl={8}>
                 <Title level={3}> Create and edit your position </Title>
                 <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
@@ -207,52 +171,39 @@ const CompanyJobView = (props) => {
                   shape="round"
                   size="large"
                   block
-                  onClick={openDrawerCreate}>
-                  Create Job
+                  onClick={() => setNewServide()}>
+                  Add new services
                 </Button>
               </Col>
             </Row>
-            <JobsList
-              header={header}
-              fetchJobList={fetchJobList}
-              isFetching={isFetching}
-              openDrawer={openDrawer}
-              jobsByCompany={jobsByCompany}
-            />
+          </WrapperSection>
+          <WrapperSection row={24}>
+            <div className="services-list__container">
+              <ServicesList
+                serviceList={serviceList}
+                deleteService={deleteService}
+                setEditService={setEditService} />
+            </div>
           </WrapperSection>
         </Col>
       </Row>
       <Drawer
-        title='Create Job'
+        title={typeForm === 'create' ? 'Create Job' : 'Edit Job'}
         placement="right"
         closable={true}
-        width={detectMobile.isMobile() ? 400 : 680}
-        onClose={closeDrawerCreate}
-        visible={state.visible_create}>
+        width={detectMobile.isMobile() ? 400 : 580}
+        onClose={() => setVisibleAdd(false)}
+        visible={visibleAdd}>
         {
-          state.visible_create && <ServicesForm
+          visibleAdd && <ServicesForm
             handleOnChangeImage={handleOnChangeImage}
-            formType='create'
+            fields={fields}
+            formType={typeForm}
             setImage={setImage}
-            onFinisCreateJobs={onFinisCreateJobs}
-          />
-        }
-      </Drawer>
-      <Drawer
-        title='Edit Job'
-        placement="right"
-        closable={true}
-        width={detectMobile.isMobile() ? 400 : 680}
-        onClose={onCloseDrawer}
-        visible={state.visible}>
-        {
-          state.visible &&
-          <ServicesForm
-            setImage={setImage}
-            handleOnChangeImage={handleOnChangeImage}
-            fields={state.fields}
-            formType='edit'
-            ediJob={handlerEditJob}
+            createService={createService}
+            editService={editService}
+            includeServices={includeServices}
+            setIncludeServices={setIncludeServices}
           />
         }
       </Drawer>
