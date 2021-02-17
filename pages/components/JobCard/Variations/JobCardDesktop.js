@@ -33,21 +33,19 @@ const JobCardDesktop = (props) => {
           <div className="card-job__header">
             <div className="card-job__header__title" >
               <Title level={4}> {item.title} </Title>
-            </div>
-            <div className="card-job__header__sub-title">
-              <Text>
-                {item.company.address}  |  {item.company.address2}
-              </Text>
-              <Text type="secondary" > {moment(item.date, "YYYYMMDD").fromNow()}</Text>
+              <div className="card-job__header__sub-title">
+                <Text>
+                  {item.company.address}  |  {item.company.address2}
+                </Text>
+                <Text type="secondary" > {moment(item.date, "YYYYMMDD").fromNow()}</Text>
+              </div>
             </div>
           </div>
           <div className="card-job__detail">
             <div>
               <p> {item.description} </p>
             </div>
-          </div>
-          <div className="card-job__footer">
-            <center><Button type="primary" shape="round">Apply now </Button></center>
+            <Button type="primary" shape="round">More </Button>
           </div>
         </div>
       </Link>
