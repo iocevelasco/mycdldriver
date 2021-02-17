@@ -11,7 +11,7 @@ const { Text, Title } = Typography
 
 const ServicesList = (props) => {
 
-  const { includeService, image, email, detail, city, state, whatsapp, title } = props;
+  const { includeService, image, email, detail, city, state, whatsapp, title, _id } = props;
   const ItemProps = ({ text, icon }) => (
     <div className={`services-card__item`}>
       {icon}
@@ -35,64 +35,71 @@ const ServicesList = (props) => {
 
 
   return <Card key={props.key} hoverable={true} bodyStyle={styles.body}>
-    <div className="services-card__body">
-      <div className="services-card__left">
-        <div className="services-card__thumbnails">
-          <Image height={200} src={image} />
-        </div>
-        <div className="services-card__contact-list">
-          <span className="services-card__custom-whatsapp">
-            <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
-              <p>Open Whatsapp</p>  <WhatsappIcon style={{ color: '#fff' }} />
-            </ReactWhatsapp>
-          </span>
-          <ItemProps
-            className={null}
-            icon={<MailOutlined style={{ color: "#E73540" }} />}
-            text={`${email} `}
-          />
-        </div>
-      </div>
-      <div className="services-card__right">
-        <div className="services-card__title">
-          <Title level={3} >{title} </Title>
-          <Text>{detail}</Text>
-        </div>
-        <h4 className="services-card__service-include-title">Include </h4>
-
-        <div className="services-card__service-include">
-          {
-            includeService.map((include) => {
-              if (include.description) {
-                return (
-                  <ItemProps
-                    className={null}
-                    icon={<CheckCircleOutlined style={{ color: "#E73540" }} />}
-                    text={include.description}
-                  />
-                )
-              }
-            })
-          }
-        </div>
-        <div className="services-card__footer">
-          <div className="services-card__footer--address">
-            <p> {state.stateName} </p>
-            <p> {city.cityName}  </p>
+    <Link
+      href={{
+        pathname: '/services',
+        query: { id: _id },
+      }}
+    >
+      <div className="services-card__body">
+        <div className="services-card__left">
+          <div className="services-card__thumbnails">
+            <Image height={200} src={image} />
           </div>
-          {
-            props.type !== 'home' &&
-            <div className="services-card__footer--actions">
-              <Button
-                type="link"
-                icon={<EditOutlined />}
-                onClick={() => setEditService(service)} />
-              <Button type="link" icon={<DeleteOutlined />} />
+          <div className="services-card__contact-list">
+            <span className="services-card__custom-whatsapp">
+              <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
+                <p>Open Whatsapp</p>  <WhatsappIcon style={{ color: '#fff' }} />
+              </ReactWhatsapp>
+            </span>
+            <ItemProps
+              className={null}
+              icon={<MailOutlined style={{ color: "#E73540" }} />}
+              text={`${email} `}
+            />
+          </div>
+        </div>
+        <div className="services-card__right">
+          <div className="services-card__title">
+            <Title level={3} >{title} </Title>
+            <Text>{detail}</Text>
+          </div>
+          <h4 className="services-card__service-include-title">Include </h4>
+
+          <div className="services-card__service-include">
+            {
+              includeService.map((include) => {
+                if (include.description) {
+                  return (
+                    <ItemProps
+                      className={null}
+                      icon={<CheckCircleOutlined style={{ color: "#E73540" }} />}
+                      text={include.description}
+                    />
+                  )
+                }
+              })
+            }
+          </div>
+          <div className="services-card__footer">
+            <div className="services-card__footer--address">
+              <p> {state.stateName} </p>
+              <p> {city.cityName}  </p>
             </div>
-          }
+            {
+              props.type !== 'home' &&
+              <div className="services-card__footer--actions">
+                <Button
+                  type="link"
+                  icon={<EditOutlined />}
+                  onClick={() => setEditService(service)} />
+                <Button type="link" icon={<DeleteOutlined />} />
+              </div>
+            }
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   </Card>
 }
 
