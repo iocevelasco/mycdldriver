@@ -5,6 +5,7 @@ async function getArticle(slug) {
         const result = await store.getArticle(slug);
         return(result);
     }catch(e){
+        console.log('ERROR EN CONTROLLER', e);
         return {
             status: 500,
             message: 'Unexpected controller error',
