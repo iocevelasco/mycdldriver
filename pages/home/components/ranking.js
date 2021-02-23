@@ -46,17 +46,19 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
             <Col key={key} className="home--ranking" lg={6} md={12} sm={22}>
               <Card
                 hoverable={true}
-                cover={<img alt="example" src={e.photo} />}
+                cover={<img alt="example" src={e.photo} style={{borderColor:"transparent"}} />}
                 style={{ width: "220px", marginTop: 24 }}
                 className={"cardCarousel"}
+                style={{background:"rgb(0, 22, 40)",borderColor:"transparent"}}
               >
-                <div className="star-container">
-                  <Rate defaultValue={e.driver.rating} />
-                </div>
+               
                 <Meta
                   title={`${e.name} ${e.lastname}`}
                   description={`Address ${e.driver.address}`}
                 />
+                 <div className="star-container">
+                  <Rate defaultValue={e.driver.rating} />
+                </div>
               </Card>
             </Col>
           );

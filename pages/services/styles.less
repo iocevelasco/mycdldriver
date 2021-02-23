@@ -24,12 +24,18 @@
 
 
 .home--ranking{
+  color: #fff;
+
   .star-container{
     margin-bottom: 8px;
     span{
       margin-right:4px;
     }
   }
+}
+
+.home--ranking .ant-card-cover {
+  border: 0px solid transparent !important;
 }
 
 
@@ -39,6 +45,9 @@
   right: 20px;
 }
 
+.ant-card-cover{
+  border-color: transparent !important;
+}
 
 @media @phone-down {
   div.home-header{
@@ -67,6 +76,8 @@
 .cardCarousel {
   width: 260px;
   margin-top: 24;
+  background-color: rgb(0, 22, 40);
+
 }
 
 .home--ranking {
@@ -175,4 +186,162 @@
 
 .home__ranking{
   margin-bottom: 20vh;
+}
+
+
+.services-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  .ant-card-body{
+    padding: 0px;
+  }
+  .service-container__card-top{
+ img{
+  height: 244px;
+  width: 100%;
+  object-fit: cover;
+ }}
+}
+
+.service-container__card-description{
+  padding-left: 32px;
+  padding-right: 32px;
+  .service-container__card-description__img{
+    height: 108px;
+    width: 153px;
+    object-fit: contain;
+    position: absolute;
+    top: 170px;
+  }
+
+  .service-container__card-description__title{
+    color: #989797;
+
+  }
+  .service-container__card-description__comunication{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+   
+    .service-container__card-description__comunication__email{
+        margin-left: 30px;
+    }
+    div{
+      display: flex;
+      align-items: center;
+      svg{
+        margin-right: 8px;
+        fill: #E73540;
+      }
+    }
+  }
+}
+
+
+.service-container__card-description__wp{
+  width: 126px;
+  height: 41px;
+  margin-top: 8px;
+  border: 1px solid #D8D8D8;
+border-radius: 5px;
+display: flex;
+align-items: center;
+justify-content: space-evenly;
+span{
+  color: #E73540;
+  font-size: 14px;
+}
+}
+
+
+.description-job{
+
+  p{
+    margin-top: 24px;
+    color: #001628;
+
+  }
+}
+.description-job--wrapper{
+  padding: 32px 32px 32px 32px;
+  .description-job__title{
+    color: #001628;
+    font-weight: 500;
+  
+  }
+  .description-job--wrapper__list{
+    .description-job-wrapper__list--container{
+      display: flex;
+      align-items: center;
+    }
+    .description-job--wrapper-list__circle{
+      border-radius: 8px;
+      height: 12px  !important;
+      width: 12px !important;
+      background-color: #E73540;
+      margin: 0px;
+      margin-right: 8px;
+    }
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    div{
+      width: 50%;
+      margin-top: 12px;
+    }
+    span{
+    color: #000000;
+    }
+  }
+}
+
+.similar-container{
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 6px;
+  margin-right: 6px;
+  .similiar-container__viewMore{
+    font-size: 14px;
+    color:#E73540;
+    margin-bottom:90px;
+    margin-top:32px;
+    text-align: center;
+
+  }
+  .similar-container__box-card{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+   
+    .similar-container__box-card__info{
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 32px;
+      img{
+        width: 74px;
+        height: 52px;
+      }
+      h3{
+        margin-top:32px;
+        color: #E73540;
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.6px;
+      }
+      span{
+        color: #989797;
+        font-size: 12px;
+      }
+    }
+  }
+  h2{
+    font-size: 24px;
+    margin: 0px;
+    padding:0px;
+    margin-bottom:8px
+  }
 }

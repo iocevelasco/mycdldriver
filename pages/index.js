@@ -148,16 +148,20 @@ const Home = ({
       <WrapperSection xs={24} row={18}>
         <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
           <Col span={14}>
-            <Title style={{ textAlign: 'center' }}>Find your new job</Title>
+            <Title className="home__title" style={{ textAlign: 'center' }}>Featured Jobs</Title>
+          </Col>
+          <Col span={14} style={{display:"flex",flexDirection:"column"}}>
+            <span style={{ textAlign: 'center' }}>It is a long established fact that a reader will be distracted by the readable content of a page </span>
+            <span style={{ textAlign: 'center',marginBottom:"36px" }}>when looking at its layout. The point of using Lorem Ipsum is</span>
           </Col>
         </Row>
         <JobsListComp type='large' />
       </WrapperSection>
-      <WrapperSection xs={24} row={18} style={wrapperStyle} >
-        <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
+      <WrapperSection xs={24} row={18} styles={{background:"#001628"}} >
+        <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24, }}>
           <Col span={14}>
-            <Title style={{ textAlign: 'center' }}>Our Drivers</Title>
-            <Text style={{ textAlign: 'center', display: 'flex' }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
+            <Title style={{ textAlign: 'center',color:"#fff" }}>Our Drivers</Title>
+            <Text style={{ textAlign: 'center', display: 'flex',color:"#fff",marginBottom:"32px" }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
           </Col>
         </Row>
         <Row justify='center' align='middle' gutter={[16, 16]}>
