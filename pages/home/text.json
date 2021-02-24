@@ -1,0 +1,14 @@
+{
+  "drivers": {
+    "title": "Our drivers",
+    "subTitle": " If your are looking for a new member for your company, here you have some examples  of our profesional drivers ."
+  },
+  "services": {
+    "title": "Services",
+    "subTitle": "Find the service you are looking for your company or your truck"
+  },
+  "jobs": {
+    "title": "Featured Jobs",
+    "subTitle": "Find your new job as a driver, see our catalog of opportunities in your city"
+  }
+}

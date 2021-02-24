@@ -27,8 +27,6 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
   }, []);
   const slider = useRef();
 
-  const stars = [1, 2, 3, 4, 5];
-
   let widthScreen = useWindowSize().width;
   return (
     <div className="home__ranking" style={{ width: "100%" }}>
@@ -42,21 +40,24 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
         }}
       >
         {drivers.map((e, key) => {
+          console.log('e', e);
           return (
             <Col key={key} className="home--ranking" lg={6} md={12} sm={22}>
               <Card
                 hoverable={true}
-                cover={<img alt="example" src={e.photo} />}
+                cover={<img alt="driver-image" src={e.photo || '/static/images/cardDriver/user.png'} style={{ borderColor: "transparent" }} />}
                 style={{ width: "220px", marginTop: 24 }}
                 className={"cardCarousel"}
+                style={{ background: "rgb(0, 22, 40)", borderColor: "transparent" }}
               >
-                <div className="star-container">
-                  <Rate defaultValue={e.driver.rating} />
-                </div>
+
                 <Meta
                   title={`${e.name} ${e.lastname}`}
                   description={`Address ${e.driver.address}`}
                 />
+                <div className="star-container">
+                  <Rate allowHalf disabled defaultValue={e.driver.rating} />
+                </div>
               </Card>
             </Col>
           );

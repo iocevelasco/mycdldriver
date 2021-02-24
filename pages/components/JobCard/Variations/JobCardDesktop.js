@@ -13,6 +13,7 @@ const JobCardDesktop = (props) => {
   return (
     <Card
       hoverable
+      className="card-job__box"
       cover={
         <>
           <div className="card-job__header__company">
@@ -45,7 +46,7 @@ const JobCardDesktop = (props) => {
             <div>
               <p> {item.description} </p>
             </div>
-            <Button type="primary" shape="round">More </Button>
+            <Button type="primary" shape="round" style={{width:"140px"}}>Aply now</Button>
           </div>
         </div>
       </Link>
