@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import queryString from "query-string";
 import { fetchJobPositionData, fetchDriversData, fetchCommonData, fetchServices } from '@store/reducers/landing_reducer';
 import { logoutUser } from '@store/reducers/user_reducer';
+import classNames from 'classnames';
 import axios from 'axios';
 
 //mock
@@ -18,6 +19,7 @@ import HeaderLandingComp from './home/components/header_home';
 import JobsListComp from './home/components/job_offerts';
 import RankingComp from './home/components/ranking';
 import ServicesList from './home/components/ServicesList';
+import { drivers, services, jobs } from './home/text.json';
 
 const { Title, Text } = Typography;
 
@@ -146,35 +148,17 @@ const Home = ({
         <CarouselComp carousel_data={state.carousel_data} />
       </WrapperSection>
       <WrapperSection xs={24} row={18}>
-        <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
-          <Col span={14}>
-            <Title className="home__title" style={{ textAlign: 'center' }}>Featured Jobs</Title>
-          </Col>
-          <Col span={14} style={{display:"flex",flexDirection:"column"}}>
-            <span style={{ textAlign: 'center' }}>It is a long established fact that a reader will be distracted by the readable content of a page </span>
-            <span style={{ textAlign: 'center',marginBottom:"36px" }}>when looking at its layout. The point of using Lorem Ipsum is</span>
-          </Col>
-        </Row>
+        <TitleSection theme='light' title={jobs.title} subTitle={jobs.subTitle} />
         <JobsListComp type='large' />
       </WrapperSection>
-      <WrapperSection xs={24} row={18} styles={{background:"#001628"}} >
-        <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24, }}>
-          <Col span={14}>
-            <Title style={{ textAlign: 'center',color:"#fff" }}>Our Drivers</Title>
-            <Text style={{ textAlign: 'center', display: 'flex',color:"#fff",marginBottom:"32px" }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
-          </Col>
-        </Row>
+      <WrapperSection xs={24} row={18} styles={{ background: "#001628" }} >
+        <TitleSection theme='dark' title={drivers.title} subTitle={drivers.subTitle} />
         <Row justify='center' align='middle' gutter={[16, 16]}>
           <RankingComp rankingDriver={state.ranking} />
         </Row>
       </WrapperSection>
       <WrapperSection xs={24} row={24}>
-        <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
-          <Col span={14}>
-            <Title style={{ textAlign: 'center' }}> Services </Title>
-            <Text style={{ textAlign: 'center', display: 'flex', marginBottom: 32 }}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is </Text>
-          </Col>
-        </Row>
+        <TitleSection theme='light' title={services.title} subTitle={services.subTitle} />
         <ServicesList />
       </WrapperSection>
       {/* <div className='delete-user' style={{ display: 'block' }}>
@@ -185,5 +169,22 @@ const Home = ({
     </>
   )
 }
+
+const TitleSection = ({ theme, title, subTitle }) => {
+  const titleClass = classNames({
+    'home__title': true,
+    'home__title--dark': theme == 'dark',
+    'home__title--light': theme == 'light',
+  });
+  return (
+    <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
+      <Col className={titleClass} span={14}>
+        <Title level={2}>{title}</Title>
+        <Text>{subTitle}</Text>
+      </Col>
+    </Row>
+  )
+}
+
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home)); 
