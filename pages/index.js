@@ -157,7 +157,7 @@ const Home = ({
           <RankingComp rankingDriver={state.ranking} />
         </Row>
       </WrapperSection>
-      <WrapperSection xs={24} row={24}>
+      <WrapperSection xs={24} row={18}>
         <TitleSection theme='light' title={services.title} subTitle={services.subTitle} />
         <ServicesList />
       </WrapperSection>
