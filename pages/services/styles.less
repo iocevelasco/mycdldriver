@@ -209,6 +209,7 @@
   padding-left: 32px;
   padding-right: 32px;
   .service-container__card-description__img{
+    border-radius: 5px;
     height: 108px;
     width: 153px;
     object-fit: contain;
@@ -313,9 +314,11 @@ span{
 
   }
   .similar-container__box-card{
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-column-gap: 16px;
+    grid-row-gap: 18px;
    
     .similar-container__box-card__info{
       display: flex;

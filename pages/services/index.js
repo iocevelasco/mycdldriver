@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import{HeaderCard,SimilarServices,DescriptionCard }from "./components/CardService"
+import { HeaderCard, SimilarServices, DescriptionCard } from "./components/CardService"
 import FormUserDriver from 'components/FormUserDriver';
-import { activeLoading } from '@store/reducers/landing_reducer';
-import { WrapperSection, MessageSuccess, MessageError } from 'components/helpers';
+import { activeLoading, fetchServices } from '@store/reducers/landing_reducer';
 import { withRouter } from 'next/router';
 import ReactWhatsapp from 'react-whatsapp';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
@@ -18,13 +17,15 @@ function mapStateToProps(state) {
   return {
     isUserRegistry: state.user.typeUser,
     user: state.user,
-    isLogin: state.user.isLogin
+    isLogin: state.user.isLogin,
+    serviceList: state.landing.services
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     activeLoading: (e) => dispatch(activeLoading(e)),
+    fetchServices: () => dispatch(fetchServices())
   }
 }
 
@@ -34,16 +35,20 @@ const ServiceDetail = (props) => {
     image: '',
     email: '',
     detail: '',
-    city: {},
-    state: {},
+    city: '',
+    state: '',
+    company: {
+      photo: '',
+    },
     whatsapp: '',
     title: '',
     _id: ''
   })
 
-  const { includeService, image, email, detail, city, state, whatsapp, title, _id } = service;
+  const { includeService, image, email, detail, company, city, state, whatsapp, title, _id } = service;
   useEffect(() => {
-    props.activeLoading(false)
+    props.activeLoading(false);
+    props.fetchServices();
     fetchserviceDetails(props.router.query.id);
   }, [props.router.query.id])
 
@@ -61,26 +66,28 @@ const ServiceDetail = (props) => {
     </svg>
   );
 
-  const WhatsappIcon = props => <Icon component={WhatsappSvg} {...props} />;
-
-  const ItemProps = ({ text, icon }) => (
-    <div className={`services-card__item`}>
-      {icon}
-      <span>{text}</span>
-    </div>
-  );
-
   return (
     <>
-     <HeaderCard/>
-     <DescriptionCard/>
-     <SimilarServices/>
-     </>
+      <HeaderCard
+        image={image}
+        title={title}
+        logo={company.photo}
+        city={city}
+        state={state}
+        email={email}
+        phone={whatsapp}
+      />
+      <DescriptionCard
+        detail={detail}
+        includeService={includeService}
+      />
+      <SimilarServices serviceList={props.serviceList} />
+    </>
   )
 }
 
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ServiceDetail)); 
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ServiceDetail));
 
 
