@@ -161,11 +161,6 @@ const Home = ({
         <TitleSection theme='light' title={services.title} subTitle={services.subTitle} />
         <ServicesList />
       </WrapperSection>
-      {/* <div className='delete-user' style={{ display: 'block' }}>
-        <Tooltip title=" Borrar usuario">
-          <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined />} />
-        </Tooltip>
-      </div> */}
     </>
   )
 }
