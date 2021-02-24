@@ -36,24 +36,24 @@ const ServicesList = (props) => {
 
   return (
     <span className="services-card">
-      <Card
-        key={props.key}
-        hoverable={true}
-        bodyStyle={styles.body}
-        cover={
-          <>
-            <div className="services-card__header">
-              <Avatar shape="square" size={120} src={company.photo} />
-            </div>
-            <img alt="image-service" src={image} />
-          </>
-        }
+      <Link
+        href={{
+          pathname: '/services',
+          query: { id: _id },
+        }}
       >
-        <Link
-          href={{
-            pathname: '/services',
-            query: { id: _id },
-          }}
+        <Card
+          key={props.key}
+          hoverable={true}
+          bodyStyle={styles.body}
+          cover={
+            <>
+              <div className="services-card__header">
+                <Avatar shape="square" size={120} src={company.photo} />
+              </div>
+              <img alt="image-service" src={image} />
+            </>
+          }
         >
           <div className="services-card__body">
             <div className="services-card__title">
@@ -86,8 +86,8 @@ const ServicesList = (props) => {
               </div>
             </div>
           </div>
-        </Link>
-      </Card>
+        </Card>
+      </Link>
     </span >
   )
 }
