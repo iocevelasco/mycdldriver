@@ -21,9 +21,15 @@ const FormComponent = (props) => {
   };
 
   const createUser = async (fields) => {
-    const newUSer = {
+    const base = {
       name: fields.name,
       lastname: fields.lastname,
+      typeUser: 1,
+      email: fields.email,
+      companyId: props.userId
+    }
+    const newUSer = {
+      base: base,
       dln: fields.dln,
       expDateDln: fields.expDateDln,
       birthDate: fields.birthDate,

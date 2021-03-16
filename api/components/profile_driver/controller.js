@@ -25,6 +25,8 @@ function addDriver(driver) {
             return false;
         }
 
+        const randomPass = Math.random().toString(36).slice(-8);
+
         const expDefault = [
             {
                 "name":"Tank Endorsed",
@@ -58,6 +60,21 @@ function addDriver(driver) {
             }
         ];
 
+        if(!driver.base.photo){
+            driver.base.photo = "https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png";
+        }
+
+        if(!driver.password){
+            driver.password = randomPass;
+        }
+
+        let companyJob = [];
+        if(driver.base.companyId){
+            companyJob = [{
+                company: driver.base.companyId
+            }];
+        }
+
         const fullDriver = {
             dln: driver.dln,
             birthDate: driver.birthDate,
@@ -67,10 +84,13 @@ function addDriver(driver) {
             experience: expDefault,
             address: driver.address,
             address2: driver.address2,
+            imageDln: driver.imageDln,
+            medicCardImage: driver.medicCardImage,
             zipCode: driver.zipCode,
             city: driver.city,
             state: driver.state,
-            description: driver.description
+            description: driver.description,
+            companyJob: companyJob
         };
 
         const user = {
@@ -92,6 +112,8 @@ function addDriver(driver) {
                     user.email, 
                     'Welcome to MyCDL Driver!', 
                     `Your profile has been created , you can now start searching for your next job.`,
+                    `<p>Your access data:</p>`,
+                    `<ul><li>user: <b>${user.email}</b></li><li>pass: <b>${driver.password}</b></li></ul><br/>`,
                     `Tip: For a better experience , remember to maintain your profile up to date. You can edit your profile here! 
                     <p>Have a great at day , My CDL Driver Team.</p>`);
                 resolve(driverResolve);
