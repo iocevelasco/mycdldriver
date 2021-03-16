@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { Row, Col, notification, Tabs, Form, Typography, Button, Input, Drawer } from 'antd';
+import { Row, Col, notification, Tabs, Form, Typography, Button, Input, Drawer, Space } from 'antd';
 import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import NewDriverForm from './components/FormNewDriver';
 import { withRouter } from 'next/router';
@@ -317,13 +317,13 @@ const StaffCompanyView = ({ user, ...props }) => {
       loader={state.loading}
       header={header}
     /> : <ReportIncident
-        addNewDriver={addNewDriver}
-        loader={state.loading}
-        header={header}
-        user={state.userSelected}
-        job={state.jobSelected}
-        closeDrawer={onCloseDrawer}
-      />
+      addNewDriver={addNewDriver}
+      loader={state.loading}
+      header={header}
+      user={state.userSelected}
+      job={state.jobSelected}
+      closeDrawer={onCloseDrawer}
+    />
     return formSelected;
   }
 
@@ -333,17 +333,26 @@ const StaffCompanyView = ({ user, ...props }) => {
         <Col span={24} className="profile-company__jobs">
           <WrapperSection row={23} styles={stylesWrapper}>
             <Row justify='space-between' align='middle' className='add-new-driver--header'>
-              <Col xs={24} xl={8}>
+              <Col xs={24} lg={16}>
                 <Title level={4}> Driver's status </Title>
               </Col>
-              <Col xs={24} xl={4}><center>
-                <Button
-                  type='primary'
-                  shape="round"
-                  size="large"
-                  onClick={() => openDrawer('new-driver', {})}>
-                  Create invitation
-                </Button></center>
+              <Col xs={24} lg={6}>
+                <Space>
+                  <Button
+                    type='Secondary'
+                    shape="round"
+                    size="large"
+                    onClick={() => openDrawer('new-driver', {})}>
+                    Send invitation
+                </Button>
+                  <Button
+                    type='primary'
+                    shape="round"
+                    size="large"
+                    onClick={() => props.router.push('/userProfile/company/staff/create-driver')}>
+                    Add Driver
+                </Button>
+                </Space>
               </Col>
             </Row>
             <Tabs defaultActiveKey="1">
@@ -410,7 +419,7 @@ const StaffCompanyView = ({ user, ...props }) => {
         visible={state.drawerVisible}>
         {selectForm(state.formSelected)}
       </Drawer>
-    </WrapperDashboard>
+    </WrapperDashboard >
   )
 };
 
