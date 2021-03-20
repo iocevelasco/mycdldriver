@@ -300,7 +300,13 @@ async function getStaffCompanyJobs(query) {
     }
     try{
         const userCompany = await User.findOne({ company: id }).populate('company');
-        const drivers = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
+        const driversJob = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
+        const driverNoJob = await ProfileDriver.find({'companyJob.company': id});
+        const idDriver = driverNoJob.map((res)=>{
+            return res._id;
+        });
+        const userNoJob = await User.find({driver: {$in: idDriver}});
+        const drivers = driversJob.concat(userNoJob);
 
         result = await Promise.all(drivers.map(async (response) => {
             const userDriver = await User.findOne({ _id: response })

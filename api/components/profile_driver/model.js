@@ -73,6 +73,12 @@ const profileDriverSchema = Schema({
              type: Number,
              default: 0
          }
+    }],
+    companyJob: [{
+        company: {
+            type: Schema.ObjectId,
+            ref: 'ProfileCompany'
+        }
     }]
 });
 

@@ -1,0 +1,57 @@
+.dashboard-container{
+  min-height: 80vh;
+}
+
+.header {
+  &__col {
+    display: flex;
+  }
+  &__container {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    button{
+      width: 100px;
+    }
+  }
+  &__title {
+    color: black;
+    font-size: 30px;
+    font-weight: 600;
+    &__text {
+      color: black;
+      font-size: 15px;
+    }
+  }
+}
+.create-user {
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    > div {
+      width: 65%;
+    }
+  }
+
+  &__avatar-container {
+    text-align: end;
+  }
+
+  &__submit-container {
+    display: flex;
+    justify-content: center;
+
+    button {
+      padding: 0 4em;
+    }
+  }
+}
+
+.dividers {
+  border-top: 1.8px solid rgb(215, 215, 215);
+}
+
+.ant-select-dropdown {
+  background-color: white;
+}

@@ -45,7 +45,7 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
             <Col key={key} className="home--ranking" lg={6} md={12} sm={22}>
               <Card
                 hoverable={true}
-                cover={<img alt="example" src={e.photo} style={{ borderColor: "transparent" }} />}
+                cover={<img alt="driver-image" src={e.photo || '/static/images/cardDriver/user.png'} style={{ borderColor: "transparent" }} />}
                 style={{ width: "220px", marginTop: 24 }}
                 className={"cardCarousel"}
                 style={{ background: "rgb(0, 22, 40)", borderColor: "transparent" }}

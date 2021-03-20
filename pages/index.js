@@ -157,15 +157,10 @@ const Home = ({
           <RankingComp rankingDriver={state.ranking} />
         </Row>
       </WrapperSection>
-      <WrapperSection xs={24} row={24}>
+      <WrapperSection xs={24} row={18}>
         <TitleSection theme='light' title={services.title} subTitle={services.subTitle} />
         <ServicesList />
       </WrapperSection>
-      {/* <div className='delete-user' style={{ display: 'block' }}>
-        <Tooltip title=" Borrar usuario">
-          <Button onClick={DeleteUser} shape="circle" icon={<DeleteOutlined />} />
-        </Tooltip>
-      </div> */}
     </>
   )
 }

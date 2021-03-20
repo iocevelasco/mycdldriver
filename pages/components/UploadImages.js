@@ -17,7 +17,7 @@ const beforeUpload = (file) => {
   return isJpgOrPng && isLt2M;
 }
 
-const ImageProfile = ({ setNewImage, newImage, avatar }) => {
+const ImageProfile = ({ setNewImage, shape, newImage, avatar }) => {
 
   const uploadImage = async options => {
     const { onSuccess, onError, file } = options;
@@ -42,7 +42,7 @@ const ImageProfile = ({ setNewImage, newImage, avatar }) => {
 
   return (
     <div className='avatar'>
-      <Avatar icon={<UserOutlined />} src={avatar} size={120} />
+      <Avatar shape={shape} icon={<UserOutlined />} src={avatar} size={120} />
       <Upload
         customRequest={uploadImage}
         onChange={handleOnChange}

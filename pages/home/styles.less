@@ -3,14 +3,14 @@
 
 .home-header{
   height: 55vh;
-  background-position-y: -320px!important;
+  background-position-y: -100px!important;
   background-repeat: no-repeat;
   background-size:cover;
   .home-header__input-container{
     background: #0000008a;
     padding: 32px;
     border-radius: 20px;
-    margin-top: 23vh;
+    margin-top: 100px;
   }
 }
 
@@ -156,6 +156,11 @@
 
 
 .home__services{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
   margin-bottom: 20vh;
   .slick-slide{
     padding:24px

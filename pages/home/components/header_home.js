@@ -47,69 +47,69 @@ const HeaderLandingComp = ({ handlerSearch, cleanFilter, filter_selected, jobs_n
     <>
       <div className="home-header"
         style={{
-          background: `url('/static/images/truck11.jpg')`
+          background: `url('/static/images/driver-home.jpg')`
         }}>
         <Form
           form={form}>
-        <Row justify='center' align='middle'>
-          <Col xs={24} lg={18} md={18}>
-            <div className="home-header__input-container">
-              <Title> Teamwork & loyalty <br />
+          <Row justify='center' align='middle'>
+            <Col xs={24} lg={18} md={18}>
+              <div className="home-header__input-container">
+                <Title> Teamwork & loyalty <br />
                       Driving our success
                     </Title>
-              <Row gutter={[16]}>
-                <Col xs={24} lg={clearFilters ? 10 : 12} md={clearFilters ? 10 : 12}>
-                  <AutoComplete
-                    options={jobs_name}
-                    size='large'
-                    allowClear={true}
-                    value={value}
-                    style={{ width: '100%' }}
-                    placeholder="Search your new job"
-                    onChange={e => onChangeAutocomplete(e)} />
-                </Col>
-                <Col xs={24} lg={8} md={8}>
-                  <Select
-                    size="large"
-                    style={{ width: '100%' }}
-                    allowClear
-                    value={selectValue}
-                    value={filter_selected.city}
-                    placeholder="Search by city"
-                    onChange={e => onChangeSelect(e)}>
-                    {
-                      citys.map((e, i) => (
-                        <Option key={i} value={e.id}>{e.name}</Option>
-                      ))
-                    }
-                  </Select>
-                </Col>
-                <Col xs={24} lg={3} md={3}>
-                  <Button
-                    onClick={() => fetchJobs(query)}
-                    onKeyPress={event => {
-                      if (event.key === 'Enter') {
-                        fetchJobs(query)
-                      }
-                    }}
-                    size="large"
-                    style={{ width: '100%' }}
-                    type="primary">Search </Button>
-                </Col>
-                {
-                  clearFilters &&
-                  <Col xs={24} lg={3} md={3}>
-                    <Button
-                      onClick={() => resetForm()}
+                <Row gutter={[16]}>
+                  <Col xs={24} lg={clearFilters ? 10 : 12} md={clearFilters ? 10 : 12}>
+                    <AutoComplete
+                      options={jobs_name}
+                      size='large'
+                      allowClear={true}
+                      value={value}
+                      style={{ width: '100%' }}
+                      placeholder="Search your new job"
+                      onChange={e => onChangeAutocomplete(e)} />
+                  </Col>
+                  <Col xs={24} lg={8} md={8}>
+                    <Select
                       size="large"
                       style={{ width: '100%' }}
-                      type="secondary">Clean Filters </Button>
+                      allowClear
+                      value={selectValue}
+                      value={filter_selected.city}
+                      placeholder="Search by city"
+                      onChange={e => onChangeSelect(e)}>
+                      {
+                        citys.map((e, i) => (
+                          <Option key={i} value={e.id}>{e.name}</Option>
+                        ))
+                      }
+                    </Select>
                   </Col>
-                }
-              </Row>
-            </div>
-          </Col>
-        </Row>
+                  <Col xs={24} lg={3} md={3}>
+                    <Button
+                      onClick={() => fetchJobs(query)}
+                      onKeyPress={event => {
+                        if (event.key === 'Enter') {
+                          fetchJobs(query)
+                        }
+                      }}
+                      size="large"
+                      style={{ width: '100%' }}
+                      type="primary">Search </Button>
+                  </Col>
+                  {
+                    clearFilters &&
+                    <Col xs={24} lg={3} md={3}>
+                      <Button
+                        onClick={() => resetForm()}
+                        size="large"
+                        style={{ width: '100%' }}
+                        type="secondary">Clean Filters </Button>
+                    </Col>
+                  }
+                </Row>
+              </div>
+            </Col>
+          </Row>
         </Form>
       </div>
     </>
