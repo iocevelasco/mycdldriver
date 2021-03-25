@@ -47,7 +47,7 @@ const UserPassword = (props) => {
           }
           props.updateUserDrive(data);
           props.handleModal(false);
-          router.push('/userProfile/driver/profile');
+          router.push('/userProfile/driver/my-jobs');
         }
 
         if (typeUser === 2) {
@@ -57,7 +57,7 @@ const UserPassword = (props) => {
           }
           props.updateUserCompany(data);
           props.handleModal(false);
-          router.push('/userProfile/company/profile');
+          router.push('/userProfile/company/staff');
         }
 
       })
@@ -116,4 +116,4 @@ const UserPassword = (props) => {
 }
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserPassword)); 
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserPassword));
