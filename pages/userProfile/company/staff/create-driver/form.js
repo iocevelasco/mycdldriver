@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'next/router';
-import { connect } from 'react-redux';
-import Link from 'next/link';
 import axios from 'axios';
 import { DLNinput, EmailInput } from 'components/inputs';
 import { DraggerUpload, ImageProfile } from 'components/UploadImages';
-
+import moment from 'moment';
 import { Button, Row, Col, Form, Input, notification, Select, Divider, DatePicker, Radio } from 'antd';
 
 const { Option } = Select;
@@ -62,6 +60,8 @@ const FormComponent = (props) => {
       })
   }
 
+  const dateFormat = 'MM/DD/YYYY';
+
   return (
     <Form
       form={form}
@@ -92,7 +92,10 @@ const FormComponent = (props) => {
                 message: 'Birth date is required!',
               },
             ]}>
-            <DatePicker style={{ width: '100%' }} />
+            <DatePicker
+              defaultValue={moment(moment().format('L'), dateFormat)}
+              format={dateFormat}
+              style={{ width: '100%' }} />
           </Form.Item>
         </Col>
         <Col span={12}>
