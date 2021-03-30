@@ -313,6 +313,31 @@ async function checkMail(mail){
     }
 }
 
+async function checkuser(filter){
+    try{
+        const list = await User.findOne(filter)
+        .select('name lastname date email typeUser');
+        if(list){
+            return {
+                status: 200,
+                message: list
+            };
+        }else{
+            return {
+                status: 404,
+                message: 'No user found'
+            };
+        }
+        
+    }catch(e){
+        return {
+            status: 500,
+            message: "Unexpected error",
+            detail: e
+        };
+    }
+}
+
 module.exports = {
     list: getUser,
     oneUser: getOneUser,
@@ -326,5 +351,6 @@ module.exports = {
     getPrelogin,
     updatePhoto,
     changePassword,
-    checkMail
+    checkMail,
+    checkuser
 }
