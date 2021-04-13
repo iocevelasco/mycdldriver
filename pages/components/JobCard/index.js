@@ -17,7 +17,10 @@ const JobCardComponent = (props) => {
   return (
     <div className={jobListContainer}>
       {
-        detectMobile.isMobile() ? <JobCardMobile item={props.item} /> : <JobCardDesktop item={props.item} />
+        detectMobile.isMobile() ?
+          <JobCardMobile item={props.item} />
+          :
+          <JobCardDesktop type={props.type} item={props.item} />
       }
     </div>
   )
