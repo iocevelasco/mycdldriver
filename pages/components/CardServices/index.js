@@ -49,7 +49,7 @@ const ServicesList = (props) => {
           cover={
             <>
               <div className="services-card__header">
-                <Avatar shape="square" size={120} src={company.photo} />
+                {/* <Avatar shape="square" size={120} src={company.photo} /> */}
               </div>
               <img alt="image-service" src={image} />
             </>
@@ -75,7 +75,7 @@ const ServicesList = (props) => {
               </span>
               <span className="services-card__custom-whatsapp">
                 <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
-                  <WhatsappIcon style={{ color: '#E73540', fontSize: '2em' }} />
+                  <WhatsappIcon style={{ color: '#25D366', fontSize: '20px' }} />
                   <span>Whatsapp</span>
                 </ReactWhatsapp>
               </span>

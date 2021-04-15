@@ -386,4 +386,4 @@ const DriverUser = ({ user, ...props }) => {
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(DriverUser)
-); 
+);

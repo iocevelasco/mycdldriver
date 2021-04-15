@@ -40,7 +40,6 @@ const RankingComp = ({ drivers, fetchDrivers }) => {
         }}
       >
         {drivers.map((e, key) => {
-          console.log('e', e);
           return (
             <Col key={key} className="home--ranking" lg={6} md={12} sm={22}>
               <Card

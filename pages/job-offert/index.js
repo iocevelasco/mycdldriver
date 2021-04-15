@@ -10,6 +10,7 @@ import {
   Drawer
 } from 'antd';
 import FormUserDriver from 'components/FormUserDriver';
+import { SpinnerComp } from 'components/helpers';
 import { WrapperSection, MessageSuccess, MessageError } from 'components/helpers';
 import { withRouter } from 'next/router';
 import { handlerModalLogin } from '@store/reducers/landing_reducer';
@@ -19,9 +20,6 @@ import moment from 'moment';
 import axios from 'axios';
 import "./styles.less";
 const { Title, Text } = Typography;
-const { Option } = Select;
-
-const { TextArea } = Input;
 
 const initialState = {
   showSuccess: false,
@@ -84,6 +82,7 @@ function mapDispatchToProps(dispatch) {
 
 const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [isMounted, setMounted] = useState(false);
 
   useEffect(() => {
     if (props.isLogin && user.typeUser === 0) {
@@ -98,6 +97,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
   }, [router.query.id])
 
   const fetchJobDetails = async (job_id) => {
+    setMounted(true)
     let applyJob = {
       id: job_id
     };
@@ -121,6 +121,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
           phoneNumber: phoneNumber,
           email: email
         };
+        setMounted(false)
         dispatch({ type: types.FETCH_DETAIL, payload: { ...detail } });
       })
       .catch((err) => console.log('err', err))
@@ -142,7 +143,6 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
       console.log(e);
     }
   }
-  console.log();
 
   return (
     <>
@@ -284,9 +284,10 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                 Send request
               </Button>} />
         </Drawer>
+        <SpinnerComp active={isMounted} />
       </WrapperSection>
     </>
   )
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(JobOffert)); 
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(JobOffert));

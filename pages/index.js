@@ -182,4 +182,4 @@ const TitleSection = ({ theme, title, subTitle }) => {
 }
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home)); 
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
