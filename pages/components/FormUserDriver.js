@@ -88,7 +88,9 @@ const DriverUser = ({ user, ...props }) => {
   }
 
   const newDrivers = async (fields) => {
-    passwordValidator();
+    if(!passwordValidator()){
+      return false;
+    }
     const { driver, base } = await beforeToCreateProfile(fields, 'create');
     const fullDriver = { base: base, ...driver };
     await axios.post('/api/driver', fullDriver)
@@ -219,7 +221,9 @@ const DriverUser = ({ user, ...props }) => {
         description:
           'Please config your password'
       });
-      return
+      return false;
+    }else{
+      return true;
     }
   }
 
@@ -344,7 +348,7 @@ const DriverUser = ({ user, ...props }) => {
                   rules={[
                     {
                       required: true,
-                      message: 'Area code expiration date is required!',
+                      message: 'Area code is required!',
                     },
                   ]}>
                   <Input />
@@ -357,7 +361,7 @@ const DriverUser = ({ user, ...props }) => {
                   rules={[
                     {
                       required: true,
-                      message: 'Phone number date is required!',
+                      message: 'Phone number is required!',
                     },
                   ]}>
                   <Input />
