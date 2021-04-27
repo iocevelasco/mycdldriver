@@ -42,10 +42,13 @@ function ListDrivers(props) {
 
   const onSearch = (value) => console.log(value);
 
-  const handleChange = (value) => console.log(`selected ${value}`);
+  const handleChange = (value) => {
+    console.log(value)
+  };
   const handleSelect = (driverData) => {
     setSelectedDriver(driverData);
   };
+
   return (
     <WrapperSection row={18}>
       <DetailsDrawer
