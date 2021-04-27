@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { CitiesModel, StatesModel } = require('../cities/model');
 const Schema = mongoose.Schema;
 
 const profileDriverSchema = Schema({
@@ -57,11 +58,11 @@ const profileDriverSchema = Schema({
     },
     state: {
         type: Schema.ObjectId,
-        ref: 'States',
+        ref: StatesModel,
     },
     city: {
         type: Schema.ObjectId,
-        ref: 'Cities',
+        ref: CitiesModel,
     },
     experience: [{
         name: {

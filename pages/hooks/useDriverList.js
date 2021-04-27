@@ -7,7 +7,7 @@ const ListState = (props) => {
     const [driverList, setDriverList] = useState([]);
 
     function fetchDriversData() {
-        return axios.get(`/api/user/1`)
+        return axios.get(`/api/user/driver-list`)
             .then(({ data }) => {
                 let drivers = data.data;
                 setDriverList(drivers);

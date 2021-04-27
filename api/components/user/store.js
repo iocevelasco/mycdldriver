@@ -13,7 +13,18 @@ async function getUser(type){
     try{
         const list = await User.find(filter)
         .select('name lastname photo date email')
-        .populate('driver')
+        .populate({
+            path: 'driver',
+            model: 'ProfileDriver',
+            populate: [{
+                path: 'state',
+                select: 'stateName'
+            },
+            {
+                path: 'city',
+                select: 'cityName'
+            }]
+        })
         .populate({
             path: 'company',
             model: 'ProfileCompany',

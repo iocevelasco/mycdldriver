@@ -32,7 +32,6 @@ function mapDispatchToProps(dispatch) {
 function ListDrivers(props) {
   const [selectedDriver, setSelectedDriver] = useState({});
   const [driverList, isFetching] = useDrivers();
-  console.log('driverList', driverList);
   const [drivers, setDrivers] = useState([]);
 
   useEffect(() => {
@@ -40,7 +39,21 @@ function ListDrivers(props) {
     setDrivers(driverList);
   }, [isFetching]);
 
-  const onSearch = (value) => console.log(value);
+  const onSearch = (value) => {
+
+    const list = driverList.filter((user) => {
+      const nombre = user.name.toLowerCase() + " " + user.lastname.toLowerCase();
+      const resultName = nombre.indexOf(value.toLowerCase());
+      const resultDln = user.driver.dln.indexOf(value.toLowerCase());
+      if(resultName !== -1 || resultDln !== -1){
+        return true;
+      }else{
+        return false;
+      }
+    });
+    
+    setDrivers(list);
+  }
 
   const handleChange = (value) => {
     console.log(value)
@@ -69,6 +82,9 @@ function ListDrivers(props) {
             <Search
               placeholder="Search for name or number license"
               onSearch={onSearch}
+              onChange={(e)=>{
+                onSearch(e.target.value);
+              }}
               className="search-input"
             />
             <Select
@@ -85,6 +101,8 @@ function ListDrivers(props) {
           <Row gutter={[16, 16]} className="space-rows">
             {drivers.map((driverData) => {
               const { _id, name, lastname, driver, rating, photo } = driverData;
+              const ciudad = driver.city?driver.city.cityName:"";
+              const estado = driver.state?driver.state.stateName:"";
               return (
                 <Col flex={1} className="card-driver" key={_id} span={6}>
                   <Card
@@ -95,7 +113,7 @@ function ListDrivers(props) {
                   >
                     <Meta
                       title={`${name} ${lastname}`}
-                      description={driver.state}
+                      description={`${estado} - ${ciudad}`}
                     />
                     <Rate
                       className="rating"
