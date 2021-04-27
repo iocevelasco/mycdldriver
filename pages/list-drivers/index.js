@@ -72,13 +72,13 @@ function ListDrivers(props) {
               className="search-input"
             />
             <Select
-              defaultValue="qualification"
+              defaultValue="name"
               onChange={handleChange}
               className="select-input"
             >
               <Option value="name">Name</Option>
               <Option value="state">State</Option>
-              <Option value="qualification">Qualification</Option>
+              <Option value="dln">Dln</Option>
             </Select>
           </Row>
           <Divider />
