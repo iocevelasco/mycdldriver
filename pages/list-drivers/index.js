@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Input, Select, Rate, Divider, Card } from "antd";
 import { WrapperSection } from "components/helpers";
 import { withRouter } from "next/router";
 import Link from "next/link";
+import { activeLoading } from '@store/reducers/landing_reducer';
 import { connect } from "react-redux";
 import axios from "axios";
 import "./styles.less";
 import data from "./dataDummy.json";
 import DetailsDrawer from "./components/detailsDrawer";
 import { ArrowLeftOutlined } from "@ant-design/icons";
+import { useDrivers } from '@hooks';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -23,11 +25,20 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {};
+  return {
+    activeLoading: (e) => dispatch(activeLoading(e)),
+  }
 }
-
 function ListDrivers(props) {
   const [selectedDriver, setSelectedDriver] = useState({});
+  const [driverList, isFetching] = useDrivers();
+  console.log('driverList', driverList);
+  const [drivers, setDrivers] = useState([]);
+
+  useEffect(() => {
+    props.activeLoading(false);
+    setDrivers(driverList);
+  }, [isFetching]);
 
   const onSearch = (value) => console.log(value);
 
@@ -69,25 +80,25 @@ function ListDrivers(props) {
           </Row>
           <Divider />
           <Row gutter={[16, 16]} className="space-rows">
-            {data.map((driverData) => {
-              const { _id, name, lastname, profile, rating, img } = driverData;
+            {drivers.map((driverData) => {
+              const { _id, name, lastname, driver, rating, photo } = driverData;
               return (
                 <Col flex={1} className="card-driver" key={_id} span={6}>
                   <Card
                     onClick={() => handleSelect(driverData)}
                     className="card"
                     hoverable
-                    cover={<img alt="example" src={img} />}
+                    cover={<img alt="example" src={photo} />}
                   >
                     <Meta
                       title={`${name} ${lastname}`}
-                      description={profile.state}
+                      description={driver.state}
                     />
                     <Rate
                       className="rating"
                       allowHalf
                       disabled
-                      value={rating}
+                      value={driver.rating}
                     />
                   </Card>
                 </Col>

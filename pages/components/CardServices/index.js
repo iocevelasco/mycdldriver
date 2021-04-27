@@ -49,7 +49,7 @@ const ServicesList = (props) => {
           cover={
             <>
               <div className="services-card__header">
-                <Avatar shape="square" size={120} src={company.photo} />
+                {/* <Avatar shape="square" size={120} src={company.photo} /> */}
               </div>
               <img alt="image-service" src={image} />
             </>
