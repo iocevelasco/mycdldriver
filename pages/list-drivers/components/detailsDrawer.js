@@ -11,14 +11,25 @@ import {
   Select,
   notification,
 } from "antd";
+import axios from "axios";
 import { IdcardOutlined } from "@ant-design/icons";
+import { withRouter } from "next/router";
+import { connect } from 'react-redux';
+import ListJob from '@hooks/companyJobList';
 
 const { Option } = Select;
 
-export default function DetailsDrawer(props) {
-  const [modalVisible, setModalVisible] = useState(false);
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
+
+function DetailsDrawer(props) {
   const [profile, setProfile] = useState({});
-  const { driverData, setSelectedDriver } = props;
+  const jobOptions = ListJob();
+  const { driverData, setSelectedDriver, user } = props;
+  const [visible, setVisible] = useState();
   const {
     _id,
     name,
@@ -41,16 +52,14 @@ export default function DetailsDrawer(props) {
         dln: driver.dln,
         exp: driver.expDateDln,
       };
+      setVisible(true);
       setProfile(ProfileData);
     }
   }, [driverData]);
 
   const onClose = () => {
+    setVisible(false);
     setSelectedDriver({});
-  };
-
-  const handleModal = () => {
-    setModalVisible(!modalVisible);
   };
 
   return (
@@ -59,9 +68,15 @@ export default function DetailsDrawer(props) {
       placement="right"
       closable
       onClose={onClose}
-      visible={driverData._id ? true : false}
+      visible={visible}
       className="details-drawer"
-      footer={<FooterDrawer setSelectedDriver={setSelectedDriver} />}
+      footer={<FooterDrawer 
+        setSelectedDriver={setSelectedDriver} 
+        jobOptions={jobOptions} 
+        setVisible={setVisible}
+        driverId={driverData._id}
+        driverEmail={driverData.email}
+        token={user.token} />}
     >
       {driverData._id && (
         <>
@@ -103,20 +118,6 @@ export default function DetailsDrawer(props) {
               );
             })}
             <Col span={24}>
-              <Modal
-                visible={modalVisible}
-                closable
-                onCancel={handleModal}
-                footer={null}
-                width={400}
-              >
-                <div style={{ textAlign: "center" }}>
-                  <img
-                    width={360}
-                    src="https://www.dmv.pa.gov/ONLINE-SERVICES/SiteAssets/Pages/Where-Find-DL/DL%20w%20ARROW.jpg"
-                  />
-                </div>
-              </Modal>
               <Row gutter={[16]}>
                 <Col span={12} className="buttons-experience">
                     DLN Number
@@ -163,21 +164,41 @@ export default function DetailsDrawer(props) {
 }
 
 const FooterDrawer = (props) => {
-  const { setSelectedDriver } = props;
+  const { setSelectedDriver, setVisible, jobOptions, driverId, driverEmail, token } = props;
   const [job, setJob] = useState(null);
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
     setJob(value);
   };
 
   const handleClick = () => {
-    console.log(`job sent ${job}`);
-    setJob(null);
-    setSelectedDriver({});
-    return notification.success({
-      message: "Success",
-      description: "It's done! The invitation has been sent succesfully",
-    });
+
+    const data = {
+      job: job,
+      driver:driverId,
+      email:driverEmail,
+    };
+
+    const header = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    axios.post(`/api/company/jobs/invite`, data, header)
+      .then(({ response }) => {
+        setJob(null);
+        setSelectedDriver({});
+        return notification.success({
+          message: "Success",
+          description: "It's done! The invitation has been sent succesfully",
+        });
+      }).catch((error) => {
+          console.log(error);
+          return notification.error({
+            message: "Error",
+            description: "The invitation could not be sent, please try again later",
+          });
+      }).finally(() => {
+        setVisible(false);
+      });
   };
 
   return (
@@ -187,14 +208,17 @@ const FooterDrawer = (props) => {
         onChange={handleChange}
         placeholder={"Select a job to apply"}
       >
-        <Option value="job 1">Job 1</Option>
-        <Option value="job 2">Job 2</Option>
-        <Option value="job 3">Job 3</Option>
+        {
+          jobOptions.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
+        }
       </Select>
-      {console.log(job)}
       <Button onClick={handleClick} type="primary" disabled={!job}>
         Send Invitation
       </Button>
     </div>
   );
 };
+
+export default withRouter(
+  connect(mapStateToProps)(DetailsDrawer)
+);
