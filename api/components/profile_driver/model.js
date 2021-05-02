@@ -68,12 +68,12 @@ const profileDriverSchema = Schema({
         name: {
             type: String,
             trim: true
-         },
-         have: Boolean,
-         years: {
-             type: Number,
-             default: 0
-         }
+        },
+        have: Boolean,
+        years: {
+            type: Number,
+            default: 0
+        }
     }],
     companyJob: [{
         company: {
