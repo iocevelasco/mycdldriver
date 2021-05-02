@@ -41,14 +41,14 @@ function DetailsDrawer(props) {
   } = driverData;
 
   useEffect(() => {
-    if(driverData._id){
+    if (driverData._id) {
       const ProfileData = {
-        birtday: driver.birthDate?driver.birthDate:"",
-        address: driver.address?driver.address:"",
+        birtday: driver.birthDate ? driver.birthDate : "",
+        address: driver.address ? driver.address : "",
         state: driver.state.stateName + " " + driver.city.cityName,
         phoneNumber: driver.areaCode + " " + driver.phoneNumber,
         email: email,
-        sex: driver.sex == 0?'Female':driver.sex == 1?'Male':'Other',
+        sex: driver.sex == 0 ? 'Female' : driver.sex == 1 ? 'Male' : 'Other',
         dln: driver.dln,
         exp: driver.expDateDln,
       };
@@ -70,9 +70,9 @@ function DetailsDrawer(props) {
       onClose={onClose}
       visible={visible}
       className="details-drawer"
-      footer={<FooterDrawer 
-        setSelectedDriver={setSelectedDriver} 
-        jobOptions={jobOptions} 
+      footer={<FooterDrawer
+        setSelectedDriver={setSelectedDriver}
+        jobOptions={jobOptions}
         setVisible={setVisible}
         driverId={driverData._id}
         driverEmail={driverData.email}
@@ -120,7 +120,7 @@ function DetailsDrawer(props) {
             <Col span={24}>
               <Row gutter={[16]}>
                 <Col span={12} className="buttons-experience">
-                    DLN Number
+                  DLN Number
                   <Image
                     width={200}
                     alt="DLN Number"
@@ -129,7 +129,7 @@ function DetailsDrawer(props) {
                   />
                 </Col>
                 <Col span={12} className="buttons-experience">
-                    Medic Card
+                  Medic Card
                   <Image
                     width={200}
                     alt="Medic Card"
@@ -174,8 +174,8 @@ const FooterDrawer = (props) => {
 
     const data = {
       job: job,
-      driver:driverId,
-      email:driverEmail,
+      driver: driverId,
+      email: driverEmail,
     };
 
     const header = {
@@ -191,11 +191,11 @@ const FooterDrawer = (props) => {
           description: "It's done! The invitation has been sent succesfully",
         });
       }).catch((error) => {
-          console.log(error);
-          return notification.error({
-            message: "Error",
-            description: "The invitation could not be sent, please try again later",
-          });
+        console.log(error);
+        return notification.error({
+          message: "Error",
+          description: "The invitation could not be sent, please try again later",
+        });
       }).finally(() => {
         setVisible(false);
       });

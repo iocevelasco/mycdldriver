@@ -75,7 +75,7 @@ const ServicesList = (props) => {
               </span>
               <span className="services-card__custom-whatsapp">
                 <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
-                  <WhatsappIcon style={{ color: '#E73540', fontSize: '2em' }} />
+                  <WhatsappIcon style={{ color: '#35e784', fontSize: '2em' }} />
                   <span>Whatsapp</span>
                 </ReactWhatsapp>
               </span>

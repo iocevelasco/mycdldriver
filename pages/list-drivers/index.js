@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Input, Select, Rate, Divider, Card } from "antd";
+import { Row, Col, Input, Select, Rate, Divider, Card, Button } from "antd";
 import { WrapperSection } from "components/helpers";
 import { withRouter } from "next/router";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { activeLoading } from '@store/reducers/landing_reducer';
 import { connect } from "react-redux";
 import axios from "axios";
 import "./styles.less";
-import data from "./dataDummy.json";
+import { SpinnerComp } from 'components/helpers';
 import DetailsDrawer from "./components/detailsDrawer";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useDrivers } from '@hooks';
@@ -40,24 +40,19 @@ function ListDrivers(props) {
   }, [isFetching]);
 
   const onSearch = (value) => {
-
     const list = driverList.filter((user) => {
       const nombre = user.name.toLowerCase() + " " + user.lastname.toLowerCase();
       const resultName = nombre.indexOf(value.toLowerCase());
       const resultDln = user.driver.dln.indexOf(value.toLowerCase());
-      if(resultName !== -1 || resultDln !== -1){
+      if (resultName !== -1 || resultDln !== -1) {
         return true;
-      }else{
+      } else {
         return false;
       }
     });
-    
     setDrivers(list);
   }
 
-  const handleChange = (value) => {
-    console.log(value)
-  };
   const handleSelect = (driverData) => {
     setSelectedDriver(driverData);
   };
@@ -72,62 +67,56 @@ function ListDrivers(props) {
         <Col span={24}>
           <Row className="space-rows" justify="space-between" align="bottom">
             <h1 className="title">Drivers</h1>
-            <Link href="/posts/first-post">
-              <div className="go-back">
-                <ArrowLeftOutlined /> <span>Back</span>
-              </div>
-            </Link>
           </Row>
           <Row className="space-rows" justify="space-between" align="bottom">
             <Search
               placeholder="Search for name or number license"
               onSearch={onSearch}
-              onChange={(e)=>{
+              onChange={(e) => {
                 onSearch(e.target.value);
               }}
               className="search-input"
             />
-            <Select
-              defaultValue="name"
-              onChange={handleChange}
-              className="select-input"
-            >
-              <Option value="name">Name</Option>
-              <Option value="state">State</Option>
-              <Option value="dln">Dln</Option>
-            </Select>
+            <Link href="/">
+              <Button type='link' icon={<ArrowLeftOutlined />} className="go-back">
+                <span>Back</span>
+              </Button>
+            </Link>
           </Row>
           <Divider />
-          <Row gutter={[16, 16]} className="space-rows">
-            {drivers.map((driverData) => {
-              const { _id, name, lastname, driver, rating, photo } = driverData;
-              const ciudad = driver.city?driver.city.cityName:"";
-              const estado = driver.state?driver.state.stateName:"";
-              return (
-                <Col flex={1} className="card-driver" key={_id} span={6}>
-                  <Card
-                    onClick={() => handleSelect(driverData)}
-                    className="card"
-                    hoverable
-                    cover={<img alt="example" src={photo} />}
-                  >
-                    <Meta
-                      title={`${name} ${lastname}`}
-                      description={`${estado} - ${ciudad}`}
-                    />
-                    <Rate
-                      className="rating"
-                      allowHalf
-                      disabled
-                      value={driver.rating}
-                    />
-                  </Card>
-                </Col>
-              );
-            })}
-          </Row>
+          <div className="list-drivers__container">
+            <Row gutter={[16, 16]} className="space-rows">
+              {drivers.map((driverData) => {
+                const { _id, name, lastname, driver, rating, photo } = driverData;
+                const city = driver.city ? driver.city.cityName : "";
+                const state = driver.state ? driver.state.stateName : "";
+                return (
+                  <Col flex={1} className="card-driver" key={_id} span={6}>
+                    <Card
+                      onClick={() => handleSelect(driverData)}
+                      className="card"
+                      hoverable
+                      cover={<img alt="example" src={photo} />}
+                    >
+                      <Meta
+                        title={`${name} ${lastname}`}
+                        description={`${state} - ${city}`}
+                      />
+                      <Rate
+                        className="rating"
+                        allowHalf
+                        disabled
+                        value={driver.rating}
+                      />
+                    </Card>
+                  </Col>
+                );
+              })}
+            </Row>
+          </div>
         </Col>
       </Row>
+      <SpinnerComp active={isFetching} />
     </WrapperSection>
   );
 }
