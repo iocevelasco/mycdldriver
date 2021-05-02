@@ -75,8 +75,12 @@ const updatePropsDriver = (props) => {
 }
 
 function fetchUserData(token, typeUser) {
+  axios.interceptors.request.use(function (config) {
+    config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  });
   return (dispatch) => {
-    return axios.post(`/api/user/me`, {}, { headers: { Authorization: `Bearer ${token}` } })
+    return axios.post(`/api/user/me`, {})
       .then((response) => {
         if (typeUser == 1) {
           let { date, driver, lastname, name, _id, photo, email } = response.data.data;

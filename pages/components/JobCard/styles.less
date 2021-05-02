@@ -71,16 +71,17 @@
   align-content:center;
 }
 .card-job__detail{
-  display: grid;
-  grid-template-columns: 60% 40%;
-  grid-column-gap: 24px;
-  grid-row-gap: 24px;
+  display: flex;
+  gap: 24px;
+  padding: 24px;
   align-items: center;
-  padding:14px 24px 24px 24px ;
-  margin-bottom: 24px;
-  max-height: 120px;
-  min-height: 120px;
-  overflow: hidden;
+  justify-content:space-between;
+  >div{
+    width: 70%;
+  }
+  Button{
+    width: 80px;
+  }
   p{
     overflow: hidden;
     max-height: 114px;
@@ -163,6 +164,7 @@ flex-direction:column;
 padding:16px;
 button{
   margin-top:16px;
+  margin-left: 16px;
 }
 }
 }

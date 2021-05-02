@@ -1,6 +1,7 @@
 const {User, Prelogin} = require('./model');
 const driverModel = require('../profile_driver/model');
 const companyModel = require('../profile_company/model');
+const Incident = require('../incident/model');
 const fs = require('fs');
 
 async function getUser(type){
@@ -13,7 +14,18 @@ async function getUser(type){
     try{
         const list = await User.find(filter)
         .select('name lastname photo date email')
-        .populate('driver')
+        .populate({
+            path: 'driver',
+            model: 'ProfileDriver',
+            populate: [{
+                path: 'state',
+                select: 'stateName'
+            },
+            {
+                path: 'city',
+                select: 'cityName'
+            }]
+        })
         .populate({
             path: 'company',
             model: 'ProfileCompany',
@@ -26,9 +38,32 @@ async function getUser(type){
                 select: 'cityName'
             }]
         });
+        const result = await Promise.all(list.map(async (val) => {
+            const incident = await Incident.find({driver: val._id})
+            .populate({
+                path: 'company',
+                model: 'User',
+                select: "name lastname photo email",
+                populate: [{
+                    path: 'company',
+                    select: 'tradename legalNumber'
+                }]
+            });
+            const resp = {
+                _id: val._id,
+                name: val.name,
+                lastname: val.lastname,
+                photo: val.photo,
+                email: val.email,
+                date: val.date,
+                driver: val.driver,
+                incidents: incident
+            }
+            return resp;
+        }));
         return {
             status: 200,
-            message: list
+            message: result
         };
     }catch(e){
         return {

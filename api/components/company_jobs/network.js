@@ -121,6 +121,24 @@ router.post('/apply', auth(1), function (req, res) {
     });
 });
 
+router.post('/invite', auth(2), function (req, res){
+    controller.inviteJob(req.user, req.body)
+        .then((data) => {
+            switch(data.status){
+                case 200:
+                    response.success(req, res, data.message, data.status);
+                    break;
+                default:
+                    response.error(req, res, data.message, data.status);
+                    break;
+            }
+        })
+        .catch(e => {
+            console.log(e);
+            response.error(req, res, e.message, e.status);
+        });
+});
+
 router.patch('/change_status', auth(2), function (req, res) {
     const data = req.body;
     controller.setStatus(data.id, data.status)

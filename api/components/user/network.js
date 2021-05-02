@@ -139,6 +139,23 @@ const mailer = require('../../middelware/mailer');
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
+
+router.get('/driver-list', function (req, res) {
+    controller.getUsers(1)
+    .then((userList) => {
+        switch(userList.status){
+            case 200:
+                response.success(req, res, userList.message, userList.status);
+                break;
+            default:
+                response.error(req, res, userList.message, userList.status, userList.detail);
+                break;
+        }
+    }).catch(e => {
+        response.error(req, res, 'Unexpected Error', 500, e);
+    });
+});
+
 router.get('/:type', function (req, res) {
     controller.getUsers(req.params.type)
     .then((userList) => {

@@ -8,17 +8,15 @@ import { connect } from 'react-redux';
 import queryString from "query-string";
 import { fetchJobPositionData, fetchDriversData, fetchCommonData, fetchServices } from '@store/reducers/landing_reducer';
 import { logoutUser } from '@store/reducers/user_reducer';
-import classNames from 'classnames';
 import axios from 'axios';
 
 //mock
 import mock_ranking from '../mock/ranking.json';
 import "./home/styles.less";
+import "./home/styles/index.less";
 //View components
-import HeaderLandingComp from './home/components/header_home';
-import JobsListComp from './home/components/job_offerts';
-import RankingComp from './home/components/ranking';
-import ServicesList from './home/components/ServicesList';
+import { HeaderLandingComp, JobsListComp, DriverList, TitleSection, ServicesList } from './home/components';
+
 import { drivers, services, jobs } from './home/text.json';
 
 const { Title, Text } = Typography;
@@ -76,7 +74,7 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-const Home = ({
+const HomePage = ({
   user,
   fetchJobs,
   fetchDrivers,
@@ -154,7 +152,7 @@ const Home = ({
       <WrapperSection xs={24} row={18} styles={{ background: "#001628" }} >
         <TitleSection theme='dark' title={drivers.title} subTitle={drivers.subTitle} />
         <Row justify='center' align='middle' gutter={[16, 16]}>
-          <RankingComp rankingDriver={state.ranking} />
+          <DriverList rankingDriver={state.ranking} />
         </Row>
       </WrapperSection>
       <WrapperSection xs={24} row={18}>
@@ -165,21 +163,6 @@ const Home = ({
   )
 }
 
-const TitleSection = ({ theme, title, subTitle }) => {
-  const titleClass = classNames({
-    'home__title': true,
-    'home__title--dark': theme == 'dark',
-    'home__title--light': theme == 'light',
-  });
-  return (
-    <Row justify='center' align='middle' gutter={[16]} style={{ marginTop: 24 }}>
-      <Col className={titleClass} span={14}>
-        <Title level={2}>{title}</Title>
-        <Text>{subTitle}</Text>
-      </Col>
-    </Row>
-  )
-}
-
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)
+    (HomePage));
