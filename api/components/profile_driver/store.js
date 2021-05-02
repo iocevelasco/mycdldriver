@@ -22,6 +22,30 @@ async function getDriver(filterDriver){
     });
 }
 
+async function getOneDriver(filter){
+    try{
+        const driver = await Model.findOne(filter);
+        if(driver){
+            return {
+                status: 200,
+                message: driver
+            };
+        }else{
+            return {
+                status: 404,
+                message: 'No user found'
+            };
+        }
+    }catch(e){
+        return {
+            status: 500,
+            message: "Unexpected error",
+            detail: e
+        };
+    };    
+
+}
+
 async function addDriver(user){
     const driver = new Model(user.driver);
     
@@ -321,5 +345,6 @@ module.exports = {
     delete: deleteDriver,
     experience: updateExperience,
     check: checkDriver,
-    addStaff
+    addStaff,
+    getOneDriver
 }

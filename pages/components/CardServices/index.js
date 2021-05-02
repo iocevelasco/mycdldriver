@@ -1,10 +1,9 @@
 import React from 'react';
-import { Typography, Card, Image, Button, Avatar } from 'antd';
-import { DeleteOutlined, EditOutlined, CheckCircleOutlined, PhoneOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
+import { Typography, Card } from 'antd';
+import { PhoneOutlined, MailOutlined } from '@ant-design/icons';
 import ReactWhatsapp from 'react-whatsapp';
 import Icon from '@ant-design/icons';
 import Link from 'next/link';
-import axios from 'axios';
 import './styles.less';
 
 const { Text, Title } = Typography
@@ -75,7 +74,7 @@ const ServicesList = (props) => {
               </span>
               <span className="services-card__custom-whatsapp">
                 <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
-                  <WhatsappIcon style={{ color: '#35e784', fontSize: '2em' }} />
+                  <WhatsappIcon style={{ color: '#35e784', fontSize: '1em' }} />
                   <span>Whatsapp</span>
                 </ReactWhatsapp>
               </span>

@@ -72,7 +72,7 @@ const AddressInputs = (props) => {
             rules={[
               {
                 required: true,
-                message: 'State is required!',
+                message: 'Address is required!',
               },
             ]}>
             <Input />

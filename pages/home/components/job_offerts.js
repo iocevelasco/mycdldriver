@@ -42,7 +42,7 @@ const JobListComp = ({ jobs, fetchJobs, type }) => {
         }}
         renderItem={item => (
           <List.Item>
-            <JobCardComponent type='large' item={item} />
+            <JobCardComponent type={type} item={item} />
           </List.Item>
         )}
       />
