@@ -15,7 +15,6 @@ function mapStateToProps(state) {
 }
 
 const DriverDetailProps = (props) => {
-  console.log(props);
   const {isDeletable} = props;
   const [loading, setLoadin] = useState(true);
   const [detail, setDetail] = useState({

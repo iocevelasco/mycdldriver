@@ -60,7 +60,7 @@ const FormComponent = (props) => {
       })
   }
 
-  const dateFormat = 'MM/DD/YYYY';
+  const dateFormat = 'YYYY/MM/DD';
 
   return (
     <Form
@@ -93,7 +93,6 @@ const FormComponent = (props) => {
               },
             ]}>
             <DatePicker
-              defaultValue={moment(moment().format('L'), dateFormat)}
               format={dateFormat}
               style={{ width: '100%' }} />
           </Form.Item>

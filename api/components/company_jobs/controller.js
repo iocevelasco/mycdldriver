@@ -240,46 +240,56 @@ function addJob(job, company) {
     });
 }
 
-function applyJob(jobApply) {
-    return new Promise((resolve, reject) => {
-        if (!jobApply) {
-            reject({ status: 400, message: 'Invalid Job Apply data' });
-            return false;
-        }
-        const result = store.applyJob(jobApply);
+async function applyJob(jobApply) {
+    if (!jobApply) {
+        return { status: 400, message: 'Invalid Job Apply data' };
+    }
+    const result = await store.applyJob(jobApply);
 
-        switch (result.status) {
-            case 200:
-                try{
-                    console.log('[ APPLY JOB MAILER ]');
-                    const url_job_detail = `${config.baseurl}/job-offert?id=${jobApply.job}`;
-                    const url_candidate = `${config.baseurl}/userProfile/company/candidate`;
-                    mailer(
-                        jobApply.user.email, 
-                        'Job Application', 
-                        `Your job application`,
-                        `Hello ${jobApply.user.name} ${jobApply.user.lastname}, you applied for this <a href="${url_job_detail}">${url_job_detail}</a> job! Now we have to wait, in the meantime , you can send more applications here <a href="${config.baseurl}">${config.baseurl}</a>.  
-                        <p>Good Luck, MyCDL Driver Team.</p>`);
-                    mailer(
-                        result.userCompany.email, 
-                        'Job Application', 
-                        ``,
-                        `Hello ${result.userCompany.company.tradename}, you have a new driver application, here <a href="${url_candidate}">${url_candidate}</a> you can read the full profile.  
-                        <p>Good Luck, MyCDL Driver Team.</p>`);
-                }catch(e){
-                    console.log(e);
-                }
-                
-                resolve(result);
-                break;
-            case 500:
-                reject(result);
-                break;
-            default:
-                resolve(result);
-                break;
+    if(result.status == 200) {
+        try{
+            const url_job_detail = `${config.baseurl}/job-offert?id=${jobApply.job}`;
+            const url_candidate = `${config.baseurl}/userProfile/company/candidate`;
+            mailer(
+                jobApply.user.email, 
+                'Job Application', 
+                `Your job application`,
+                `Hello ${jobApply.user.name} ${jobApply.user.lastname}, you applied for this <a href="${url_job_detail}">${url_job_detail}</a> job! Now we have to wait, in the meantime , you can send more applications here <a href="${config.baseurl}">${config.baseurl}</a>.  
+                <p>Good Luck, MyCDL Driver Team.</p>`);
+            mailer(
+                result.userCompany.email, 
+                'Job Application', 
+                ``,
+                `Hello ${result.userCompany.company.tradename}, you have a new driver application, here <a href="${url_candidate}">${url_candidate}</a> you can read the full profile.  
+                <p>Good Luck, MyCDL Driver Team.</p>`);
+        }catch(e){
+            console.log(e);
         }
-    });
+    }
+    return result;
+}
+
+async function inviteJob(company, jobApply) {
+    if (!jobApply) {
+        return { status: 400, message: 'Invalid Job Apply data' };
+    }
+    jobApply.company = company._id;
+    const result = await store.inviteJob(jobApply);
+
+    if(result.status == 200) {
+        try{
+            const url_job_detail = `${config.baseurl}/job-offert?id=${jobApply.job}`;
+            mailer(
+                jobApply.email, 
+                'Job Application', 
+                `Your job application`,
+                `Hello, you applied for this <a href="${url_job_detail}">${url_job_detail}</a> job! Now we have to wait, in the meantime , you can send more applications here <a href="${config.baseurl}">${config.baseurl}</a>.  
+                <p>Good Luck, MyCDL Driver Team.</p>`);
+        }catch(e){
+            console.log(e);
+        }
+    }
+    return result;
 }
 
 function updateJob(id, job, company) {
@@ -345,5 +355,6 @@ module.exports = {
     setRating,
     getCompanyStaffApply,
     setHistory,
-    unlinkDriver
+    unlinkDriver,
+    inviteJob
 }

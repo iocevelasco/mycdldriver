@@ -1,0 +1,42 @@
+{
+  "post": {
+    "success": {
+      "title": "Create or change successfully",
+      "description": "This item has been create or change"
+    },
+    "error": {
+      "title": "Something is wrong",
+      "description": "This item was not create or change"
+    }
+  },
+  "update": {
+    "success": {
+      "title": "Update successfully",
+      "description": "This item has been update"
+    },
+    "error": {
+      "title": "Something is wrong",
+      "description": "This item was not update"
+    }
+  },
+  "get": {
+    "success": {
+      "title": "Delete successfully",
+      "description": "This item was not deleted"
+    },
+    "error": {
+      "title": "Something is wrong",
+      "description": "This item was not deleted"
+    }
+  },
+  "delete": {
+    "success": {
+      "title": "Delete successfully",
+      "description": "This item has been deleted"
+    },
+    "error": {
+      "title": "Something is wrong",
+      "description": "This item was not deleted"
+    }
+  }
+}

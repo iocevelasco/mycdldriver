@@ -6,6 +6,7 @@ import { Typography, Card } from 'antd';
 import Link from 'next/link';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
+import './styles.less';
 
 const { Title, Text } = Typography;
 
@@ -47,11 +48,11 @@ const UserProfile = ({ user, ...props }) => {
   return (
     <WrapperSection styles={stylesWrapper}>
       <div className="profile-driver__route">
-        <div className="title">
+        <div className="profile-driver__route__title">
           <Title level={4}>  Let's do this!  </Title>
           <Title level={3}>Are you a driver or a company?</Title>
         </div>
-        <div className="card-container">
+        <div className="profile-driver__options">
           <Link href="/userProfile/driver/profile">
             <a>
               <Card
@@ -65,7 +66,7 @@ const UserProfile = ({ user, ...props }) => {
             <a>
               <Card
                 hoverable={true}>
-                <img src='/static/images/truck.svg' />
+                <img src='/static/images/team.svg' />
                 <Text > Company </Text>
               </Card>
             </a>

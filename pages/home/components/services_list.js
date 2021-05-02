@@ -1,11 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Typography, Carousel } from 'antd';
 import { fetchServices } from '@store/reducers/landing_reducer';
 import CardServices from 'components/CardServices';
-import Link from 'next/link';
-
-const { Text, Title } = Typography
 
 function mapStateToProps(state) {
   return {
@@ -27,10 +23,10 @@ const ServicesList = (props) => {
   }, [])
 
   return (
-    <div className="home__services">
+    <div className="services-list__container">
       {
         servicesArray.map((service, key) => {
-          return <CardServices type='home' {...service} />
+          return <CardServices key={key} type='home' {...service} />
         })
       }
     </div >

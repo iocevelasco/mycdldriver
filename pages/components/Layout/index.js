@@ -74,9 +74,9 @@ const MainLayout = ({
         background: `url('/static/images/bg-routes.jpg')`,
         backgroundSize: 'contain',
     } : {
-            background: `#fff`,
-            backgroundSize: 'contain',
-        }
+        background: `#fff`,
+        backgroundSize: 'contain',
+    }
 
     return (<>
         <Head>
@@ -129,7 +129,7 @@ const MainLayout = ({
                                         <Text strong style={{ float: 'right', marginRight: 10 }}>{user.name + " " + user.lastname}</Text>
                                     </Col>
                                     <Col xs={6} xl={2}>
-                                        <Avatar icon={<UserOutlined />} src={user.photo} />
+                                        <Avatar size='large' shape='square' icon={<UserOutlined />} src={user.photo} />
                                     </Col>
                                     <Col xs={18} xl={6}>
                                         <Button

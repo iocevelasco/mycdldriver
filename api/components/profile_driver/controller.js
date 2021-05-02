@@ -1,5 +1,6 @@
 const store = require('./store');
 const storeJob = require('../company_jobs/store');
+const storeUser = require('../user/store');
 const config = require('../../config');
 const mailer = require('../../middelware/mailer');
 
@@ -17,16 +18,41 @@ function getDriver() {
     });
 }
 
-function addDriver(driver) {
-    return new Promise((resolve, reject) => {
+async function addDriver(driver) {
         if (!driver) {
             console.error('[driverController.addDriver] No driver data');
-            reject('[driverController.addDriver] No driver data');
-            return false;
+            return {
+                status: 500,
+                message: "No driver data"
+            };
         }
 
         const randomPass = Math.random().toString(36).slice(-8);
 
+        try{
+            const prevMail = await storeUser.checkuser({email: driver.base.email});
+            if(prevMail.status == 200){
+                return {
+                    status: 500,
+                    message: "The email is already registered"
+                };
+            }
+        }catch(e){
+            console.log(e);
+        }
+
+        try{
+            const prevDln = await store.getOneDriver({dln: driver.dln});
+            if(prevDln.status == 200){
+                return {
+                    status: 500,
+                    message: "The DLN is already registered"
+                };
+            }
+        }catch(e){
+            console.log(e);
+        }
+        
         const expDefault = [
             {
                 "name":"Tank Endorsed",
@@ -105,31 +131,30 @@ function addDriver(driver) {
             driver: fullDriver
         };
 
-        const driverResolve = store.add(user);
-        switch (driverResolve.status) {
-            case 201:
-                mailer(
-                    user.email, 
-                    'Welcome to MyCDL Driver!', 
-                    `Your profile has been created , you can now start searching for your next job.`,
-                    `<p>Your access data:</p>`,
-                    `<ul><li>user: <b>${user.email}</b></li><li>pass: <b>${driver.password}</b></li></ul><br/>`,
-                    `Tip: For a better experience , remember to maintain your profile up to date. You can edit your profile here! 
-                    <p>Have a great at day , My CDL Driver Team.</p>`);
-                resolve(driverResolve);
-                break;
-            case 500:
-                reject(driverResolve);
-                break;
-            case 400:
-                reject(driverResolve);
-                break;
-            default:
-                resolve(driverResolve);
-                break;
+        try{
+            const driverResolve = await store.add(user);
+            switch (driverResolve.status) {
+                case 201:
+                    mailer(
+                        user.email, 
+                        'Welcome to MyCDL Driver!', 
+                        `Your profile has been created , you can now start searching for your next job.`,
+                        `<p>Your access data:</p>`,
+                        `<ul><li>user: <b>${user.email}</b></li><li>pass: <b>${driver.password}</b></li></ul><br/>`,
+                        `Tip: For a better experience , remember to maintain your profile up to date. You can edit your profile here! 
+                        <p>Have a great at day , My CDL Driver Team.</p>`);
+                    return driverResolve;
+                default:
+                    return driverResolve;
+            }
+        }catch(e){
+            return {
+                status: 500,
+                message: "Unexpected error",
+                detail: e
+            };
         }
-    });
-
+        
 }
 
 function updateDriver(id, driver) {

@@ -528,6 +528,30 @@ async function applyJob(job) {
     }
 }
 
+async function inviteJob(job) {
+    try {
+        const newApply = new JobsApplysModel(job);
+        const resp = await newApply.save();
+        if (resp) {
+            return {
+                status: 200,
+                message: 'Ok'
+            };
+        }else{
+            return {
+                status: 400,
+                message: 'No apply saved'
+            };
+        }
+    } catch (e) {
+        return {
+            status: 500,
+            message: 'Invalid data recived for apply job',
+            detail: e
+        };
+    }
+}
+
 async function updateJob(id, job, company) {
     const foundJob = await JobsModel.findOne({
         _id: id
@@ -648,5 +672,6 @@ module.exports = {
     setRanking,
     getStaffCompanyJobs,
     setHistory,
-    unlinkDriver
+    unlinkDriver,
+    inviteJob
 }

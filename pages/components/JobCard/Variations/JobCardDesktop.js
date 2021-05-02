@@ -46,7 +46,12 @@ const JobCardDesktop = (props) => {
             <div>
               <p> {item.description} </p>
             </div>
-            <Button type="primary" shape="round" style={{width:"140px"}}>Aply now</Button>
+            {
+              props.type !== 'small' ?
+                <Button type="primary" shape="round" style={{ width: "140px" }}>Aply now</Button>
+                :
+                <Button type="primary" shape="round" style={{ width: "140px" }}>View more</Button>
+            }
           </div>
         </div>
       </Link>

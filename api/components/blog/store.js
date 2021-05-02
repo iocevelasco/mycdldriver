@@ -70,7 +70,9 @@ async function setArticle(article, user) {
         detail: e
       };
     }
-}async function updateArticle(article){
+}
+
+async function updateArticle(article){
     try{
         const foundArticle = await Blog.findOne({
             _id: article.id
