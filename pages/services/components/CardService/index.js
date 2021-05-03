@@ -51,7 +51,7 @@ export const HeaderCard = ({ image, title, phone, logo, email, state, city }) =>
                 </span>
               </div>
             </div>
-          </Card>,
+          </Card>
         </div>
       </WrapperSection>
     </>
