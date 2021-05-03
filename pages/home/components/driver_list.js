@@ -54,7 +54,7 @@ const DriverListSection = (props) => {
 
                   <Meta
                     title={`${e.name} ${e.lastname}`}
-                    description={`${e.driver.state.stateName}`}
+                    description={`${e.driver.state?e.driver.state.stateName:''}`}
                   />
                   <Rate className="home__driver-list--start" allowHalf disabled defaultValue={e.driver.rating} />
                 </Card>
