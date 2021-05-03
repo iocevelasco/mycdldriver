@@ -144,7 +144,6 @@ const SideNavAdmin = ({ user, section, isUserSuccess, router, logoutUser }) => {
 
 SideNavAdmin.propTypes = {
   user: propTypes.object.isRequired,
-  currentLocation: propTypes.string.isRequired,
   isUserSuccess: propTypes.number.isRequired
 }
 

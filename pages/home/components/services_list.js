@@ -28,7 +28,19 @@ const ServicesList = (props) => {
       {
         servicesArray.map((service, key) => {
           return <Col lg={12} md={12} xs={24}>
-            <CardServices key={key} type='home' {...service} />
+            <CardServices
+              key={key}
+              type='home'
+              edit={false}
+              image={service.image}
+              city={service.city}
+              email={service.email}
+              title={service.title}
+              whatsapp={service.whatsapp}
+              _id={service._id}
+              detail={service.detail}
+              state={service.state}
+            />
           </Col>
         })
       }

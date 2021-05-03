@@ -101,7 +101,7 @@ const CompanyJobView = (props) => {
         notification['error']({
           message: 'error',
           description:
-            "Sorry! We couldn't create this position, please try again. "
+            "Sorry! We couldn't create this service, please try again. "
         });
       })
   };
