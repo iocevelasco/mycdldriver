@@ -111,6 +111,7 @@ const CompanyJobsSchema = mongoose.Schema({
     },
     image: {
         type: String,
+        default: 'https://mycdldriver-images.s3-us-west-2.amazonaws.com/placeholder-02.jpg',
         trim: true
     },
     areaCode: {

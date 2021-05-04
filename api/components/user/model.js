@@ -40,7 +40,7 @@ const userSchema = mongoose.Schema({
    },
    photo: {
       type: String,
-      required: true,
+      default: 'https://mycdldriver-images.s3-us-west-2.amazonaws.com/placeholder-03.jpg',
       trim: true
    },
    date: {

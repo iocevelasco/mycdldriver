@@ -6,6 +6,7 @@ const Incident = require('../incident/model');
 const {CitiesModel} = require('../cities/model');
 const mongoose = require('mongoose');
 const fs = require('fs');
+const { isArray } = require('lodash');
 
 function capitalize(text) {
     return text.replace(/\b\w/g, function (m) { return m.toUpperCase(); });
@@ -301,7 +302,7 @@ async function getStaffCompanyJobs(query) {
     try{
         const userCompany = await User.findOne({ company: id }).populate('company');
         const driversJob = await JobsApplysModel.find(filter).distinct('driver').populate('driver');
-        const driverNoJob = await ProfileDriver.find({'companyJob.company': id});
+        const driverNoJob = await ProfileDriver.find({'companyJob.company': id, 'companyJob.status': true});
         const idDriver = driverNoJob.map((res)=>{
             return res._id;
         });
@@ -449,6 +450,19 @@ async function setHistory(id, history){
 async function unlinkDriver(driver, company){
     try{
         const applyJob = await JobsApplysModel.find({driver: driver, company:company});
+        const foundUser = await User.findOne({_id: driver});
+        const foundDriver = await ProfileDriver.findOne({_id: foundUser.driver});
+        if(isArray(foundDriver.companyJob) && foundDriver.companyJob.length > 0){
+            const companyJobs = foundDriver.companyJob.map(e=>{
+                if(String(e.company).trim() === String(company).trim()){
+                    e.status = false;
+                }
+                return e;
+            });
+            foundDriver.companyJob = companyJobs;
+            foundDriver.save();
+        }
+        
         applyJob.forEach(e => {
             e.status = 4;
             e.save();
@@ -458,6 +472,7 @@ async function unlinkDriver(driver, company){
             message: "Unlinked"
         }
     }catch(e){
+        console.log(e);
         return {
             status: 500,
             message: 'Unexpected error',

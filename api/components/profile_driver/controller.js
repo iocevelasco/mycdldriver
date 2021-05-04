@@ -86,10 +86,6 @@ async function addDriver(driver) {
             }
         ];
 
-        if(!driver.base.photo){
-            driver.base.photo = "https://www.unitecnar.edu.co/sites/default/files/pictures/user_default.png";
-        }
-
         if(!driver.password){
             driver.password = randomPass;
         }
