@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const types = {
-    FETCH_LANDING_DATA: 'FETCH_LANDING_DATA',
+    FETCH_JOBS: 'FETCH_JOBS',
+    FETCH_DRIVERS: 'FETCH_DRIVERS',
+    FETCH_SERVICES: 'FETCH_SERVICES',
     VISIBLE_MODAL_LOGIN: 'VISIBLE_MODAL_LOGIN',
     DEVICETYPE: 'DEVICETYPE',
     IS_LOADING: 'IS_LOADING',
@@ -37,33 +39,55 @@ function fetchJobPositionData(qs) {
     }
 }
 
-
-function fetchLandingData() {
+function fetchServices() {
     return (dispatch) => {
-        function servicesList() {
-            return axios.get('/api/services/home');
-        }
-        function jobsLits() {
-            return axios.get('/api/company/jobs');
-        }
-        function driversList() {
-            return axios.get('/api/user/1');
-        }
-        function fetchCommonData() {
-            return axios.get(`/api/company/jobs/customlist`);
-        }
+        return axios.get(`/api/services/home`)
+            .then(({ data }) => {
+                let services = data.data;
+                dispatch(({
+                    type: types.FETCH_SERVICES,
+                    payload: services
+                }));
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+}
 
-        return Promise.all([servicesList(), jobsLits(), driversList(), fetchCommonData()])
-            .then(function (results) {
-                const services = results[0].data.data;
-                const jobs = results[1].data.data;
-                const drivers = results[2].data.data;
-                const commont = results[3].data.data;
-                console.log('results', services, jobs, drivers, commont)
-                dispatch({
-                    type: types.FETCH_LANDING_DATA,
-                    payload: { jobs, drivers, commont, services }
-                })
+function fetchDriversData() {
+    return (dispatch) => {
+        return axios.get(`/api/user/1`)
+            .then(({ data }) => {
+                let drivers = data.data;
+                dispatch(({
+                    type: types.FETCH_DRIVERS,
+                    payload: drivers
+                }));
+            }).catch((error) => {
+                console.log(error);
+            })
+    }
+}
+
+function fetchCommonData() {
+    return (dispatch) => {
+        return axios.get(`/api/company/jobs/customlist`)
+            .then(({ data }) => {
+                let jobs_name = data.data.title.map(e => {
+                    return { value: e }
+                }) || [];
+                let citys = data.data.citys || [];
+                let companies = data.data.company || [];
+                dispatch(({
+                    type: types.COMMON_DATA,
+                    payload: {
+                        jobs_name,
+                        citys,
+                        companies
+                    }
+                }));
+            }).catch((error) => {
+                console.log(error);
             })
     }
 }
@@ -91,9 +115,20 @@ const activeLoading = (props) => {
 
 const landingReducer = (state = initialState, action) => {
     switch (action.type) {
-        case types.FETCH_LANDING_DATA:
+        case types.FETCH_JOBS:
             return {
-                ...state, ...action.payload
+                ...state,
+                jobs: action.payload.jobs,
+                citys_available: action.payload.citys_available,
+                isLoading: false
+            }
+        case types.FETCH_SERVICES:
+            return {
+                ...state, services: action.payload
+            }
+        case types.FETCH_DRIVERS:
+            return {
+                ...state, drivers: action.payload
             }
         case types.VISIBLE_MODAL_LOGIN:
             return {
@@ -107,6 +142,10 @@ const landingReducer = (state = initialState, action) => {
             return {
                 ...state, isLoading: action.payload
             }
+        case types.COMMON_DATA:
+            return {
+                ...state, ...action.payload
+            }
         default:
             return state;
     }
@@ -119,5 +158,7 @@ export {
     handlerModalLogin,
     deviceType,
     activeLoading,
-    fetchLandingData
+    fetchCommonData,
+    fetchDriversData,
+    fetchServices
 };
