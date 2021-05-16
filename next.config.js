@@ -16,6 +16,7 @@ module.exports = withLess({
   },
   webpack: (config, { isServer }) => {
     config.resolve.alias['components'] = path.resolve('./pages/components');
+    config.resolve.alias['@components'] = path.resolve('./pages/components');
     config.resolve.alias['@hooks'] = path.resolve('./pages/hooks');
     config.resolve.alias['@styles'] = path.resolve('./styles');
     config.resolve.alias['@store'] = path.resolve('./store');
