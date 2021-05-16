@@ -79,6 +79,10 @@ const profileDriverSchema = Schema({
         company: {
             type: Schema.ObjectId,
             ref: 'ProfileCompany'
+        },
+        status: {
+            type: Boolean,
+            default: true
         }
     }]
 });

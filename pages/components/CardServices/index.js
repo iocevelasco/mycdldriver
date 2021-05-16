@@ -1,6 +1,6 @@
 import React from 'react';
-import { Typography, Card } from 'antd';
-import { PhoneOutlined, MailOutlined } from '@ant-design/icons';
+import { Typography, Card, Button } from 'antd';
+import { PhoneOutlined, MailOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import ReactWhatsapp from 'react-whatsapp';
 import Icon from '@ant-design/icons';
 import Link from 'next/link';
@@ -8,9 +8,9 @@ import './styles.less';
 
 const { Text, Title } = Typography
 
-const ServicesList = (props) => {
+const ServicesCard = (props) => {
+  const { image, email, detail, city, state, whatsapp, title, _id } = props;
 
-  const { image, email, detail, city, state, whatsapp, title, _id, company } = props;
   const ItemProps = ({ text, icon }) => (
     <div className={`services-card__item`}>
       {icon}
@@ -35,60 +35,73 @@ const ServicesList = (props) => {
 
   return (
     <span className="services-card">
-      <Link
-        href={{
-          pathname: '/services',
-          query: { id: _id },
-        }}
+      <Card
+        key={props.key}
+        hoverable={true}
+        bodyStyle={styles.body}
+        cover={
+          <>
+            <Link
+              href={{
+                pathname: '/services',
+                query: { id: _id },
+              }}
+            >
+              <>
+                <div className="services-card__header">
+                  {/* <Avatar shape="square" size={120} src={company.photo} /> */}
+                </div>
+                <img alt="image-service" src={image} />
+              </>
+            </Link>
+          </>
+        }
       >
-        <Card
-          key={props.key}
-          hoverable={true}
-          bodyStyle={styles.body}
-          cover={
-            <>
-              <div className="services-card__header">
-                {/* <Avatar shape="square" size={120} src={company.photo} /> */}
+        <div className="services-card__body">
+          <div className="services-card__title">
+            {
+              props.edit && <div className="services-card__footer--actions">
+                <Button
+                  type="link"
+                  icon={<EditOutlined />}
+                  onClick={props.actions.edit} />
+                <Button type="link" icon={<DeleteOutlined />} onClick={props.actions.delete} />
               </div>
-              <img alt="image-service" src={image} />
-            </>
-          }
-        >
-          <div className="services-card__body">
-            <div className="services-card__title">
+            }
+            <div>
               <Title level={3} >{title} </Title>
               <Text>{detail}</Text>
             </div>
-            <div className="services-card__contact-list">
-              <span>
-                <ItemProps
-                  className={null}
-                  icon={<PhoneOutlined style={{ color: "#E73540" }} />}
-                  text={`${whatsapp} `}
-                />
-                <ItemProps
-                  className={null}
-                  icon={<MailOutlined style={{ color: "#E73540" }} />}
-                  text={`${email} `}
-                />
-              </span>
-              <span className="services-card__custom-whatsapp">
-                <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
-                  <WhatsappIcon style={{ color: '#35e784', fontSize: '1em' }} />
-                  <span>Whatsapp</span>
-                </ReactWhatsapp>
-              </span>
-            </div>
-            <div className="services-card__footer">
-              <div className="services-card__footer--address">
-                <p> {state.stateName} </p> - <p> {city.cityName} </p>
-              </div>
+          </div>
+          <div className="services-card__contact-list">
+            <span>
+              <ItemProps
+                className={null}
+                icon={<PhoneOutlined style={{ color: "#E73540" }} />}
+                text={`${whatsapp} `}
+              />
+              <ItemProps
+                className={null}
+                icon={<MailOutlined style={{ color: "#E73540" }} />}
+                text={`${email} `}
+              />
+            </span>
+            <span className="services-card__custom-whatsapp">
+              <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
+                <WhatsappIcon style={{ color: '#35e784', fontSize: '1em' }} />
+                <span>Whatsapp</span>
+              </ReactWhatsapp>
+            </span>
+          </div>
+          <div className="services-card__footer">
+            <div className="services-card__footer--address">
+              <p> {state.stateName} </p> - <p> {city.cityName} </p>
             </div>
           </div>
-        </Card>
-      </Link>
+        </div>
+      </Card>
     </span >
   )
 }
 
-export default ServicesList;
+export default ServicesCard;

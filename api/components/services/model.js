@@ -16,6 +16,7 @@ const serviceSchema = mongoose.Schema({
    },
    image: {
       type: String,
+      default: 'https://mycdldriver-images.s3-us-west-2.amazonaws.com/placeholder-01.jpg',
       trim: true
    },
    email: {
