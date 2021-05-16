@@ -38,7 +38,35 @@ function fetchJobPositionData(qs) {
 }
 
 
+function fetchLandingData() {
+    return (dispatch) => {
+        function servicesList() {
+            return axios.get('/api/services/home');
+        }
+        function jobsLits() {
+            return axios.get('/api/company/jobs');
+        }
+        function driversList() {
+            return axios.get('/api/user/1');
+        }
+        function fetchCommonData() {
+            return axios.get(`/api/company/jobs/customlist`);
+        }
 
+        return Promise.all([servicesList(), jobsLits(), driversList(), fetchCommonData()])
+            .then(function (results) {
+                const services = results[0].data.data;
+                const jobs = results[1].data.data;
+                const drivers = results[2].data.data;
+                const commont = results[3].data.data;
+                console.log('results', services, jobs, drivers, commont)
+                dispatch({
+                    type: types.FETCH_LANDING_DATA,
+                    payload: { jobs, drivers, commont, services }
+                })
+            })
+    }
+}
 
 const handlerModalLogin = (props) => {
     return {
@@ -63,6 +91,10 @@ const activeLoading = (props) => {
 
 const landingReducer = (state = initialState, action) => {
     switch (action.type) {
+        case types.FETCH_LANDING_DATA:
+            return {
+                ...state, ...action.payload
+            }
         case types.VISIBLE_MODAL_LOGIN:
             return {
                 ...state, visible_modal_login: action.payload
@@ -87,4 +119,5 @@ export {
     handlerModalLogin,
     deviceType,
     activeLoading,
+    fetchLandingData
 };
