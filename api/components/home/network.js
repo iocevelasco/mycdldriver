@@ -4,8 +4,8 @@ const router = express.Router();
 const response = require('../../network/response');
 const controller = require('./controller');
 
-router.get('/', auth(), function (req, res) {
-  controller.getDashboardAdmin(req.user.typeUser)
+router.get('/', function (req, res) {
+  controller.getDashboardAdmin()
     .then((dashboard) => {
       switch (dashboard.status) {
         case 200:
