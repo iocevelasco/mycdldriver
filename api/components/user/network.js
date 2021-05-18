@@ -156,6 +156,22 @@ router.get('/driver-list', function (req, res) {
     });
 });
 
+router.get('/check_mail/:email', function (req, res) {
+   controller.mailExist(req.params.email)
+   .then((resp) => {
+       switch(resp.status){
+           case 200:
+               response.success(req, res, resp.message, resp.status);
+               break;
+           default:
+               response.error(req, res, resp.message, resp.status, resp.detail);
+               break;
+       }
+   }).catch(e => {
+       response.error(req, res, 'Unexpected Error', 500, e);
+   });
+});
+
 router.get('/:type', function (req, res) {
     controller.getUsers(req.params.type)
     .then((userList) => {
