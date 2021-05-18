@@ -11,21 +11,12 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  /*return {
-    fetchServices: () => dispatch(fetchServices())
-  }*/
-}
-
 const ServicesList = (props) => {
   const { servicesArray } = props;
-  /*useEffect(() => {
-    props.fetchServices();
-  }, [])*/
 
   return (
     <Row gutter={[24, 24]}>
-      {/*
+      {
         servicesArray.map((service, key) => {
           return <Col lg={12} md={12} xs={24}>
             <CardServices
@@ -43,9 +34,9 @@ const ServicesList = (props) => {
             />
           </Col>
         })
-      */}
+      }
     </Row>
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServicesList);
+export default connect(mapStateToProps)(ServicesList);

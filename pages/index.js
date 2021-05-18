@@ -6,7 +6,7 @@ import CarouselComp from 'components/carousel';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
 import queryString from "query-string";
-import { fetchJobPositionData, fetchDriversData, fetchCommonData, fetchServices } from '@store/reducers/landing_reducer';
+import { fetchJobPositionData, fetchLandingData } from '@store/reducers/landing_reducer';
 import { logoutUser } from '@store/reducers/user_reducer';
 import axios from 'axios';
 
@@ -59,38 +59,27 @@ const reducer = (state, action) => {
 }
 
 function mapStateToProps(state) {
+  const { landing } = state;
   return {
     user: state.user,
-    jobsList: state.landing.jobs,
-    driversList: state.landing.drivers
+    jobsList: landing.jobs,
+    driversList: landing.drivers,
+    servicesList: landing.services
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchJobs: (query) => dispatch(fetchJobPositionData(query)),
-    fetchDrivers: () => dispatch(fetchDriversData()),
-    fetchServices: () => dispatch(fetchServices()),
-    fetCommons: () => dispatch(fetchCommonData()),
-    handleLogout: () => dispatch(logoutUser()),
+    fetchLandingData: () => dispatch(fetchLandingData()),
   }
 }
 
-const HomePage = ({
-  user,
-  fetchJobs,
-  fetchDrivers,
-  deviceType,
-  fetCommons,
-  ...props
-}) => {
+const HomePage = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    fetchJobs(state.query);
-    fetchPosition();
-    fetchDrivers();
-    fetCommons();
+    props.fetchLandingData();
   }, [])
 
   const cleanFilter = () => {
@@ -116,21 +105,6 @@ const HomePage = ({
     });
   }
 
-  const DeleteUser = async () => {
-    const header = {
-      headers: { Authorization: `Bearer ${user.token}` }
-    };
-    await axios.delete('/api/user/' + user._id, header)
-      .then((response) => props.handleLogout())
-      .catch((err) => {
-        console.log('err', err)
-      })
-  }
-
-  const fetchPosition = async () => {
-    dispatch({ type: types.ranking, payload: mock_ranking.ranking });
-  }
-
   const wrapperStyle = {
     marginTop: 16,
     marginBottom: 16
@@ -144,22 +118,19 @@ const HomePage = ({
         cleanFilter={cleanFilter}
         query={state.query}
       />
-      <WrapperSection xs={24} row={20} style={wrapperStyle}  >
-        <CarouselComp carousel_data={state.carousel_data} />
-      </WrapperSection>
       <WrapperSection xs={24} row={18}>
         <TitleSection theme='light' title={jobs.title} subTitle={jobs.subTitle} />
-        <JobsListComp type='large' />
+        <JobsListComp jobsList={props.jobsList} type='large' />
       </WrapperSection>
       <WrapperSection xs={24} row={18} styles={{ background: "#001628" }} >
         <TitleSection theme='dark' title={drivers.title} subTitle={drivers.subTitle} />
         <Row justify='center' align='middle' gutter={[16, 16]}>
-          <DriverList driversList={props.driversList} rankingDriver={state.ranking} />
+          <DriverList driversList={props.driversList} />
         </Row>
       </WrapperSection>
       <WrapperSection xs={24} row={18}>
         <TitleSection theme='light' title={services.title} subTitle={services.subTitle} />
-        <ServicesList />
+        <ServicesList servicesList={props.servicesList} />
       </WrapperSection>
     </>
   )

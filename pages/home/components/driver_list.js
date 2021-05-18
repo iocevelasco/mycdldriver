@@ -7,7 +7,8 @@ import Link from 'next/link';
 import { Carousel } from "antd";
 
 
-const DriverListSection = (props) => {console.log(props);
+const DriverListSection = (props) => {
+  console.log('DriverListSection', props)
   const handleSelect = (id) => {
     console.log('d', id);
   }
@@ -25,23 +26,24 @@ const DriverListSection = (props) => {console.log(props);
           slider.current = ref;
         }}
       >
-        {/*props.driversList.map((data, key) => {
-          const city = data.driver.city ? data.driver.city.cityName : "";
-          const state = data.driver.state ? data.driver.state.stateName : "";
-          return (
-            <div key={key} className="home__driver-list--carousel-list">
-              <CardDriver
-                handlerAction={() => handleSelect(data)}
-                city={city}
-                state={state}
-                fullName={`${data.name} ${data.lastname}`}
-                rating={data.driver.rating}
-                photo={data.photo}
-                darkTheme={false}
-              />
-            </div>
-          );
-        })*/}
+        {
+          props.driversList.map((data, key) => {
+            const city = data.driver.city ? data.driver.city.cityName : "";
+            const state = data.driver.state ? data.driver.state.stateName : "";
+            return (
+              <div key={key} className="home__driver-list--carousel-list">
+                <CardDriver
+                  handlerAction={() => handleSelect(data)}
+                  city={city}
+                  state={state}
+                  fullName={`${data.name} ${data.lastname}`}
+                  rating={data.driver.rating}
+                  photo={data.photo}
+                  darkTheme={false}
+                />
+              </div>
+            );
+          })}
       </Carousel>
       {
         props.typeUser === 2 ? <div className="home__driver-list--action-container">
