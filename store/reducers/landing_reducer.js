@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const types = {
+    FETCH_LANDING_DATA: 'FETCH_LANDING_DATA',
     FETCH_JOBS: 'FETCH_JOBS',
     FETCH_DRIVERS: 'FETCH_DRIVERS',
     FETCH_SERVICES: 'FETCH_SERVICES',
@@ -39,51 +40,25 @@ function fetchJobPositionData(qs) {
     }
 }
 
-function fetchServices() {
+function fetchLandingData() {
     return (dispatch) => {
-        return axios.get(`/api/services/home`)
+        return axios.get(`/api/home`)
             .then(({ data }) => {
-                let services = data.data;
-                dispatch(({
-                    type: types.FETCH_SERVICES,
-                    payload: services
-                }));
-            }).catch((error) => {
-                console.log(error);
-            })
-    }
-}
+                const { drivers, jobs, search, service } = data.data
+                const { citys, company, title } = search;
 
-function fetchDriversData() {
-    return (dispatch) => {
-        return axios.get(`/api/user/1`)
-            .then(({ data }) => {
-                let drivers = data.data;
-                dispatch(({
-                    type: types.FETCH_DRIVERS,
-                    payload: drivers
-                }));
-            }).catch((error) => {
-                console.log(error);
-            })
-    }
-}
-
-function fetchCommonData() {
-    return (dispatch) => {
-        return axios.get(`/api/company/jobs/customlist`)
-            .then(({ data }) => {
-                let jobs_name = data.data.title.map(e => {
+                const jobs_name = title.map(e => {
                     return { value: e }
-                }) || [];
-                let citys = data.data.citys || [];
-                let companies = data.data.company || [];
+                });
                 dispatch(({
-                    type: types.COMMON_DATA,
+                    type: types.FETCH_LANDING_DATA,
                     payload: {
-                        jobs_name,
+                        drivers,
+                        jobs,
+                        services: service,
                         citys,
-                        companies
+                        jobs_name,
+                        companies: company
                     }
                 }));
             }).catch((error) => {
@@ -115,20 +90,9 @@ const activeLoading = (props) => {
 
 const landingReducer = (state = initialState, action) => {
     switch (action.type) {
-        case types.FETCH_JOBS:
+        case types.FETCH_LANDING_DATA:
             return {
-                ...state,
-                jobs: action.payload.jobs,
-                citys_available: action.payload.citys_available,
-                isLoading: false
-            }
-        case types.FETCH_SERVICES:
-            return {
-                ...state, services: action.payload
-            }
-        case types.FETCH_DRIVERS:
-            return {
-                ...state, drivers: action.payload
+                ...state, ...action.payload, isLoading: false
             }
         case types.VISIBLE_MODAL_LOGIN:
             return {
@@ -142,10 +106,6 @@ const landingReducer = (state = initialState, action) => {
             return {
                 ...state, isLoading: action.payload
             }
-        case types.COMMON_DATA:
-            return {
-                ...state, ...action.payload
-            }
         default:
             return state;
     }
@@ -154,11 +114,9 @@ const landingReducer = (state = initialState, action) => {
 export {
     types,
     landingReducer,
+    fetchLandingData,
     fetchJobPositionData,
     handlerModalLogin,
     deviceType,
     activeLoading,
-    fetchCommonData,
-    fetchDriversData,
-    fetchServices
 };

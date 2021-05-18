@@ -11,10 +11,9 @@ import { SpinnerComp } from 'components/helpers';
 import DetailsDrawer from "./components/detailsDrawer";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useDrivers } from '@hooks';
-
+import { CardDriver } from '@components/Cards';
 const { Search } = Input;
-const { Option } = Select;
-const { Meta } = Card;
+
 
 function mapStateToProps(state) {
   return {
@@ -86,29 +85,20 @@ function ListDrivers(props) {
           <Divider />
           <div className="list-drivers__container">
             <Row gutter={[16, 16]} className="space-rows">
-              {drivers.map((driverData) => {
-                const { _id, name, lastname, driver, rating, photo } = driverData;
-                const city = driver.city ? driver.city.cityName : "";
-                const state = driver.state ? driver.state.stateName : "";
+              {drivers.map((data) => {
+                const city = data.driver.city ? data.driver.city.cityName : "";
+                const state = data.driver.state ? data.driver.state.stateName : "";
                 return (
-                  <Col flex={1} className="card-driver" key={_id} span={6}>
-                    <Card
-                      onClick={() => handleSelect(driverData)}
-                      className="card"
-                      hoverable
-                      cover={<img alt="example" src={photo} />}
-                    >
-                      <Meta
-                        title={`${name} ${lastname}`}
-                        description={`${state} - ${city}`}
-                      />
-                      <Rate
-                        className="rating"
-                        allowHalf
-                        disabled
-                        value={driver.rating}
-                      />
-                    </Card>
+                  <Col flex={1} className="card-driver" key={data._id} span={6}>
+                    <CardDriver
+                      handlerAction={() => handleSelect(data)}
+                      city={city}
+                      state={state}
+                      fullName={`${data.name} ${data.lastname}`}
+                      rating={data.driver.rating}
+                      photo={data.photo}
+                      darkTheme={false}
+                    />
                   </Col>
                 );
               })}

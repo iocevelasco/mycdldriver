@@ -428,6 +428,36 @@ async function addStaff(user, company) {
     }
 }
 
+async function checkDln(dln){
+    if(!dln){
+        return {
+            status: 400,
+            message: 'false'
+        }
+    }
+
+    try{
+        const respuesta = await store.checkDln(dln);
+        if(respuesta.status === 200){
+            return {
+                status: 200,
+                message: 'true'
+            }
+        }else{
+            return {
+                status: 400,
+                message: 'false'
+            }
+        }
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
+}
+
 module.exports = {
     getDriver,
     addDriver,
@@ -435,5 +465,6 @@ module.exports = {
     deleteDriver,
     updateExperience,
     checkDriver,
-    addStaff
+    addStaff,
+    checkDln
 }

@@ -465,5 +465,14 @@ router.post('/staff/get', auth(1), function (req, res) {
   response.success(req, res, req.user, 200);
 });
 
+router.get('/check_dln/:dln', function (req, res) {
+  controller.checkDln(req.params.dln)
+    .then((resp) => {
+      response.success(req, res, resp.message, resp.status);
+    }).catch(e => {
+      response.error(req, res, e.message, e.status, e.detail);
+    });
+});
+
 
 module.exports = router;
