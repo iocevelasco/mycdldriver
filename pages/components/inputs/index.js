@@ -1,13 +1,59 @@
+import React, { useState } from 'react';
 import { Input, Form, Select } from "antd";
+import axios from 'axios';
 import useListState from '@hooks/useListState';
 
 const { Option } = Select;
 
 const DLNinput = (props) => {
+  const [validation, setValidation] = useState({
+    status: "",
+    message: "",
+    disabled: false
+  });
+
+  const checkDln = async (dln) => {
+    setValidation({
+      status:"validating",
+      message:"The information is being validated, please wait",
+      disabled: true
+    });
+
+    await axios
+      .get('/api/driver/check_dln/' + dln)
+      .then((response) => {
+        if(response.status === 200){
+          setValidation({
+            status:"error",
+            message:"The dln already exists in the database",
+            disabled: false
+          });
+        }else{
+          throw "Error";
+        }
+      })
+      .catch((err) => {
+        setValidation({
+          status:"success",
+          message:"",
+          disabled: false
+        });
+        console.log(err)
+      })
+  }
+
   return (
     <Form.Item
       label='DLN Number'
       name="dln"
+      hasFeedback
+      validateStatus={validation.status}
+      help={validation.message}
+      onBlur={(val) => {
+          if(val.target.value){
+            checkDln(val.target.value);
+          }
+      }}
       rules={[
         {
           required: true,
@@ -24,24 +70,68 @@ const DLNinput = (props) => {
           },
         }),
       ]}>
-      <Input />
+      <Input disabled={validation.disabled} />
     </Form.Item>
   )
 }
 
 const EmailInput = () => {
+  const [validation, setValidation] = useState({
+    status: "",
+    message: "",
+    disabled: false
+  });
+
+  const checkMail = async (mail) => {
+    setValidation({
+      status:"validating",
+      message:"The information is being validated, please wait",
+      disabled: true
+    });
+
+    await axios
+      .get('/api/user/check_mail/' + mail)
+      .then((response) => {
+        if(response.status === 200){
+          setValidation({
+            status:"error",
+            message:"The email already exists in the database",
+            disabled: false
+          });
+        }else{
+          throw "Error";
+        }
+      })
+      .catch((err) => {
+        setValidation({
+          status:"success",
+          message:"",
+          disabled: false
+        });
+        console.log(err)
+      })
+  }
+
   return (
     <Form.Item
       name="email"
       label="Email"
+      hasFeedback
+      validateStatus={validation.status}
+      help={validation.message}
       rules={[
         {
           required: true,
           type: "email",
           message: 'Enter a valid email address',
         },
-      ]}>
-      <Input />
+      ]}
+      onBlur={(val) => {
+          if(val.target.value){
+            checkMail(val.target.value);
+          }
+      }}>
+      <Input disabled={validation.disabled} />
     </Form.Item>
   )
 }

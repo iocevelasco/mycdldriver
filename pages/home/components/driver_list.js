@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Carousel } from "antd";
 
 
-const DriverListSection = (props) => {
+const DriverListSection = (props) => {console.log(props);
   const handleSelect = (id) => {
     console.log('d', id);
   }
@@ -25,7 +25,7 @@ const DriverListSection = (props) => {
           slider.current = ref;
         }}
       >
-        {props.driversList.map((data, key) => {
+        {/*props.driversList.map((data, key) => {
           const city = data.driver.city ? data.driver.city.cityName : "";
           const state = data.driver.state ? data.driver.state.stateName : "";
           return (
@@ -41,7 +41,7 @@ const DriverListSection = (props) => {
               />
             </div>
           );
-        })}
+        })*/}
       </Carousel>
       {
         props.typeUser === 2 ? <div className="home__driver-list--action-container">

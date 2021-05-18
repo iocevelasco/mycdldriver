@@ -212,6 +212,26 @@ async function checkMail(mail){
     }
 }
 
+async function mailExist(mail){
+    if(!mail){
+        return {
+            status: 400,
+            message: 'No email recived'
+        }
+    }
+
+    try{
+        const respuesta = await store.checkuser({email: mail});
+        return respuesta;
+    }catch(e){
+        return {
+            status: 500,
+            message: 'Unexpected error',
+            detail: e
+        }
+    }
+}
+
 module.exports = {
     getUsers,
     getUser,
@@ -226,5 +246,6 @@ module.exports = {
     getPrelogin,
     setPhoto,
     changePassword,
-    checkMail
+    checkMail,
+    mailExist
 }

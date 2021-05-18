@@ -338,6 +338,29 @@ async function addStaff(user){
     
 }
 
+async function checkDln(dln){
+    try{
+        const list = await Model.findOne({dln: dln});
+        if(list){
+            return {
+                status: 200,
+                message: list
+            };
+        }else{
+            return {
+                status: 404,
+                message: 'No driver found'
+            };
+        }
+    }catch(e){
+        return {
+            status: 500,
+            message: "Unexpected error",
+            detail: e
+        };
+    }
+}
+
 module.exports = {
     list: getDriver,
     add: addDriver,
@@ -346,5 +369,6 @@ module.exports = {
     experience: updateExperience,
     check: checkDriver,
     addStaff,
-    getOneDriver
+    getOneDriver,
+    checkDln
 }
