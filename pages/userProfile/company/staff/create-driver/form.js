@@ -9,6 +9,7 @@ import { Button, Row, Col, Form, Input, notification, Select, Divider, DatePicke
 const { Option } = Select;
 
 const FormComponent = (props) => {
+  const {city, state} = props;
   const [form] = Form.useForm();
   const [loading, setLoader] = useState(false);
   const [imageDln, setImageDLN] = useState('');
@@ -33,6 +34,8 @@ const FormComponent = (props) => {
       birthDate: fields.birthDate,
       phoneNumber: fields.phoneNumber,
       sex: fields.sex,
+      city: city,
+      state: state,
       description: fields.description,
       imageDln: imageDln,
       medicCardImage: medicCardImage

@@ -42,7 +42,11 @@ const AdminView = (props) => {
                   <Row>
                     <Header setNewImage={setNewImage} newImage={newImage} />
                     <Divider className="dividers" />
-                    <FormComponent token={props.user.token} userId={props.user.company._id} />
+                    <FormComponent 
+                      token={props.user.token} 
+                      userId={props.user.company._id}
+                      city={props.user.company.city}
+                      state={props.user.company.state} />
                   </Row>
                 </div>
               </div>
