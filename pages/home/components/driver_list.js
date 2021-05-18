@@ -1,34 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Col, Card, Typography, Rate, Button } from "antd";
-import { connect } from "react-redux";
-import { fetchDriversData } from "@store/reducers/landing_reducer";
+import React, { useRef } from "react";
+import { Button } from "antd";
+import { CardDriver } from '@components/Cards'
 import useMobileDetect from 'use-mobile-detect-hook';
 import { withRouter } from "next/router";
 import Link from 'next/link';
 import { Carousel } from "antd";
 
-const { Text, Title } = Typography;
-const { Meta } = Card;
-
-function mapStateToProps(state) {
-  return {
-    drivers: state.landing.drivers,
-    typeUser: state.user.typeUser
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchDrivers: () => dispatch(fetchDriversData()),
-  };
-}
 
 const DriverListSection = (props) => {
-
+  console.log('DriverListSection', props)
+  const handleSelect = (id) => {
+    console.log('d', id);
+  }
   const detectMobile = useMobileDetect();
-  useEffect(() => {
-    props.fetchDrivers();
-  }, []);
   const slider = useRef();
 
   return (
@@ -42,26 +26,24 @@ const DriverListSection = (props) => {
           slider.current = ref;
         }}
       >
-        {props.drivers.map((e, key) => {
-          return (
-            <div key={key} className="home__driver-list--carousel-list">
-              <div className="home__driver-list--container-card">
-                <Card
-                  hoverable={true}
-                  cover={<img alt="driver-image" src={e.photo || '/static/images/cardDriver/user.png'} style={{ borderColor: "transparent" }} />}
-                  className="home__driver-list__card"
-                >
-
-                  <Meta
-                    title={`${e.name} ${e.lastname}`}
-                    description={`${e.driver.state?e.driver.state.stateName:''}`}
-                  />
-                  <Rate className="home__driver-list--start" allowHalf disabled defaultValue={e.driver.rating} />
-                </Card>
+        {
+          props.driversList.map((data, key) => {
+            const city = data.driver.city ? data.driver.city.cityName : "";
+            const state = data.driver.state ? data.driver.state.stateName : "";
+            return (
+              <div key={key} className="home__driver-list--carousel-list">
+                <CardDriver
+                  handlerAction={() => handleSelect(data)}
+                  city={city}
+                  state={state}
+                  fullName={`${data.name} ${data.lastname}`}
+                  rating={data.driver.rating}
+                  photo={data.photo}
+                  darkTheme={false}
+                />
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </Carousel>
       {
         props.typeUser === 2 ? <div className="home__driver-list--action-container">
@@ -74,6 +56,4 @@ const DriverListSection = (props) => {
   );
 };
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(DriverListSection)
-);
+export default withRouter(DriverListSection);

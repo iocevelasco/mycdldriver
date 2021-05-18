@@ -15,16 +15,7 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchJobs: (query) => dispatch(fetchJobPositionData(query))
-  }
-}
-
 const JobListComp = ({ jobs, fetchJobs, type }) => {
-  useEffect(() => {
-    fetchJobs('');
-  }, [])
 
   var jobListContainer = classnames({
     'home__jobs-list': type == 'large',
@@ -50,4 +41,4 @@ const JobListComp = ({ jobs, fetchJobs, type }) => {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(JobListComp);
+export default connect(mapStateToProps)(JobListComp);

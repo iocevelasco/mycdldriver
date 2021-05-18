@@ -363,7 +363,6 @@ async function checkuser(filter){
                 message: 'No user found'
             };
         }
-        
     }catch(e){
         return {
             status: 500,
