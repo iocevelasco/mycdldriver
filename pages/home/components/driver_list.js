@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Button } from "antd";
+import { Button, Col } from "antd";
 import { CardDriver } from '@components/Cards'
 import useMobileDetect from 'use-mobile-detect-hook';
 import { withRouter } from "next/router";
@@ -31,17 +31,20 @@ const DriverListSection = (props) => {
             const city = data.driver.city ? data.driver.city.cityName : "";
             const state = data.driver.state ? data.driver.state.stateName : "";
             return (
-              <div key={key} className="home__driver-list--carousel-list">
-                <CardDriver
-                  handlerAction={() => handleSelect(data)}
-                  city={city}
-                  state={state}
-                  fullName={`${data.name} ${data.lastname}`}
-                  rating={data.driver.rating}
-                  photo={data.photo}
-                  darkTheme={false}
-                />
-              </div>
+              <Col >
+                <div key={key} className="home__driver-list--carousel-list">
+                  <CardDriver
+                    bordered={false}
+                    handlerAction={() => handleSelect(data)}
+                    city={city}
+                    state={state}
+                    fullName={`${data.name} ${data.lastname}`}
+                    rating={data.driver.rating}
+                    photo={data.photo}
+                    darkTheme={true}
+                  />
+                </div>
+              </Col>
             );
           })}
       </Carousel>
