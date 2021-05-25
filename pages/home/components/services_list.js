@@ -18,21 +18,21 @@ const ServicesList = (props) => {
     <Row gutter={[24, 24]}>
       {
         servicesArray.map((service, key) => {
-          return <Col lg={12} md={12} xs={24}>
-            <CardServices
-              key={key}
-              type='home'
-              edit={false}
-              image={service.image}
-              city={service.city}
-              email={service.email}
-              title={service.title}
-              whatsapp={service.whatsapp}
-              _id={service._id}
-              detail={service.detail}
-              state={service.state}
-            />
-          </Col>
+          return (
+            <Col key={key} lg={12} md={12} xs={24}>
+              <CardServices
+                type='home'
+                edit={false}
+                image={service.image}
+                city={service.city}
+                email={service.email}
+                title={service.title}
+                whatsapp={service.whatsapp}
+                _id={service._id}
+                detail={service.detail}
+                state={service.state}
+              />
+            </Col>)
         })
       }
     </Row>

@@ -8,7 +8,6 @@ import { Carousel } from "antd";
 
 
 const DriverListSection = (props) => {
-  console.log('DriverListSection', props)
   const handleSelect = (id) => {
     console.log('d', id);
   }
@@ -31,8 +30,8 @@ const DriverListSection = (props) => {
             const city = data.driver.city ? data.driver.city.cityName : "";
             const state = data.driver.state ? data.driver.state.stateName : "";
             return (
-              <Col >
-                <div key={key} className="home__driver-list--carousel-list">
+              <Col key={key}>
+                <div className="home__driver-list--carousel-list">
                   <CardDriver
                     bordered={false}
                     handlerAction={() => handleSelect(data)}
