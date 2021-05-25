@@ -17,6 +17,7 @@ const DriversCard = (props) => {
   return (
     <div className={driverStyles}>
       <Card
+        bordered={props.bordered}
         onClick={() => props.handleSelect(driverData)}
         className={driverStyles}
         hoverable
@@ -44,7 +45,8 @@ DriversCard.propsTypes = {
   city: string.isRequired,
   photo: string.isRequired,
   darkTheme: bool.isRequired,
-  handlerAction: func.isRequired
+  handlerAction: func.isRequired,
+  bordered: bool.isRequired
 }
 
 export default DriversCard;

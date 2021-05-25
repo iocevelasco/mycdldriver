@@ -91,6 +91,7 @@ function ListDrivers(props) {
                 return (
                   <Col flex={1} className="card-driver" key={data._id} span={6}>
                     <CardDriver
+                      bordered={true}
                       handlerAction={() => handleSelect(data)}
                       city={city}
                       state={state}
