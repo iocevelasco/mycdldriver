@@ -1,172 +1,175 @@
-
-
-.card-job--lg{
-  width: 100%;
-  margin-top:8px;
+.card-job--lg {
+  width: 90%;
+  margin-top: 8px;
   margin-bottom: 16px;
+  margin: 0 auto;
   //custom antd card styles
-  .ant-card{
+  .ant-card {
     box-shadow: 0 1px 20px 8px #0000001a;
-    padding:0;
-  }
-  
-  .ant-card-body{
-    box-shadow: inset 1px -42px 20px -7px rgba(255,255,255,1);
-    padding:0;
+    padding: 0;
   }
 
-  .ant-card-cover{
+  .ant-card-body {
+    box-shadow: inset 1px -42px 20px -7px rgba(255, 255, 255, 1);
+    padding: 0;
+  }
+
+  .ant-card-cover {
     position: relative;
     max-height: 200px;
-    img{
+    img {
       object-fit: cover;
       height: 200px;
     }
   }
 
-.card-job__header{
-  border-bottom: 1px solid rgb(218, 218, 218);
-  margin-bottom: 8px;
-  padding:24px;
-}
-
-.card-job__header__title{
-  h4{
-    height:50px;
-    font-size: 16px;
-    font-weight: 600;
+  .card-job__header {
+    border-bottom: 1px solid rgb(218, 218, 218);
+    margin-bottom: 8px;
+    padding: 24px;
   }
-}
 
-.card-job__header__company{
-  display: flex;
-  align-items: center;
-  align-content: center;
-  position: absolute;
-  flex-direction: column;
-  left: 0;
-  width: 39%;
-  background: linear-gradient(90deg, rgba(19, 19,19,5) 0%, rgba(255,255,255,0) 100%);
-  bottom: 0;
-  justify-content: center;
-  top: 0;
-  .ant-avatar{
-    background:#fff;
-    box-shadow: 0px 0px 14px rgb(19 19 19);
+  .card-job__header__title {
+    h4 {
+      height: 50px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  .card-job__header__company {
     display: flex;
     align-items: center;
     align-content: center;
-    img{
-      height:auto;
+    position: absolute;
+    flex-direction: column;
+    left: 0;
+    width: 39%;
+    background: linear-gradient(
+      90deg,
+      rgba(19, 19, 19, 5) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    bottom: 0;
+    justify-content: center;
+    top: 0;
+    .ant-avatar {
+      background: #fff;
+      box-shadow: 0px 0px 14px rgb(19 19 19);
+      display: flex;
+      align-items: center;
+      align-content: center;
+      img {
+        height: auto;
+      }
+    }
+    p {
+      font-weight: 600;
+      color: #fff;
+      margin-top: 16px;
     }
   }
-  p{
-    font-weight: 600;
-    color:  #fff;
-    margin-top:16px;
+  .card-job__header__sub-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
   }
-}
-.card-job__header__sub-title{
-  display: flex;
-  justify-content:space-between;
-  align-items:center;
-  align-content:center;
-}
-.card-job__detail{
-  display: flex;
-  gap: 24px;
-  padding: 24px;
-  align-items: center;
-  height: 180px;
-  justify-content:space-between;
-  >div{
-    width: 70%;
+  .card-job__detail {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+    align-items: center;
+    height: 180px;
+    justify-content: space-between;
+    > div {
+      width: 70%;
+    }
+    Button {
+      width: 80px;
+    }
+    p {
+      overflow: hidden;
+      max-height: 114px;
+    }
   }
-  Button{
-    width: 80px;
-  }
-  p{
-    overflow: hidden;
-    max-height: 114px;
-  }
-}
 }
 
-.card-job__box{
+.card-job__box {
   border-left: 1px solid#dadada;
-  border-right:  1px solid#dadada;
-  border-bottom:  1px solid#dadada;
+  border-right: 1px solid#dadada;
+  border-bottom: 1px solid#dadada;
 }
-
 
 // SMALL
 
-.card-job--small{
-  width: 100%;
-  margin-top:8px;
+.card-job--small {
+  width: 90%;
+  margin-top: 8px;
   margin-bottom: 16px;
+  margin: 0 auto;
   //custom antd card styles
-  .ant-card{
-    padding:0;
-  }
-  
-  .ant-card-body{
-    padding:0;
+  .ant-card {
+    padding: 0;
   }
 
-  .ant-card-cover{
+  .ant-card-body {
+    padding: 0;
+  }
+
+  .ant-card-cover {
     position: relative;
     max-height: 200px;
-    img{
+    img {
       object-fit: cover;
       height: 200px;
     }
   }
 
-.card-job__header{
-  display:flex;
-  border-bottom: 1px solid rgb(218, 218, 218);
-  margin-bottom: 8px;
-  padding:16px;
-  justify-content:space-between;
-}
-
-.card-job__header__title{
-  width: 100%;
-  margin-top: -50px;
-  z-index: 10;
-  h4{
-    font-weight: 600;
-    text-align: left;
-    margin-top: 8px;
+  .card-job__header {
+    display: flex;
+    border-bottom: 1px solid rgb(218, 218, 218);
+    margin-bottom: 8px;
+    padding: 16px;
+    justify-content: space-between;
   }
-}
 
-.card-job__header__company{
-  display:flex;
-  align-items:center;
-  align-content: center;
-  box-shadow: 0px 0px 14px rgb(210 210 210);
-  background: #fff;
-  border-radius: 5px;
-  overflow: hidden;
-  .ant-avatar{
-    background: rgb(218, 218, 218);
-    margin-right: 16px;
+  .card-job__header__title {
+    width: 100%;
+    margin-top: -50px;
+    z-index: 10;
+    h4 {
+      font-weight: 600;
+      text-align: left;
+      margin-top: 8px;
+    }
   }
-  p{
-    font-weight: 600;
-    color:  @primary-color;
-  }
-}
 
-.card-job__detail{
-display:flex; 
-flex-direction:column;
-padding:16px;
-button{
-  margin-top:16px;
-  margin-left: 16px;
-}
-}
+  .card-job__header__company {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    box-shadow: 0px 0px 14px rgb(210 210 210);
+    background: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    .ant-avatar {
+      background: rgb(218, 218, 218);
+      margin-right: 16px;
+    }
+    p {
+      font-weight: 600;
+      color: @primary-color;
+    }
+  }
+
+  .card-job__detail {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    button {
+      margin-top: 16px;
+      margin-left: 16px;
+    }
+  }
 }
