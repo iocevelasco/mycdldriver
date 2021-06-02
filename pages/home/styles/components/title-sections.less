@@ -1,10 +1,12 @@
-.home__title{
+@import "../../../../styles/settings/media-query.less";
+
+.home__title {
   text-align: center;
   margin: 36px auto;
-  h2{
+  h2 {
     font-weight: 300;
   }
-  .home__title-subtitle{
+  .home__title-subtitle {
     font-weight: 300;
     font-size: 16px;
     display: block;
@@ -12,13 +14,26 @@
   }
 }
 
-.home__title--dark{
-  h2{
+.home__title--dark {
+  h2 {
     font-weight: 300;
-    color:#fff;
+    color: #fff;
   }
 
-  span{
-    color:#fff;
+  span {
+    color: #fff;
+  }
+}
+
+@media @phone-down {
+  .home__title {
+    margin: 36px 0 0 0;
+
+    .home__title-subtitle {
+      display: none;
+    }
+    h2.ant-typography {
+      margin: 0;
+    }
   }
 }
