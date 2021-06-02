@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { fetchServices } from '@store/reducers/landing_reducer';
-import { Row, Col } from 'antd';
-import CardServices from 'components/CardServices';
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { fetchServices } from "@store/reducers/landing_reducer";
+import { Row, Col } from "antd";
+import CardServices from "components/CardServices";
 
 function mapStateToProps(state) {
   return {
     jobs: state.landing.jobs,
-    servicesArray: state.landing.services
-  }
+    servicesArray: state.landing.services,
+  };
 }
 
 const ServicesList = (props) => {
@@ -16,12 +16,11 @@ const ServicesList = (props) => {
 
   return (
     <Row gutter={[24, 24]}>
-      {
-        servicesArray.map((service, key) => {
-          return <Col lg={12} md={12} xs={24}>
+      {servicesArray.map((service, key) => {
+        return (
+          <Col key={key} lg={12} md={12} xs={24}>
             <CardServices
-              key={key}
-              type='home'
+              type="home"
               edit={false}
               image={service.image}
               city={service.city}
@@ -33,10 +32,10 @@ const ServicesList = (props) => {
               state={service.state}
             />
           </Col>
-        })
-      }
+        );
+      })}
     </Row>
-  )
-}
+  );
+};
 
 export default connect(mapStateToProps)(ServicesList);
