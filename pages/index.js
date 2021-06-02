@@ -76,10 +76,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 const HomePage = (props) => {
+  const { fetchJobs, fetchLandingData } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    props.fetchLandingData();
+    fetchLandingData();
   }, [])
 
   const cleanFilter = () => {
