@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+const { useSelector } = require('react-redux');
 import propTypes, { arrayOf, node } from 'prop-types';
 import { withRouter } from 'next/router';
 import Head from 'next/head'
@@ -43,7 +44,6 @@ const MainLayout = ({
     children,
     title,
     user,
-    isLoading,
     router,
     bgActive,
     deviceType,
@@ -112,7 +112,7 @@ const MainLayout = ({
         </Head>
         <Layout>
             <Header className='header-component'>
-                <SpinnerComp active={isLoading} />
+                <SpinnerComp active={props.isLoading} />
                 <Row justify='space-between' align='middle'>
                     <Col span={4}>
                         <Link href="/">

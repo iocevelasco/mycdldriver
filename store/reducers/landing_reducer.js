@@ -1,10 +1,8 @@
 import axios from 'axios';
-
+import lodash from 'lodash';
 const types = {
     FETCH_LANDING_DATA: 'FETCH_LANDING_DATA',
     FETCH_JOBS: 'FETCH_JOBS',
-    FETCH_DRIVERS: 'FETCH_DRIVERS',
-    FETCH_SERVICES: 'FETCH_SERVICES',
     VISIBLE_MODAL_LOGIN: 'VISIBLE_MODAL_LOGIN',
     DEVICETYPE: 'DEVICETYPE',
     IS_LOADING: 'IS_LOADING',
@@ -47,7 +45,7 @@ function fetchLandingData() {
                 const { drivers, jobs, search, service } = data.data
                 const { citys, company, title } = search;
 
-                const jobs_name = title.map(e => {
+                const jobs_name = lodash.uniqBy(title).map(e => {
                     return { value: e }
                 });
                 dispatch(({
@@ -93,6 +91,10 @@ const landingReducer = (state = initialState, action) => {
         case types.FETCH_LANDING_DATA:
             return {
                 ...state, ...action.payload, isLoading: false
+            }
+        case types.FETCH_JOBS:
+            return {
+                ...state, ...action.payload
             }
         case types.VISIBLE_MODAL_LOGIN:
             return {
