@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+
 import { Button, Col } from "antd";
 import { CardDriver } from "@components/Cards";
 import useMobileDetect from "use-mobile-detect-hook";
@@ -7,7 +8,6 @@ import Link from "next/link";
 import { Carousel } from "antd";
 
 const DriverListSection = (props) => {
-  console.log("DriverListSection", props);
   const handleSelect = (id) => {
     console.log("d", id);
   };

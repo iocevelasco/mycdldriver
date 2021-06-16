@@ -5,12 +5,13 @@ import ReactWhatsapp from 'react-whatsapp';
 import Icon from '@ant-design/icons';
 import Link from 'next/link';
 import './styles.less';
+import useMobileDetect from 'use-mobile-detect-hook';
 
 const { Text, Title } = Typography
 
 const ServicesCard = (props) => {
   const { image, email, detail, city, state, whatsapp, title, _id } = props;
-
+  const detectMobile = useMobileDetect();
   const ItemProps = ({ text, icon }) => (
     <div className={`services-card__item`}>
       {icon}
@@ -73,26 +74,31 @@ const ServicesCard = (props) => {
               <Text>{detail}</Text>
             </div>
           </div>
-          <div className="services-card__contact-list">
-            <span>
-              <ItemProps
-                className={null}
-                icon={<PhoneOutlined style={{ color: "#E73540" }} />}
-                text={`${whatsapp} `}
-              />
-              <ItemProps
-                className={null}
-                icon={<MailOutlined style={{ color: "#E73540" }} />}
-                text={`${email} `}
-              />
-            </span>
-            <span className="services-card__custom-whatsapp">
-              <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
-                <WhatsappIcon style={{ color: '#35e784', fontSize: '1em' }} />
-                <span>Whatsapp</span>
-              </ReactWhatsapp>
-            </span>
-          </div>
+            {
+              !detectMobile.isMobile() && (
+              <div className="services-card__contact-list">
+                <span>
+                  <ItemProps
+                    className={null}
+                    icon={<PhoneOutlined style={{ color: "#E73540" }} />}
+                    text={`${whatsapp} `}
+                  />
+                  <ItemProps
+                    className={null}
+                   icon={<MailOutlined style={{ color: "#E73540" }} />}
+                    text={`${email} `}
+                  />
+                </span>
+                <span className="services-card__custom-whatsapp">
+                  <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
+                    <WhatsappIcon style={{ color: '#35e784', fontSize: '1em' }} />
+                    <span>Whatsapp</span>
+                  </ReactWhatsapp>
+                </span>
+              </div>
+
+              )
+            }
           <div className="services-card__footer">
             <div className="services-card__footer--address">
               <p> {state.stateName} </p> - <p> {city.cityName} </p>

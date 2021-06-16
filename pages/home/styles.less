@@ -22,13 +22,18 @@
 }
 
 @media @phone-down {
-  div.home-header {
-    background-position: 60% 0 !important;
+  .home-header {
+    background-position: 60% !important;
+    height: 250px;
     .home-header__input-container {
-      margin: 20px;
+      margin: 0;
+      border-radius: 0;
+      padding: 30px;
+      top: 250px;
+      background-color: #001628;
     }
   }
-  h1.ant-typography {
+  .ant-typography {
     font-size: 24px;
     font-weight: bold;
     text-align: center;
@@ -50,10 +55,15 @@
   @media @phone-down {
     .ant-list-items {
       display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: repeat(3, 1fr);
+      grid-template-columns: auto auto auto auto;
+      grid-template-rows: 550px;
       grid-column-gap: 24px;
+      overflow-y: hidden; 
+      overflow-x: auto;
       padding: 0px 16px;
+      .ant-list-item{
+        width: 300px;
+      }
     }
   }
 }
