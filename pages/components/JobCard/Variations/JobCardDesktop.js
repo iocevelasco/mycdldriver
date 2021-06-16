@@ -3,10 +3,11 @@ import { withRouter } from "next/router";
 import { Card, Avatar, Typography, Button } from "antd";
 import moment from "moment";
 import Link from "next/link";
-
+import useMobileDetect from 'use-mobile-detect-hook';
 const { Title, Text } = Typography;
 
 const JobCardDesktop = (props) => {
+    const detectMobile = useMobileDetect();
   const { item } = props;
   return (
     <Card
@@ -47,9 +48,10 @@ const JobCardDesktop = (props) => {
             </div>
           </div>
           <div className="card-job__detail">
-            <div>
-              <p> {item.description} </p>
-            </div>
+              <div>
+                  <p> {item.description} </p>
+              </div>
+              )      
             {props.type !== "small" ? (
               <Button type="primary" shape="round" style={{ width: "140px" }}>
                 Apply now

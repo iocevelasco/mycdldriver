@@ -1,3 +1,9 @@
+@wide-screen-down: ~"(max-width: 1199px)";
+@desktop-down: ~"(max-width: 991px)";
+@tablet-down: ~"(max-width: 767px)";
+@phone-down: ~"(max-width: 480px)";
+@small-phone-down: ~"(max-width: 320px)";
+
 .card-driver {
   .ant-card-meta-title {
     margin-bottom: 0;
@@ -14,11 +20,14 @@
     height: 258px;
     img{
       object-fit: cover;
+      border-radius: 5%;
     }
   }
   .rating {
     color: #e73540;
     margin-top: 30px;
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -30,6 +39,30 @@
     }
   }
   .ant-card{
-    background: transparent
+    background: transparent;
+  }
+}
+
+
+
+@media @phone-down{
+
+  .card-driver{
+    .ant-card-meta{
+      height: 70px;
+    }
+    .ant-card-cover{
+      height: 200px;
+      width: 200px;
+      margin: auto;
+      img{
+        margin-top: 10px;
+        height: 200px;
+        width: 200px;
+      }
+    }
+    .rating{
+      margin-top: 0;
+    }
   }
 }
