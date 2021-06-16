@@ -75,7 +75,6 @@ const reducer = (state, action) => {
 };
 
 function mapStateToProps(state) {
-  console.log("`[state]`", state);
   return {
     isUserRegistry: state.user.typeUser,
     user: state.user,
