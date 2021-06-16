@@ -27,8 +27,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 const HomePage = (props) => {
-  const { fetchJobs, fetchLandingData } = props;
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [filters, setFilterSelected] = useState({ city: "", job_name: "", selected: false });
+  const [query, setQuery] = useState('')
+  const resetFilter = () => {
+    setFilterSelected({ city: "", job_name: "", selected: false })
+    props.fetchJobs('');
+  };
 
   useEffect(() => {
     fetchLandingData();
