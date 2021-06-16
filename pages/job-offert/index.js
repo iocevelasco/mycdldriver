@@ -217,7 +217,7 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
                     props.handleModal(true);
                   }}
                 >
-                  Complete the login and apply to this position
+                  Complete the login and apply
                 </Button>
               ) : state.can_apply ? (
                 isUserRegistry == 2 ? (
@@ -271,7 +271,6 @@ const JobOffert = ({ user, router, isUserRegistry, deviceType, ...props }) => {
               </Row>
               <Row justify="center" align="middle">
                 <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                  {console.log(detectMobile.isMobile(), "is mobile")}
                   <Carousel
                     dots={false}
                     autoplay={false}
