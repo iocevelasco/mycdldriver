@@ -46,7 +46,7 @@ const DriverListSection = (props) => {
           );
         })}
       </Carousel>
-      {props.typeUser === 2 ? (
+      {props.typeUser === 2 && (
         <div className="home__driver-list--action-container">
           <Link href="/list-drivers">
             <Button shape="round" ghost size="large">
@@ -55,7 +55,7 @@ const DriverListSection = (props) => {
             </Button>
           </Link>
         </div>
-      ) : null}
+      )}
     </div>
   );
 };

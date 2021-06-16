@@ -1,3 +1,9 @@
+@wide-screen-down: ~"(max-width: 1199px)";
+@desktop-down: ~"(max-width: 991px)";
+@tablet-down: ~"(max-width: 767px)";
+@phone-down: ~"(max-width: 480px)";
+@small-phone-down: ~"(max-width: 320px)";
+
 .card-driver {
   .ant-card-meta-title {
     margin-bottom: 0;
@@ -7,29 +13,56 @@
     flex: 1 0 auto;
     height: 500px;
   }
-  .ant-card-meta{
-    height:80px
+  .ant-card-meta {
+    height: 80px;
   }
-  .ant-card-cover{
+  .ant-card-cover {
     height: 258px;
-    img{
+    img {
       object-fit: cover;
+      border-radius: 5%;
     }
   }
   .rating {
     color: #e73540;
     margin-top: 30px;
+    display: flex;
+    justify-content: center;
   }
 }
 
-.card-driver--dark{
-  .ant-card-cover{
+.card-driver--dark {
+  .ant-card-cover {
     height: 204px;
-    img{
+    img {
       object-fit: cover;
     }
   }
   .ant-card{
-    background: transparent
+    background: transparent;
+  }
+}
+
+
+
+@media @phone-down{
+
+  .card-driver{
+    .ant-card-meta{
+      height: 70px;
+    }
+    .ant-card-cover{
+      height: 200px;
+      width: 200px;
+      margin: auto;
+      img{
+        margin-top: 10px;
+        height: 200px;
+        width: 200px;
+      }
+    }
+    .rating{
+      margin-top: 0;
+    }
   }
 }

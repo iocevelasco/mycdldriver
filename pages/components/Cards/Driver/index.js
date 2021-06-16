@@ -16,6 +16,7 @@ const DriversCard = (props) => {
 
   return (
     <div className={driverStyles}>
+      <div>
       <Card
         bordered={props.bordered}
         onClick={() => props.handleSelect(driverData)}
@@ -34,6 +35,8 @@ const DriversCard = (props) => {
           value={props.rating}
         />
       </Card>
+
+      </div>
     </div>
   )
 }

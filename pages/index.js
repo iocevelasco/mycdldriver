@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-const { useSelector } = require('react-redux');
+const { useSelector, useDispatch } = require('react-redux');
 import { Row } from 'antd';
 import { withRouter } from 'next/router';
 import { WrapperSection } from 'components/helpers';
@@ -12,30 +12,18 @@ import "./home/styles/index.less";
 //View components
 import { HeaderLandingComp, JobsListComp, DriverList, TitleSection, ServicesList } from './home/components';
 import { drivers, services, jobs } from './home/text.json';
-import { filter } from 'lodash';
-function mapStateToProps(state) {
-  return {
-    user: state.user,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchJobs: (query) => dispatch(fetchJobPositionData(query)),
-    fetchLandingData: () => dispatch(fetchLandingData()),
-  }
-}
 
 const HomePage = (props) => {
+  const dispatch = useDispatch();
   const [filters, setFilterSelected] = useState({ city: "", job_name: "", selected: false });
   const [query, setQuery] = useState('')
   const resetFilter = () => {
     setFilterSelected({ city: "", job_name: "", selected: false })
-    props.fetchJobs('');
+    dispatch(fetchJobPositionData(''));
   };
 
   useEffect(() => {
-    props.fetchLandingData();
+    dispatch(fetchLandingData());
   }, [])
 
   const handlerSearch = (value, key) => {
@@ -92,6 +80,4 @@ const HomePage = (props) => {
   )
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)
-    (HomePage));
+export default withRouter(HomePage);
