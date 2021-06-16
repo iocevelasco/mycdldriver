@@ -76,13 +76,13 @@ const MainLayout = ({
 
   let bg = bgActive
     ? {
-        background: `url('/static/images/bg-routes.jpg')`,
-        backgroundSize: "contain",
-      }
+      background: `url('/static/images/bg-routes.jpg')`,
+      backgroundSize: "contain",
+    }
     : {
-        background: `#fff`,
-        backgroundSize: "contain",
-      };
+      background: `#fff`,
+      backgroundSize: "contain",
+    };
 
   return (
     <>

@@ -3,10 +3,12 @@ import { withRouter } from "next/router";
 import { Card, Avatar, Typography, Button } from "antd";
 import moment from "moment";
 import Link from "next/link";
+import useMobileDetect from 'use-mobile-detect-hook';
 
 const { Title, Text, Paragraph } = Typography;
 
 const JobCardMobile = (props) => {
+  const detectMobile = useMobileDetect();
   const { item } = props;
   return (
     <Card hoverable cover={<img alt="logo" src={item.logo} />}>
