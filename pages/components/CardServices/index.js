@@ -36,76 +36,76 @@ const ServicesCard = (props) => {
 
   return (
     <span className="services-card">
-      <Card
-        key={props.key}
-        hoverable={true}
-        bodyStyle={styles.body}
-        cover={
-          <>
-            <Link
-              href={{
-                pathname: '/services',
-                query: { id: _id },
-              }}
-            >
+      <Link
+        href={{
+          pathname: '/services',
+          query: { id: _id },
+        }}
+      >
+        <Card
+          key={props.key}
+          hoverable={true}
+          bodyStyle={styles.body}
+          cover={
+            <>
               <>
                 <div className="services-card__header">
                   {/* <Avatar shape="square" size={120} src={company.photo} /> */}
                 </div>
                 <img alt="image-service" src={image} />
               </>
-            </Link>
-          </>
-        }
-      >
-        <div className="services-card__body">
-          <div className="services-card__title">
-            {
-              props.edit && <div className="services-card__footer--actions">
-                <Button
-                  type="link"
-                  icon={<EditOutlined />}
-                  onClick={props.actions.edit} />
-                <Button type="link" icon={<DeleteOutlined />} onClick={props.actions.delete} />
+            </>
+          }
+        >
+          <div className="services-card__body">
+            <div className="services-card__title">
+              {
+                props.edit && <div className="services-card__footer--actions">
+                  <Button
+                    type="link"
+                    icon={<EditOutlined />}
+                    onClick={props.actions.edit} />
+                  <Button type="link" icon={<DeleteOutlined />} onClick={props.actions.delete} />
+                </div>
+              }
+              <div>
+                <Title level={3} >{title} </Title>
+                <Text>{detail}</Text>
               </div>
-            }
-            <div>
-              <Title level={3} >{title} </Title>
-              <Text>{detail}</Text>
             </div>
-          </div>
             {
               !detectMobile.isMobile() && (
-              <div className="services-card__contact-list">
-                <span>
-                  <ItemProps
-                    className={null}
-                    icon={<PhoneOutlined style={{ color: "#E73540" }} />}
-                    text={`${whatsapp} `}
-                  />
-                  <ItemProps
-                    className={null}
-                   icon={<MailOutlined style={{ color: "#E73540" }} />}
-                    text={`${email} `}
-                  />
-                </span>
-                <span className="services-card__custom-whatsapp">
-                  <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
-                    <WhatsappIcon style={{ color: '#35e784', fontSize: '1em' }} />
-                    <span>Whatsapp</span>
-                  </ReactWhatsapp>
-                </span>
-              </div>
+                <div className="services-card__contact-list">
+                  <span>
+                    <ItemProps
+                      className={null}
+                      icon={<PhoneOutlined style={{ color: "#E73540" }} />}
+                      text={`${whatsapp} `}
+                    />
+                    <ItemProps
+                      className={null}
+                      icon={<MailOutlined style={{ color: "#E73540" }} />}
+                      text={`${email} `}
+                    />
+                  </span>
+                  <span className="services-card__custom-whatsapp">
+                    <ReactWhatsapp number={whatsapp} message="Hello World!!!" >
+                      <WhatsappIcon style={{ color: '#35e784', fontSize: '1em' }} />
+                      <span>Whatsapp</span>
+                    </ReactWhatsapp>
+                  </span>
+                </div>
 
               )
             }
-          <div className="services-card__footer">
-            <div className="services-card__footer--address">
-              <p> {state.stateName} </p> - <p> {city.cityName} </p>
+            <div className="services-card__footer">
+              <div className="services-card__footer--address">
+                <p> {state.stateName} </p> - <p> {city.cityName} </p>
+              </div>
             </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      </Link>
     </span >
   )
 }
