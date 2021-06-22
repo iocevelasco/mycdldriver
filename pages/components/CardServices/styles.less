@@ -165,8 +165,32 @@
 
 @media @phone-down{
   .services-card{
-    background-color: #ff2a39;
-    height: 200px;
-    width: 300px;
+    .ant-card-bordered{
+      width: 350px;
+      height: 300px;
+      margin: 10px auto 50px auto;
+    }
+    .ant-card-cover{
+      height: 120px;
+      .services-card__header{
+        height: 120px;
+      }
+      img{
+        height: 120px;
+      }
+    }
+  }
+
+  .services-card__body{
+    height: 120px;
+  }
+
+  .services-card__title{
+    h3{
+      color: black;
+    }
+    span{
+      font-size: 15px;
+    }
   }
 }

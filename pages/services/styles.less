@@ -1,10 +1,15 @@
-@import "../../styles/settings/media-query.less";
+
+@wide-screen-down: ~"(max-width: 1199px)";
+@desktop-down: ~"(max-width: 991px)";
+@tablet-down: ~"(max-width: 767px)";
+@phone-down: ~"(max-width: 480px)";
+@small-phone-down: ~"(max-width: 320px)";
 
 .services-container{
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+  margin-top: 10px;
   .ant-card-body{
     padding: 0px;
   }
@@ -158,4 +163,29 @@ span{
     padding:0px;
     margin-bottom:8px
   }
+}
+
+@media @phone-down{
+  .ant-card{
+    width: 370px !important;
+    .ant-card-body{
+      width: 370px;
+    }
+  }
+
+  .service-container__card-top{
+    img{
+      height: 200px;
+    }
+  }
+
+  .service-container__card-description{
+    .service-container__card-description__img{
+      top: 120px;
+    }
+    .ant-typography{
+      margin-top: 25px;
+    }
+  }
+  
 }

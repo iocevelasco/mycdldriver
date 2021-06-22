@@ -28,19 +28,24 @@ const JobCardMobile = (props) => {
             </Text>
           </div>
         </div>
+        
         <div className="card-job__detail">
-          <div>
-            <Paragraph
-              className="card-job__description"
-              ellipsis={{ rows: 8, expandable: true, symbol: "more" }}
-            >
-              {item.description}
-            </Paragraph>
-            <Text type="secondary">
-              {" "}
-              {moment(item.date, "YYYYMMDD").fromNow()}
-            </Text>
-          </div>
+          {
+            !detectMobile.isMobile() && (
+            <div>
+              <Paragraph
+                className="card-job__description"
+                ellipsis={{ rows: 8, expandable: true, symbol: "more" }}
+              >
+                {item.description}
+              </Paragraph>
+              <Text type="secondary">
+                {" "}
+                {moment(item.date, "YYYYMMDD").fromNow()}
+              </Text>
+            </div>
+            )
+          }
           <Link
             href={{
               pathname: "/job-offert",

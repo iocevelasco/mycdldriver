@@ -48,12 +48,11 @@ const ServiceDetail = (props) => {
   const { includeService, image, email, detail, company, city, state, whatsapp, title, _id } = service;
   useEffect(() => {
     props.activeLoading(false);
-    props.fetchServices();
     fetchserviceDetails(props.router.query.id);
   }, [props.router.query.id])
 
   const fetchserviceDetails = async (id) => {
-    await axios.get(`/api/services/find/${id}`)
+    await axios.get(`/api/services/find/601b3dbb454d001f04cfce8b`)
       .then((response) => {
         setService(response.data.data);
       })
