@@ -1,3 +1,9 @@
+@wide-screen-down: ~'(max-width: 1199px)';
+@desktop-down: ~'(max-width: 991px)';
+@tablet-down: ~'(max-width: 767px)';
+@phone-down: ~'(max-width: 480px)';
+@small-phone-down: ~'(max-width: 320px)';
+
 .card-job--lg {
   width: 90%;
   margin-top: 8px;
@@ -105,17 +111,20 @@
 // SMALL
 
 .card-job--small {
-  width: 90%;
+  width: 80%;
   margin-top: 8px;
   margin-bottom: 16px;
   margin: 0 auto;
+
   //custom antd card styles
   .ant-card {
     padding: 0;
+    margin-top: 20px;
   }
 
   .ant-card-body {
     padding: 0;
+    max-height: 400px;
   }
 
   .ant-card-cover {
@@ -142,7 +151,11 @@
     h4 {
       font-weight: 600;
       text-align: left;
-      margin-top: 8px;
+      margin-top: 5px;
+      font-size: 25px;
+    }
+    span{
+      font-size: 16px;
     }
   }
 
@@ -167,14 +180,22 @@
   .card-job__detail {
     display: flex;
     flex-direction: column;
-    padding: 16px;
+    padding: 10px;
     button {
-      margin-top: 16px;
-      margin-left: 16px;
+      margin: 2px auto;
+      width: 130px;
+    }
+
+    .ant-typography-secondary{
+      font-size: 16px;
     }
   }
   .card-job__description {
     text-align: start;
-    height: 180px;
+    font-size: 14px;
   }
+}
+
+@media @phone-down{
+  background-color: aqua;
 }
