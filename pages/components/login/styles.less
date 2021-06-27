@@ -1,3 +1,10 @@
+@wide-screen-down: ~"(max-width: 1199px)";
+@desktop-down: ~"(max-width: 991px)";
+@tablet-down: ~"(max-width: 767px)";
+@phone-down: ~"(max-width: 480px)";
+@small-phone-down: ~"(max-width: 320px)";
+
+
 .login{
   height: 645px;
   display: flex;
@@ -102,5 +109,11 @@
   }
   input, button, .ant-space{
     width: 100%;
+  }
+}
+
+@media @phone-down{
+  .login{
+    padding: 10px;
   }
 }

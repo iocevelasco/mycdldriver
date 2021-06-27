@@ -52,7 +52,7 @@ const ServiceDetail = (props) => {
   }, [props.router.query.id])
 
   const fetchserviceDetails = async (id) => {
-    await axios.get(`/api/services/find/601b3dbb454d001f04cfce8b`)
+    await axios.get(`/api/services/find/${id}`)
       .then((response) => {
         setService(response.data.data);
       })
