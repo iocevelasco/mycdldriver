@@ -20,7 +20,9 @@ const FooterComp = () => (
                     </div>
                 </Col>
                 <Col xs={24} md={4} lg={4}>
-                    <img src='/static/images/logo-white.svg' />
+                    <div className='footer-component__img-logo'>
+                        <img src='/static/images/logo-white.svg' />
+                    </div>
                 </Col>
             </Row>
             <Row justify='center' align='middle'>

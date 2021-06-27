@@ -1,10 +1,11 @@
 import React from "react"
 
-import { Typography, Card } from 'antd';
+import { Typography, Card, Carousel} from 'antd';
 import { PhoneOutlined, MailOutlined } from '@ant-design/icons';
 import { WrapperSection } from 'components/helpers';
 import Icon from '@ant-design/icons';
 import ReactWhatsapp from 'react-whatsapp';
+import useMobileDetect from 'use-mobile-detect-hook';
 const { Title, Text } = Typography;
 import "../../styles.less";
 
@@ -20,9 +21,9 @@ export const HeaderCard = ({ image, title, phone, logo, email, state, city }) =>
 
   return (
     <>
-      <WrapperSection row={22} mt={0}>
+      <WrapperSection row={17} xs={24}>
         <div className="services-container">
-          <Card style={{ height: 439, width: 1004 }}>
+          <Card style={{ width: 1004, marginBottom: "5px" }}>
             <div className="service-container__card-top">
               <img src={image}></img>
             </div>
@@ -30,7 +31,7 @@ export const HeaderCard = ({ image, title, phone, logo, email, state, city }) =>
               <img className="service-container__card-description__img" src={logo} />
               <Title style={{ color: "#E73540", fontWeight: "500", fontSize: "32px", letterSpacing: "0.6px", marginTop: "50px" }}>{title}</Title>
               <span className="service-container__card-description__title">{`${state} - ${city}`}</span>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div className="service-container__card-description__list" style={{ display: "flex", justifyContent: "space-between" }}>
                 <div className="service-container__card-description__comunication">
                   <div>
                     <div >
@@ -60,7 +61,7 @@ export const HeaderCard = ({ image, title, phone, logo, email, state, city }) =>
 
 export const DescriptionCard = ({ detail, includeService }) => {
   return (
-    <WrapperSection row={22} mt={0}>
+    <WrapperSection row={24} xs={24}>
       <div className="services-container">
         <Card style={{ width: 1004, marginBottom: "32px" }}>
           <div className="description-job">
@@ -93,7 +94,76 @@ export const DescriptionCard = ({ detail, includeService }) => {
 }
 
 export const SimilarServices = ({ serviceList }) => {
+  const detectMobile = useMobileDetect();
+  const servicios = [
+    {
+      image: 'https://mycdl-driver-test.s3-us-west-2.amazonaws.com/DaipRiTqiRQHblSD7DjePrCjRObju-2GvK5R3X7NfHzNbTPvEbg0c7HJC5XiGvsS.png',
+      title: 'Test 01',
+      state: {
+        stateName: 'Estado 01',
+      },
+      city: {
+        cityName: 'Ciudad 01',
+      },
+    },
+    {
+      image: 'https://mycdl-driver-test.s3-us-west-2.amazonaws.com/1cXFsODsJzCmwdUJi_LIWZ2yt4xYb2GgSJ1hubYquDYOBK17x3GI2-KUjvhEetyS.png',
+      title: 'Test 02',
+      state: {
+        stateName: 'Estado 02',
+      },
+      city: {
+        cityName: 'Ciudad 02',
+      },
+    },
+    {
+      image: 'https://mycdl-driver-test.s3.us-west-2.amazonaws.com/fqVysKZbmdL1DB_HIaJK0jNnFZY4UpkhgTwKt9wpExTaR_rYIWrTWqQTmbpDDD5k.jpg',
+      title: 'Test 03',
+      state: {
+        stateName: 'Estado 03',
+      },
+      city: {
+        cityName: 'Ciudad 03',
+      },
+    },
+    {
+      image: 'https://mycdl-driver-test.s3.us-west-2.amazonaws.com/jTkf_5ujKXfqdX_hfJWbcrY0Zr8ox0OwD5cdLer8vWZVmzTdjAMjOZtjQqr3HqUL.png',
+      title: 'Test 04',
+      state: {
+        stateName: 'Estado 04',
+      },
+      city: {
+        cityName: 'Ciudad 04',
+      },
+    },
+  ];
   return (
+    <>
+    {detectMobile.isMobile() ? 
+    <WrapperSection row={17} mt={0} >
+      <div className="similar-container">
+        <h2>Similar services</h2>
+        <Carousel autoplay={true}>
+        {servicios && servicios.map((e, ind) => {
+          return (
+            <div className="similar-container__box-card">
+            <Card style={{ width: 239, height: 262 }} key={ind}>
+              <div className="similar-container__box-card__info">
+                <img src={e.image} />
+                <h3>{e.title}</h3>
+                <span>{`${e.state.stateName} - ${e.city.cityName}`}</span>
+              </div>
+            </Card>
+          </div>
+          )
+        })}
+        </Carousel>
+
+      </div>
+
+    </WrapperSection>
+    :
+
     <WrapperSection row={17} mt={0} >
       <div className="similar-container">
         <h2>Similar services</h2>
@@ -112,6 +182,8 @@ export const SimilarServices = ({ serviceList }) => {
         </div>
       </div>
     </WrapperSection>
+    }
+    </>
   )
 }
 
