@@ -1,0 +1,27 @@
+@wide-screen-down: ~"(max-width: 1199px)";
+@desktop-down: ~"(max-width: 991px)";
+@tablet-down: ~"(max-width: 767px)";
+@phone-down: ~"(max-width: 480px)";
+@small-phone-down: ~"(max-width: 320px)";
+
+.profile-driver{
+  background-color: teal;
+}
+
+@media @phone-down{
+  .profile-driver{
+    padding: 0;
+  }
+  .profile-company__jobs{
+    padding-top: 0;
+  }
+
+  .ant-form{
+    .ant-form-item{
+      margin-bottom: 5px;
+      .ant-form-item-label{
+        padding: 0;
+      }
+    }
+  }
+}
