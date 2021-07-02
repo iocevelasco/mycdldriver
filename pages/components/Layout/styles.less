@@ -7,22 +7,18 @@
 .header-component {
   background: white;
   border-bottom: 1px solid rgb(240, 240, 240);
+  .header-component--logo{
   img {
     height: 50px;
   }
-  @media @small-phone-down {
-    padding: 0 20px;
-    img {
-      height: 40px;
-    }
-  }
-  @media @phone-down {
-    padding: 0 20px;
-    img {
-      height: 40px;
-    }
+}
+  .ant-avatar-lg{
+    width: 32px;
+    height: 32px;
+    margin-left: 5px;
   }
 }
+
 
 .footer-component {
   background: @primary-color;
@@ -42,45 +38,50 @@
   }
 }
 
-@media @small-phone-down {
-  .footer-component {
-    background: @primary-color;
-    min-height: 200px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-  }
-  .ant-typography {
-    text-align: center;
-  }
-
-  .footer-component__contact-data {
-    text-align: center;
-    margin-bottom: 16px;
+@media @phone-down{
+  .header-component{
+    padding: 0 10px;
+    .header-component--logo{
+      width: 140px;
+      height: auto;
+      img {
+        width: 100%;
+        height: auto;
+        margin-left: 10px;
+      }
+    }
   }
 }
 
+
+
+
+
 @media @phone-down {
-  .footer-component {
-    background: @primary-color;
-    min-height: 200px;
-    padding-top: 16px;
-    padding-bottom: 16px;
+  .ant-layout-footer{
+    padding: 30px 30px;
   }
-  
-  .footer-component__img-logo{
-    width: 70%;
-    height: 80px;
-    margin: 5px auto 20px auto;
-  }
-  .ant-typography {
-    text-align: center;
-    font-size: 15px;
+
+  h4{
+    font-size: 12px;
+    font-family: sans-serif;
+    font-weight: bold;
   }
   
   .footer-component__contact-data {
+    width: 100%;
     border-bottom: 1px solid #fff;
     padding-bottom: 25px;
     text-align: center;
     margin-bottom: 16px;
+    span{
+      font-size: 12px;
+      font-weight: normal;
+    }
+  }
+  .footer-component__img-logo{
+    width: 60%;
+    height: 50px;
+    margin: 5px auto 25px auto;
   }
 }

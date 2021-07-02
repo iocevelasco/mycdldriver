@@ -124,30 +124,30 @@ const MainLayout = ({
         <Header className="header-component">
           <SpinnerComp active={isLoading} />
           <Row justify="space-between" align="middle">
-            <Col span={4}>
+            <Col xs={12} lg={8}>
               <Link href="/">
-                <a>
+                <a className="header-component--logo">
                   <img src="/static/images/logo.svg" />
                 </a>
               </Link>
             </Col>
-            <Col span={10}>
+            <Col xs={10} lg={14}>
               {user.isLogin ? (
                 <Row justify="end" align="middle">
-                  <Col xs={0} xl={16}>
+                  <Col xs={0} lg={16}>
                     <Text strong style={{ float: "right", marginRight: 10 }}>
                       {user.name + " " + user.lastname}
                     </Text>
                   </Col>
-                  <Col xs={6} xl={2}>
-                    <Avatar
+                  <Col xs={12} lg={2} style={{flex: 0, marginRight: 5}}>
+                    <Avatar 
                       size="large"
                       shape="square"
                       icon={<UserOutlined />}
                       src={user.photo}
                     />
                   </Col>
-                  <Col xs={18} xl={6}>
+                  <Col xs={12} lg={6}>
                     <Button
                       style={{ color: "#FF2A39" }}
                       icon={<MenuFoldOutlined />}

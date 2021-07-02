@@ -23,14 +23,14 @@ const WrapperSection = ({ children, xs, row, styles }) => {
 const WrapperDashboard = ({ children, section }) => {
   const detectMobile = useMobileDetect();
   return (
-    <Row justify='start' style={{ minHeight: '90vh' }}>
+    <Row justify='center' style={{ minHeight: '90vh' }}>
       {
         !detectMobile.isMobile() && (
           <SideNav page={section} />
         )
       }
-      <Col xs={23} lg={23} md={23}>
-        <div style={{ padding: 40 }}>
+      <Col xs={23} lg={20} md={23}>
+        <div style={{ padding: 20 }}>
           {children}
         </div>
       </Col>

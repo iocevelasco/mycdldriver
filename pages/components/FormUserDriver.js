@@ -326,18 +326,20 @@ const DriverUser = ({ user, ...props }) => {
                   </Radio.Group>
                 </Form.Item>
               </Col>
-              <Col xs={24} xl={6}>
+              <Col xs={24} xl={6} style={{padding: '0'}}>
                 <PasswordModal
                   setPsw={setPsw}
                   visible={visibleModalPassword}
                   handleModal={setVisiblePassword} />
+                <div className="profile-driver__form--button">  
                 <Button
                   type={configPsw.isPassword ? '' : 'danger'}
                   onClick={() => setVisiblePassword(true)}
                   size='large'
                   block
                   icon={<SafetyCertificateOutlined />}
-                >Setting Password</Button>
+                >Setting Password</Button>  
+                </div>
               </Col>
             </Row>
             <Row gutter={[24]} justify='space-between' >

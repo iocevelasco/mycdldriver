@@ -4,24 +4,40 @@
 @phone-down: ~"(max-width: 480px)";
 @small-phone-down: ~"(max-width: 320px)";
 
-.profile-driver{
-  background-color: teal;
-}
+
+
 
 @media @phone-down{
-  .profile-driver{
-    padding: 0;
-  }
-  .profile-company__jobs{
-    padding-top: 0;
-  }
-
-  .ant-form{
-    .ant-form-item{
-      margin-bottom: 5px;
-      .ant-form-item-label{
-        padding: 0;
+  .profile-driver__form{
+    .ant-form{
+      .ant-form-item{
+        margin-bottom: 15px;
+        .ant-form-item-label{
+          padding: 0;
+          flex: none;
+          max-width: 100%;
+          height: 30px;
+        }
       }
     }
+
+
+    .ant-radio-group{
+      display: flex;
+      justify-content: space-evenly;
+    }
+    
+    .profile-driver__form--button{
+      position: relative;
+      display: flex;
+      margin: 8px 0;
+      align-items: center;
+      height: 100px;
+      width: 100%;
+      border-top: 1px solid #989797;
+      border-bottom: 1px solid #989797;
+    }
   }
+  
+  
 }
