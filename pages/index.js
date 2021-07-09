@@ -10,8 +10,8 @@ import { fetchJobPositionData, fetchLandingData } from '@store/reducers/landing_
 import "./home/styles.less";
 import "./home/styles/index.less";
 //View components
-import { HeaderLandingComp, JobsListComp, DriverList, TitleSection, ServicesList } from './home/components';
-import { drivers, services, jobs } from './home/text.json';
+import { HeaderLandingComp, JobsListComp, DriverList, TitleSection, ServicesList,NewsList } from './home/components';
+import { drivers, services, jobs, news } from './home/text.json';
 
 const HomePage = (props) => {
   const dispatch = useDispatch();
@@ -75,6 +75,10 @@ const HomePage = (props) => {
       <WrapperSection xs={24} row={18}>
         <TitleSection theme='light' title={services.title} subTitle={services.subTitle} />
         <ServicesList servicesList={servicesList} />
+      </WrapperSection>
+      <WrapperSection xs={24} row={18}>
+        <TitleSection theme='light' title={news.title} subTitle={news.subTitle} />
+        <NewsList />
       </WrapperSection>
     </>
   )

@@ -10,5 +10,9 @@
   "jobs": {
     "title": "Featured Jobs",
     "subTitle": "Find your new job as a driver, see our catalog of opportunities in your city"
+  },
+  "news": {
+    "title": "News",
+    "subTitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore"
   }
 }
