@@ -14,5 +14,9 @@
   "news": {
     "title": "News",
     "subTitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore"
+  },
+  "formTitle":{
+    "title": "Prueba Form",
+    "subTitle": "m ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore"
   }
 }

@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, Typography, Col, Row, Image, Button, Switch} from "antd";
 import classNames from 'classnames';
-import { PhoneOutlined, MailOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Icon from '@ant-design/icons';
 import Link from 'next/link';
 import "./styles.less";
@@ -22,7 +21,7 @@ const CardNews = (props) => {
     
 
     var newsStyles = classNames({
-        'card-news': true,
+        'card-news-section': true,
         'card-news--dark': props.darkTheme,
     });
 
@@ -81,8 +80,8 @@ const CardNews = (props) => {
                 {data.map((noticia) => {
                     return (
 
-                        <Col xs={24} lg={18}>
-                            <Card style={{ maxHeight: 460, align: 'center'}}>
+                        <Col xs={21} lg={12}>
+                            <Card style={{ marginBottom: 10, align: 'center'}}>
                                 <div className="card-news__title">
                                     <Title level={2}>{noticia.title}</Title>
                                     <p>{noticia.fecha}</p>
