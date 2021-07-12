@@ -7,4 +7,5 @@ const rootReducer = combineReducers({
     landing: landingReducer,
 });
 
+
 export default rootReducer;

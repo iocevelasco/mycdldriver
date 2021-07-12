@@ -46,10 +46,6 @@ if (!dev && cluster.isMaster) {
           secret: 'ClydeIsASquirrel',
           resave: 'false',
           saveUninitialized: 'false',
-          store: new MemcachedStore({
-            servers: config.memcached,
-            prefix: '_session_'
-          })
         }));
         // Enforce SSL & HSTS in production
         server.use(function (req, res, next) {
@@ -84,7 +80,6 @@ if (!dev && cluster.isMaster) {
       passport.use(new LocalStrategy(
         { usernameField: "email" },
         function (email, password, done) {
-          console.log(email, password);
           const user = { email, password }
           userController.loginUser(user).then((fullUser) => {
             return done(null, fullUser);
