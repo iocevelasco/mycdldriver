@@ -1,24 +1,17 @@
 import React from "react";
 import { Card, Typography, Col, Row, Image, Button, Switch} from "antd";
 import classNames from 'classnames';
-import Icon from '@ant-design/icons';
-import Link from 'next/link';
+import useMobileDetect from 'use-mobile-detect-hook';
+import NewsDetails from '../../news-details';
 import "./styles.less";
-const { Text, Title, Paragraph} = Typography
+const { Title, Paragraph} = Typography
 
 
 
 
 
 const CardNews = (props) => {
-    const ItemProps = ({ text, icon }) => (
-        <div className={`news-card__item`}>
-          {icon}
-          <span>{text}</span>
-        </div>
-    );
-   
-    
+    const detectMobile = useMobileDetect();
 
     var newsStyles = classNames({
         'card-news-section': true,
@@ -76,12 +69,15 @@ const CardNews = (props) => {
     return(
 
         <span className={newsStyles}>
-            <Row justify="center" gutter={[16, 16]}>
+            <Row justify="center" gutter={[16, 24]}>
                 {data.map((noticia) => {
                     return (
 
                         <Col xs={21} lg={12}>
                             <Card style={{ marginBottom: 10, align: 'center'}}>
+                                <div className="card-news__image-top">
+                                    <Image src={noticia.image} align="center"></Image>
+                                </div>
                                 <div className="card-news__title">
                                     <Title level={2}>{noticia.title}</Title>
                                     <p>{noticia.fecha}</p>
@@ -95,15 +91,22 @@ const CardNews = (props) => {
                                             Ver mas
                                         </Button>
                                     </div>
-
-                                    <div className="card-news__content--image">
-                                        <Image src={noticia.image} align="center"></Image>
-                                    </div>
+                                        {
+                                            !detectMobile.isMobile() && (
+                                            <div className="card-news__content--image">
+                                                <Image src={noticia.image} align="center"></Image>
+                                            </div>
+                                            )
+                                        }
                                 </div>
                             </Card>
                         </Col>
+                        
                     )
                 })}
+                <Col span={24}>
+                <NewsDetails />
+                </Col>
                 
             </Row>
         </span>

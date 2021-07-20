@@ -4,7 +4,6 @@ import JobsListComp from './job_offerts';
 import DriverList from './driver_list';
 import NewsList from './news_list';
 import ServicesList from './services_list';
-import FormList from './form_list';
 
 export {
   TitleSection,
@@ -12,6 +11,5 @@ export {
   JobsListComp,
   DriverList,
   ServicesList,
-  NewsList,
-  FormList
+  NewsList
 }

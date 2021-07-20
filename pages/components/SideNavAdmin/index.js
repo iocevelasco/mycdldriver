@@ -14,7 +14,8 @@ import {
   LogoutOutlined,
   HomeOutlined,
   UserSwitchOutlined,
-  ControlOutlined
+  ControlOutlined,
+  FormOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -67,6 +68,11 @@ const SideNavAdmin = ({ user, section, isUserSuccess, router, logoutUser }) => {
       path: '/userProfile/company/candidate',
       section_name: 'Candidate',
       icon: <UserSwitchOutlined />
+    },
+    {
+      path: '/userProfile/company/news',
+      section_name: 'Create a news item',
+      icon: <FormOutlined />
     }
   ]
 

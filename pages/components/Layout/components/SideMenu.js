@@ -12,7 +12,8 @@ import {
   CarOutlined,
   DashboardOutlined,
   UserSwitchOutlined,
-  ControlOutlined
+  ControlOutlined,
+  FormOutlined
 } from '@ant-design/icons';
 
 import '@styles/index.less';
@@ -69,6 +70,11 @@ const SideMenu = ({ setVisible, visible, typeUser, logoutUser, router }) => {
       path: '/userProfile/company/candidate',
       section_name: 'Candidate',
       icon: <UserSwitchOutlined />
+    },
+    {
+      path: '/userProfile/company/news',
+      section_name: 'Create a news item',
+      icon: <FormOutlined />
     }
   ]
 
