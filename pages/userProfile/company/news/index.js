@@ -1,20 +1,34 @@
 import React from "react";
-import { Row, Col} from "antd";
+import { Row, Col, notification } from "antd";
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { withRouter } from 'next/router';
 import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import FormNews  from './FormNews';
 
+
+// CONNECT WITH REDUX
+function mapStateToProps(state) {
+    return {
+      user: state.user
+    }
+}
+
+
 const FormList = (props) => {
+    const { user } = props;
+
+    const header = {
+        headers: { Authorization: `Bearer ${user.token}` }
+    };
     const createNews = async (fields) => {
 
-        dispatch({ type: types.LOADING, payload: true });
-        await axios.post('/api/company/jobs', fields, header)
-          .then(() => {
-            createSuccess();
+        await axios.post('/api/blog', fields, header)
+          .then((response) => {
+            console.log(response)
           })
           .catch((err) => {
             console.log(err);
-            fetchJobList();
             notification['error']({
               message: 'error',
               description:
@@ -29,7 +43,7 @@ const FormList = (props) => {
                 <Col span={24}>
                     <WrapperSection row={24}>
                         <div>
-                            <FormNews />
+                            <FormNews createNews={createNews}/>
                         </div>
                     </WrapperSection>
                 </Col>
@@ -38,4 +52,6 @@ const FormList = (props) => {
     );
 };
 
-export default FormList;
+export default withRouter(
+    connect(mapStateToProps)(FormList)
+);

@@ -2,14 +2,23 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Row, Col , Upload} from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import { ImageUpload } from 'components/UploadImages';
+import { create } from 'lodash';
 
 const { Item } = Form
-const FormNews = () => {
+const FormNews = (props) => {
     const [newImage, setNewImage] = useState(null);
+    const {createNews} = props;
 
     const FormSucces=(datos) => {
         console.log("Formulario enviado exitosamente:", datos)
         console.log(newImage)
+        const data = {
+            title: datos.title,
+            description: datos.description,
+            image: newImage,
+            slug: datos.slug
+        }
+        createNews(data)
     }
 
     const FormFailed=(error) =>{
@@ -48,6 +57,15 @@ const FormNews = () => {
                     rules={[{
                         required: true,
                         message: "Please indicate a title for the news"
+                    }
+                    ]}>
+                    <Input style={{height: 50}}/>
+                    </Item>
+                    <Item label="slug"
+                    name="slug"
+                    rules={[{
+                        required: true,
+                        message: "Please indicate a slug for the news"
                     }
                     ]}>
                     <Input style={{height: 50}}/>
