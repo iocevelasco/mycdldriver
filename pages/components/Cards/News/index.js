@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Typography, Col, Row, Image, Button, Switch} from "antd";
 import classNames from 'classnames';
 import useMobileDetect from 'use-mobile-detect-hook';
-import NewsDetails from '../../news-details';
 import "./styles.less";
 const { Title, Paragraph} = Typography
 
@@ -87,7 +86,7 @@ const CardNews = (props) => {
                                         <Paragraph ellipsis={ellipsis ? { rows: 7, expandable: false} : false}>
                                             {noticia.description}
                                         </Paragraph>
-                                        <Button type="text" danger>
+                                        <Button type="link" href="../../../news-details" danger>
                                             Ver mas
                                         </Button>
                                     </div>
@@ -103,11 +102,7 @@ const CardNews = (props) => {
                         </Col>
                         
                     )
-                })}
-                <Col span={24}>
-                <NewsDetails />
-                </Col>
-                
+                })} 
             </Row>
         </span>
     );

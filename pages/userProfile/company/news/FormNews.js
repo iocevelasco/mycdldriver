@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Row, Col , Upload} from 'antd';
-import UploadOutlined from '@ant-design/icons';
+import { HomeOutlined } from '@ant-design/icons';
+import { ImageUpload } from 'components/UploadImages';
 
 const { Item } = Form
-const FormNews = (props) => {
+const FormNews = () => {
+    const [newImage, setNewImage] = useState(null);
 
     const FormSucces=(datos) => {
-        console.log("Formulario enviado exitosamente:", datos);
+        console.log("Formulario enviado exitosamente:", datos)
+        console.log(newImage)
     }
 
     const FormFailed=(error) =>{
@@ -59,16 +62,14 @@ const FormNews = (props) => {
                     extra="If you need to expand the description area, click on the bottom left">
                     <Input.TextArea style={{height: 150}}/>
                     </Item>
-                    <Item
-                    name="upload"
-                    label="Upload"
-                    valuePropName="fileList"
-                    extra="nombre-del-archivo.jpg"
-                    >
-                        <Upload name="logo" action="/upload.do" listType="picture">
-                        <Button icon={<UploadOutlined />}>Click to upload</Button>
-                        </Upload>
-                    </Item>
+                    <ImageUpload
+                    shape="square"
+                    size={125}
+                    icon={<HomeOutlined />}
+                    style={{ backgroundColor: '#562ce6' }}
+                    setNewImage={setNewImage}
+                    newImage={newImage}
+                    />
                     <Item {...layoutBtn}>
                         <Button type="primary" htmlType="submit" style={{marginRight: 10, width: 100}}>
                             Send
@@ -78,7 +79,6 @@ const FormNews = (props) => {
                         </Button>
                     </Item>
                     </Form>
-                    <MenuOptions />
                 </Col>
             </Row>
         </div>
