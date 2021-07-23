@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Row, Col , Upload} from 'antd';
+import { Form, Input, Button, Row, Col } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import { ImageUpload } from 'components/UploadImages';
 import { create } from 'lodash';
 
 const { Item } = Form
-const FormNews = (props) => {
+const NewsForm = (props) => {
     const [newImage, setNewImage] = useState(null);
     const {createNews} = props;
 
@@ -104,4 +104,4 @@ const FormNews = (props) => {
     );
 }
 
-export default FormNews;
+export default NewsForm;

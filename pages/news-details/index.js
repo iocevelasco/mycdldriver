@@ -1,17 +1,21 @@
 import React from 'react';
-import { WrapperSection } from "components/helpers";
+import { WrapperSection, WrapperDashboard } from "components/helpers";
 import { Row, Col } from 'antd';
 import NewsRow from '../components/NewsRow';
 
-const NewsDetails = () => {
+const NewsDetails = (props) => {
     return(
-        <WrapperSection row={18}>
-            <Row>
-                <Col span={20}>
-                <NewsRow/>
+        <WrapperDashboard>
+            <Row display='flex' justify='start'>
+                <Col span={24}>
+                    <WrapperSection row={24}>
+                        <div>
+                            <NewsRow/>
+                        </div>
+                    </WrapperSection>
                 </Col>
             </Row>
-        </WrapperSection>
+        </WrapperDashboard>
     );
 }
 

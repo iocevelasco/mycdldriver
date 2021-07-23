@@ -71,7 +71,7 @@ const SideNavAdmin = ({ user, section, isUserSuccess, router, logoutUser }) => {
     },
     {
       path: '/userProfile/company/news',
-      section_name: 'Create a news item',
+      section_name: 'News',
       icon: <FormOutlined />
     }
   ]

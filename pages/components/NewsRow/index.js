@@ -4,7 +4,7 @@ import './styles.less'
 
 const {Title, Text, Paragraph} = Typography
 
-const NewsRow = () => {
+const NewsRow = (props) => {
     return(
         <Row justify='center'>
             <Col xs={22} lg={20}>

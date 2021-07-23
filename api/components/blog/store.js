@@ -52,18 +52,13 @@ async function setArticle(article, user) {
           message: 'No article recived'
         };
       }
-      if (!company) {
-        return {
-          status: 400,
-          message: 'No company recived'
-        };
-      }
       article.author = user._id;
       const blogModel = new Blog(article)
       const blogResult = await blogModel.save();
   
       return { status: 201, message: blogResult };
     } catch (e) {
+      console.log(e)
       return {
         status: 500,
         message: 'Unexpected store error',

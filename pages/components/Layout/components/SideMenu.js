@@ -73,7 +73,7 @@ const SideMenu = ({ setVisible, visible, typeUser, logoutUser, router }) => {
     },
     {
       path: '/userProfile/company/news',
-      section_name: 'Create a news item',
+      section_name: 'News',
       icon: <FormOutlined />
     }
   ]
