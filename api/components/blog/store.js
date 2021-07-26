@@ -18,6 +18,22 @@ async function getArticle(slug) {
     } 
 }
 
+async function getArticles() {
+    try {
+      const result = await Blog.find()
+        .populate("author")
+        .populate("category");
+      return { status: 200, message: result }
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 500,
+        message: 'Unexpected store error',
+        detail: e
+      };
+    } 
+}
+
 async function getCategory(slug) {
     try {
       let query = { slug : slug};
@@ -127,5 +143,6 @@ module.exports = {
     getCategory,
     setArticle,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    getArticles
 }

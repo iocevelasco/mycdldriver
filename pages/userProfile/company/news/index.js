@@ -42,7 +42,7 @@ const FormList = (props) => {
 
     const fetchNews = async () => {
 
-        await axios.get('/api/blog', header)
+        await axios.get('/api/blog')
           .then((response) => {
             console.log(response)
           })

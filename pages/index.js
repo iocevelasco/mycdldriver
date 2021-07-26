@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 const { useSelector, useDispatch } = require('react-redux');
+import axios from 'axios';
 import { Row } from 'antd';
 import { withRouter } from 'next/router';
 import { WrapperSection } from 'components/helpers';
@@ -47,7 +48,7 @@ const HomePage = (props) => {
 
   const fetchNews = async () => {
 
-    /*await axios.get('/api/blog', header)
+    await axios.get('/api/blog')
       .then((response) => {
         console.log(response)
       })
@@ -58,7 +59,7 @@ const HomePage = (props) => {
           description:
             "Sorry! We couldn't create this position, please try again. "
         });
-    })*/
+    })
   };
 
   const typeUser = useSelector(state => state.user.userType)
