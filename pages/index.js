@@ -4,6 +4,7 @@ import { Row } from 'antd';
 import { withRouter } from 'next/router';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import queryString from "query-string";
 import { fetchJobPositionData, fetchLandingData } from '@store/reducers/landing_reducer';
 
