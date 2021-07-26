@@ -21,6 +21,23 @@ router.post('/', auth(2), function (req, res) {
       });
 });
 
+router.get('/', function (req, res) {
+    controller.getArticles()
+      .then((data) => {
+        switch (data.status) {
+          case 200:
+            response.success(req, res, data.message, 200);
+            break;
+          default:
+            response.error(req, res, data.message, data.status);
+        }
+  
+      }).catch(e => {
+          console.log(e);
+        response.error(req, res, 'Unexpected network Error', 500, e);
+      });
+});
+
 router.get('/:id', function (req, res) {
     controller.getArticle(req.params.id)
       .then((service) => {

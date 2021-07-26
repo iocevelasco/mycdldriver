@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 const { useSelector, useDispatch } = require('react-redux');
+import axios from 'axios';
 import { Row } from 'antd';
 import { withRouter } from 'next/router';
 import { WrapperSection } from 'components/helpers';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import queryString from "query-string";
 import { fetchJobPositionData, fetchLandingData } from '@store/reducers/landing_reducer';
 
@@ -46,21 +46,6 @@ const HomePage = (props) => {
     props.fetchJobs(query);
   }
 
-  const fetchNews = async () => {
-
-    /*await axios.get('/api/blog', header)
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((err) => {
-        console.log(err);
-        notification['error']({
-          message: 'error',
-          description:
-            "Sorry! We couldn't create this position, please try again. "
-        });
-    })*/
-  };
 
   const typeUser = useSelector(state => state.user.userType)
   const jobsList = useSelector(state => state.landing.jobs)
@@ -96,7 +81,7 @@ const HomePage = (props) => {
       </WrapperSection>
       <WrapperSection xs={24} row={18}>
         <TitleSection theme='light' title={news.title} subTitle={news.subTitle} />
-        <NewsList fetchNews={fetchNews}/>
+        <NewsList/>
       </WrapperSection>
     </>
   )

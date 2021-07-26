@@ -7,7 +7,7 @@ const { confirm } = Modal;
 const { Text, Title } = Typography
 
 const NewsList = (props) => {
-  const { newList, setEditNew, deleteNew, fetchNews } = props;
+  const { newList, setEditNew, deleteNew } = props;
   function showConfirm(id) {
     confirm({
       title: 'Do you Want to delete these service?',
@@ -25,7 +25,7 @@ const NewsList = (props) => {
   return (
     <Row gutter={[24, 24]}>
         <Col span={24}>
-          <CardNews fetchNews={fetchNews}/>
+          <CardNews origin="company"/>
         </Col>
     </Row>
   )

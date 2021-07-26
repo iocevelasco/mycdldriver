@@ -1,8 +1,9 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { Card, Typography, Col, Row, Image, Button, Switch} from "antd";
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import useMobileDetect from 'use-mobile-detect-hook';
+import axios from 'axios';
 import "./styles.less";
 const { Title, Paragraph} = Typography
 
@@ -11,8 +12,9 @@ const { Title, Paragraph} = Typography
 
 
 const CardNews = (props) => {
-    const { fetchNews } = props;
+    const origin = props;
     const detectMobile = useMobileDetect();
+    const [news, setNews] = useState([]);
     useEffect( () => {
         fetchNews()
     }, [])
@@ -67,6 +69,24 @@ const CardNews = (props) => {
         }
     ]
 
+    const fetchNews = async () => {
+
+        await axios.get('/api/blog')
+          .then((response) => {
+            console.log(response)
+            const data = response.data.data
+            setNews(data)
+          })
+          .catch((err) => {
+            console.log(err);
+            notification['error']({
+              message: 'error',
+              description:
+                "Sorry! We couldn't create this position, please try again. "
+            });
+        })
+    };
+
     const [ellipsis, setEllipsis] = React.useState(true);
     
     <Switch
@@ -80,7 +100,7 @@ const CardNews = (props) => {
 
         <span className={newsStyles}>
             <Row justify="center" gutter={[16, 24]}>
-                {data.map((noticia) => {
+                {news.map((noticia) => {
                     return (
 
                         <Col xs={21} lg={12}>

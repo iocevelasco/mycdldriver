@@ -40,21 +40,7 @@ const FormList = (props) => {
         })
     };
 
-    const fetchNews = async () => {
-
-        await axios.get('/api/blog', header)
-          .then((response) => {
-            console.log(response)
-          })
-          .catch((err) => {
-            console.log(err);
-            notification['error']({
-              message: 'error',
-              description:
-                "Sorry! We couldn't create this position, please try again. "
-            });
-        })
-    };
+    
 
     const [visible, setVisible] = useState(false);
     const showDrawer = () => {
@@ -88,7 +74,7 @@ const FormList = (props) => {
                     </WrapperSection>
                     <WrapperSection row={24}>
                         <div>
-                            <NewsList fetchNews={fetchNews}/>
+                            <NewsList/>
                         </div>
                     </WrapperSection>
                 </Col>
@@ -101,7 +87,7 @@ const FormList = (props) => {
             onClose={onClose}
             visible={visible}>
             <div> 
-                <NewsForm createNews={createNews}/> 
+                <NewsForm/> 
             </div>
             </Drawer>
         </WrapperDashboard>
