@@ -46,22 +46,6 @@ const HomePage = (props) => {
     props.fetchJobs(query);
   }
 
-  const fetchNews = async () => {
-
-    await axios.get('/api/blog')
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((err) => {
-        console.log(err);
-        notification['error']({
-          message: 'error',
-          description:
-            "Sorry! We couldn't create this position, please try again. "
-        });
-    })
-  };
-
   const typeUser = useSelector(state => state.user.userType)
   const jobsList = useSelector(state => state.landing.jobs)
   const driversList = useSelector(state => state.landing.drivers)
@@ -96,7 +80,7 @@ const HomePage = (props) => {
       </WrapperSection>
       <WrapperSection xs={24} row={18}>
         <TitleSection theme='light' title={news.title} subTitle={news.subTitle} />
-        <NewsList fetchNews={fetchNews}/>
+        <NewsList/>
       </WrapperSection>
     </>
   )

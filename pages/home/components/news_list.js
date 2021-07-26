@@ -4,13 +4,12 @@ import { CardNews } from '../../components/Cards';
 
 
 const NewsList = (props) => {
-    const { fetchNews } = props;
 
     return (
         <div>
             <Row style={{marginBottom: 30}}>
                 <Col span={24}>
-                <CardNews fetchNews={fetchNews} />
+                <CardNews origin = 'home' />
                 </Col>
             </Row>
         </div>
