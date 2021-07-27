@@ -46,7 +46,6 @@ const HomePage = (props) => {
     props.fetchJobs(query);
   }
 
-
   const typeUser = useSelector(state => state.user.userType)
   const jobsList = useSelector(state => state.landing.jobs)
   const driversList = useSelector(state => state.landing.drivers)

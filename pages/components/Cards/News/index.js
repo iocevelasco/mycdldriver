@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import axios from 'axios';
 import { Card, Typography, Col, Row, Image, Button, Switch} from "antd";
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
@@ -7,17 +8,32 @@ import axios from 'axios';
 import "./styles.less";
 const { Title, Paragraph} = Typography
 
-
-
-
-
 const CardNews = (props) => {
-    const origin = props;
+    const { origin } = props;
     const detectMobile = useMobileDetect();
     const [news, setNews] = useState([]);
+
     useEffect( () => {
         fetchNews()
     }, [])
+
+    const fetchNews = async () => {
+
+        await axios.get('/api/blog')
+          .then((response) => {
+              const data = response.data.data;
+              setNews(data);
+            console.log(data)
+          })
+          .catch((err) => {
+            console.log(err);
+            notification['error']({
+              message: 'error',
+              description:
+                "Sorry! We couldn't create this position, please try again. "
+            });
+        })
+      };
 
     var newsStyles = classNames({
         'card-news-section': true,

@@ -25,7 +25,7 @@ const NewsList = (props) => {
   return (
     <Row gutter={[24, 24]}>
         <Col span={24}>
-          <CardNews origin="company"/>
+          <CardNews origin = 'company' />
         </Col>
     </Row>
   )

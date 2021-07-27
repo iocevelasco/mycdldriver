@@ -9,7 +9,7 @@ const NewsList = (props) => {
         <div>
             <Row style={{marginBottom: 30}}>
                 <Col span={24}>
-                <CardNews origin=""/>
+                <CardNews origin = 'home' />
                 </Col>
             </Row>
         </div>
