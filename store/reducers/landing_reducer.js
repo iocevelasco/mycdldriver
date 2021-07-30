@@ -7,6 +7,7 @@ const types = {
     DEVICETYPE: 'DEVICETYPE',
     IS_LOADING: 'IS_LOADING',
     COMMON_DATA: 'COMMON_DATA',
+    FETCH_NEWS: 'FETCH_NEWS',
 }
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
     services: [],
     jobs_name: [],
     companies: [],
+    news: [],
     visible_modal_login: false,
     deviceType: 'desktop',
     isLoading: true
@@ -37,6 +39,24 @@ function fetchJobPositionData(qs) {
             })
     }
 }
+
+function fetchNews() {
+    return (dispatch) => {
+        return axios.get('/api/blog')
+        .then((response) => {
+            const data = response.data.data;
+            dispatch(({
+                type: types.FETCH_NEWS,
+                payload: {
+                    news: data,
+                }
+            }));
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
+};
 
 function fetchLandingData() {
     return (dispatch) => {
@@ -96,6 +116,10 @@ const landingReducer = (state = initialState, action) => {
             return {
                 ...state, ...action.payload
             }
+        case types.FETCH_NEWS:
+            return {
+                ...state, ...action.payload
+            }
         case types.VISIBLE_MODAL_LOGIN:
             return {
                 ...state, visible_modal_login: action.payload
@@ -121,4 +145,5 @@ export {
     handlerModalLogin,
     deviceType,
     activeLoading,
+    fetchNews,
 };
