@@ -3,6 +3,7 @@ import { WrapperSection, WrapperDashboard } from "components/helpers";
 import { connect } from "react-redux";
 import { withRouter } from "next/router";
 import { activeLoading } from '@store/reducers/landing_reducer';
+import axios from 'axios';
 import { Row, Col } from 'antd';
 import NewsRow from '../components/NewsRow';
 
@@ -19,10 +20,22 @@ function mapStateToProps(state) {
 }
 
 const NewsDetails = (props) => {
+  const {router} = props;
+  useEffect(() => {
+    let new_id = router.query.id;
+    getNew(new_id)
+    props.activeLoading(false);
+  }, [router.query.id]);
 
-    useEffect(() => {
-      props.activeLoading(false);
-    }, []);
+  const getNew = async (id) => {
+      await axios.get(`/api/blog/${id}`)
+        .then((response) => {
+          console.log(response.data.data)
+      })
+      .catch((e) => {
+
+      })
+  }
 
     return(
         <WrapperDashboard>

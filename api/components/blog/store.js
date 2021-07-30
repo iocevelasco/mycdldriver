@@ -2,7 +2,7 @@ const {Blog, CategoryBlog} = require('./model');
 
 async function getArticle(slug) {
     try {
-      let query = { slug : slug};
+      let query = { _id : slug};
   
       const result = await Blog.find(query)
         .populate("author")
