@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 const { useSelector, useDispatch } = require('react-redux');
-import axios from 'axios';
 import { Row } from 'antd';
 import { withRouter } from 'next/router';
 import { WrapperSection } from 'components/helpers';
-import { connect } from 'react-redux';
 import queryString from "query-string";
-import { fetchJobPositionData, fetchLandingData } from '@store/reducers/landing_reducer';
+import { fetchJobPositionData, fetchLandingData, fetchNews } from '@store/reducers/landing_reducer';
 
 import "./home/styles.less";
 import "./home/styles/index.less";
 //View components
 import { HeaderLandingComp, JobsListComp, DriverList, TitleSection, ServicesList, NewsList } from './home/components';
 import { drivers, services, jobs, news} from './home/text.json';
-import Form from 'antd/lib/form/Form';
 
 const HomePage = (props) => {
   const dispatch = useDispatch();
@@ -26,6 +23,7 @@ const HomePage = (props) => {
 
   useEffect(() => {
     dispatch(fetchLandingData());
+    dispatch(fetchNews());
   }, [])
 
   const handlerSearch = (value, key) => {

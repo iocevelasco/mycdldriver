@@ -21,7 +21,7 @@ const CardNews = (props) => {
     //const [news, setNews] = useState([]);
 
     useEffect( () => {
-        fetchNews()
+        //fetchNews()
     }, [])
 
     /*const fetchNews = async () => {
