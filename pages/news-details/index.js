@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import { WrapperSection, WrapperDashboard } from "components/helpers";
 import { connect } from "react-redux";
+import { withRouter } from "next/router";
 import { Row, Col } from 'antd';
 import NewsRow from '../components/NewsRow';
 
