@@ -2,12 +2,19 @@ import React, {useEffect} from 'react';
 import { WrapperSection, WrapperDashboard } from "components/helpers";
 import { connect } from "react-redux";
 import { withRouter } from "next/router";
+import { activeLoading } from '@store/reducers/landing_reducer';
 import { Row, Col } from 'antd';
 import NewsRow from '../components/NewsRow';
 
 function mapDispatchToProps(dispatch) {
   return {
     activeLoading: (e) => dispatch(activeLoading(e)),
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    user: state.user
   }
 }
 
@@ -33,5 +40,5 @@ const NewsDetails = (props) => {
 }
 
 export default withRouter(
-  connect(mapDispatchToProps)(NewsDetails)
+  connect(mapStateToProps, mapDispatchToProps)(NewsDetails)
 );
