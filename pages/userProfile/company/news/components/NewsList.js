@@ -5,7 +5,7 @@ import CardNews from '../../../../components/Cards/News';
 const { confirm } = Modal;
 
 const NewsList = (props) => {
-  const { newList, setEditNew, deleteNew } = props;
+  const { newList, setEditNew, deleteNew, showDrawerEdit } = props;
   function showConfirm(id) {
     confirm({
       title: 'Do you Want to delete these service?',
@@ -22,7 +22,10 @@ const NewsList = (props) => {
   return (
     <Row gutter={[24, 24]}>
         <Col span={24}>
-          <CardNews origin = 'company' />
+          <CardNews 
+          origin = 'company'
+          showDrawerEdit={showDrawerEdit} 
+          />
         </Col>
     </Row>
   )

@@ -26,10 +26,12 @@ const FormList = (props) => {
     const { user } = props;
     const [visible, setVisible] = useState(false);
     const [reload, setReload] = useState(false);
+    const [dataEdit, setDataEdit] = useState(false);
 
     useEffect(() => {
         dispatch(fetchNews());
         setReload(false);
+        console.log("console de useEffect")
     }, [reload]);
 
     const header = {
@@ -50,9 +52,30 @@ const FormList = (props) => {
             });
         })
     };
+    const editNews = async (fields) => {
+
+        await axios.patch('/api/blog', fields, header)
+          .then((response) => {
+            console.log(response)
+          })
+          .catch((err) => {
+            console.log(err);
+            notification['error']({
+              message: 'error',
+              description:
+                "Sorry! We couldn't create this position, please try again. "
+            });
+        })
+    };
+
+    const showDrawerEdit = (notice) => {
+        setVisible(true);
+        setDataEdit(notice)
+    }
 
     const showDrawer = () => {
       setVisible(true);
+      setDataEdit(null)
     };
     const onClose = () => {
       setVisible(false);
@@ -84,7 +107,8 @@ const FormList = (props) => {
                     </WrapperSection>
                     <WrapperSection row={24}>
                         <div>
-                            <NewsList/>
+                            <NewsList
+                            showDrawerEdit={showDrawerEdit}/>
                         </div>
                     </WrapperSection>
                 </Col>
@@ -97,7 +121,11 @@ const FormList = (props) => {
             onClose={onClose}
             visible={visible}>
             <div> 
-                <NewsForm createNews={createNews} setReload={setReload} /> 
+                <NewsForm 
+                createNews={createNews} 
+                setReload={setReload} 
+                dataEdit={dataEdit}
+                editNews={editNews}/> 
             </div>
             </Drawer>
         </WrapperDashboard>

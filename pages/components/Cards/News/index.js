@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Card, Typography, Col, Row, Image, Button, Switch} from "antd";
+import { Card, Typography, Col, Row, Image, Button, Switch, Tooltip, Popconfirm } from "antd";
+import { DeleteOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import useMobileDetect from 'use-mobile-detect-hook';
 import "./styles.less";
@@ -13,13 +14,18 @@ function mapStateToProps(state) {
 }
 
 const CardNews = (props) => {
-    const { news } = props;
+    console.log(props)
+    const { news, origin, showDrawerEdit } = props;
     const detectMobile = useMobileDetect();
 
     var newsStyles = classNames({
         'card-news-section': true,
         'card-news--dark': props.darkTheme,
     });
+
+    const editNews = (news) => {
+        showDrawerEdit(news)
+    }
 
     const [ellipsis, setEllipsis] = React.useState(true);
     
@@ -53,9 +59,31 @@ const CardNews = (props) => {
                                         <Paragraph ellipsis={ellipsis ? { rows: 7, expandable: false} : false}>
                                             {noticia.description}
                                         </Paragraph>
-                                        <Button type="link" href="../../../news-details" danger>
-                                            Ver mas
+                                        {origin=="company" ?
+                                        <>
+                                        <Button 
+                                        onClick={() => {
+                                            editNews(noticia)
+                                        }} 
+                                        type="link" danger>
+                                            edit
                                         </Button>
+                                        <Tooltip placement="bottom" title="delete">
+                                        <Popconfirm
+                                          title="Are you sure？" okText="Yes" cancelText="No"
+                                          onConfirm={() => {console.log("eliminado")}}
+                                          onCancel={() => console.log('cancel')}
+                                        >
+                                          <Button type="link" shape="circle" icon={<DeleteOutlined />} />
+                                        </Popconfirm>
+                                        </Tooltip>
+                                        </>
+                                        :
+                                        <Button 
+                                        type="link" href={`../../../news-details/${noticia._id}`} danger>
+                                            see more
+                                        </Button>
+                                        }
                                     </div>
                                         {
                                             !detectMobile.isMobile() && (
