@@ -80,7 +80,7 @@ const CardNews = (props) => {
                                         </>
                                         :
                                         <Button 
-                                        type="link" href={`../../../news-details/${noticia._id}`} danger>
+                                        type="link" href={`../../../news-details?id=${noticia._id}`} danger>
                                             see more
                                         </Button>
                                         }

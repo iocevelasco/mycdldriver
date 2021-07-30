@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import axios from 'axios';
 import { Row, Col, Typography, Image} from 'antd';
 import './styles.less'
@@ -8,20 +8,7 @@ const {Title, Text, Paragraph} = Typography
 
 const NewsRow = (props) => {
 
-    useEffect(() => {
-        let new_id = router.query.id;
-        getNew(new_id)
-    }, [router.query.id]);
-
-    const getNew = async (id) => {
-        await axios.get(`/api/blog/${id}`)
-            .then((response) => {
-                console.log(response.data.data)
-        })
-        .catch((e) => {
-
-        })
-    }
+    
 
     return(
         <Row justify='center'>
