@@ -1,9 +1,8 @@
 import React from 'react'
-import { Row, Col, Modal, Typography } from 'antd';
+import { Row, Col, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import CardNews from '../../../../components/Cards/News';
 const { confirm } = Modal;
-
 
 const NewsList = (props) => {
   const { newList, setEditNew, deleteNew } = props;

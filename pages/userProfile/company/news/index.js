@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Row, Col, notification, Typography, Drawer, Button} from "antd";
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
+import { fetchNews } from "@store/reducers/landing_reducer";
+const { useDispatch } = require('react-redux');
 import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import useMobileDetect from 'use-mobile-detect-hook';
 import NewsForm  from './components/NewsForm';
@@ -19,8 +21,16 @@ function mapStateToProps(state) {
 
 
 const FormList = (props) => {
+    const dispatch = useDispatch();
     const detectMobile = useMobileDetect();
     const { user } = props;
+    const [visible, setVisible] = useState(false);
+    const [reload, setReload] = useState(false);
+
+    useEffect(() => {
+        dispatch(fetchNews());
+        setReload(false);
+    }, [reload]);
 
     const header = {
         headers: { Authorization: `Bearer ${user.token}` }
@@ -41,9 +51,6 @@ const FormList = (props) => {
         })
     };
 
-    console.log(createNews)
-
-    const [visible, setVisible] = useState(false);
     const showDrawer = () => {
       setVisible(true);
     };
@@ -90,7 +97,7 @@ const FormList = (props) => {
             onClose={onClose}
             visible={visible}>
             <div> 
-                <NewsForm createNews={createNews}/> 
+                <NewsForm createNews={createNews} setReload={setReload} /> 
             </div>
             </Drawer>
         </WrapperDashboard>

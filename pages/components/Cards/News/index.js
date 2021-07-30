@@ -1,7 +1,5 @@
-import React, {useEffect, useState} from "react";
-import axios from 'axios';
+import React from "react";
 import { connect } from "react-redux";
-import { fetchNews } from "@store/reducers/landing_reducer";
 import { Card, Typography, Col, Row, Image, Button, Switch} from "antd";
 import classNames from 'classnames';
 import useMobileDetect from 'use-mobile-detect-hook';
@@ -11,36 +9,12 @@ const { Title, Paragraph} = Typography
 function mapStateToProps(state) {
   return {
     news: state.landing.news,
-    // deviceType: state.landing.deviceType
   };
 }
 
 const CardNews = (props) => {
     const { news } = props;
     const detectMobile = useMobileDetect();
-    //const [news, setNews] = useState([]);
-
-    useEffect( () => {
-        //fetchNews()
-    }, [])
-
-    /*const fetchNews = async () => {
-
-        await axios.get('/api/blog')
-          .then((response) => {
-              const data = response.data.data;
-              setNews(data);
-            console.log(data)
-          })
-          .catch((err) => {
-            console.log(err);
-            notification['error']({
-              message: 'error',
-              description:
-                "Sorry! We couldn't create this position, please try again. "
-            });
-        })
-    };*/
 
     var newsStyles = classNames({
         'card-news-section': true,

@@ -8,7 +8,7 @@ import { create } from 'lodash';
 const { Item } = Form
 const NewsForm = (props) => {
     const [newImage, setNewImage] = useState(null);
-    const {createNews} = props;
+    const {createNews, setReload} = props;
     const [form] = Form.useForm();
 
     const FormSucces=(datos) => {
@@ -22,6 +22,7 @@ const NewsForm = (props) => {
                 slug: datos.slug
             }
             createNews(data)
+            setReload(true)
             onReset()
         } catch (error) {
             console.log("error de news", error)
