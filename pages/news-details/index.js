@@ -1,9 +1,21 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { WrapperSection, WrapperDashboard } from "components/helpers";
+import { connect } from "react-redux";
 import { Row, Col } from 'antd';
 import NewsRow from '../components/NewsRow';
 
+function mapDispatchToProps(dispatch) {
+  return {
+    activeLoading: (e) => dispatch(activeLoading(e)),
+  }
+}
+
 const NewsDetails = (props) => {
+
+    useEffect(() => {
+      props.activeLoading(false);
+    }, []);
+
     return(
         <WrapperDashboard>
             <Row display='flex' justify='start'>
@@ -19,4 +31,6 @@ const NewsDetails = (props) => {
     );
 }
 
-export default NewsDetails;
+export default withRouter(
+  connect(mapDispatchToProps)(NewsDetails)
+);
