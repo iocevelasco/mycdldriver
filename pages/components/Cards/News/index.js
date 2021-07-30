@@ -4,7 +4,6 @@ import { Card, Typography, Col, Row, Image, Button, Switch} from "antd";
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import useMobileDetect from 'use-mobile-detect-hook';
-import axios from 'axios';
 import "./styles.less";
 const { Title, Paragraph} = Typography
 
@@ -33,7 +32,7 @@ const CardNews = (props) => {
                 "Sorry! We couldn't create this position, please try again. "
             });
         })
-      };
+    };
 
     var newsStyles = classNames({
         'card-news-section': true,
@@ -85,24 +84,6 @@ const CardNews = (props) => {
         }
     ]
 
-    const fetchNews = async () => {
-
-        await axios.get('/api/blog')
-          .then((response) => {
-            console.log(response)
-            const data = response.data.data
-            setNews(data)
-          })
-          .catch((err) => {
-            console.log(err);
-            notification['error']({
-              message: 'error',
-              description:
-                "Sorry! We couldn't create this position, please try again. "
-            });
-        })
-    };
-
     const [ellipsis, setEllipsis] = React.useState(true);
     
     <Switch
@@ -125,15 +106,6 @@ const CardNews = (props) => {
                                     <Image src={noticia.image} align="center"></Image>
                                 </div>
                                 <div className="card-news__title">
-                                {
-                                    props.edit && <div className="card-news__footer--actions">
-                                    <Button
-                                    type="link"
-                                    icon={<EditOutlined />}
-                                    onClick={props.actions.edit} />
-                                    <Button type="link" icon={<DeleteOutlined />} onClick={props.actions.delete} />
-                                    </div>
-                                }
                                     <div>
                                     <Title level={2}>{noticia.title}</Title>
                                     <p>{noticia.fecha}</p>

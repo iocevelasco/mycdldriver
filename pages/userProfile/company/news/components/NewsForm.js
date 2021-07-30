@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Form, Input, Button, Row, Col } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import { ImageUpload } from 'components/UploadImages';
@@ -8,17 +9,23 @@ const { Item } = Form
 const NewsForm = (props) => {
     const [newImage, setNewImage] = useState(null);
     const {createNews} = props;
+    const [form] = Form.useForm();
 
     const FormSucces=(datos) => {
-        console.log("Formulario enviado exitosamente:", datos)
-        console.log(newImage)
-        const data = {
-            title: datos.title,
-            description: datos.description,
-            image: newImage,
-            slug: datos.slug
+        try {
+            console.log("Formulario enviado exitosamente:", datos)
+            console.log(newImage)
+            const data = {
+                title: datos.title,
+                description: datos.description,
+                image: newImage,
+                slug: datos.slug
+            }
+            createNews(data)
+            onReset()
+        } catch (error) {
+            console.log("error de news", error)
         }
-        createNews(data)
     }
 
     const FormFailed=(error) =>{
@@ -46,9 +53,9 @@ const NewsForm = (props) => {
 
         <div className="form_news">
             <Row justify='start'>
-
                 <Col xs={22} lg={22}>
                     <Form name="formulario"
+                    form={form}
                     onFinish={FormSucces}
                     onFinishFailed={FormFailed}
                     {...layoutForm}>

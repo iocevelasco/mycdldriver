@@ -196,10 +196,12 @@ const CompanyJobView = (props) => {
       <Row>
         <Col span={24} className="profile-company__jobs">
           <WrapperSection row={24}>
-            <Row justify='space-between' align='middle' className='add-new-driver--header'>
+            <Row gutter={[12, 12]} justify='space-between' align='middle' className='add-new-driver__header'>
               <Col xs={22} xl={8}>
-                <Title level={3}> Create and edit your position </Title>
-                <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
+                <div className="add-new-driver__header--title">
+                  <Title level={3}> Create and edit your position </Title>
+                  <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
+                </div>
               </Col>
               <Col xs={22} xl={4}>
                 <Button
@@ -226,7 +228,7 @@ const CompanyJobView = (props) => {
         title='Create Job'
         placement="right"
         closable={true}
-        width={detectMobile.isMobile() ? 400 : 680}
+        width={detectMobile.isMobile() ? '100%' : 680}
         onClose={closeDrawerCreate}
         visible={state.visible_create}>
         {
@@ -242,7 +244,7 @@ const CompanyJobView = (props) => {
         title='Edit Job'
         placement="right"
         closable={true}
-        width={detectMobile.isMobile() ? 400 : 680}
+        width={detectMobile.isMobile() ? 360 : 680}
         onClose={onCloseDrawer}
         visible={state.visible}>
         {

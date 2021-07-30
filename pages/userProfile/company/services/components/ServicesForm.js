@@ -186,11 +186,11 @@ console.log(props.fields);
           ]}>
           <TextArea />
         </Form.Item>
-        <Row gutter={[16, 16]} justify='space-between' >
-          <Col span={12}>
+        <Row gutter={[12, 12]} justify='space-between' >
+          <Col xs={24} xl={12}>
             <EmailInput />
           </Col>
-          <Col span={12}>
+          <Col xs={24} lg={12}>
             <Form.Item
               name="whatsapp"
               label="Contact Number"
@@ -205,7 +205,7 @@ console.log(props.fields);
           </Col>
         </Row>
         <Row gutter={[16, 16]} justify='space-between' >
-          <Col span={24} className="profile-company__services__header__add-new">
+          <Col span={24} className="profile-company__services__header--add-new">
             <Form.Item label="Add servises included">
               {
                 includeServices.map((e, i) => {
@@ -223,10 +223,10 @@ console.log(props.fields);
         </Row>
         <Form.Item>
           <Row gutter={[16, 16]} justify='space-between' >
-            <Col span={12}>
+            <Col xs={24} lg={12}>
               <SelectStateInput />
             </Col>
-            <Col span={12}>
+            <Col xs={24} lg={12}>
               <Form.Item label="City">
                 <Form.Item
                   name={'city'}
@@ -249,7 +249,7 @@ console.log(props.fields);
             </Col>
           </Row>
           <Row gutter={[16, 16]} justify='center' >
-            <Col span={12}>
+            <Col xs={24} lg={12}>
               <Form.Item
                 name="photo"
                 valuePropName="fileList"
@@ -274,6 +274,7 @@ console.log(props.fields);
                   onRemove={onRemove}
                 >
                   <Button
+                    className="add-new__button"
                     style={{ width: '300px' }}
                     type='secondary'
                     shape="round"

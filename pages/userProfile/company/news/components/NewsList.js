@@ -4,7 +4,6 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import CardNews from '../../../../components/Cards/News';
 const { confirm } = Modal;
 
-const { Text, Title } = Typography
 
 const NewsList = (props) => {
   const { newList, setEditNew, deleteNew } = props;
@@ -20,7 +19,6 @@ const NewsList = (props) => {
       },
     });
   }
-  console.log('newList', newList);
 
   return (
     <Row gutter={[24, 24]}>

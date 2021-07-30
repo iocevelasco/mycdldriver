@@ -28,7 +28,7 @@ const ServicesList = (props) => {
     <Row gutter={[24, 24]}>
       {
         serviceList.map((service, key) => (
-          <Col span={8}>
+          <Col xs={24} lg={8}>
             <ServicesCard
               edit={true}
               type='ABM'

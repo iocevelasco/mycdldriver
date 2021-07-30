@@ -7,6 +7,7 @@ import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import useMobileDetect from 'use-mobile-detect-hook';
 import NewsForm  from './components/NewsForm';
 import NewsList from './components/NewsList';
+import './styles.less';
 
 const { Text, Title } = Typography;
 // CONNECT WITH REDUX
@@ -40,6 +41,8 @@ const FormList = (props) => {
         })
     };
 
+    console.log(createNews)
+
     const [visible, setVisible] = useState(false);
     const showDrawer = () => {
       setVisible(true);
@@ -53,10 +56,12 @@ const FormList = (props) => {
             <Row>
                 <Col span={24} className="profile-company__news">
                     <WrapperSection row={24}>
-                        <Row justify='space-between' align='middle' className='profile-company__news__header'>
+                        <Row gutter={[12, 12]} justify='space-between' align='middle' className='add-new__header'>
                             <Col xs={22} xl={8}>
-                                <Title level={3}> Create and edit your new </Title>
-                                <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
+                                <div className="add-new__header--title">
+                                    <Title level={3}> Create and edit your new </Title>
+                                    <Text>Fill out the form and publish the news of interest that our drivers will see</Text>
+                                </div>
                             </Col>
                             <Col xs={22} xl={4}>
                                 <Button
@@ -78,14 +83,14 @@ const FormList = (props) => {
                 </Col>
             </Row>
             <Drawer 
-            width={detectMobile.isMobile() ? 400 : 980}
+            width={detectMobile.isMobile() ? 300 : 980}
             title="Basic Drawer"
             placement="right"
             closable={false}
             onClose={onClose}
             visible={visible}>
             <div> 
-                <NewsForm/> 
+                <NewsForm createNews={createNews}/> 
             </div>
             </Drawer>
         </WrapperDashboard>

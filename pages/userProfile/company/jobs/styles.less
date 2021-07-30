@@ -1,3 +1,5 @@
+@import '../../../../styles/settings/media-query.less';
+
 .profile-company__jobs{
   background: white;
   margin: 20px auto;
@@ -109,4 +111,17 @@
 }
 [data-theme="dark"] .site-description-item-profile-wrapper {
   color: rgba(255,255,255,0.65);
+}
+
+@media @phone-down{
+  .add-new-driver__header{
+    justify-content: center;
+  }
+
+  .add-new-driver__header--title{
+    span{
+      font-size: 16px;
+      font-weight: normal;
+    }
+  }
 }

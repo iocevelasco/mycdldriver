@@ -160,10 +160,12 @@ const CompanyJobView = (props) => {
       <Row>
         <Col span={24} className="profile-company__services">
           <WrapperSection row={24}>
-            <Row justify='space-between' align='middle' className='profile-company__services__header'>
+            <Row gutter={[12, 12]} justify='space-between' align='middle' className='add-new-services__header'>
               <Col xs={22} xl={8}>
+                <div className="add-new-services__header--title">
                 <Title level={3}> Create and edit your position </Title>
                 <Text> Fill the form and publish a job search, wich will we seen by our drivers</Text>
+                </div>
               </Col>
               <Col xs={22} xl={4}>
                 <Button
@@ -191,7 +193,7 @@ const CompanyJobView = (props) => {
         title={typeForm === 'create' ? 'Create Job' : 'Edit Job'}
         placement="right"
         closable={true}
-        width={detectMobile.isMobile() ? 400 : 580}
+        width={detectMobile.isMobile() ? '100%' : 580}
         onClose={() => setVisibleAdd(false)}
         visible={visibleAdd}>
         {
