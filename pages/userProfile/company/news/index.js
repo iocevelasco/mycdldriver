@@ -31,7 +31,6 @@ const FormList = (props) => {
     useEffect(() => {
         dispatch(fetchNews());
         setReload(false);
-        console.log("console de useEffect")
     }, [reload]);
 
     const header = {
@@ -57,6 +56,21 @@ const FormList = (props) => {
         await axios.patch('/api/blog', fields, header)
           .then((response) => {
             console.log(response)
+          })
+          .catch((err) => {
+            console.log(err);
+            notification['error']({
+              message: 'error',
+              description:
+                "Sorry! We couldn't create this position, please try again. "
+            });
+        })
+    };
+
+    const deleteNews = async (id) => {
+
+        await axios.delete('/api/blog/'+id, header)
+          .then((response) => {
           })
           .catch((err) => {
             console.log(err);
@@ -108,7 +122,9 @@ const FormList = (props) => {
                     <WrapperSection row={24}>
                         <div>
                             <NewsList
-                            showDrawerEdit={showDrawerEdit}/>
+                            showDrawerEdit={showDrawerEdit}
+                            deleteNews={deleteNews}
+                            setReload={setReload}/>
                         </div>
                     </WrapperSection>
                 </Col>

@@ -2,9 +2,9 @@ const {Blog, CategoryBlog} = require('./model');
 
 async function getArticle(slug) {
     try {
-      let query = { slug : slug};
+      let query = { _id : slug};
   
-      const result = await Blog.find(query)
+      const result = await Blog.findOne(query)
         .populate("author")
         .populate("category");
       return { status: 200, message: result }

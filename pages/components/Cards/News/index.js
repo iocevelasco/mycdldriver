@@ -5,6 +5,8 @@ import { DeleteOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import useMobileDetect from 'use-mobile-detect-hook';
 import "./styles.less";
+
+
 const { Title, Paragraph} = Typography
 
 function mapStateToProps(state) {
@@ -14,9 +16,13 @@ function mapStateToProps(state) {
 }
 
 const CardNews = (props) => {
-    console.log(props)
-    const { news, origin, showDrawerEdit } = props;
+    const { news, origin, showDrawerEdit, deleteNews, setReload } = props;
     const detectMobile = useMobileDetect();
+
+    const onDelete = (id) => {
+        deleteNews(id)
+        setReload(true)
+    }
 
     var newsStyles = classNames({
         'card-news-section': true,
@@ -71,7 +77,7 @@ const CardNews = (props) => {
                                         <Tooltip placement="bottom" title="delete">
                                         <Popconfirm
                                           title="Are you sure？" okText="Yes" cancelText="No"
-                                          onConfirm={() => {console.log("eliminado")}}
+                                          onConfirm={() => {onDelete(noticia._id)}}
                                           onCancel={() => console.log('cancel')}
                                         >
                                           <Button type="link" shape="circle" icon={<DeleteOutlined />} />

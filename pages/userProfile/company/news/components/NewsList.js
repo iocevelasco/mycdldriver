@@ -5,19 +5,7 @@ import CardNews from '../../../../components/Cards/News';
 const { confirm } = Modal;
 
 const NewsList = (props) => {
-  const { newList, setEditNew, deleteNew, showDrawerEdit } = props;
-  function showConfirm(id) {
-    confirm({
-      title: 'Do you Want to delete these service?',
-      icon: <ExclamationCircleOutlined />,
-      content: 'This action can not be undone',
-      onOk() {
-        deleteNew(id);
-      },
-      onCancel() {
-      },
-    });
-  }
+  const { newList, setEditNew, deleteNews, showDrawerEdit, setReload } = props;
 
   return (
     <Row gutter={[24, 24]}>
@@ -25,6 +13,8 @@ const NewsList = (props) => {
           <CardNews 
           origin = 'company'
           showDrawerEdit={showDrawerEdit} 
+          deleteNews={deleteNews}
+          setReload={setReload}
           />
         </Col>
     </Row>
