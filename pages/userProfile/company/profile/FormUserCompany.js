@@ -8,7 +8,6 @@ import { SpinnerComp } from 'components/helpers';
 import AddressInputs from 'components/AddressInput';
 import { ImageProfile } from 'components/UploadImages';
 
-
 function mapStateToProps(state) {
   const { user } = state;
   return {

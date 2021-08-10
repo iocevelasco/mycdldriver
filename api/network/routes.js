@@ -21,6 +21,7 @@ const routes = function (server) {
     server.use(url_api + '/files', files);
     server.use(url_api + '/address', cities);
     server.use(url_api + '/services', services);
+    server.use(url_api + '/blog', blog);
     server.use(url_api + '/home', home);
     server.use(config.publicRoute, express.static('public'));
 };

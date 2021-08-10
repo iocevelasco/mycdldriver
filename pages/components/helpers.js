@@ -4,6 +4,7 @@ import { Row, Col, Image, Typography, Result, Spin } from 'antd';
 import SideNav from './SideNavAdmin';
 import { LoadingOutlined } from '@ant-design/icons';
 import propTypes from 'prop-types';
+import useMobileDetect from 'use-mobile-detect-hook'
 const { Title } = Typography;
 const antIcon = <LoadingOutlined style={{ fontSize: 60, color: '#FF2A39' }} spin />;
 
@@ -20,11 +21,16 @@ const WrapperSection = ({ children, xs, row, styles }) => {
 }
 
 const WrapperDashboard = ({ children, section }) => {
+  const detectMobile = useMobileDetect();
   return (
-    <Row justify='start' style={{ minHeight: '90vh' }}>
-      <SideNav page={section} />
-      <Col xs={23} lg={23} md={23}>
-        <div style={{ padding: 40 }}>
+    <Row justify='center' style={{ minHeight: '90vh' }}>
+      {
+        !detectMobile.isMobile() && (
+          <SideNav page={section} />
+        )
+      }
+      <Col xs={23} lg={20} md={23}>
+        <div style={{ padding: 20 }}>
           {children}
         </div>
       </Col>

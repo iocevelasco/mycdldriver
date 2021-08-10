@@ -5,6 +5,7 @@ import { withRouter } from 'next/router';
 import FormUserDriver from 'components/FormUserDriver';
 import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import { activeLoading } from '@store/reducers/landing_reducer';
+import './styles.less';
 
 function mapStateToProps(state) {
   return {
@@ -47,7 +48,7 @@ const DriverProfileView = (props) => {
       <Row display='flex' justify='center'>
         {closeWindow()}
         <Col span={24} className="profile-company__jobs">
-          <WrapperSection styles={stylesWrapper} row={20} mt={0}>
+          <WrapperSection styles={stylesWrapper}row={20} mt={0}>
             <FormUserDriver />
           </WrapperSection>
         </Col>

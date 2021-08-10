@@ -1,20 +1,19 @@
-.profile-company__services{
+@import '../../../../styles/settings/media-query.less';
 
-}
+@media @phone-down{
 
-.profile-company__services__header{
-  padding: 16px;
-  border: 1px solid #cecece;
-  margin-bottom: 16px;
-  border-radius: 5px;
-  .ant-typography{
-    margin-bottom: 0;
+  .add-new-services__header{
+    justify-content: center;
+  }
+  
+  .add-new-services__header--title{
+    span{
+      font-size: 16px;
+      font-weight: normal;
+    }
+  }
+  .add-new__button{
+    width: 270px !important;
   }
 }
 
-.profile-company__services__header__add-new{
-  .ant-typography{
-    margin-bottom: 16px;
-    margin-left: 16px;
-  }
-}

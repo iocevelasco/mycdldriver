@@ -1,5 +1,19 @@
 const store = require('./store');
 
+async function getArticles() {
+    try{
+        const result = await store.getArticles();
+        return(result);
+    }catch(e){
+        console.log('ERROR EN CONTROLLER', e);
+        return {
+            status: 500,
+            message: 'Unexpected controller error',
+            detail: e
+        };
+    }
+}
+
 async function getArticle(slug) {
     try{
         const result = await store.getArticle(slug);
@@ -71,5 +85,6 @@ module.exports = {
     getCategory,
     setArticle,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    getArticles
 }
