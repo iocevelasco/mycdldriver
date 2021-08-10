@@ -207,6 +207,7 @@ const CompanyProfileView = ({ user, ...props }) => {
         {closeWindow()}
         <Col span={24}>
           <WrapperSection row={24} >
+            <div className='profile-company-wrapper'>
             <FormUserCompany
               newImage={newImage}
               setNewImage={setNewImage}
@@ -218,7 +219,8 @@ const CompanyProfileView = ({ user, ...props }) => {
               setPsw={setPsw}
               fields={fields}
               configPsw={configPsw}
-            />
+              />
+              </div>
           </WrapperSection>
         </Col>
       </Row>

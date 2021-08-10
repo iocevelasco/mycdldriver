@@ -91,190 +91,194 @@ const FormJobs = (props) => {
 
   return (
     <>
-      <Form
-        form={form}
-        onFinish={handlerInput}
-        fields={fields}
-        name={props.formType === 'create' ? "new-job" : "edit-job"}
-        initialValues={{ remember: true }}
-        onFieldsChange={onChangeProps}
-        layout='vertical'>
-        <Form.Item name="_id" noStyle>
-          <Input type="hidden" />
-        </Form.Item>
-        <Form.Item
-          name="title"
-          label="Title/ Position name"
-          rules={[
-            {
-              required: true,
-              message: 'Name is required!',
-            },
-          ]}>
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="description"
-          label="Job Description"
-          rows={4}
-          rules={[
-            {
-              required: true,
-              message: 'Description is required!',
-            },
-          ]}>
-          <TextArea />
-        </Form.Item>
-        <Row gutter={[16, 16]} justify='space-between' >
-          <Col span={4}>
+      <Row>
+        <Col xs={24} xl={22}>
+          <Form
+            form={form}
+            onFinish={handlerInput}
+            fields={fields}
+            name={props.formType === 'create' ? "new-job" : "edit-job"}
+            initialValues={{ remember: true }}
+            onFieldsChange={onChangeProps}
+            layout='vertical'>
+            <Form.Item name="_id" noStyle>
+              <Input type="hidden" />
+            </Form.Item>
             <Form.Item
-              name="areaCode"
-              label="Area Code"
+              name="title"
+              label="Title/ Position name"
               rules={[
                 {
                   required: true,
-                  message: 'Area code is required!',
+                  message: 'Name is required!',
                 },
               ]}>
               <Input />
             </Form.Item>
-          </Col>
-          <Col span={10}>
             <Form.Item
-              name="phoneNumber"
-              label="Phone Number"
+              name="description"
+              label="Job Description"
+              rows={4}
               rules={[
                 {
                   required: true,
-                  message: 'Phone Number is required!',
+                  message: 'Description is required!',
                 },
               ]}>
-              <Input />
+              <TextArea />
             </Form.Item>
-          </Col>
-          <Col span={10}>
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[
-                {
-                  required: true,
-                  type: "email",
-                  message: 'Enter a valid email address',
-                },
-              ]}>
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={[16, 16]} justify='space-between' >
-          <Col span={12}>
-            <Form.Item
-              name="time"
-              rules={[
-                {
-                  required: true,
-                  message: 'Time is required!',
-                },
-              ]}>
-              <Radio.Group>
-                <Radio value={0}>Part-time</Radio>
-                <Radio value={1} >Full-time</Radio>
-                <Radio value={2}>Eventual</Radio>
-              </Radio.Group>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Form.Item>
-          <Row gutter={[16, 16]} justify='space-between' >
-            <Col span={12}>
-              <Form.Item label="State / Province / Reagion">
+            <Row gutter={[16, 16]} justify='space-between' >
+              <Col  xs={8} lg={4}>
                 <Form.Item
-                  name={'state'}
-                  noStyle
-                  rules={[{ required: true, message: 'Province is required' }]}
-                >
-                  <Select
-                    placeholder="Select province">
+                  name="areaCode"
+                  label="Area Code"
+                  rules={[
                     {
-                      stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id} val>{e.value}</Option>))
-                    }
-                  </Select>
+                      required: true,
+                      message: 'Area code is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="City">
+              </Col>
+              <Col xs={20} lg={10}>
                 <Form.Item
-                  name={'city'}
-                  noStyle
-                  rules={[{ required: true, message: 'City is required' }]}
-                >
-                  <Select
-                    disabled={cityOptions.disabled}
-                    placeholder="Select city"
-                    showSearch
-                    filterOption={(input, option) =>
-                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }>
+                  name="phoneNumber"
+                  label="Phone Number"
+                  rules={[
                     {
-                      cityOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
-                    }
-                  </Select>
+                      required: true,
+                      message: 'Phone Number is required!',
+                    },
+                  ]}>
+                  <Input />
                 </Form.Item>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[16, 16]} justify='center' >
-            <Col span={12}>
-              <Form.Item
-                name="photo"
-                valuePropName="fileList"
-                getValueFromEvent={(e) => {
-                  if (Array.isArray(e)) {
-                    return e;
-                  }
-                  return e && e.fileList;
-                }}
-                rules={[
-                  {
-                    required: props.formType === 'create' ? true : false,
-                    message: 'Photo is required!',
-                  },
-                ]}
-              >
-                <Upload {...props.propsUpload}
-                  fileList={props.newPhoto}
-                  onChange={props.handleOnChangeImage}
-                  customRequest={uploadImage}
-                  beforeUpload={beforeUpload}
-                  onRemove={onRemove}
-                >
-                  <Button
-                    style={{ width: '300px' }}
-                    type='secondary'
-                    shape="round"
-                    size="large"
-                    block
-                    icon={<PictureOutlined />}>Click to Upload Image</Button>
-                </Upload>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form.Item>
-        <Row justify='center' >
-          <Col span={16}>
-            <Button
-              htmlType="submit"
-              shape="round"
-              type='primary'
-              block
-              size='large'>{TextButton}</Button>
-          </Col>
-        </Row>
-        <Form.Item>
-        </Form.Item>
-      </Form>
+              </Col>
+              <Col xs={20} lg={10}>
+                <Form.Item
+                  name="email"
+                  label="Email"
+                  rules={[
+                    {
+                      required: true,
+                      type: "email",
+                      message: 'Enter a valid email address',
+                    },
+                  ]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]} justify='space-between' >
+              <Col xs={24} lg={6}>
+                <Form.Item
+                  name="time"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Time is required!',
+                    },
+                  ]}>
+                  <Radio.Group>
+                    <Radio value={0}>Part-time</Radio>
+                    <Radio value={1} >Full-time</Radio>
+                    <Radio value={2}>Eventual</Radio>
+                  </Radio.Group>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item>
+              <Row gutter={[16, 16]} justify='space-between' >
+                <Col span={12}>
+                  <Form.Item label="State / Province / Reagion">
+                    <Form.Item
+                      name={'state'}
+                      noStyle
+                      rules={[{ required: true, message: 'Province is required' }]}
+                    >
+                      <Select
+                        placeholder="Select province">
+                        {
+                          stateOptions.options.map((e, ind) => (<Option key={ind} value={e.id} val>{e.value}</Option>))
+                        }
+                      </Select>
+                    </Form.Item>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="City">
+                    <Form.Item
+                      name={'city'}
+                      noStyle
+                      rules={[{ required: true, message: 'City is required' }]}
+                    >
+                      <Select
+                        disabled={cityOptions.disabled}
+                        placeholder="Select city"
+                        showSearch
+                        filterOption={(input, option) =>
+                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }>
+                        {
+                          cityOptions.options.map((e, ind) => (<Option key={ind} value={e.id}>{e.value}</Option>))
+                        }
+                      </Select>
+                    </Form.Item>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={[16, 16]} justify='center' >
+                <Col xs={24} xl={12}>
+                  <Form.Item
+                    name="photo"
+                    valuePropName="fileList"
+                    getValueFromEvent={(e) => {
+                      if (Array.isArray(e)) {
+                        return e;
+                      }
+                      return e && e.fileList;
+                    }}
+                    rules={[
+                      {
+                        required: props.formType === 'create' ? true : false,
+                        message: 'Photo is required!',
+                      },
+                    ]}
+                  >
+                    <Upload {...props.propsUpload}
+                      fileList={props.newPhoto}
+                      onChange={props.handleOnChangeImage}
+                      customRequest={uploadImage}
+                      beforeUpload={beforeUpload}
+                      onRemove={onRemove}
+                    >
+                      <Button
+                        style={{ width: '300px' }}
+                        type='secondary'
+                        shape="round"
+                        size="large"
+                        block
+                        icon={<PictureOutlined />}>Click to Upload Image</Button>
+                    </Upload>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form.Item>
+            <Row justify='center' >
+              <Col span={16}>
+                <Button
+                  htmlType="submit"
+                  shape="round"
+                  type='primary'
+                  block
+                  size='large'>{TextButton}</Button>
+              </Col>
+            </Row>
+            <Form.Item>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
     </>
 
   )

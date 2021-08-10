@@ -1,0 +1,46 @@
+@import url("../../../styles/settings/media-query.less");
+
+
+.news-details__top--summary{
+    text-align: justify;
+}
+
+.news-details__img{
+    margin-bottom: 5px;
+    img{
+        height: auto;
+        object-fit: cover;
+    }
+}
+
+.news_details-description{
+    margin-top: 10px;
+    border-top: 1px solid #D8D8D8;
+    padding: 10px 20px;
+    span{
+        margin-top: 10px;
+    }
+}
+
+@media @phone-down{
+
+    .news-details__top--title{
+        h2{
+            text-align: left;
+            font-size: 26px;
+        }
+    }
+    .news-details__top--summary{
+        .ant-typography{
+            font-weight: normal;
+            font-size: 15px;
+        } 
+    }
+    .news_details-description{
+        .ant-typography{
+            font-weight: normal;
+            font-size: 15px;
+            text-align: left;
+        }
+    }
+}

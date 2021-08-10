@@ -3,15 +3,14 @@ const { useSelector, useDispatch } = require('react-redux');
 import { Row } from 'antd';
 import { withRouter } from 'next/router';
 import { WrapperSection } from 'components/helpers';
-import { connect } from 'react-redux';
 import queryString from "query-string";
-import { fetchJobPositionData, fetchLandingData } from '@store/reducers/landing_reducer';
+import { fetchJobPositionData, fetchLandingData, fetchNews } from '@store/reducers/landing_reducer';
 
 import "./home/styles.less";
 import "./home/styles/index.less";
 //View components
-import { HeaderLandingComp, JobsListComp, DriverList, TitleSection, ServicesList } from './home/components';
-import { drivers, services, jobs } from './home/text.json';
+import { HeaderLandingComp, JobsListComp, DriverList, TitleSection, ServicesList, NewsList } from './home/components';
+import { drivers, services, jobs, news} from './home/text.json';
 
 const HomePage = (props) => {
   const dispatch = useDispatch();
@@ -24,6 +23,7 @@ const HomePage = (props) => {
 
   useEffect(() => {
     dispatch(fetchLandingData());
+    dispatch(fetchNews());
   }, [])
 
   const handlerSearch = (value, key) => {
@@ -75,6 +75,10 @@ const HomePage = (props) => {
       <WrapperSection xs={24} row={18}>
         <TitleSection theme='light' title={services.title} subTitle={services.subTitle} />
         <ServicesList servicesList={servicesList} />
+      </WrapperSection>
+      <WrapperSection xs={24} row={18}>
+        <TitleSection theme='light' title={news.title} subTitle={news.subTitle} />
+        <NewsList/>
       </WrapperSection>
     </>
   )

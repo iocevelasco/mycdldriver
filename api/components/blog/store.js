@@ -2,9 +2,25 @@ const {Blog, CategoryBlog} = require('./model');
 
 async function getArticle(slug) {
     try {
-      let query = { slug : slug};
+      let query = { _id : slug};
   
-      const result = await Blog.find(query)
+      const result = await Blog.findOne(query)
+        .populate("author")
+        .populate("category");
+      return { status: 200, message: result }
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 500,
+        message: 'Unexpected store error',
+        detail: e
+      };
+    } 
+}
+
+async function getArticles() {
+    try {
+      const result = await Blog.find()
         .populate("author")
         .populate("category");
       return { status: 200, message: result }
@@ -52,18 +68,13 @@ async function setArticle(article, user) {
           message: 'No article recived'
         };
       }
-      if (!company) {
-        return {
-          status: 400,
-          message: 'No company recived'
-        };
-      }
       article.author = user._id;
       const blogModel = new Blog(article)
       const blogResult = await blogModel.save();
   
       return { status: 201, message: blogResult };
     } catch (e) {
+      console.log(e)
       return {
         status: 500,
         message: 'Unexpected store error',
@@ -132,5 +143,6 @@ module.exports = {
     getCategory,
     setArticle,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    getArticles
 }

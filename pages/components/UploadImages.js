@@ -158,9 +158,54 @@ const UploadMultiple = ({ fileList, setFileList }) => {
   )
 }
 
+const ImageUpload = ({ setNewImage, shape, newImage, avatar }) => {
+
+  const uploadImage = async options => {
+    const { onSuccess, onError, file } = options;
+
+    const fmData = new FormData();
+    fmData.append("logo", file);
+    try {
+      const res = await axios.post(
+        '/api/files',
+        fmData,
+      );
+      onSuccess(res.data.data.file);
+    } catch (err) {
+      console.log("Error: ", err);
+      onError({ err });
+    }
+  };
+
+  const handleOnChange = ({ file }) => {
+    setNewImage(file.response);
+  };
+
+  return (
+    <div className='avatar'>
+      <Avatar shape={shape} icon={<UserOutlined />} src={avatar} size={120} />
+      <Upload
+        customRequest={uploadImage}
+        onChange={handleOnChange}
+        listType="text"
+        defaultFileList={newImage}
+        multiple={false}
+        beforeUpload={beforeUpload}
+      >
+        <Button
+          type='primary'
+          size='small'
+          shape="circle"
+          icon={<RetweetOutlined />} />
+      </Upload>
+    </div>
+  )
+}
+
 export {
   ImageProfile,
   DraggerUpload,
   beforeUpload,
-  UploadMultiple
+  UploadMultiple,
+  ImageUpload
 }
