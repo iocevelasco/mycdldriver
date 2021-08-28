@@ -140,7 +140,7 @@ async function updateDriver(id, user){
         foundDriver.address = driver.address;
     }
     if(driver.address2){
-        foundDriver.address = driver.address2;
+        foundDriver.address2 = driver.address2;
     }
     if(driver.city){
         foundDriver.city = driver.city;
@@ -159,6 +159,7 @@ async function updateDriver(id, user){
             message: {user, foundDriver}
         }
     }catch(e){
+        console.log(e);
         return {
             status: 400,
             message: 'Unexpected Error',

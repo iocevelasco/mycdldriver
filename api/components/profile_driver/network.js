@@ -333,9 +333,8 @@ router.post('/', function (req, res) {
  * @apiErrorExample {json} List error
  *    HTTP/1.1 500 Internal Server Error
  */
-router.patch('/', auth(1), function (req, res) {
-  const id = req.user._id || null;
-  controller.updateDriver(id, req.body)
+router.patch('/', auth(), function (req, res) {
+  controller.updateDriver(req.body.id, req.body)
     .then((data) => {
       switch (data.status) {
         case 200:
@@ -349,6 +348,7 @@ router.patch('/', auth(1), function (req, res) {
 
     })
     .catch(e => {
+      console.log(e);
       response.error(req, res, e.message, e.status, e.detail);
     });
 });

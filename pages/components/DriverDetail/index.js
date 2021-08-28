@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Avatar, Card, Typography, Divider, Image, Space, Button, Modal, notification } from 'antd';
-import { StarFilled, UserOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { StarFilled, UserOutlined, DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -15,7 +15,7 @@ function mapStateToProps(state) {
 }
 
 const DriverDetailProps = (props) => {
-  const {isDeletable} = props;
+  const {isDeletable, editDrawer} = props;
   const [loading, setLoadin] = useState(true);
   const [detail, setDetail] = useState({
     email: '',
@@ -173,7 +173,16 @@ const DriverDetailProps = (props) => {
       }
       {isDeletable &&
       <Row>
-        <Col span={24} style={{textAlign:"center"}}>
+        <Col span={12} style={{textAlign:"center"}}>
+          <Button
+            icon={<EditOutlined />}
+            shape="round"
+            size="large"
+            onClick={() => editDrawer(detail)}>
+            Edit Driver
+          </Button>
+        </Col>
+        <Col span={12} style={{textAlign:"center"}}>
           <Button
             icon={<DeleteOutlined />}
             shape="round"

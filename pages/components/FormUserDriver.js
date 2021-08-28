@@ -16,7 +16,6 @@ import AddressInputs from './AddressInput';
 function mapStateToProps(state) {
   const { user } = state;
   return {
-    user: user,
     photoProfile: user.photo || '',
     token: user.token || null,
     isUserRegistry: user._id || null,
@@ -26,13 +25,13 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps)),
-    fetchUserData: (token, typeUser) => dispatch(fetchUserData(token, typeUser))
+    handleNewDriverProps: (newProps) => dispatch(updateUserDrive(newProps))
   }
 }
 
-const DriverUser = ({ user, ...props }) => {
-  const { router } = props;
+const DriverUser = (props) => {
+  const { router, user, is_password_edit } = props;
+  const driverId = user._id ? user._id : user.id;
   const [form] = Form.useForm();
   const [visibleModalPassword, setVisiblePassword] = useState(false);
   const [loading, setLoader] = useState(false);
@@ -122,7 +121,7 @@ const DriverUser = ({ user, ...props }) => {
 
   const updateDriver = async (fields) => {
     const { driver, base } = await beforeToCreateProfile(fields, 'update');
-    const fullDriver = { base: base, ...driver };
+    const fullDriver = { id: driverId, base: base, ...driver };
     try {
       await axios.patch('/api/driver', fullDriver, header)
         .then((response) => {
@@ -130,6 +129,9 @@ const DriverUser = ({ user, ...props }) => {
           const data = {
             driver: foundDriver,
             user
+          }
+          if(!is_password_edit){
+            props.onUpdate(true);
           }
           props.handleNewDriverProps(data);
           if (props.isJobs) {
@@ -326,6 +328,7 @@ const DriverUser = ({ user, ...props }) => {
                   </Radio.Group>
                 </Form.Item>
               </Col>
+              {is_password_edit && 
               <Col xs={24} xl={6} style={{padding: '0'}}>
                 <PasswordModal
                   setPsw={setPsw}
@@ -341,6 +344,7 @@ const DriverUser = ({ user, ...props }) => {
                 >Setting Password</Button>  
                 </div>
               </Col>
+              }
             </Row>
             <Row gutter={[24]} justify='space-between' >
               <Col xs={24} xl={6}>
@@ -388,6 +392,46 @@ const DriverUser = ({ user, ...props }) => {
       <SpinnerComp active={loading} />
     </div >
   )
+}
+
+DriverUser.defaultProps = {
+  is_password_edit: false,
+  onUpdate: () => {},
+  user: {
+    company: null,
+    currentLocation: "",
+    date: moment(),
+    email: "",
+    facebook_id: "",
+    google_id: "",
+    isLogin: true,
+    lastname: "",
+    name: "",
+    photo: "",
+    token: "",
+    typeUser: 1,
+    _id: "",
+    driver: {
+      address: "",
+      areaCode: "",
+      birthDate: moment(),
+      expDateDln: moment(),
+      city: "",
+      state: "",
+      companyJob: [],
+      description: "",
+      dln: "",
+      experience: {},
+      imageDln: "",
+      medicCardImage: "",
+      phoneNumber: "",
+      rating: 0,
+      sex: 0,
+      twicCard: false,
+      zipCode: "",
+      _id: "",
+    }
+  }
 }
 
 export default withRouter(

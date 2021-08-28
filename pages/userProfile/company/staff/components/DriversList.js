@@ -4,6 +4,7 @@ import { Progress, Table, Space } from 'antd';
 import { StarFilled } from '@ant-design/icons';
 
 const DriverList = (props) => {
+  const {editDrawer} = props;
   const [driverList, setDriverList] = useState([]);
 
   useEffect(() => {
@@ -77,6 +78,7 @@ const DriverList = (props) => {
         driverDetail={driver} 
         isDeletable={true}
         header={props.header}
+        editDrawer={editDrawer}
         fetchStaffList = {props.fetchStaffList} />
       }
     }}

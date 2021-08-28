@@ -20,7 +20,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const DriverProfileView = (props) => {
-
+  const {user} = props;
   useEffect(() => {
     props.activeLoading(false)
   }, [])
@@ -49,7 +49,7 @@ const DriverProfileView = (props) => {
         {closeWindow()}
         <Col span={24} className="profile-company__jobs">
           <WrapperSection styles={stylesWrapper}row={20} mt={0}>
-            <FormUserDriver />
+            <FormUserDriver user={user} is_password_edit={true} />
           </WrapperSection>
         </Col>
       </Row>

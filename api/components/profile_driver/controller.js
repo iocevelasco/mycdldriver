@@ -200,6 +200,7 @@ function updateDriver(id, driver) {
                     break;
             }
         } catch (e) {
+            console.log(e);
             reject(e);
         }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { Row, Col, notification, Tabs, Form, Typography, Button, Input, Drawer, Space } from 'antd';
 import { WrapperDashboard, WrapperSection } from 'components/helpers';
 import NewDriverForm from './components/FormNewDriver';
@@ -12,6 +12,7 @@ import DriverList from './components/DriversList';
 import JobList from './components/JobList';
 import IncidentList from './components/IncidentList';
 import useMobileDetect from 'use-mobile-detect-hook';
+import FormUserDriver from 'components/FormUserDriver';
 import axios from 'axios';
 import { UserOutlined, CarOutlined, WarningOutlined } from '@ant-design/icons';
 import "./styles.less";
@@ -25,6 +26,7 @@ const initialState = {
   modalUnlinkVisible: false,
   loadingModal: false,
   drawerVisible: false,
+  drawerEditVisible: false,
   formSelected: 'new-driver',
   drawerTitle: 'Add new driver',
   jobs: [],
@@ -54,7 +56,8 @@ const types = {
   SET_RANKING: 'set_ranking',
   CLOSE_MODAL: 'close_modal',
   CLOSE_MODAL_UNLINK: 'close_modal_unlink',
-  DRAWER_VISIBLE: 'drawer_visible'
+  DRAWER_VISIBLE: 'drawer_visible',
+  DRAWER_EDIT: 'drawer_edit'
 }
 
 function mapStateToProps(state) {
@@ -128,6 +131,11 @@ const reducer = (state, action) => {
         userSelected: action.payload.user,
         jobSelected: action.payload.job
       }
+    case types.DRAWER_EDIT:
+      return {
+        ...state,
+        drawerEditVisible: !state.drawerEditVisible
+      }
     default:
       throw new Error('Unexpected action');
   }
@@ -135,6 +143,7 @@ const reducer = (state, action) => {
 
 const StaffCompanyView = ({ user, ...props }) => {
   const [form] = Form.useForm();
+  const [driverEdit, setDriverEdit] = useState(null);
   const detectMobile = useMobileDetect();
   const header = {
     headers: { Authorization: `Bearer ${user.token}` }
@@ -299,6 +308,22 @@ const StaffCompanyView = ({ user, ...props }) => {
     });
   };
 
+  const editDrawer = (driver) => {
+    setDriverEdit(driver);
+    dispatch({
+      type: types.DRAWER_EDIT,
+    });
+  };
+
+  const onCloseEdit = (update) => {
+    dispatch({
+      type: types.DRAWER_EDIT,
+    });
+    if(update){
+      fetchStaffList();
+    }
+  };
+
   const onCloseDrawer = () => {
     dispatch({
       type: types.DRAWER_VISIBLE,
@@ -367,6 +392,7 @@ const StaffCompanyView = ({ user, ...props }) => {
                   loading={state.loading}
                   header={header}
                   fetchStaffList={fetchStaffList}
+                  editDrawer={editDrawer}
                 />
               </TabPane>
               <TabPane tab={
@@ -418,6 +444,15 @@ const StaffCompanyView = ({ user, ...props }) => {
         onClose={onCloseDrawer}
         visible={state.drawerVisible}>
         {selectForm(state.formSelected)}
+      </Drawer>
+      <Drawer
+        title="Edit Driver"
+        placement="right"
+        closable={true}
+        width={detectMobile.isMobile() ? 400 : 480}
+        onClose={onCloseEdit}
+        visible={state.drawerEditVisible}>
+        <FormUserDriver user={driverEdit} onUpdate={onCloseEdit} />
       </Drawer>
     </WrapperDashboard >
   )
